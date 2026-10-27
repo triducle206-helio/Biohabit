@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BioLife - Lối sống khoa học qua góc nhìn Sinh học</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Font: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Firebase SDKs (v9 Compat) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            bio: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              200: '#bbf7d0',
+              300: '#86efac',
+              400: '#4ade80',
+              500: '#22c55e',
+              600: '#16a34a',
+              700: '#15803d',
+              800: '#166534',
+              900: '#14532d',
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; }
+    ::-webkit-scrollbar-thumb { background: #86efac; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #22c55e; }
+    .custom-gradient {
+      background: linear-gradient(135deg, #15803d 0%, #16a34a 50%, #22c55e 100%);
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col antialiased selection:bg-bio-200 selection:text-bio-900">
+
+  <!-- ================= NAVBAR ================= -->
+  <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-bio-100 shadow-sm transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 py-3 flex items-center justify-between">
+      
+      <!-- Logo -->
+      <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('dashboard')">
+        <div class="w-10 h-10 rounded-2xl bg-bio-600 flex items-center justify-center text-white text-xl shadow-md shadow-bio-200">
+          <i class="fa-solid fa-dna animate-pulse"></i>
+        </div>
+        <div>
+          <span class="text-xl font-extrabold tracking-tight text-slate-900">Bio<span class="text-bio-600">Life</span></span>
+          <p class="text-[10px] text-bio-700 font-semibold tracking-wider uppercase -mt-1">Nhịp Sống Sinh Học</p>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="hidden md:flex items-center space-x-1 lg:space-x-2 text-sm font-semibold text-slate-600">
+        <button onclick="switchTab('dashboard')" id="nav-dashboard" class="tab-btn px-4 py-2 rounded-xl text-bio-700 bg-bio-50 hover:bg-bio-100 transition">
+          <i class="fa-solid fa-house mr-1.5"></i> Tổng quan
+        </button>
+        <button onclick="switchTab('planner')" id="nav-planner" class="tab-btn px-4 py-2 rounded-xl hover:bg-slate-100 transition">
+          <i class="fa-solid fa-clock mr-1.5"></i> Đồng hồ sinh học
+        </button>
+        <button onclick="switchTab('habits')" id="nav-habits" class="tab-btn px-4 py-2 rounded-xl hover:bg-slate-100 transition">
+          <i class="fa-solid fa-calendar-check mr-1.5"></i> Thói quen & Quiz
+        </button>
+        <button onclick="switchTab('market')" id="nav-market" class="tab-btn px-4 py-2 rounded-xl hover:bg-slate-100 transition">
+          <i class="fa-solid fa-store mr-1.5"></i> BioMarket
+        </button>
+      </nav>
+
+      <!-- User Stats / Authentication Box -->
+      <div class="flex items-center space-x-3">
+        <!-- Coin Counter -->
+        <div class="flex items-center bg-amber-50 border border-amber-200 text-amber-700 px-3 py-1.5 rounded-full text-xs sm:text-sm font-bold shadow-xs">
+          <i class="fa-solid fa-coins text-amber-500 mr-1.5 text-base"></i>
+          <span id="user-coins">0</span>
+          <span class="ml-1 text-[11px] hidden sm:inline text-amber-600 font-medium">BioCoins</span>
+        </div>
+
+        <!-- Trạng thái Đăng nhập Google / Tài khoản -->
+        <div id="auth-container">
+          <!-- Khi chưa đăng nhập -->
+          <button id="btn-login-google" onclick="loginWithGoogle()" class="flex items-center space-x-2 bg-white text-slate-700 border border-slate-300 hover:bg-slate-50 px-3.5 py-1.5 rounded-full text-xs font-bold transition shadow-xs">
+            <i class="fa-brands fa-google text-red-500 text-sm"></i>
+            <span class="hidden sm:inline">Đăng nhập Google</span>
+            <span class="sm:hidden">Login</span>
+          </button>
+
+          <!-- Khi đã đăng nhập thành công -->
+          <div id="user-logged-pill" class="hidden flex items-center space-x-2 bg-slate-100 pl-1.5 pr-2 py-1 rounded-full border border-slate-200">
+            <img id="user-avatar-img" src="" alt="Avatar" class="w-7 h-7 rounded-full border border-bio-400 object-cover">
+            <span id="user-display-name" class="text-xs sm:text-sm font-bold text-slate-700 truncate max-w-[85px] sm:max-w-[110px]">Học sinh</span>
+            <button onclick="logoutGoogle()" title="Đăng xuất" class="text-slate-400 hover:text-rose-600 transition pl-1 text-xs">
+              <i class="fa-solid fa-right-from-bracket"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Bottom Nav -->
+  <div class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 px-4 py-2 flex justify-around z-40 shadow-lg text-xs font-semibold text-slate-500">
+    <button onclick="switchTab('dashboard')" class="flex flex-col items-center py-1 text-bio-600">
+      <i class="fa-solid fa-house text-lg mb-0.5"></i> Tổng quan
+    </button>
+    <button onclick="switchTab('planner')" class="flex flex-col items-center py-1">
+      <i class="fa-solid fa-clock text-lg mb-0.5"></i> Nhịp sinh học
+    </button>
+    <button onclick="switchTab('habits')" class="flex flex-col items-center py-1">
+      <i class="fa-solid fa-check-circle text-lg mb-0.5"></i> Thói quen
+    </button>
+    <button onclick="switchTab('market')" class="flex flex-col items-center py-1">
+      <i class="fa-solid fa-store text-lg mb-0.5"></i> Đổi thưởng
+    </button>
+  </div>
+
+  <!-- ================= MAIN CONTENT WRAPPER ================= -->
+  <main class="flex-grow max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6 mb-16 md:mb-8">
+
+    <!-- ================= TAB 1: DASHBOARD ================= -->
+    <section id="tab-dashboard" class="space-y-6">
+      <div class="custom-gradient rounded-3xl p-6 sm:p-10 text-white relative overflow-hidden shadow-xl shadow-bio-900/10">
+        <div class="absolute -right-10 -bottom-10 opacity-15 pointer-events-none">
+          <i class="fa-solid fa-microscope text-9xl"></i>
+        </div>
+        <div class="relative z-10 max-w-2xl space-y-3">
+          <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-white/20 text-white backdrop-blur-md">
+            🔬 Chuyên đề Sinh Học Cấp 3 • Đồng bộ Đám mây
+          </span>
+          <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight leading-tight">
+            Tối ưu hóa thể chất và trí não bằng <span class="underline decoration-bio-300">Khoa học Sự sống</span>.
+          </h1>
+          <p class="text-bio-100 text-sm sm:text-base leading-relaxed">
+            Khám phá chu kỳ Circadian, cơ chế giải phóng hormone và dinh dưỡng tế bào. Đăng nhập để lưu tiến độ và đồng bộ giữa điện thoại, máy tính học tập.
+          </p>
+          <div class="pt-2 flex flex-wrap gap-3">
+            <button onclick="switchTab('planner')" class="px-5 py-2.5 rounded-xl bg-white text-bio-800 font-bold text-sm shadow-md hover:bg-bio-50 transition transform hover:-translate-y-0.5">
+              <i class="fa-solid fa-sliders mr-1.5"></i> Thiết lập Nhịp sinh học
+            </button>
+            <button onclick="switchTab('habits')" class="px-5 py-2.5 rounded-xl bg-bio-700/60 text-white font-bold text-sm border border-white/20 hover:bg-bio-700 transition">
+              <i class="fa-solid fa-brain mr-1.5"></i> Làm Quiz hàng ngày
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Stats -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center space-x-4">
+          <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl shrink-0">
+            <i class="fa-solid fa-fire-flame-curved"></i>
+          </div>
+          <div>
+            <div class="text-xs text-slate-500 font-semibold uppercase">Chuỗi ngày kỷ luật</div>
+            <div class="text-2xl font-black text-slate-800" id="dash-streak">0 ngày</div>
+          </div>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center space-x-4">
+          <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center text-xl shrink-0">
+            <i class="fa-solid fa-sack-dollar"></i>
+          </div>
+          <div>
+            <div class="text-xs text-slate-500 font-semibold uppercase">BioCoins tích lũy</div>
+            <div class="text-2xl font-black text-slate-800" id="dash-coins">0</div>
+          </div>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center space-x-4">
+          <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-xl shrink-0">
+            <i class="fa-solid fa-book-bookmark"></i>
+          </div>
+          <div>
+            <div class="text-xs text-slate-500 font-semibold uppercase">Bài nghiên cứu đã mở</div>
+            <div class="text-2xl font-black text-slate-800" id="dash-unlocked-count">0 / 3</div>
+          </div>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center space-x-4">
+          <div class="w-12 h-12 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center text-xl shrink-0">
+            <i class="fa-solid fa-award"></i>
+          </div>
+          <div>
+            <div class="text-xs text-slate-500 font-semibold uppercase">Danh hiệu hiện tại</div>
+            <div class="text-sm font-black text-purple-700 truncate" id="dash-badge-current">Mầm sinh học 🌱</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Badges Showcase Section -->
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-lg font-bold text-slate-800 flex items-center">
+            <i class="fa-solid fa-medal text-amber-500 mr-2"></i> Bộ sưu tập Huy hiệu Sinh học
+          </h2>
+          <span class="text-xs text-slate-400 font-medium">Tự động đạt khi hoàn thành chỉ số</span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4" id="badges-container">
+          <!-- Rendered via JS -->
+        </div>
+      </div>
+
+      <!-- Biological Tips -->
+      <div class="bg-bio-50 border border-bio-200 rounded-2xl p-5 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div class="flex items-center space-x-4">
+          <div class="w-12 h-12 bg-bio-600 text-white rounded-full flex items-center justify-center text-xl shrink-0">
+            <i class="fa-regular fa-lightbulb"></i>
+          </div>
+          <div>
+            <h4 class="font-bold text-slate-900 text-sm sm:text-base">Mẹo mắt học đường: Quy tắc 20-20-20</h4>
+            <p class="text-xs sm:text-sm text-slate-600">Cứ sau mỗi 20 phút học với màn hình hoặc sách vở, hãy nhìn xa ít nhất 20 feet (6m) trong 20 giây để thể mi mắt thư giãn hoàn toàn.</p>
+          </div>
+        </div>
+        <button onclick="switchTab('planner')" class="shrink-0 px-4 py-2 bg-bio-600 hover:bg-bio-700 text-white rounded-xl text-xs font-bold transition">
+          Xem lịch sinh học cá nhân &rarr;
+        </button>
+      </div>
+    </section>
+
+    <!-- ================= TAB 2: CÁ NHÂN HÓA LỐI SỐNG & ĐỒNG HỒ SINH HỌC ================= -->
+    <section id="tab-planner" class="hidden space-y-6">
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs">
+        <div class="max-w-2xl">
+          <h2 class="text-xl font-black text-slate-900 tracking-tight flex items-center">
+            <i class="fa-solid fa-sliders text-bio-600 mr-2.5"></i> Thiết Lập Cá Nhân Hóa Chu Kỳ Sinh Học
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-600 mt-1">
+            Điều chỉnh lịch trình thực tế của bạn để giải mã chu kỳ dao động nội tiết tố (Cortisol, Melatonin, Serotonin) và kích hoạt hiệu suất cao nhất.
+          </p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Left: Form inputs -->
+        <div class="lg:col-span-5 space-y-5">
+          <form id="bio-profile-form" class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-5">
+            <div class="border-b border-slate-100 pb-3">
+              <span class="text-xs font-extrabold text-bio-600 uppercase tracking-wider">Bước 1</span>
+              <h3 class="text-base font-bold text-slate-800">Đối tượng & Thời gian biểu</h3>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-600 mb-1.5">Đối tượng người dùng</label>
+              <select id="user-role-select" class="w-full text-sm border border-slate-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-bio-500 font-medium">
+                <option value="student">Học sinh / Sinh viên (Mặc định)</option>
+                <option value="freelancer">Làm việc tự do / Nghiên cứu</option>
+              </select>
+            </div>
+
+            <div id="student-schedule-block" class="space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-100">
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-[11px] font-bold text-slate-500 mb-1"><i class="fa-regular fa-sun text-amber-500 mr-1"></i> Giờ thức dậy</label>
+                  <input type="time" id="wake-time" value="06:00" class="w-full text-xs font-bold border border-slate-200 rounded-lg px-2.5 py-2 bg-white">
+                </div>
+                <div>
+                  <label class="block text-[11px] font-bold text-slate-500 mb-1"><i class="fa-solid fa-school text-blue-500 mr-1"></i> Giờ vào học</label>
+                  <input type="time" id="school-time" value="07:15" class="w-full text-xs font-bold border border-slate-200 rounded-lg px-2.5 py-2 bg-white">
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-[11px] font-bold text-slate-500 mb-1"><i class="fa-solid fa-house text-emerald-500 mr-1"></i> Giờ về nhà</label>
+                  <input type="time" id="home-time" value="17:00" class="w-full text-xs font-bold border border-slate-200 rounded-lg px-2.5 py-2 bg-white">
+                </div>
+                <div>
+                  <label class="block text-[11px] font-bold text-slate-500 mb-1"><i class="fa-solid fa-moon text-indigo-500 mr-1"></i> Giờ đi ngủ</label>
+                  <input type="time" id="sleep-time" value="22:30" class="w-full text-xs font-bold border border-slate-200 rounded-lg px-2.5 py-2 bg-white">
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 2: Dinh dưỡng toggle -->
+            <div class="border-t border-slate-100 pt-4">
+              <div class="flex items-center justify-between">
+                <div>
+                  <span class="text-xs font-extrabold text-bio-600 uppercase tracking-wider">Bước 2</span>
+                  <h3 class="text-base font-bold text-slate-800">Dinh dưỡng & Thực đơn</h3>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" id="nutrition-toggle" class="sr-only peer">
+                  <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-bio-600"></div>
+                </label>
+              </div>
+
+              <div id="nutrition-inputs-area" class="hidden mt-4 space-y-3 bg-emerald-50/50 p-4 rounded-xl border border-emerald-100">
+                <div class="grid grid-cols-2 gap-3">
+                  <div>
+                    <label class="block text-[11px] font-bold text-slate-600 mb-1">Chiều cao (cm)</label>
+                    <input type="number" id="user-height" placeholder="165" value="165" class="w-full text-xs font-medium border border-slate-200 rounded-lg px-3 py-2 bg-white">
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-bold text-slate-600 mb-1">Cân nặng (kg)</label>
+                    <input type="number" id="user-weight" placeholder="55" value="55" class="w-full text-xs font-medium border border-slate-200 rounded-lg px-3 py-2 bg-white">
+                  </div>
+                </div>
+
+                <div>
+                  <label class="block text-[11px] font-bold text-slate-600 mb-1">Mục tiêu thể chất</label>
+                  <select id="user-goal" class="w-full text-xs font-medium border border-slate-200 rounded-lg px-3 py-2 bg-white">
+                    <option value="maintain">Duy trì thể lực & Tăng tập trung học tập</option>
+                    <option value="muscle">Tăng cơ / Phát triển chiều cao dậy thì</option>
+                    <option value="fatloss">Giảm mỡ khoa học / Nhẹ nhàng cơ thể</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <button type="submit" class="w-full py-3 bg-bio-600 hover:bg-bio-700 text-white font-bold text-sm rounded-xl transition shadow-md shadow-bio-200 flex items-center justify-center">
+              <i class="fa-solid fa-cloud-arrow-up mr-2"></i> Lưu & Đồng Bộ Lên Đám Mây
+            </button>
+          </form>
+
+          <div id="nutrition-result-card" class="hidden bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+            <h4 class="font-bold text-slate-800 text-sm flex items-center text-bio-700">
+              <i class="fa-solid fa-apple-whole mr-2 text-bio-600"></i> Chỉ số & Khuyến nghị Dinh dưỡng Sinh học
+            </h4>
+            <div class="mt-3 space-y-2 text-xs text-slate-600" id="nutrition-details"></div>
+          </div>
+        </div>
+
+        <!-- Right: Biological Rhythm Timeline -->
+        <div class="lg:col-span-7 space-y-4">
+          <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-100 gap-2">
+              <div>
+                <h3 class="text-base font-bold text-slate-900 flex items-center">
+                  <i class="fa-solid fa-wave-square text-bio-600 mr-2"></i> Lược Đồ Nhịp Sinh Học (Circadian Rhythm)
+                </h3>
+                <p class="text-xs text-slate-500">Chu kỳ thích nghi tự nhiên của vùng dưới đồi (SCN)</p>
+              </div>
+              <span class="inline-flex items-center text-[11px] font-bold px-2.5 py-1 bg-bio-100 text-bio-800 rounded-full self-start sm:self-auto">
+                <i class="fa-solid fa-circle text-[7px] text-bio-600 mr-1.5 animate-ping"></i> Cá nhân hóa theo bạn
+              </span>
+            </div>
+
+            <div class="relative mt-6 space-y-6 before:absolute before:inset-0 before:left-3.5 before:w-0.5 before:bg-gradient-to-b before:from-amber-400 before:via-bio-400 before:to-indigo-500">
+              <!-- Point 1 -->
+              <div class="relative flex items-start space-x-4 pl-1">
+                <div class="w-6 h-6 rounded-full bg-amber-400 border-4 border-white shadow-xs flex items-center justify-center shrink-0 z-10 text-[10px] text-white">
+                  <i class="fa-solid fa-sun"></i>
+                </div>
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/80 flex-grow">
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs font-extrabold text-amber-700 bg-amber-100 px-2 py-0.5 rounded-md" id="time-wake-display">06:00 AM</span>
+                    <span class="text-[11px] font-bold text-slate-400">Cortisol Đỉnh Cao</span>
+                  </div>
+                  <h4 class="text-sm font-bold text-slate-800 mt-2">Bình minh: Đánh thức hệ nội tiết</h4>
+                  <p class="text-xs text-slate-600 mt-1">
+                    Cơ thể tiết Hormone Cortisol giúp tỉnh táo. Tiếp xúc ngay với ánh sáng mặt trời tự nhiên trong 10-15 phút để đồng bộ tế bào hạch võng mạc (ipRGCs). Uống 300ml nước bù đắp mất nước đêm.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Point 2 -->
+              <div class="relative flex items-start space-x-4 pl-1">
+                <div class="w-6 h-6 rounded-full bg-bio-500 border-4 border-white shadow-xs flex items-center justify-center shrink-0 z-10 text-[10px] text-white">
+                  <i class="fa-solid fa-brain"></i>
+                </div>
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/80 flex-grow">
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs font-extrabold text-bio-800 bg-bio-100 px-2 py-0.5 rounded-md" id="time-school-display">08:00 - 11:00 AM</span>
+                    <span class="text-[11px] font-bold text-bio-600">Đỉnh cao tư duy</span>
+                  </div>
+                  <h4 class="text-sm font-bold text-slate-800 mt-2">Giờ vàng học thuật: Vỏ não trước trán (Prefrontal Cortex)</h4>
+                  <p class="text-xs text-slate-600 mt-1">
+                    Nhiệt độ cơ thể tăng, Acetylcholine & Dopamine đạt mức tối ưu. Hãy giải quyết các môn suy luận khó (Toán, Lý, Sinh học phân tử).
+                  </p>
+                </div>
+              </div>
+
+              <!-- Point 3 -->
+              <div class="relative flex items-start space-x-4 pl-1">
+                <div class="w-6 h-6 rounded-full bg-orange-400 border-4 border-white shadow-xs flex items-center justify-center shrink-0 z-10 text-[10px] text-white">
+                  <i class="fa-solid fa-battery-quarter"></i>
+                </div>
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/80 flex-grow">
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs font-extrabold text-orange-700 bg-orange-100 px-2 py-0.5 rounded-md">13:30 - 14:30 PM</span>
+                    <span class="text-[11px] font-bold text-orange-500">Giảm áp lực Homeostatic</span>
+                  </div>
+                  <h4 class="text-sm font-bold text-slate-800 mt-2">Đáy sinh học ban ngày (Post-lunch Dip)</h4>
+                  <p class="text-xs text-slate-600 mt-1">
+                    Sau bữa trưa, nồng độ Adenosine tăng nhẹ gây buồn ngủ. Một giấc ngủ chớp 15-20 phút trước 14:00 sẽ xua tan mệt mỏi mà không gây uể oải.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Point 4 -->
+              <div class="relative flex items-start space-x-4 pl-1">
+                <div class="w-6 h-6 rounded-full bg-blue-500 border-4 border-white shadow-xs flex items-center justify-center shrink-0 z-10 text-[10px] text-white">
+                  <i class="fa-solid fa-dumbbell"></i>
+                </div>
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/80 flex-grow">
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs font-extrabold text-blue-700 bg-blue-100 px-2 py-0.5 rounded-md" id="time-home-display">17:00 - 18:30 PM</span>
+                    <span class="text-[11px] font-bold text-blue-500">Thể lực cực đại</span>
+                  </div>
+                  <h4 class="text-sm font-bold text-slate-800 mt-2">Nhiệt độ cơ thể cao nhất: Vận động thể thao</h4>
+                  <p class="text-xs text-slate-600 mt-1">
+                    Hiệu suất cơ bắp và dung tích phổi đạt đỉnh. Vận động giúp giải phóng năng lượng và kích thích sản sinh BDNF hỗ trợ tế bào thần kinh.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Point 5 -->
+              <div class="relative flex items-start space-x-4 pl-1">
+                <div class="w-6 h-6 rounded-full bg-indigo-600 border-4 border-white shadow-xs flex items-center justify-center shrink-0 z-10 text-[10px] text-white">
+                  <i class="fa-solid fa-moon"></i>
+                </div>
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/80 flex-grow">
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs font-extrabold text-indigo-700 bg-indigo-100 px-2 py-0.5 rounded-md" id="time-sleep-display">21:30 - 22:30 PM</span>
+                    <span class="text-[11px] font-bold text-indigo-500">Tuyến tùng & Melatonin</span>
+                  </div>
+                  <h4 class="text-sm font-bold text-slate-800 mt-2">Bật chế độ tiết Melatonin - Phục hồi sâu</h4>
+                  <p class="text-xs text-slate-600 mt-1">
+                    Tắt điện thoại trước khi ngủ 60 phút để không ức chế Melatonin, chuẩn bị cho chu kỳ làm sạch độc tố não Glymphatic trong lúc ngủ sâu.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= TAB 3: THÓI QUEN & TRẮC NGHIỆM BIO QUIZ ================= -->
+    <section id="tab-habits" class="hidden space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Habits Check-in -->
+        <div class="lg:col-span-6 space-y-4">
+          <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+              <div>
+                <h3 class="text-base font-bold text-slate-900 flex items-center">
+                  <i class="fa-solid fa-list-check text-bio-600 mr-2"></i> Điểm Danh Thói Quen Sinh Học
+                </h3>
+                <p class="text-xs text-slate-500">Tích lũy tế bào khỏe - Nhận ngay +10 BioCoins</p>
+              </div>
+              <span class="text-xs font-black text-bio-700 bg-bio-100 px-2.5 py-1 rounded-full">
+                Mỗi ngày 1 lần
+              </span>
+            </div>
+
+            <div class="mt-4 space-y-3">
+              <label class="flex items-start space-x-3 p-3.5 rounded-xl border border-slate-200 hover:bg-slate-50 cursor-pointer transition">
+                <input type="checkbox" id="habit-sleep" class="habit-check mt-1 w-4 h-4 text-bio-600 rounded focus:ring-bio-500 border-slate-300">
+                <div class="text-xs">
+                  <p class="font-bold text-slate-800">1. Giấc ngủ đủ 7-8 tiếng</p>
+                  <p class="text-slate-500 mt-0.5">Cho phép não bộ trải qua 4-5 chu kỳ sóng chậm REM và NREM củng cố trí nhớ.</p>
+                </div>
+              </label>
+
+              <label class="flex items-start space-x-3 p-3.5 rounded-xl border border-slate-200 hover:bg-slate-50 cursor-pointer transition">
+                <input type="checkbox" id="habit-water" class="habit-check mt-1 w-4 h-4 text-bio-600 rounded focus:ring-bio-500 border-slate-300">
+                <div class="text-xs">
+                  <p class="font-bold text-slate-800">2. Nạp đủ 1.5 - 2 Lít nước</p>
+                  <p class="text-slate-500 mt-0.5">Duy trì áp suất thẩm thấu màng tế bào máu, ngăn ngừa đau đầu do thiếu nước vi mô.</p>
+                </div>
+              </label>
+
+              <label class="flex items-start space-x-3 p-3.5 rounded-xl border border-slate-200 hover:bg-slate-50 cursor-pointer transition">
+                <input type="checkbox" id="habit-move" class="habit-check mt-1 w-4 h-4 text-bio-600 rounded focus:ring-bio-500 border-slate-300">
+                <div class="text-xs">
+                  <p class="font-bold text-slate-800">3. Vận động nhẹ hoặc co giãn cơ &gt; 20 phút</p>
+                  <p class="text-slate-500 mt-0.5">Thúc đẩy tuần hoàn bạch huyết và đào thải Axit Lactic tích tụ do ngồi học lâu.</p>
+                </div>
+              </label>
+            </div>
+
+            <button id="btn-submit-habits" onclick="checkInHabits()" class="mt-5 w-full py-3 bg-bio-600 hover:bg-bio-700 text-white font-bold text-xs sm:text-sm rounded-xl transition shadow-md shadow-bio-200 flex items-center justify-center">
+              <i class="fa-solid fa-calendar-check mr-2"></i> Xác nhận hoàn thành hôm nay (+10 Coins)
+            </button>
+          </div>
+        </div>
+
+        <!-- Daily Bio Quiz -->
+        <div class="lg:col-span-6 space-y-4">
+          <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+              <div>
+                <h3 class="text-base font-bold text-slate-900 flex items-center">
+                  <i class="fa-solid fa-feather-pointed text-purple-600 mr-2"></i> Daily Bio Quiz (Trắc nghiệm vui)
+                </h3>
+                <p class="text-xs text-slate-500">3 câu trắc nghiệm nhanh • Đúng hết nhận +15 BioCoins</p>
+              </div>
+              <span id="quiz-badge-status" class="text-xs font-bold text-slate-600 bg-slate-100 px-2 py-1 rounded-md">
+                Chưa làm
+              </span>
+            </div>
+
+            <div id="quiz-container" class="mt-4 space-y-5"></div>
+
+            <div id="quiz-result-box" class="hidden mt-4 p-4 rounded-xl bg-bio-50 border border-bio-200 text-center">
+              <p class="text-sm font-bold text-bio-900" id="quiz-score-text">Bạn đạt 3/3 câu đúng!</p>
+              <p class="text-xs text-bio-700 mt-1" id="quiz-bonus-text">+15 BioCoins đã được cộng vào tài khoản.</p>
+            </div>
+
+            <button id="btn-submit-quiz" onclick="evaluateQuiz()" class="mt-4 w-full py-3 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs sm:text-sm rounded-xl transition shadow-md shadow-purple-200 flex items-center justify-center">
+              <i class="fa-solid fa-circle-check mr-2"></i> Chấm điểm bài Quiz
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================= TAB 4: BIOMARKET ================= -->
+    <section id="tab-market" class="hidden space-y-6">
+      <div class="bg-gradient-to-r from-emerald-800 to-teal-700 p-6 sm:p-8 rounded-3xl text-white shadow-lg flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="space-y-2">
+          <span class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-white/20 text-emerald-100">
+            Cửa hàng kiến thức độc quyền
+          </span>
+          <h2 class="text-xl sm:text-3xl font-extrabold tracking-tight">BioMarket: Mở Khóa Khoa Học Chuyên Sâu</h2>
+          <p class="text-xs sm:text-sm text-emerald-100 max-w-xl">
+            Sử dụng BioCoins bạn tích lũy từ thói quen sinh học và Quiz để mở khóa các bài nghiên cứu mở rộng, phục vụ học sinh thi học sinh giỏi và định hướng Y sinh học.
+          </p>
+        </div>
+        <div class="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/20 text-center shrink-0 min-w-[150px]">
+          <span class="text-xs text-emerald-200 block">Số dư hiện tại</span>
+          <span class="text-3xl font-black text-amber-300" id="market-coins-display">0</span>
+          <span class="text-xs text-white block font-medium">BioCoins</span>
+        </div>
+      </div>
+
+      <!-- Articles Store Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="article-cards-container">
+        <!-- Card 1 -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden flex flex-col justify-between p-5 hover:shadow-md transition">
+          <div>
+            <div class="flex items-center justify-between text-xs mb-3">
+              <span class="px-2.5 py-1 rounded-full font-bold bg-blue-100 text-blue-700">Di truyền học</span>
+              <span class="font-bold text-amber-600"><i class="fa-solid fa-coins mr-1"></i>50 Coins</span>
+            </div>
+            <h3 class="font-extrabold text-slate-800 text-base mb-2">Di truyền học hành vi (Behavioral Genetics)</h3>
+            <p class="text-xs text-slate-500 leading-relaxed mb-4">
+              Liệu sự trì hoãn, thói quen cú đêm hay khả năng chịu áp lực có bị mã hóa trong ADN? Khám phá vai trò của thụ thể Dopamine D4 và các biến dị di truyền.
+            </p>
+          </div>
+          <div id="unlock-btn-container-1">
+            <button onclick="unlockArticle(1, 50)" class="w-full py-2.5 bg-bio-600 hover:bg-bio-700 text-white rounded-xl text-xs font-bold transition flex items-center justify-center">
+              <i class="fa-solid fa-lock mr-2"></i> Mở khóa ngay (50 Coins)
+            </button>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden flex flex-col justify-between p-5 hover:shadow-md transition">
+          <div>
+            <div class="flex items-center justify-between text-xs mb-3">
+              <span class="px-2.5 py-1 rounded-full font-bold bg-indigo-100 text-indigo-700">Thần kinh học</span>
+              <span class="font-bold text-amber-600"><i class="fa-solid fa-coins mr-1"></i>80 Coins</span>
+            </div>
+            <h3 class="font-extrabold text-slate-800 text-base mb-2">Cơ chế sinh học của trí nhớ dài hạn (LTP)</h3>
+            <p class="text-xs text-slate-500 leading-relaxed mb-4">
+              Khái niệm Long-Term Potentiation tại xinap thần kinh. Cách ion Ca2+ và thụ thể NMDA biến bài học trên lớp thành ký ức vĩnh cửu.
+            </p>
+          </div>
+          <div id="unlock-btn-container-2">
+            <button onclick="unlockArticle(2, 80)" class="w-full py-2.5 bg-bio-600 hover:bg-bio-700 text-white rounded-xl text-xs font-bold transition flex items-center justify-center">
+              <i class="fa-solid fa-lock mr-2"></i> Mở khóa ngay (80 Coins)
+            </button>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden flex flex-col justify-between p-5 hover:shadow-md transition">
+          <div>
+            <div class="flex items-center justify-between text-xs mb-3">
+              <span class="px-2.5 py-1 rounded-full font-bold bg-rose-100 text-rose-700">Sinh học tế bào</span>
+              <span class="font-bold text-amber-600"><i class="fa-solid fa-coins mr-1"></i>100 Coins</span>
+            </div>
+            <h3 class="font-extrabold text-slate-800 text-base mb-2">Sinh học sự mệt mỏi & Tự thực bào (Autophagy)</h3>
+            <p class="text-xs text-slate-500 leading-relaxed mb-4">
+              Công trình Nobel Y học 2016: Cơ thể tự động làm sạch bào quan hỏng hóc và phân tử biến tính như thế nào trong giấc ngủ sâu?
+            </p>
+          </div>
+          <div id="unlock-btn-container-3">
+            <button onclick="unlockArticle(3, 100)" class="w-full py-2.5 bg-bio-600 hover:bg-bio-700 text-white rounded-xl text-xs font-bold transition flex items-center justify-center">
+              <i class="fa-solid fa-lock mr-2"></i> Mở khóa ngay (100 Coins)
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= MODAL BÀI VIẾT ================= -->
+  <div id="article-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-2xl w-full max-h-[85vh] flex flex-col shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+      <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-bio-50/50">
+        <h3 id="modal-article-title" class="font-extrabold text-slate-800 text-base sm:text-lg">Tên Bài Viết</h3>
+        <button onclick="closeArticleModal()" class="text-slate-400 hover:text-slate-700 w-8 h-8 rounded-full flex items-center justify-center hover:bg-slate-200/60 transition">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+      <div class="p-6 overflow-y-auto space-y-4 text-xs sm:text-sm text-slate-600 leading-relaxed" id="modal-article-content"></div>
+      <div class="px-6 py-3 border-t border-slate-100 bg-slate-50 flex justify-end">
+        <button onclick="closeArticleModal()" class="px-5 py-2 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-xl text-xs transition">
+          Đóng cửa sổ
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-5 right-5 z-50 bg-slate-900 text-white px-4 py-3 rounded-2xl shadow-xl flex items-center space-x-3 text-xs font-bold transform translate-y-20 opacity-0 pointer-events-none transition-all duration-300">
+    <i class="fa-solid fa-circle-check text-bio-400 text-base" id="toast-icon"></i>
+    <span id="toast-msg">Thông báo thành công</span>
+  </div>
+
+  <!-- ================= JAVASCRIPT & FIREBASE ENGINE ================= -->
+  <script>
+    /* ----------------------------------------------------
+       1. CẤU HÌNH FIREBASE CỦA BẠN
+    ---------------------------------------------------- */
+    const firebaseConfig = { 
+      apiKey : "AIzaSyBs8IE9u231Sbpr5jbghNAKFEHkM0v8sOs", 
+      authDomain : "biohabit-f8a7f.firebaseapp.com", 
+      projectId : "biohabit-f8a7f", 
+      storageBucket : "biohabit-f8a7f.firebasestorage.app", 
+      messagingSenderId : "455369675252", 
+      appId : "1:455369675252:web:2d91ba6b4e13f08b46a9a1", 
+      measurementId : "G-P11VQXNKBS" 
+    };
+
+    // Khởi tạo Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    let currentUser = null; // Lưu user đang đăng nhập
+    let unsubscribeFirestore = null; // Hủy listener khi đăng xuất
+
+    /* ----------------------------------------------------
+       2. MẪU DỮ LIỆU BAN ĐẦU
+    ---------------------------------------------------- */
+    const DEFAULT_STORAGE = {
+      user: {
+        name: "Học sinh",
+        coins: 50, // Cho sẵn 50 coins ban đầu trải nghiệm
+        streak: 1,
+        lastCheckInDate: null,
+        quizCompletedDate: null,
+      },
+      schedule: {
+        role: "student",
+        wake: "06:00",
+        school: "07:15",
+        home: "17:00",
+        sleep: "22:30",
+        nutritionEnabled: false,
+        height: 165,
+        weight: 55,
+        goal: "maintain"
+      },
+      unlockedArticles: [1], // Mặc định mở bài 1
+      badges: {
+        streak7: false,
+        quizMaster: false,
+        bioScholar: false
+      }
+    };
+
+    let AppState = JSON.parse(JSON.stringify(DEFAULT_STORAGE));
+
+    /* ----------------------------------------------------
+       3. QUIZ & ARTICLES DATABASE
+    ---------------------------------------------------- */
+    const QUIZ_DATA = [
+      {
+        id: 1,
+        question: "Hormone nào sau đây được tiết ra từ tuyến tùng để điều chỉnh chu kỳ thức - ngủ tự nhiên?",
+        options: ["Adrenaline", "Melatonin", "Insulin", "Testosterone"],
+        answer: 1
+      },
+      {
+        id: 2,
+        question: "Khi bạn vận động thể thao mạnh, cơ xương bị thiếu oxy tạm thời sẽ lên men sinh ra chất nào gây mỏi cơ?",
+        options: ["Axit Lactic", "Axit Axetic", "Khí CO2 nguyên chất", "Rượu Ethanol"],
+        answer: 0
+      },
+      {
+        id: 3,
+        question: "Bào quan nào được ví như 'nhà máy tiêu hóa và dọn rác' của tế bào, giữ vai trò cốt lõi trong cơ chế Tự thực bào (Autophagy)?",
+        options: ["Riboxom", "Lysosome", "Lưới nội chất hạt", "Bộ máy Golgi"],
+        answer: 1
+      }
+    ];
+
+    const ARTICLES_DATA = {
+      1: {
+        title: "Di truyền học hành vi: Giải mã thói quen học tập qua ADN",
+        tag: "Di truyền học • Sinh học 12",
+        content: `
+          <h4 class="font-bold text-slate-800 text-sm">1. Khái niệm Di truyền học hành vi (Behavioral Genetics)</h4>
+          <p>Nhiều học sinh thường tự hỏi: "Tại sao mình luôn khó dậy sớm, trong khi bạn bè lại là những 'chú chim sớm' (Early Birds)?" Câu trả lời nằm ở sự tương tác phức tạp giữa gen và môi trường. Các nghiên cứu trên gen <strong>CLOCK</strong> và <strong>PER2</strong> (Period Circadian Regulator 2) cho thấy đột biến ở các locus này quy định kiểu hình nhịp sinh học (Chronotype) của từng cá thể.</p>
+          <h4 class="font-bold text-slate-800 text-sm mt-3">2. Thụ thể Dopamine D4 và sự tập trung</h4>
+          <p>Gen <em>DRD4</em> quy định thụ thể Dopamine tại vỏ não trước trán. Những biến thể alen lặp lại 7 lần (7R) thường liên quan đến xu hướng tìm kiếm sự mới lạ và dễ xao nhãng. Tuy nhiên, tính dẻo của hệ thần kinh (Neuroplasticity) cho phép rèn luyện thói quen để tái cấu trúc synap hiệu quả.</p>
+        `
+      },
+      2: {
+        title: "Cơ chế sinh học của trí nhớ dài hạn: Điềm tiềm hóa dài hạn (LTP)",
+        tag: "Thần kinh học & Sinh lý học",
+        content: `
+          <h4 class="font-bold text-slate-800 text-sm">1. Synap và Hiện tượng Long-Term Potentiation (LTP)</h4>
+          <p>Khi bạn học một kiến thức mới, thông tin ban đầu chỉ lưu tạm thời ở Hồi hải mã (Hippocampus). Để trở thành ký ức dài hạn, các nơ-ron phải trải qua hiện tượng <strong>LTP</strong> - sự tăng cường kéo dài trong truyền tín hiệu giữa hai nơ-ron do kích thích lặp đi lặp lại.</p>
+          <h4 class="font-bold text-slate-800 text-sm mt-3">2. Dòng ion Canxi (Ca2+) và Thụ thể NMDA</h4>
+          <p>Glutamate kích hoạt thụ thể AMPA khử cực màng, đẩy ion Mg2+ ra khỏi thụ thể NMDA. Canxi (Ca2+) ồ ạt tràn vào tế bào, kích hoạt enzyme gắn thêm nhiều thụ thể AMPA mới. Kết quả: Lần sau chỉ cần một kích thích nhỏ là ký ức được gợi mở dễ dàng.</p>
+        `
+      },
+      3: {
+        title: "Sinh học sự mệt mỏi & Tự thực bào (Autophagy) - Dọn dẹp độc tố tế bào",
+        tag: "Sinh học tế bào • Nobel Y học 2016",
+        content: `
+          <h4 class="font-bold text-slate-800 text-sm">1. Tại sao chúng ta mệt mỏi sau ngày dài học tập?</h4>
+          <p>Trong quá trình chuyển hóa, việc phân giải ATP thành ADP và cuối cùng là <strong>Adenosine</strong> tích tụ ở khe synap gắn vào các thụ thể thần kinh, phát tín hiệu buồn ngủ lên vỏ não.</p>
+          <h4 class="font-bold text-slate-800 text-sm mt-3">2. Kỳ quan Autophagy - Tái chế rác nội bào</h4>
+          <p>Khi ngủ sâu hoặc nhịn ăn cách quãng, cơ thể kích hoạt túi tự thực (Autophagosome) đưa bào quan ty thể già cỗi đến hòa màng với Lysosome, cắt nhỏ chúng thành axit amin tự do để tái tạo tế bào mới tràn đầy năng lượng.</p>
+        `
+      }
+    };
+
+    /* ----------------------------------------------------
+       4. ĐĂNG NHẬP / ĐĂNG XUẤT & ĐỒNG BỘ CLOUD (REAL-TIME)
+    ---------------------------------------------------- */
+    function loginWithGoogle() {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      auth.signInWithPopup(provider)
+        .then(() => {
+          showToast("Đăng nhập Google thành công!", "success");
+        })
+        .catch(error => {
+          console.error(error);
+          showToast("Lỗi đăng nhập: " + error.message, "warning");
+        });
+    }
+
+    function logoutGoogle() {
+      auth.signOut().then(() => {
+        showToast("Đã đăng xuất tài khoản", "info");
+      });
+    }
+
+    // Lắng nghe trạng thái đăng nhập
+    auth.onAuthStateChanged(user => {
+      const btnLogin = document.getElementById('btn-login-google');
+      const userBox = document.getElementById('user-logged-pill');
+
+      if (user) {
+        currentUser = user;
+        btnLogin.classList.add('hidden');
+        userBox.classList.remove('hidden');
+
+        document.getElementById('user-display-name').innerText = user.displayName || "Học sinh";
+        document.getElementById('user-avatar-img').src = user.photoURL || 'https://api.dicebear.com/7.x/bottts/svg?seed=biolife';
+
+        // Lắng nghe dữ liệu thời gian thực từ Firestore Database
+        if (unsubscribeFirestore) unsubscribeFirestore();
+        
+        unsubscribeFirestore = db.collection("users").doc(user.uid).onSnapshot(doc => {
+          if (doc.exists) {
+            AppState = doc.data();
+          } else {
+            // Tài khoản lần đầu đăng nhập: khởi tạo trên Cloud
+            AppState = JSON.parse(JSON.stringify(DEFAULT_STORAGE));
+            AppState.user.name = user.displayName || "Học sinh";
+            db.collection("users").doc(user.uid).set(AppState);
+          }
+          updateGlobalUI();
+        }, err => {
+          console.error("Firestore Error:", err);
+          loadLocalFallback();
+        });
+
+      } else {
+        currentUser = null;
+        if (unsubscribeFirestore) unsubscribeFirestore();
+
+        btnLogin.classList.remove('hidden');
+        userBox.classList.add('hidden');
+
+        // Khi chưa đăng nhập: dùng LocalStorage tạm thời
+        loadLocalFallback();
+      }
+    });
+
+    function loadLocalFallback() {
+      const saved = localStorage.getItem("BIOLIFE_LOCAL_STATE");
+      if (saved) {
+        try { AppState = JSON.parse(saved); } catch(e) { AppState = JSON.parse(JSON.stringify(DEFAULT_STORAGE)); }
+      } else {
+        AppState = JSON.parse(JSON.stringify(DEFAULT_STORAGE));
+      }
+      updateGlobalUI();
+    }
+
+    // Hàm lưu trạng thái: Tự động đẩy lên Cloud nếu đã đăng nhập
+    function saveState() {
+      if (currentUser) {
+        db.collection("users").doc(currentUser.uid).set(AppState)
+          .then(() => console.log("Đã đồng bộ lên đám mây Firestore"))
+          .catch(err => {
+            console.error("Lỗi đồng bộ:", err);
+            showToast("Lỗi lưu đám mây: Vui lòng kiểm tra Rules Firestore", "warning");
+          });
+      } else {
+        localStorage.setItem("BIOLIFE_LOCAL_STATE", JSON.stringify(AppState));
+        updateGlobalUI();
+      }
+    }
+
+    /* ----------------------------------------------------
+       5. GIAO DIỆN & THAO TÁC CƠ BẢN
+    ---------------------------------------------------- */
+    function switchTab(tabId) {
+      const tabs = ['dashboard', 'planner', 'habits', 'market'];
+      tabs.forEach(t => {
+        const section = document.getElementById(`tab-${t}`);
+        const navBtn = document.getElementById(`nav-${t}`);
+        if (t === tabId) {
+          section.classList.remove('hidden');
+          if (navBtn) {
+            navBtn.classList.add('text-bio-700', 'bg-bio-50');
+            navBtn.classList.remove('hover:bg-slate-100');
+          }
+        } else {
+          section.classList.add('hidden');
+          if (navBtn) {
+            navBtn.classList.remove('text-bio-700', 'bg-bio-50');
+            navBtn.classList.add('hover:bg-slate-100');
+          }
+        }
+      });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function updateGlobalUI() {
+      document.getElementById('user-coins').innerText = AppState.user.coins;
+      document.getElementById('dash-coins').innerText = AppState.user.coins;
+      document.getElementById('dash-streak').innerText = `${AppState.user.streak} ngày`;
+      document.getElementById('dash-unlocked-count').innerText = `${AppState.unlockedArticles.length} / 3`;
+      document.getElementById('market-coins-display').innerText = AppState.user.coins;
+
+      // Đồng bộ thời gian biểu
+      document.getElementById('wake-time').value = AppState.schedule.wake;
+      document.getElementById('school-time').value = AppState.schedule.school;
+      document.getElementById('home-time').value = AppState.schedule.home;
+      document.getElementById('sleep-time').value = AppState.schedule.sleep;
+
+      document.getElementById('time-wake-display').innerText = formatTimeToAMPM(AppState.schedule.wake);
+      document.getElementById('time-school-display').innerText = `${formatTimeToAMPM(AppState.schedule.school)} - Giờ vàng học tập`;
+      document.getElementById('time-home-display').innerText = `${formatTimeToAMPM(AppState.schedule.home)} - Thể lực cực đại`;
+      document.getElementById('time-sleep-display').innerText = `${formatTimeToAMPM(AppState.schedule.sleep)} - Tiết Melatonin`;
+
+      // Dinh dưỡng
+      const nutCheck = document.getElementById('nutrition-toggle');
+      const nutInputs = document.getElementById('nutrition-inputs-area');
+      const nutCard = document.getElementById('nutrition-result-card');
+
+      nutCheck.checked = AppState.schedule.nutritionEnabled;
+      if (AppState.schedule.nutritionEnabled) {
+        nutInputs.classList.remove('hidden');
+        nutCard.classList.remove('hidden');
+        renderNutritionAdvice();
+      } else {
+        nutInputs.classList.add('hidden');
+        nutCard.classList.add('hidden');
+      }
+
+      checkBadges();
+      renderBadges();
+      renderStoreButtons();
+    }
+
+    function formatTimeToAMPM(timeStr) {
+      if (!timeStr) return "06:00 AM";
+      const [h, m] = timeStr.split(":");
+      let hour = parseInt(h);
+      const period = hour >= 12 ? "PM" : "AM";
+      hour = hour % 12 || 12;
+      return `${hour.toString().padStart(2, '0')}:${m} ${period}`;
+    }
+
+    /* ----------------------------------------------------
+       6. LOGIC: THÓI QUEN, QUIZ, MỞ KHÓA BÀI VIẾT
+    ---------------------------------------------------- */
+    function checkInHabits() {
+      const todayStr = new Date().toISOString().split('T')[0];
+      if (AppState.user.lastCheckInDate === todayStr) {
+        showToast("Hôm nay bạn đã hoàn thành điểm danh rồi!", "info");
+        return;
+      }
+
+      const h1 = document.getElementById('habit-sleep').checked;
+      const h2 = document.getElementById('habit-water').checked;
+      const h3 = document.getElementById('habit-move').checked;
+
+      if (!h1 && !h2 && !h3) {
+        showToast("Vui lòng tích chọn ít nhất 1 thói quen bạn đã làm!", "warning");
+        return;
+      }
+
+      AppState.user.coins += 10;
+      AppState.user.streak += 1;
+      AppState.user.lastCheckInDate = todayStr;
+
+      saveState();
+      showToast("Tuyệt vời! +10 BioCoins và duy trì chuỗi Streak!", "success");
+    }
+
+    function renderQuiz() {
+      const container = document.getElementById('quiz-container');
+      container.innerHTML = QUIZ_DATA.map((q, idx) => `
+        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2.5">
+          <p class="text-xs font-bold text-slate-800">
+            <span class="text-purple-600 font-black mr-1">Câu ${idx + 1}:</span> ${q.question}
+          </p>
+          <div class="space-y-1.5">
+            ${q.options.map((opt, optIdx) => `
+              <label class="flex items-center space-x-2.5 p-2 rounded-lg bg-white border border-slate-200 hover:border-purple-300 text-xs font-medium cursor-pointer transition">
+                <input type="radio" name="quiz-q-${q.id}" value="${optIdx}" class="text-purple-600 focus:ring-purple-500 border-slate-300">
+                <span class="text-slate-700">${opt}</span>
+              </label>
+            `).join('')}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function evaluateQuiz() {
+      const todayStr = new Date().toISOString().split('T')[0];
+      if (AppState.user.quizCompletedDate === todayStr) {
+        showToast("Bạn đã nhận thưởng Quiz hôm nay rồi! Quay lại vào ngày mai nhé.", "info");
+        return;
+      }
+
+      let correctCount = 0;
+      let allAnswered = true;
+
+      QUIZ_DATA.forEach(q => {
+        const selected = document.querySelector(`input[name="quiz-q-${q.id}"]:checked`);
+        if (!selected) allAnswered = false;
+        else if (parseInt(selected.value) === q.answer) correctCount++;
+      });
+
+      if (!allAnswered) {
+        showToast("Vui lòng trả lời đủ 3 câu trắc nghiệm!", "warning");
+        return;
+      }
+
+      const resultBox = document.getElementById('quiz-result-box');
+      resultBox.classList.remove('hidden');
+
+      if (correctCount === 3) {
+        AppState.user.coins += 15;
+        AppState.user.quizCompletedDate = todayStr;
+        AppState.badges.quizMaster = true;
+
+        document.getElementById('quiz-score-text').innerText = "Xuất sắc! Bạn đúng 3/3 câu hỏi!";
+        document.getElementById('quiz-bonus-text').innerText = "+15 BioCoins đã được cộng vào tài khoản.";
+        saveState();
+        showToast("Chúc mừng! Đạt điểm tuyệt đối +15 Coins!", "success");
+      } else {
+        document.getElementById('quiz-score-text').innerText = `Bạn trả lời đúng ${correctCount}/3 câu.`;
+        document.getElementById('quiz-bonus-text').innerText = "Cần đúng cả 3 câu để nhận +15 BioCoins. Hãy thử lại!";
+        showToast(`Đúng ${correctCount}/3 câu. Cố gắng thêm nhé!`, "info");
+      }
+    }
+
+    function renderStoreButtons() {
+      [1, 2, 3].forEach(id => {
+        const btnContainer = document.getElementById(`unlock-btn-container-${id}`);
+        const isUnlocked = AppState.unlockedArticles.includes(id);
+
+        if (isUnlocked) {
+          btnContainer.innerHTML = `
+            <button onclick="openArticleModal(${id})" class="w-full py-2.5 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 rounded-xl text-xs font-bold transition flex items-center justify-center">
+              <i class="fa-solid fa-book-open-reader mr-2"></i> Đọc bài nghiên cứu (Đã mở)
+            </button>
+          `;
+        }
+      });
+    }
+
+    function unlockArticle(articleId, cost) {
+      if (AppState.unlockedArticles.includes(articleId)) {
+        openArticleModal(articleId);
+        return;
+      }
+
+      if (AppState.user.coins < cost) {
+        showToast(`Bạn cần ${cost} coins, hiện chỉ có ${AppState.user.coins} coins. Hãy tích thêm điểm nhé!`, "warning");
+        return;
+      }
+
+      AppState.user.coins -= cost;
+      AppState.unlockedArticles.push(articleId);
+      saveState();
+      showToast("Mở khóa bài nghiên cứu thành công!", "success");
+      openArticleModal(articleId);
+    }
+
+    function openArticleModal(id) {
+      const article = ARTICLES_DATA[id];
+      if (!article) return;
+
+      document.getElementById('modal-article-title').innerHTML = `<i class="fa-solid fa-dna text-bio-600 mr-2"></i> ${article.title}`;
+      document.getElementById('modal-article-content').innerHTML = `
+        <div class="mb-3">
+          <span class="text-[11px] font-bold text-bio-700 bg-bio-100 px-2.5 py-1 rounded-full">${article.tag}</span>
+        </div>
+        ${article.content}
+      `;
+      document.getElementById('article-modal').classList.remove('hidden');
+    }
+
+    function closeArticleModal() {
+      document.getElementById('article-modal').classList.add('hidden');
+    }
+
+    /* ----------------------------------------------------
+       7. PROFILE & NUTRITION ENGINE
+    ---------------------------------------------------- */
+    document.getElementById('nutrition-toggle').addEventListener('change', function(e) {
+      const area = document.getElementById('nutrition-inputs-area');
+      if (e.target.checked) area.classList.remove('hidden');
+      else area.classList.add('hidden');
+    });
+
+    document.getElementById('bio-profile-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      AppState.schedule = {
+        role: document.getElementById('user-role-select').value,
+        wake: document.getElementById('wake-time').value,
+        school: document.getElementById('school-time').value,
+        home: document.getElementById('home-time').value,
+        sleep: document.getElementById('sleep-time').value,
+        nutritionEnabled: document.getElementById('nutrition-toggle').checked,
+        height: parseFloat(document.getElementById('user-height').value) || 165,
+        weight: parseFloat(document.getElementById('user-weight').value) || 55,
+        goal: document.getElementById('user-goal').value
+      };
+
+      saveState();
+      showToast("Đã đồng bộ lịch trình cá nhân lên Đám mây!", "success");
+    });
+
+    function renderNutritionAdvice() {
+      const h = (AppState.schedule.height || 165) / 100;
+      const w = AppState.schedule.weight || 
