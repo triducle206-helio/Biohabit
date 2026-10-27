@@ -212,9 +212,7 @@
           </h2>
           <span class="text-xs text-slate-400 font-medium">Tự động đạt khi hoàn thành chỉ số</span>
         </div>
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4" id="badges-container">
-          <!-- Rendered via JS -->
-        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4" id="badges-container"></div>
       </div>
 
       <!-- Biological Tips -->
@@ -234,7 +232,7 @@
       </div>
     </section>
 
-    <!-- ================= TAB 2: CÁ NHÂN HÓA LỐI SỐNG & ĐỒNG HỒ SINH HỌC ================= -->
+    <!-- ================= TAB 2: CÁ NHÂN HÓA LỐI SỐNG ================= -->
     <section id="tab-planner" class="hidden space-y-6">
       <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs">
         <div class="max-w-2xl">
@@ -242,13 +240,12 @@
             <i class="fa-solid fa-sliders text-bio-600 mr-2.5"></i> Thiết Lập Cá Nhân Hóa Chu Kỳ Sinh Học
           </h2>
           <p class="text-xs sm:text-sm text-slate-600 mt-1">
-            Điều chỉnh lịch trình thực tế của bạn để giải mã chu kỳ dao động nội tiết tố (Cortisol, Melatonin, Serotonin) và kích hoạt hiệu suất cao nhất.
+            Điều chỉnh lịch trình thực tế để giải mã chu kỳ dao động hormone và tối ưu hiệu suất sinh học.
           </p>
         </div>
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <!-- Left: Form inputs -->
         <div class="lg:col-span-5 space-y-5">
           <form id="bio-profile-form" class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-5">
             <div class="border-b border-slate-100 pb-3">
@@ -288,7 +285,6 @@
               </div>
             </div>
 
-            <!-- Step 2: Dinh dưỡng toggle -->
             <div class="border-t border-slate-100 pt-4">
               <div class="flex items-center justify-between">
                 <div>
@@ -337,7 +333,6 @@
           </div>
         </div>
 
-        <!-- Right: Biological Rhythm Timeline -->
         <div class="lg:col-span-7 space-y-4">
           <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-100 gap-2">
@@ -353,7 +348,6 @@
             </div>
 
             <div class="relative mt-6 space-y-6 before:absolute before:inset-0 before:left-3.5 before:w-0.5 before:bg-gradient-to-b before:from-amber-400 before:via-bio-400 before:to-indigo-500">
-              <!-- Point 1 -->
               <div class="relative flex items-start space-x-4 pl-1">
                 <div class="w-6 h-6 rounded-full bg-amber-400 border-4 border-white shadow-xs flex items-center justify-center shrink-0 z-10 text-[10px] text-white">
                   <i class="fa-solid fa-sun"></i>
@@ -364,13 +358,10 @@
                     <span class="text-[11px] font-bold text-slate-400">Cortisol Đỉnh Cao</span>
                   </div>
                   <h4 class="text-sm font-bold text-slate-800 mt-2">Bình minh: Đánh thức hệ nội tiết</h4>
-                  <p class="text-xs text-slate-600 mt-1">
-                    Cơ thể tiết Hormone Cortisol giúp tỉnh táo. Tiếp xúc ngay với ánh sáng mặt trời tự nhiên trong 10-15 phút để đồng bộ tế bào hạch võng mạc (ipRGCs). Uống 300ml nước bù đắp mất nước đêm.
-                  </p>
+                  <p class="text-xs text-slate-600 mt-1">Cơ thể tiết Cortisol giúp tỉnh táo. Tiếp xúc ngay với ánh sáng tự nhiên để đồng bộ tế bào võng mạc ipRGCs. Uống 300ml nước bù mất nước ban đêm.</p>
                 </div>
               </div>
 
-              <!-- Point 2 -->
               <div class="relative flex items-start space-x-4 pl-1">
                 <div class="w-6 h-6 rounded-full bg-bio-500 border-4 border-white shadow-xs flex items-center justify-center shrink-0 z-10 text-[10px] text-white">
                   <i class="fa-solid fa-brain"></i>
@@ -380,14 +371,11 @@
                     <span class="text-xs font-extrabold text-bio-800 bg-bio-100 px-2 py-0.5 rounded-md" id="time-school-display">08:00 - 11:00 AM</span>
                     <span class="text-[11px] font-bold text-bio-600">Đỉnh cao tư duy</span>
                   </div>
-                  <h4 class="text-sm font-bold text-slate-800 mt-2">Giờ vàng học thuật: Vỏ não trước trán (Prefrontal Cortex)</h4>
-                  <p class="text-xs text-slate-600 mt-1">
-                    Nhiệt độ cơ thể tăng, Acetylcholine & Dopamine đạt mức tối ưu. Hãy giải quyết các môn suy luận khó (Toán, Lý, Sinh học phân tử).
-                  </p>
+                  <h4 class="text-sm font-bold text-slate-800 mt-2">Giờ vàng học thuật: Vỏ não trước trán</h4>
+                  <p class="text-xs text-slate-600 mt-1">Nhiệt độ cơ thể tăng, Acetylcholine & Dopamine đạt mức tối ưu. Hãy giải quyết các môn suy luận khó (Toán, Lý, Sinh học phân tử).</p>
                 </div>
               </div>
 
-              <!-- Point 3 -->
               <div class="relative flex items-start space-x-4 pl-1">
                 <div class="w-6 h-6 rounded-full bg-orange-400 border-4 border-white shadow-xs flex items-center justify-center shrink-0 z-10 text-[10px] text-white">
                   <i class="fa-solid fa-battery-quarter"></i>
@@ -398,13 +386,10 @@
                     <span class="text-[11px] font-bold text-orange-500">Giảm áp lực Homeostatic</span>
                   </div>
                   <h4 class="text-sm font-bold text-slate-800 mt-2">Đáy sinh học ban ngày (Post-lunch Dip)</h4>
-                  <p class="text-xs text-slate-600 mt-1">
-                    Sau bữa trưa, nồng độ Adenosine tăng nhẹ gây buồn ngủ. Một giấc ngủ chớp 15-20 phút trước 14:00 sẽ xua tan mệt mỏi mà không gây uể oải.
-                  </p>
+                  <p class="text-xs text-slate-600 mt-1">Nồng độ Adenosine tăng nhẹ gây buồn ngủ. Một giấc ngủ chớp 15-20 phút trước 14:00 sẽ xua tan mệt mỏi mà không gây uể oải.</p>
                 </div>
               </div>
 
-              <!-- Point 4 -->
               <div class="relative flex items-start space-x-4 pl-1">
                 <div class="w-6 h-6 rounded-full bg-blue-500 border-4 border-white shadow-xs flex items-center justify-center shrink-0 z-10 text-[10px] text-white">
                   <i class="fa-solid fa-dumbbell"></i>
@@ -415,13 +400,10 @@
                     <span class="text-[11px] font-bold text-blue-500">Thể lực cực đại</span>
                   </div>
                   <h4 class="text-sm font-bold text-slate-800 mt-2">Nhiệt độ cơ thể cao nhất: Vận động thể thao</h4>
-                  <p class="text-xs text-slate-600 mt-1">
-                    Hiệu suất cơ bắp và dung tích phổi đạt đỉnh. Vận động giúp giải phóng năng lượng và kích thích sản sinh BDNF hỗ trợ tế bào thần kinh.
-                  </p>
+                  <p class="text-xs text-slate-600 mt-1">Hiệu suất cơ bắp và phổi đạt đỉnh. Vận động giúp giải phóng năng lượng và kích thích sản sinh BDNF hỗ trợ tế bào thần kinh.</p>
                 </div>
               </div>
 
-              <!-- Point 5 -->
               <div class="relative flex items-start space-x-4 pl-1">
                 <div class="w-6 h-6 rounded-full bg-indigo-600 border-4 border-white shadow-xs flex items-center justify-center shrink-0 z-10 text-[10px] text-white">
                   <i class="fa-solid fa-moon"></i>
@@ -432,9 +414,7 @@
                     <span class="text-[11px] font-bold text-indigo-500">Tuyến tùng & Melatonin</span>
                   </div>
                   <h4 class="text-sm font-bold text-slate-800 mt-2">Bật chế độ tiết Melatonin - Phục hồi sâu</h4>
-                  <p class="text-xs text-slate-600 mt-1">
-                    Tắt điện thoại trước khi ngủ 60 phút để không ức chế Melatonin, chuẩn bị cho chu kỳ làm sạch độc tố não Glymphatic trong lúc ngủ sâu.
-                  </p>
+                  <p class="text-xs text-slate-600 mt-1">Tắt điện thoại trước khi ngủ 60 phút để không ức chế Melatonin, chuẩn bị cho chu kỳ làm sạch độc tố não Glymphatic trong lúc ngủ sâu.</p>
                 </div>
               </div>
             </div>
@@ -443,11 +423,10 @@
       </div>
     </section>
 
-    <!-- ================= TAB 3: THÓI QUEN & TRẮC NGHIỆM BIO QUIZ ================= -->
+    <!-- ================= TAB 3: THÓI QUEN & QUIZ ================= -->
     <section id="tab-habits" class="hidden space-y-6">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
         
-        <!-- Habits Check-in -->
         <div class="lg:col-span-6 space-y-4">
           <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs">
             <div class="flex items-center justify-between pb-3 border-b border-slate-100">
@@ -457,9 +436,7 @@
                 </h3>
                 <p class="text-xs text-slate-500">Tích lũy tế bào khỏe - Nhận ngay +10 BioCoins</p>
               </div>
-              <span class="text-xs font-black text-bio-700 bg-bio-100 px-2.5 py-1 rounded-full">
-                Mỗi ngày 1 lần
-              </span>
+              <span class="text-xs font-black text-bio-700 bg-bio-100 px-2.5 py-1 rounded-full">Mỗi ngày 1 lần</span>
             </div>
 
             <div class="mt-4 space-y-3">
@@ -467,7 +444,7 @@
                 <input type="checkbox" id="habit-sleep" class="habit-check mt-1 w-4 h-4 text-bio-600 rounded focus:ring-bio-500 border-slate-300">
                 <div class="text-xs">
                   <p class="font-bold text-slate-800">1. Giấc ngủ đủ 7-8 tiếng</p>
-                  <p class="text-slate-500 mt-0.5">Cho phép não bộ trải qua 4-5 chu kỳ sóng chậm REM và NREM củng cố trí nhớ.</p>
+                  <p class="text-slate-500 mt-0.5">Cho não bộ trải qua 4-5 chu kỳ sóng chậm REM và NREM củng cố trí nhớ.</p>
                 </div>
               </label>
 
@@ -475,15 +452,15 @@
                 <input type="checkbox" id="habit-water" class="habit-check mt-1 w-4 h-4 text-bio-600 rounded focus:ring-bio-500 border-slate-300">
                 <div class="text-xs">
                   <p class="font-bold text-slate-800">2. Nạp đủ 1.5 - 2 Lít nước</p>
-                  <p class="text-slate-500 mt-0.5">Duy trì áp suất thẩm thấu màng tế bào máu, ngăn ngừa đau đầu do thiếu nước vi mô.</p>
+                  <p class="text-slate-500 mt-0.5">Duy trì áp suất thẩm thấu màng tế bào, tránh thiếu nước vi mô.</p>
                 </div>
               </label>
 
               <label class="flex items-start space-x-3 p-3.5 rounded-xl border border-slate-200 hover:bg-slate-50 cursor-pointer transition">
                 <input type="checkbox" id="habit-move" class="habit-check mt-1 w-4 h-4 text-bio-600 rounded focus:ring-bio-500 border-slate-300">
                 <div class="text-xs">
-                  <p class="font-bold text-slate-800">3. Vận động nhẹ hoặc co giãn cơ &gt; 20 phút</p>
-                  <p class="text-slate-500 mt-0.5">Thúc đẩy tuần hoàn bạch huyết và đào thải Axit Lactic tích tụ do ngồi học lâu.</p>
+                  <p class="font-bold text-slate-800">3. Vận động hoặc co giãn cơ &gt; 20 phút</p>
+                  <p class="text-slate-500 mt-0.5">Thúc đẩy bạch huyết, đào thải Axit Lactic tích tụ do ngồi học lâu.</p>
                 </div>
               </label>
             </div>
@@ -494,7 +471,6 @@
           </div>
         </div>
 
-        <!-- Daily Bio Quiz -->
         <div class="lg:col-span-6 space-y-4">
           <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs">
             <div class="flex items-center justify-between pb-3 border-b border-slate-100">
@@ -504,9 +480,6 @@
                 </h3>
                 <p class="text-xs text-slate-500">3 câu trắc nghiệm nhanh • Đúng hết nhận +15 BioCoins</p>
               </div>
-              <span id="quiz-badge-status" class="text-xs font-bold text-slate-600 bg-slate-100 px-2 py-1 rounded-md">
-                Chưa làm
-              </span>
             </div>
 
             <div id="quiz-container" class="mt-4 space-y-5"></div>
@@ -529,12 +502,10 @@
     <section id="tab-market" class="hidden space-y-6">
       <div class="bg-gradient-to-r from-emerald-800 to-teal-700 p-6 sm:p-8 rounded-3xl text-white shadow-lg flex flex-col md:flex-row items-center justify-between gap-6">
         <div class="space-y-2">
-          <span class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-white/20 text-emerald-100">
-            Cửa hàng kiến thức độc quyền
-          </span>
+          <span class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-white/20 text-emerald-100">Cửa hàng kiến thức độc quyền</span>
           <h2 class="text-xl sm:text-3xl font-extrabold tracking-tight">BioMarket: Mở Khóa Khoa Học Chuyên Sâu</h2>
           <p class="text-xs sm:text-sm text-emerald-100 max-w-xl">
-            Sử dụng BioCoins bạn tích lũy từ thói quen sinh học và Quiz để mở khóa các bài nghiên cứu mở rộng, phục vụ học sinh thi học sinh giỏi và định hướng Y sinh học.
+            Sử dụng BioCoins tích lũy để mở khóa các bài nghiên cứu mở rộng phục vụ học tập và nghiên cứu.
           </p>
         </div>
         <div class="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/20 text-center shrink-0 min-w-[150px]">
@@ -544,9 +515,8 @@
         </div>
       </div>
 
-      <!-- Articles Store Grid -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="article-cards-container">
-        <!-- Card 1 -->
+        <!-- Bài 1 -->
         <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden flex flex-col justify-between p-5 hover:shadow-md transition">
           <div>
             <div class="flex items-center justify-between text-xs mb-3">
@@ -555,7 +525,7 @@
             </div>
             <h3 class="font-extrabold text-slate-800 text-base mb-2">Di truyền học hành vi (Behavioral Genetics)</h3>
             <p class="text-xs text-slate-500 leading-relaxed mb-4">
-              Liệu sự trì hoãn, thói quen cú đêm hay khả năng chịu áp lực có bị mã hóa trong ADN? Khám phá vai trò của thụ thể Dopamine D4 và các biến dị di truyền.
+              Liệu sự trì hoãn hay nhịp đồng hồ sinh học có bị mã hóa trong ADN? Khám phá vai trò của thụ thể Dopamine D4 và gen đồng hồ PER2.
             </p>
           </div>
           <div id="unlock-btn-container-1">
@@ -565,7 +535,7 @@
           </div>
         </div>
 
-        <!-- Card 2 -->
+        <!-- Bài 2 -->
         <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden flex flex-col justify-between p-5 hover:shadow-md transition">
           <div>
             <div class="flex items-center justify-between text-xs mb-3">
@@ -584,7 +554,7 @@
           </div>
         </div>
 
-        <!-- Card 3 -->
+        <!-- Bài 3 -->
         <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden flex flex-col justify-between p-5 hover:shadow-md transition">
           <div>
             <div class="flex items-center justify-between text-xs mb-3">
@@ -633,9 +603,7 @@
 
   <!-- ================= JAVASCRIPT & FIREBASE ENGINE ================= -->
   <script>
-    /* ----------------------------------------------------
-       1. CẤU HÌNH FIREBASE CỦA BẠN
-    ---------------------------------------------------- */
+    /* 1. CẤU HÌNH FIREBASE */
     const firebaseConfig = { 
       apiKey : "AIzaSyBs8IE9u231Sbpr5jbghNAKFEHkM0v8sOs", 
       authDomain : "biohabit-f8a7f.firebaseapp.com", 
@@ -646,21 +614,18 @@
       measurementId : "G-P11VQXNKBS" 
     };
 
-    // Khởi tạo Firebase
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.firestore();
 
-    let currentUser = null; // Lưu user đang đăng nhập
-    let unsubscribeFirestore = null; // Hủy listener khi đăng xuất
+    let currentUser = null;
+    let unsubscribeFirestore = null;
 
-    /* ----------------------------------------------------
-       2. MẪU DỮ LIỆU BAN ĐẦU
-    ---------------------------------------------------- */
+    /* 2. DỮ LIỆU BAN ĐẦU */
     const DEFAULT_STORAGE = {
       user: {
         name: "Học sinh",
-        coins: 50, // Cho sẵn 50 coins ban đầu trải nghiệm
+        coins: 50,
         streak: 1,
         lastCheckInDate: null,
         quizCompletedDate: null,
@@ -676,7 +641,7 @@
         weight: 55,
         goal: "maintain"
       },
-      unlockedArticles: [1], // Mặc định mở bài 1
+      unlockedArticles: [1],
       badges: {
         streak7: false,
         quizMaster: false,
@@ -686,9 +651,7 @@
 
     let AppState = JSON.parse(JSON.stringify(DEFAULT_STORAGE));
 
-    /* ----------------------------------------------------
-       3. QUIZ & ARTICLES DATABASE
-    ---------------------------------------------------- */
+    /* 3. DỮ LIỆU QUIZ & BÀI ĐỌC */
     const QUIZ_DATA = [
       {
         id: 1,
@@ -715,56 +678,57 @@
         title: "Di truyền học hành vi: Giải mã thói quen học tập qua ADN",
         tag: "Di truyền học • Sinh học 12",
         content: `
-          <h4 class="font-bold text-slate-800 text-sm">1. Khái niệm Di truyền học hành vi (Behavioral Genetics)</h4>
-          <p>Nhiều học sinh thường tự hỏi: "Tại sao mình luôn khó dậy sớm, trong khi bạn bè lại là những 'chú chim sớm' (Early Birds)?" Câu trả lời nằm ở sự tương tác phức tạp giữa gen và môi trường. Các nghiên cứu trên gen <strong>CLOCK</strong> và <strong>PER2</strong> (Period Circadian Regulator 2) cho thấy đột biến ở các locus này quy định kiểu hình nhịp sinh học (Chronotype) của từng cá thể.</p>
+          <h4 class="font-bold text-slate-800 text-sm">1. Khái niệm Di truyền học hành vi</h4>
+          <p>Các nghiên cứu trên gen <strong>CLOCK</strong> và <strong>PER2</strong> cho thấy đột biến ở các locus này quy định kiểu hình nhịp sinh học (Chronotype) của từng cá thể (người dậy sớm hay người thích làm việc khuya).</p>
           <h4 class="font-bold text-slate-800 text-sm mt-3">2. Thụ thể Dopamine D4 và sự tập trung</h4>
-          <p>Gen <em>DRD4</em> quy định thụ thể Dopamine tại vỏ não trước trán. Những biến thể alen lặp lại 7 lần (7R) thường liên quan đến xu hướng tìm kiếm sự mới lạ và dễ xao nhãng. Tuy nhiên, tính dẻo của hệ thần kinh (Neuroplasticity) cho phép rèn luyện thói quen để tái cấu trúc synap hiệu quả.</p>
+          <p>Gen <em>DRD4</em> quy định thụ thể Dopamine tại vỏ não trước trán. Tuy nhiên, tính dẻo của hệ thần kinh (Neuroplasticity) cho phép rèn luyện thói quen để bù đắp xu hướng di truyền này.</p>
         `
       },
       2: {
-        title: "Cơ chế sinh học của trí nhớ dài hạn: Điềm tiềm hóa dài hạn (LTP)",
+        title: "Cơ chế sinh học của trí nhớ dài hạn (LTP)",
         tag: "Thần kinh học & Sinh lý học",
         content: `
-          <h4 class="font-bold text-slate-800 text-sm">1. Synap và Hiện tượng Long-Term Potentiation (LTP)</h4>
-          <p>Khi bạn học một kiến thức mới, thông tin ban đầu chỉ lưu tạm thời ở Hồi hải mã (Hippocampus). Để trở thành ký ức dài hạn, các nơ-ron phải trải qua hiện tượng <strong>LTP</strong> - sự tăng cường kéo dài trong truyền tín hiệu giữa hai nơ-ron do kích thích lặp đi lặp lại.</p>
-          <h4 class="font-bold text-slate-800 text-sm mt-3">2. Dòng ion Canxi (Ca2+) và Thụ thể NMDA</h4>
-          <p>Glutamate kích hoạt thụ thể AMPA khử cực màng, đẩy ion Mg2+ ra khỏi thụ thể NMDA. Canxi (Ca2+) ồ ạt tràn vào tế bào, kích hoạt enzyme gắn thêm nhiều thụ thể AMPA mới. Kết quả: Lần sau chỉ cần một kích thích nhỏ là ký ức được gợi mở dễ dàng.</p>
+          <h4 class="font-bold text-slate-800 text-sm">1. Synap và Hiện tượng LTP</h4>
+          <p>Để trở thành ký ức dài hạn, các nơ-ron phải trải qua hiện tượng <strong>Long-Term Potentiation</strong> - sự củng cố liên kết xinap kéo dài nhờ kích thích liên tục lặp lại.</p>
+          <h4 class="font-bold text-slate-800 text-sm mt-3">2. Dòng ion Canxi (Ca2+)</h4>
+          <p>Dòng Canxi tràn vào tế bào kích hoạt gắn thêm nhiều thụ thể AMPA lên màng sau synap, giúp đường dẫn truyền ghi nhớ thông tin trở nên trơn tru và bền bỉ hơn.</p>
         `
       },
       3: {
-        title: "Sinh học sự mệt mỏi & Tự thực bào (Autophagy) - Dọn dẹp độc tố tế bào",
+        title: "Sinh học sự mệt mỏi & Tự thực bào (Autophagy)",
         tag: "Sinh học tế bào • Nobel Y học 2016",
         content: `
-          <h4 class="font-bold text-slate-800 text-sm">1. Tại sao chúng ta mệt mỏi sau ngày dài học tập?</h4>
-          <p>Trong quá trình chuyển hóa, việc phân giải ATP thành ADP và cuối cùng là <strong>Adenosine</strong> tích tụ ở khe synap gắn vào các thụ thể thần kinh, phát tín hiệu buồn ngủ lên vỏ não.</p>
-          <h4 class="font-bold text-slate-800 text-sm mt-3">2. Kỳ quan Autophagy - Tái chế rác nội bào</h4>
-          <p>Khi ngủ sâu hoặc nhịn ăn cách quãng, cơ thể kích hoạt túi tự thực (Autophagosome) đưa bào quan ty thể già cỗi đến hòa màng với Lysosome, cắt nhỏ chúng thành axit amin tự do để tái tạo tế bào mới tràn đầy năng lượng.</p>
+          <h4 class="font-bold text-slate-800 text-sm">1. Vì sao chúng ta mệt mỏi?</h4>
+          <p>ATP phân giải tạo thành <strong>Adenosine</strong> tích tụ ở khe synap gắn vào các thụ thể làm chậm dẫn truyền thần kinh, báo hiệu cơ thể cần nghỉ ngơi.</p>
+          <h4 class="font-bold text-slate-800 text-sm mt-3">2. Cơ chế Autophagy</h4>
+          <p>Khi ngủ sâu, túi tự thực kết hợp cùng Lysosome để bọc và tiêu hóa các bào quan hỏng hóc, tái sử dụng axit amin sạch cho ngày mới.</p>
         `
       }
     };
 
-    /* ----------------------------------------------------
-       4. ĐĂNG NHẬP / ĐĂNG XUẤT & ĐỒNG BỘ CLOUD (REAL-TIME)
-    ---------------------------------------------------- */
+    /* 4. ĐĂNG NHẬP THÔNG MINH (Tự động thích nghi Popup / Redirect) */
     function loginWithGoogle() {
       const provider = new firebase.auth.GoogleAuthProvider();
+      // Thử dùng Popup trước, nếu bị chặn thì chuyển sang Redirect
       auth.signInWithPopup(provider)
-        .then(() => {
-          showToast("Đăng nhập Google thành công!", "success");
-        })
+        .then(() => showToast("Đăng nhập Google thành công!", "success"))
         .catch(error => {
-          console.error(error);
-          showToast("Lỗi đăng nhập: " + error.message, "warning");
+          if (error.code === 'auth/popup-blocked' || error.code === 'auth/cancelled-popup-request') {
+            auth.signInWithRedirect(provider);
+          } else {
+            showToast("Lỗi đăng nhập: " + error.message, "warning");
+          }
         });
     }
 
+    // Bắt kết quả nếu người dùng đăng nhập bằng chế độ Redirect
+    auth.getRedirectResult().catch(err => console.log(err));
+
     function logoutGoogle() {
-      auth.signOut().then(() => {
-        showToast("Đã đăng xuất tài khoản", "info");
-      });
+      auth.signOut().then(() => showToast("Đã đăng xuất tài khoản", "info"));
     }
 
-    // Lắng nghe trạng thái đăng nhập
+    // Lắng nghe trạng thái người dùng
     auth.onAuthStateChanged(user => {
       const btnLogin = document.getElementById('btn-login-google');
       const userBox = document.getElementById('user-logged-pill');
@@ -777,14 +741,12 @@
         document.getElementById('user-display-name').innerText = user.displayName || "Học sinh";
         document.getElementById('user-avatar-img').src = user.photoURL || 'https://api.dicebear.com/7.x/bottts/svg?seed=biolife';
 
-        // Lắng nghe dữ liệu thời gian thực từ Firestore Database
         if (unsubscribeFirestore) unsubscribeFirestore();
         
         unsubscribeFirestore = db.collection("users").doc(user.uid).onSnapshot(doc => {
           if (doc.exists) {
             AppState = doc.data();
           } else {
-            // Tài khoản lần đầu đăng nhập: khởi tạo trên Cloud
             AppState = JSON.parse(JSON.stringify(DEFAULT_STORAGE));
             AppState.user.name = user.displayName || "Học sinh";
             db.collection("users").doc(user.uid).set(AppState);
@@ -801,8 +763,6 @@
 
         btnLogin.classList.remove('hidden');
         userBox.classList.add('hidden');
-
-        // Khi chưa đăng nhập: dùng LocalStorage tạm thời
         loadLocalFallback();
       }
     });
@@ -817,14 +777,12 @@
       updateGlobalUI();
     }
 
-    // Hàm lưu trạng thái: Tự động đẩy lên Cloud nếu đã đăng nhập
     function saveState() {
       if (currentUser) {
         db.collection("users").doc(currentUser.uid).set(AppState)
-          .then(() => console.log("Đã đồng bộ lên đám mây Firestore"))
           .catch(err => {
             console.error("Lỗi đồng bộ:", err);
-            showToast("Lỗi lưu đám mây: Vui lòng kiểm tra Rules Firestore", "warning");
+            showToast("Lỗi Firestore: Hãy kiểm tra Rules Database!", "warning");
           });
       } else {
         localStorage.setItem("BIOLIFE_LOCAL_STATE", JSON.stringify(AppState));
@@ -832,9 +790,7 @@
       }
     }
 
-    /* ----------------------------------------------------
-       5. GIAO DIỆN & THAO TÁC CƠ BẢN
-    ---------------------------------------------------- */
+    /* 5. GIAO DIỆN & TÍNH NĂNG */
     function switchTab(tabId) {
       const tabs = ['dashboard', 'planner', 'habits', 'market'];
       tabs.forEach(t => {
@@ -842,16 +798,10 @@
         const navBtn = document.getElementById(`nav-${t}`);
         if (t === tabId) {
           section.classList.remove('hidden');
-          if (navBtn) {
-            navBtn.classList.add('text-bio-700', 'bg-bio-50');
-            navBtn.classList.remove('hover:bg-slate-100');
-          }
+          if (navBtn) navBtn.classList.add('text-bio-700', 'bg-bio-50');
         } else {
           section.classList.add('hidden');
-          if (navBtn) {
-            navBtn.classList.remove('text-bio-700', 'bg-bio-50');
-            navBtn.classList.add('hover:bg-slate-100');
-          }
+          if (navBtn) navBtn.classList.remove('text-bio-700', 'bg-bio-50');
         }
       });
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -864,7 +814,6 @@
       document.getElementById('dash-unlocked-count').innerText = `${AppState.unlockedArticles.length} / 3`;
       document.getElementById('market-coins-display').innerText = AppState.user.coins;
 
-      // Đồng bộ thời gian biểu
       document.getElementById('wake-time').value = AppState.schedule.wake;
       document.getElementById('school-time').value = AppState.schedule.school;
       document.getElementById('home-time').value = AppState.schedule.home;
@@ -875,7 +824,6 @@
       document.getElementById('time-home-display').innerText = `${formatTimeToAMPM(AppState.schedule.home)} - Thể lực cực đại`;
       document.getElementById('time-sleep-display').innerText = `${formatTimeToAMPM(AppState.schedule.sleep)} - Tiết Melatonin`;
 
-      // Dinh dưỡng
       const nutCheck = document.getElementById('nutrition-toggle');
       const nutInputs = document.getElementById('nutrition-inputs-area');
       const nutCard = document.getElementById('nutrition-result-card');
@@ -904,13 +852,11 @@
       return `${hour.toString().padStart(2, '0')}:${m} ${period}`;
     }
 
-    /* ----------------------------------------------------
-       6. LOGIC: THÓI QUEN, QUIZ, MỞ KHÓA BÀI VIẾT
-    ---------------------------------------------------- */
+    /* 6. LOGIC THÓI QUEN & QUIZ */
     function checkInHabits() {
       const todayStr = new Date().toISOString().split('T')[0];
       if (AppState.user.lastCheckInDate === todayStr) {
-        showToast("Hôm nay bạn đã hoàn thành điểm danh rồi!", "info");
+        showToast("Hôm nay bạn đã điểm danh rồi!", "info");
         return;
       }
 
@@ -928,7 +874,7 @@
       AppState.user.lastCheckInDate = todayStr;
 
       saveState();
-      showToast("Tuyệt vời! +10 BioCoins và duy trì chuỗi Streak!", "success");
+      showToast("Tuyệt vời! +10 BioCoins và đã tăng Streak!", "success");
     }
 
     function renderQuiz() {
@@ -953,7 +899,7 @@
     function evaluateQuiz() {
       const todayStr = new Date().toISOString().split('T')[0];
       if (AppState.user.quizCompletedDate === todayStr) {
-        showToast("Bạn đã nhận thưởng Quiz hôm nay rồi! Quay lại vào ngày mai nhé.", "info");
+        showToast("Hôm nay bạn đã nhận thưởng Quiz rồi! Hãy quay lại ngày mai.", "info");
         return;
       }
 
@@ -967,7 +913,7 @@
       });
 
       if (!allAnswered) {
-        showToast("Vui lòng trả lời đủ 3 câu trắc nghiệm!", "warning");
+        showToast("Vui lòng chọn đáp án cho cả 3 câu!", "warning");
         return;
       }
 
@@ -1012,7 +958,7 @@
       }
 
       if (AppState.user.coins < cost) {
-        showToast(`Bạn cần ${cost} coins, hiện chỉ có ${AppState.user.coins} coins. Hãy tích thêm điểm nhé!`, "warning");
+        showToast(`Cần ${cost} coins, hiện bạn chỉ có ${AppState.user.coins} coins!`, "warning");
         return;
       }
 
@@ -1041,9 +987,7 @@
       document.getElementById('article-modal').classList.add('hidden');
     }
 
-    /* ----------------------------------------------------
-       7. PROFILE & NUTRITION ENGINE
-    ---------------------------------------------------- */
+    /* 7. DINH DƯỠNG & PROFILE */
     document.getElementById('nutrition-toggle').addEventListener('change', function(e) {
       const area = document.getElementById('nutrition-inputs-area');
       if (e.target.checked) area.classList.remove('hidden');
@@ -1066,9 +1010,110 @@
       };
 
       saveState();
-      showToast("Đã đồng bộ lịch trình cá nhân lên Đám mây!", "success");
+      showToast("Đã lưu và đồng bộ lịch trình cá nhân!", "success");
     });
 
     function renderNutritionAdvice() {
       const h = (AppState.schedule.height || 165) / 100;
-      const w = AppState.schedule.weight || 
+      const w = AppState.schedule.weight || 55;
+      const bmi = (w / (h * h)).toFixed(1);
+      const goal = AppState.schedule.goal;
+
+      let bmiStatus = "Cân đối";
+      let statusColor = "text-emerald-700 bg-emerald-100";
+      if (bmi < 18.5) { bmiStatus = "Hơi gầy"; statusColor = "text-amber-700 bg-amber-100"; }
+      else if (bmi >= 23) { bmiStatus = "Thừa cân nhẹ"; statusColor = "text-orange-700 bg-orange-100"; }
+
+      let advice = "";
+      if (goal === "muscle") {
+        advice = "Nạp lượng Protein (ức gà, trứng, đậu đỗ) khoảng 1.5g/kg cân nặng mỗi ngày để kích thích dịch mã tạo sợi Actin và Myosin cho cơ.";
+      } else if (goal === "fatloss") {
+        advice = "Hạn chế carbohydrate chỉ số GI cao (trà sữa, bánh ngọt) vào buổi tối để tránh nồng độ Insulin tăng vọt kích thích tích mỡ.";
+      } else {
+        advice = "Duy trì 'Đĩa thức ăn sinh học': 50% rau củ nhiều xơ cho hệ vi sinh đường ruột (Microbiome), 25% đạm sạch và 25% tinh bột hấp thu chậm.";
+      }
+
+      document.getElementById('nutrition-details').innerHTML = `
+        <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+          <span class="font-bold">Chỉ số BMI: <strong class="text-slate-900">${bmi}</strong></span>
+          <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full ${statusColor}">${bmiStatus}</span>
+        </div>
+        <div class="pt-1">
+          <strong class="text-slate-700 font-bold">Chiến lược Sinh học:</strong>
+          <p class="mt-1 leading-relaxed">${advice}</p>
+        </div>
+      `;
+    }
+
+    function checkBadges() {
+      if (AppState.user.streak >= 7) AppState.badges.streak7 = true;
+      if (AppState.unlockedArticles.length >= 3) AppState.badges.bioScholar = true;
+    }
+
+    function renderBadges() {
+      const container = document.getElementById('badges-container');
+      const badgeList = [
+        {
+          name: 'Chiến thần Nhịp sinh học',
+          desc: 'Duy trì chuỗi Streak kỷ luật 7 ngày liên tiếp',
+          icon: 'fa-fire text-orange-500',
+          active: AppState.badges.streak7
+        },
+        {
+          name: 'Bác sĩ tế bào',
+          desc: 'Đạt điểm tuyệt đối trong bài Daily Bio Quiz',
+          icon: 'fa-brain text-purple-500',
+          active: AppState.badges.quizMaster
+        },
+        {
+          name: 'Tâm hồn Sinh học',
+          desc: 'Mở khóa toàn bộ bài nghiên cứu chuyên sâu',
+          icon: 'fa-graduation-cap text-bio-600',
+          active: AppState.badges.bioScholar
+        }
+      ];
+
+      let currentBadge = "Mầm Sinh Học 🌱";
+      if (AppState.badges.bioScholar) currentBadge = "Tâm Hồn Sinh Học 🎓";
+      else if (AppState.badges.quizMaster) currentBadge = "Bác Sĩ Tế Bào 🧠";
+      else if (AppState.badges.streak7) currentBadge = "Chiến Thần Sinh Học 🔥";
+      document.getElementById('dash-badge-current').innerText = currentBadge;
+
+      container.innerHTML = badgeList.map(b => `
+        <div class="p-4 rounded-xl border ${b.active ? 'bg-bio-50/70 border-bio-300' : 'bg-slate-50 border-slate-200 opacity-60'} flex items-start space-x-3 transition">
+          <div class="w-10 h-10 rounded-xl bg-white shadow-xs flex items-center justify-center text-lg shrink-0 ${b.active ? 'border border-bio-200' : ''}">
+            <i class="fa-solid ${b.icon}"></i>
+          </div>
+          <div class="text-xs">
+            <div class="flex items-center space-x-1.5">
+              <span class="font-bold text-slate-800">${b.name}</span>
+              ${b.active ? '<span class="text-[9px] bg-bio-600 text-white font-extrabold px-1.5 py-0.2 rounded-full">ĐÃ ĐẠT</span>' : '<span class="text-[9px] text-slate-400 font-bold">KHÓA</span>'}
+            </div>
+            <p class="text-slate-500 mt-1 leading-snug">${b.desc}</p>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function showToast(msg, type = "success") {
+      const toast = document.getElementById('toast');
+      const icon = document.getElementById('toast-icon');
+      const text = document.getElementById('toast-msg');
+
+      text.innerText = msg;
+      if (type === "warning") icon.className = "fa-solid fa-triangle-exclamation text-amber-400 text-base";
+      else if (type === "info") icon.className = "fa-solid fa-circle-info text-blue-400 text-base";
+      else icon.className = "fa-solid fa-circle-check text-bio-400 text-base";
+
+      toast.classList.remove('opacity-0', 'translate-y-20', 'pointer-events-none');
+      setTimeout(() => toast.classList.add('opacity-0', 'translate-y-20', 'pointer-events-none'), 3500);
+    }
+
+    /* 8. KHỞI CHẠY */
+    window.addEventListener('DOMContentLoaded', () => {
+      renderQuiz();
+      updateGlobalUI();
+    });
+  </script>
+</body>
+</html>
