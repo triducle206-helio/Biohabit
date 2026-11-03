@@ -447,7 +447,68 @@
                 </h3>
                 <p class="text-xs text-slate-500">Mỗi lần bấm là 3 câu hỏi hoàn toàn mới không trùng lặp</p>
               </div>
-              <button type="button" id="btn-generate-quiz" onclick="generateGeminiQuiz()" title="Nhờ Gemini tạo 3 câu hỏi mới" class="text-xs bg-purple-50 hover:bg-purple-100 text-purple-700 px-3 py-1.5 rounded-lg font-bold border border-purple-200 transition flex items-center">
+              <button type="button" id="btn-generate-quiz" onclick="/* DANH SÁCH CHỦ ĐỀ SINH HỌC XOAY VÒNG CHO GEMINI */
+    const BIO_TOPICS = [
+      "Hệ tim mạch, chu kỳ tim và điều hòa huyết áp ở người",
+      "Hệ bài tiết, cấu tạo nephron và lọc máu ở cầu thận",
+      "Cơ chế dẫn truyền xung thần kinh và điện thế hoạt động",
+      "Hệ nội tiết, tương tác giữa tuyến yên, tuyến giáp và tuyến trên thận",
+      "Hệ miễn dịch, tế bào lympho B, lympho T và cơ chế tạo kháng thể",
+      "Hô hấp tế bào, chuỗi chuyền electron hô hấp và ti thể",
+      "Quang hợp ở thực vật C3, C4, CAM và chu trình Calvin",
+      "Cấu trúc ADN, phiên mã, dịch mã và mã di truyền",
+      "Đột biến gen, đột biến cấu trúc và số lượng nhiễm sắc thể",
+      "Quy luật di truyền Mendel và di truyền liên kết giới tính",
+      "Cân bằng nội môi, điều hòa thân nhiệt và áp suất thẩm thấu",
+      "Tiêu hóa ở người: enzym tiêu hóa ở dạ dày và ruột non",
+      "Nhịp sinh học Circadian, hormone melatonin và giấc ngủ sâu",
+      "Sinh thái học: chuỗi thức ăn, lưới thức ăn và dòng năng lượng",
+      "Tiến hóa: chọn lọc tự nhiên và các nhân tố tiến hóa",
+      "Cấu tạo màng sinh chất và các hình thức vận chuyển qua màng",
+      "Chu kỳ tế bào, nguyên phân, giảm phân và phát sinh giao tử",
+      "Dinh dưỡng tế bào: chuyển hóa lipid, glucid và protein"
+    ];
+
+    async function generateGeminiQuiz() {
+      const reloadIcon = document.getElementById('quiz-reload-icon');
+      const reloadText = document.getElementById('quiz-reload-text');
+
+      if (reloadIcon) reloadIcon.classList.add('animate-spin');
+      if (reloadText) reloadText.innerText = "Gemini đang tạo đề...";
+
+      // Chọn ngẫu nhiên 1 chủ đề khác biệt trong danh sách 18 chủ đề
+      const randomTopic = BIO_TOPICS[Math.floor(Math.random() * BIO_TOPICS.length)];
+
+      try {
+        const res = await fetch('/api/gemini', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            type: 'quiz',
+            topic: randomTopic 
+          })
+        });
+
+        const data = await res.json();
+
+        if (res.ok && Array.isArray(data.quiz) && data.quiz.length === 3) {
+          currentSessionQuiz = data.quiz;
+          showToast(`Đã tạo 3 câu hỏi mới chủ đề: ${randomTopic.split(',')[0]}!`, "success");
+        } else {
+          refreshRandomQuiz();
+          showToast("Đã tải câu hỏi sinh học dự phòng!", "info");
+        }
+      } catch (err) {
+        refreshRandomQuiz();
+        showToast("Đã tải câu hỏi sinh học dự phòng!", "info");
+      } finally {
+        if (reloadIcon) reloadIcon.classList.remove('animate-spin');
+        if (reloadText) reloadText.innerText = "Tạo đề mới (AI)";
+        renderCurrentQuiz();
+        const resBox = document.getElementById('quiz-result-box');
+        if (resBox) resBox.classList.add('hidden');
+      }
+    }" title="Nhờ Gemini tạo 3 câu hỏi mới" class="text-xs bg-purple-50 hover:bg-purple-100 text-purple-700 px-3 py-1.5 rounded-lg font-bold border border-purple-200 transition flex items-center">
                 <i class="fa-solid fa-rotate mr-1.5" id="quiz-reload-icon"></i>
                 <span id="quiz-reload-text">Tạo đề mới (AI)</span>
               </button>
