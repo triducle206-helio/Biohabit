@@ -92,7 +92,7 @@
           <i class="fa-solid fa-robot mr-1"></i> Trợ lý Gemini AI
         </button>
         <button type="button" onclick="switchTab('market')" id="nav-market" class="tab-btn px-3 py-2 rounded-xl hover:bg-slate-100 transition">
-          <i class="fa-solid fa-store mr-1"></i> BioMarket
+          <i class="fa-solid fa-newspaper mr-1"></i> Tạp chí BioMarket
         </button>
       </nav>
 
@@ -140,7 +140,7 @@
       <i class="fa-solid fa-robot text-base mb-0.5"></i> Gemini
     </button>
     <button type="button" onclick="switchTab('market')" class="flex flex-col items-center py-1">
-      <i class="fa-solid fa-store text-base mb-0.5"></i> Đổi thưởng
+      <i class="fa-solid fa-newspaper text-base mb-0.5"></i> Tạp chí
     </button>
   </div>
 
@@ -199,8 +199,8 @@
             <i class="fa-solid fa-book-bookmark"></i>
           </div>
           <div>
-            <div class="text-xs text-slate-500 font-semibold uppercase">Bài nghiên cứu đã mở</div>
-            <div class="text-2xl font-black text-slate-800" id="dash-unlocked-count">1 / 3</div>
+            <div class="text-xs text-slate-500 font-semibold uppercase">Đề tài đã mở khóa</div>
+            <div class="text-2xl font-black text-slate-800" id="dash-unlocked-count">1 bài</div>
           </div>
         </div>
         <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center space-x-4">
@@ -398,7 +398,7 @@
       </div>
     </section>
 
-    <!-- ================= TAB 3: THÓI QUEN & QUIZ GEMINI ================= -->
+    <!-- ================= TAB 3: THÓI QUEN & QUIZ GEMINI (CỘNG COIN TỪNG CÂU ĐÚNG) ================= -->
     <section id="tab-habits" class="hidden space-y-6">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
         <!-- Điểm danh -->
@@ -446,28 +446,33 @@
         <!-- Daily Quiz Gemini AI tạo ngẫu nhiên -->
         <div class="lg:col-span-7 space-y-4">
           <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs">
-            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100 flex-wrap gap-2">
               <div>
                 <h3 class="text-base font-bold text-slate-900 flex items-center">
                   <i class="fa-solid fa-wand-magic-sparkles text-purple-600 mr-2"></i> Quiz Sinh Học (Gemini AI Tạo Đề)
                 </h3>
-                <p class="text-xs text-slate-500">20 chuyên đề xoay vòng • Không trùng lặp câu hỏi</p>
+                <p class="text-xs text-slate-500">20 chuyên đề xoay vòng • Cứ đúng 1 câu nhận ngay +5 BioCoins</p>
               </div>
-              <button type="button" id="btn-generate-quiz" onclick="generateGeminiQuiz()" title="Nhờ Gemini tạo 3 câu hỏi mới" class="text-xs bg-purple-50 hover:bg-purple-100 text-purple-700 px-3 py-1.5 rounded-lg font-bold border border-purple-200 transition flex items-center">
-                <i class="fa-solid fa-rotate mr-1.5" id="quiz-reload-icon"></i>
-                <span id="quiz-reload-text">Tạo đề mới (AI)</span>
-              </button>
+              <div class="flex items-center space-x-2">
+                <span class="text-xs font-black text-amber-700 bg-amber-100 px-2.5 py-1 rounded-full border border-amber-200">
+                  +5 Coins/câu đúng
+                </span>
+                <button type="button" id="btn-generate-quiz" onclick="generateGeminiQuiz()" title="Nhờ Gemini tạo 3 câu hỏi mới" class="text-xs bg-purple-50 hover:bg-purple-100 text-purple-700 px-3 py-1.5 rounded-lg font-bold border border-purple-200 transition flex items-center">
+                  <i class="fa-solid fa-rotate mr-1.5" id="quiz-reload-icon"></i>
+                  <span id="quiz-reload-text">Tạo đề mới (AI)</span>
+                </button>
+              </div>
             </div>
 
             <div id="quiz-container" class="mt-4 space-y-4"></div>
 
-            <div id="quiz-result-box" class="hidden mt-4 p-4 rounded-xl bg-bio-50 border border-bio-200 text-center">
-              <p class="text-sm font-bold text-bio-900" id="quiz-score-text"></p>
-              <p class="text-xs text-bio-700 mt-1" id="quiz-bonus-text"></p>
+            <div id="quiz-result-box" class="hidden mt-4 p-4 rounded-xl bg-bio-50 border border-bio-200 text-center space-y-1">
+              <p class="text-base font-extrabold text-bio-900" id="quiz-score-text"></p>
+              <p class="text-xs text-bio-700" id="quiz-bonus-text"></p>
             </div>
 
             <button type="button" id="btn-submit-quiz" onclick="evaluateQuiz()" class="mt-4 w-full py-3 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs sm:text-sm rounded-xl transition shadow-md shadow-purple-200 flex items-center justify-center">
-              <i class="fa-solid fa-circle-check mr-2"></i> Chấm điểm bài Quiz
+              <i class="fa-solid fa-circle-check mr-2"></i> Chấm điểm & Nhận BioCoins
             </button>
           </div>
         </div>
@@ -482,7 +487,7 @@
             <i class="fa-solid fa-robot text-emerald-600 mr-2.5"></i> Trợ Lý Sinh Học Gemini AI (Có Bộ Nhớ)
           </h2>
           <p class="text-xs sm:text-sm text-slate-600 mt-1">
-            Ghi nhớ câu chuyện. Nếu bạn <span class="font-bold text-emerald-700">"không hiểu"</span>, AI sẽ tự động lấy ví dụ đời sống để giải thích lại dễ hiểu hơn!
+            Ghi nhớ ngữ cảnh trò chuyện. Nếu bạn <span class="font-bold text-emerald-700">"không hiểu"</span>, AI sẽ tự động lấy ví dụ đời sống để giải thích lại dễ hiểu hơn!
           </p>
         </div>
         <div class="flex items-center space-x-2">
@@ -525,81 +530,33 @@
       </div>
     </section>
 
-    <!-- ================= TAB 4: BIOMARKET ================= -->
+    <!-- ================= TAB 4: BIOMARKET (TẠP CHÍ ĐỔI MỚI MỖI NGÀY / GEMINI AI) ================= -->
     <section id="tab-market" class="hidden space-y-6">
       <div class="bg-gradient-to-r from-emerald-800 to-teal-700 p-6 sm:p-8 rounded-3xl text-white shadow-lg flex flex-col md:flex-row items-center justify-between gap-6">
         <div class="space-y-2">
-          <span class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-white/20 text-emerald-100">Cửa hàng kiến thức độc quyền</span>
-          <h2 class="text-xl sm:text-3xl font-extrabold tracking-tight">BioMarket: Mở Khóa Khoa Học Chuyên Sâu</h2>
+          <span class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-white/20 text-emerald-100">
+            Tạp chí Y Sinh học • Tự động đổi mới mỗi ngày
+          </span>
+          <h2 class="text-xl sm:text-3xl font-extrabold tracking-tight">BioMarket: Đề Tài Nghiên Cứu Mới Nhất</h2>
           <p class="text-xs sm:text-sm text-emerald-100 max-w-xl">
-            Sử dụng BioCoins tích lũy để mở khóa các bài nghiên cứu mở rộng phục vụ học sinh giỏi và đam mê Y sinh học.
+            Sử dụng BioCoins tích lũy để mở khóa các bài báo nghiên cứu chuyên sâu do Gemini AI cập nhật mỗi ngày. Mở khóa từ 3 đề tài để nhận danh hiệu học thuật!
           </p>
         </div>
-        <div class="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/20 text-center shrink-0 min-w-[150px]">
-          <span class="text-xs text-emerald-200 block">Số dư hiện tại</span>
-          <span class="text-3xl font-black text-amber-300" id="market-coins-display">50</span>
-          <span class="text-xs text-white block font-medium">BioCoins</span>
+        
+        <div class="flex items-center space-x-3 shrink-0">
+          <div class="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/20 text-center min-w-[120px]">
+            <span class="text-xs text-emerald-200 block">Số dư hiện tại</span>
+            <span class="text-2xl font-black text-amber-300" id="market-coins-display">50</span>
+            <span class="text-[11px] text-white block">BioCoins</span>
+          </div>
+          <button type="button" id="btn-refresh-articles" onclick="fetchGeminiArticles(true)" class="px-4 py-3 bg-amber-400 hover:bg-amber-500 text-slate-900 font-extrabold text-xs rounded-2xl transition flex flex-col items-center shadow-md">
+            <i class="fa-solid fa-wand-magic-sparkles text-base mb-1" id="article-reload-icon"></i>
+            <span id="article-reload-text">Xuất bản 3 bài mới (AI)</span>
+          </button>
         </div>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="article-cards-container">
-        <!-- Bài 1 -->
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden flex flex-col justify-between p-5 hover:shadow-md transition">
-          <div>
-            <div class="flex items-center justify-between text-xs mb-3">
-              <span class="px-2.5 py-1 rounded-full font-bold bg-blue-100 text-blue-700">Di truyền học</span>
-              <span class="font-bold text-amber-600"><i class="fa-solid fa-coins mr-1"></i>50 Coins</span>
-            </div>
-            <h3 class="font-extrabold text-slate-800 text-base mb-2">Di truyền học hành vi (Behavioral Genetics)</h3>
-            <p class="text-xs text-slate-500 leading-relaxed mb-4">
-              Liệu sự trì hoãn hay nhịp đồng hồ sinh học có bị mã hóa trong ADN? Khám phá vai trò của thụ thể Dopamine D4 và gen đồng hồ PER2.
-            </p>
-          </div>
-          <div id="unlock-btn-container-1">
-            <button type="button" onclick="unlockArticle(1, 50)" class="w-full py-2.5 bg-bio-600 hover:bg-bio-700 text-white rounded-xl text-xs font-bold transition flex items-center justify-center">
-              <i class="fa-solid fa-lock mr-2"></i> Mở khóa ngay (50 Coins)
-            </button>
-          </div>
-        </div>
-
-        <!-- Bài 2 -->
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden flex flex-col justify-between p-5 hover:shadow-md transition">
-          <div>
-            <div class="flex items-center justify-between text-xs mb-3">
-              <span class="px-2.5 py-1 rounded-full font-bold bg-indigo-100 text-indigo-700">Thần kinh học</span>
-              <span class="font-bold text-amber-600"><i class="fa-solid fa-coins mr-1"></i>80 Coins</span>
-            </div>
-            <h3 class="font-extrabold text-slate-800 text-base mb-2">Cơ chế sinh học của trí nhớ dài hạn (LTP)</h3>
-            <p class="text-xs text-slate-500 leading-relaxed mb-4">
-              Khái niệm Long-Term Potentiation tại xinap thần kinh. Cách ion Ca2+ và thụ thể NMDA biến bài học trên lớp thành ký ức vĩnh cửu.
-            </p>
-          </div>
-          <div id="unlock-btn-container-2">
-            <button type="button" onclick="unlockArticle(2, 80)" class="w-full py-2.5 bg-bio-600 hover:bg-bio-700 text-white rounded-xl text-xs font-bold transition flex items-center justify-center">
-              <i class="fa-solid fa-lock mr-2"></i> Mở khóa ngay (80 Coins)
-            </button>
-          </div>
-        </div>
-
-        <!-- Bài 3 -->
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden flex flex-col justify-between p-5 hover:shadow-md transition">
-          <div>
-            <div class="flex items-center justify-between text-xs mb-3">
-              <span class="px-2.5 py-1 rounded-full font-bold bg-rose-100 text-rose-700">Sinh học tế bào</span>
-              <span class="font-bold text-amber-600"><i class="fa-solid fa-coins mr-1"></i>100 Coins</span>
-            </div>
-            <h3 class="font-extrabold text-slate-800 text-base mb-2">Sinh học sự mệt mỏi & Tự thực bào (Autophagy)</h3>
-            <p class="text-xs text-slate-500 leading-relaxed mb-4">
-              Công trình Nobel Y học 2016: Cơ thể tự động làm sạch bào quan hỏng hóc và phân tử biến tính như thế nào trong giấc ngủ sâu?
-            </p>
-          </div>
-          <div id="unlock-btn-container-3">
-            <button type="button" onclick="unlockArticle(3, 100)" class="w-full py-2.5 bg-bio-600 hover:bg-bio-700 text-white rounded-xl text-xs font-bold transition flex items-center justify-center">
-              <i class="fa-solid fa-lock mr-2"></i> Mở khóa ngay (100 Coins)
-            </button>
-          </div>
-        </div>
-      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="article-cards-container"></div>
     </section>
 
   </main>
@@ -634,7 +591,6 @@
         coins: 50,
         streak: 1,
         lastCheckInDate: null,
-        quizCompletedDate: null,
       },
       schedule: {
         role: "student",
@@ -647,7 +603,7 @@
         weight: 55,
         goal: "maintain"
       },
-      unlockedArticles: [1],
+      unlockedArticles: ["art_1"],
       badges: {
         streak7: false,
         quizMaster: false,
@@ -683,7 +639,7 @@
       }
     }
 
-    /* 3. NGÂN HÀNG CÂU HỎI TRẮC NGHIỆM */
+    /* 3. NGÂN HÀNG CÂU HỎI & QUIZ GEMINI CỘNG COIN TỪNG CÂU ĐÚNG */
     const QUIZ_BANK = [
       {
         question: "Hormone nào sau đây được tiết ra từ tuyến tùng để điều chỉnh chu kỳ thức - ngủ tự nhiên?",
@@ -702,40 +658,9 @@
         options: ["Lysosome", "Riboxom", "Lưới nội chất hạt", "Bộ máy Golgi"],
         answer: 0,
         explain: "Lysosome chứa nhiều enzyme thủy phân để phân hủy tế bào quan già cỗi tái tạo axit amin."
-      },
-      {
-        question: "Cấu trúc nào trong tế bào quang hợp của thực vật trực tiếp hấp thụ năng lượng photon ánh sáng?",
-        options: ["Hệ sắc tố diệp lục (Chlorophyll)", "Không bào trung tâm", "Thành Xenlulozo", "Riboxom 70S"],
-        answer: 0,
-        explain: "Các phân tử Diệp lục trên màng Thylakoid hấp thụ ánh sáng kích thích điện tử."
-      },
-      {
-        question: "Hiện tượng nào ở xinap thần kinh là cơ chế sinh học phân tử cốt lõi của việc ghi nhớ dài hạn?",
-        options: ["Long-Term Potentiation (LTP)", "Thẩm thấu nước", "Co nguyên sinh", "Phân bào giảm nhiễm"],
-        answer: 0,
-        explain: "LTP giúp tăng cường độ truyền dẫn tín hiệu kéo dài giữa 2 nơ-ron qua thụ thể NMDA."
-      },
-      {
-        question: "Phần lớn năng lượng ATP của tế bào động vật được tạo ra ở bào quan nào qua chuỗi truyền electron?",
-        options: ["Ty thể (Mitochondria)", "Lysosome", "Nhân con", "Trung thể"],
-        answer: 0,
-        explain: "Ty thể là nhà máy năng lượng, tạo ra khoảng 30-32 ATP cho mỗi phân tử Glucozo qua hô hấp hiếu khí."
-      },
-      {
-        question: "Vùng nào ở não bộ đóng vai trò là 'đồng hồ chủ' tiếp nhận tín hiệu ánh sáng để điều khiển nhịp Circadian?",
-        options: ["Nhân trên chéo (SCN - Vùng dưới đồi)", "Tiểu não", "Hành tủy", "Thùy chẩm"],
-        answer: 0,
-        explain: "Suprachiasmatic Nucleus (SCN) nằm ở vùng dưới đồi chỉ huy nhịp sinh học 24 giờ của toàn cơ thể."
-      },
-      {
-        question: "Quy tắc 20-20-20 khuyên bạn sau 20 phút nhìn màn hình thì nên nhìn vật ở khoảng cách bao xa?",
-        options: ["20 feet (khoảng 6 mét)", "2 feet (60 cm)", "20 mét", "Nhắm mắt hoàn toàn"],
-        answer: 0,
-        explain: "Khoảng cách 20 feet (6m) cho phép cơ thể mi mắt giãn ra hoàn toàn, giảm căng thẳng điều tiết."
       }
     ];
 
-    /* 20 CHUYÊN ĐỀ ĐA DẠNG CHO GEMINI AI TẠO QUIZ */
     const BIO_TOPICS = [
       "Hệ tim mạch, chu kỳ tim và điều hòa huyết áp ở người",
       "Hệ bài tiết, cấu tạo nephron và lọc máu ở cầu thận",
@@ -754,12 +679,11 @@
       "Tiến hóa: chọn lọc tự nhiên và các nhân tố tiến hóa",
       "Cấu tạo màng sinh chất và các hình thức vận chuyển qua màng",
       "Chu kỳ tế bào, nguyên phân, giảm phân và phát sinh giao tử",
-      "Dinh dưỡng tế bào: chuyển hóa lipid, glucid và protein",
-      "Cảm ứng ở sinh vật và tính hướng động ở thực vật",
-      "Sinh sản hữu tính và thụ tinh ở động vật"
+      "Dinh dưỡng tế bào: chuyển hóa lipid, glucid và protein"
     ];
 
     let currentSessionQuiz = [];
+    let isCurrentQuizSubmitted = false; // Chống spam submit nhiều lần trên 1 đề
 
     function shuffleArray(array) {
       const arr = [...array];
@@ -772,6 +696,7 @@
 
     function refreshRandomQuiz() {
       try {
+        isCurrentQuizSubmitted = false;
         const shuffledBank = shuffleArray(QUIZ_BANK);
         currentSessionQuiz = shuffledBank.slice(0, 3).map((item, idx) => {
           const optionsWithIndex = item.options.map((opt, i) => ({ text: opt, isCorrect: i === item.answer }));
@@ -800,16 +725,14 @@
       if (reloadIcon) reloadIcon.classList.add('animate-spin');
       if (reloadText) reloadText.innerText = "Gemini đang tạo đề...";
 
+      isCurrentQuizSubmitted = false;
       const randomTopic = BIO_TOPICS[Math.floor(Math.random() * BIO_TOPICS.length)];
 
       try {
         const res = await fetch('/api/gemini', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ 
-            type: 'quiz',
-            topic: randomTopic 
-          })
+          body: JSON.stringify({ type: 'quiz', topic: randomTopic })
         });
 
         const data = await res.json();
@@ -854,8 +777,13 @@
       `).join('');
     }
 
+    /* CHẤM ĐIỂM & CỘNG COIN THEO TỪNG CÂU ĐÚNG (+5 COIN / CÂU) */
     function evaluateQuiz() {
-      const todayStr = new Date().toISOString().split('T')[0];
+      if (isCurrentQuizSubmitted) {
+        showToast("Bạn đã nhận BioCoins cho đề này rồi! Hãy bấm 'Tạo đề mới (AI)' để tiếp tục kiếm coin nhé!", "info");
+        return;
+      }
+
       let correctCount = 0;
       let allAnswered = true;
 
@@ -872,35 +800,39 @@
         return;
       }
 
+      isCurrentQuizSubmitted = true; // Khóa đề này sau khi chấm
+      const coinsEarned = correctCount * 5; // CỨ ĐÚNG 1 CÂU ĐƯỢC +5 COINS!
+
+      if (coinsEarned > 0) {
+        AppState.user.coins = (AppState.user.coins || 0) + coinsEarned;
+        if (correctCount === 3) {
+          if (!AppState.badges) AppState.badges = {};
+          AppState.badges.quizMaster = true;
+        }
+        saveState();
+        showToast(`Tuyệt vời! Đúng ${correctCount}/3 câu: +${coinsEarned} BioCoins!`, "success");
+      } else {
+        showToast("Chưa đúng câu nào lần này. Đọc giải thích và thử đề mới nhé!", "info");
+      }
+
       const resultBox = document.getElementById('quiz-result-box');
       if (resultBox) resultBox.classList.remove('hidden');
 
       const scoreEl = document.getElementById('quiz-score-text');
       const bonusEl = document.getElementById('quiz-bonus-text');
 
-      if (correctCount === 3) {
-        let bonusMsg = "+15 BioCoins đã được cộng!";
-        if (AppState.user.quizCompletedDate !== todayStr) {
-          AppState.user.coins += 15;
-          AppState.user.quizCompletedDate = todayStr;
-          AppState.badges.quizMaster = true;
-          saveState();
+      if (scoreEl) scoreEl.innerText = `Bạn trả lời đúng ${correctCount}/3 câu!`;
+      if (bonusEl) {
+        if (coinsEarned > 0) {
+          bonusEl.innerHTML = `<span class="text-amber-600 font-extrabold text-sm">+${coinsEarned} BioCoins</span> đã được cộng vào tài khoản của bạn! 🪙`;
         } else {
-          bonusMsg = "Bạn đã nhận coins ngày hôm nay rồi, tiếp tục làm để củng cố kiến thức!";
+          bonusEl.innerText = "Chưa nhận được coin lần này. Hãy đọc kỹ phần giải thích chi tiết ở dưới mỗi câu và bấm 'Tạo đề mới' để thử sức lại nhé!";
         }
-
-        if (scoreEl) scoreEl.innerText = "Xuất sắc! Bạn trả lời đúng 3/3 câu hỏi!";
-        if (bonusEl) bonusEl.innerText = bonusMsg;
-        showToast("Tuyệt vời! Bạn đúng cả 3 câu!", "success");
-      } else {
-        if (scoreEl) scoreEl.innerText = `Bạn trả lời đúng ${correctCount}/3 câu.`;
-        if (bonusEl) bonusEl.innerText = "Đã hiển thị giải thích chi tiết ở dưới mỗi câu. Hãy đọc lại và bấm 'Tạo đề mới' nhé!";
-        showToast(`Đúng ${correctCount}/3 câu. Xem giải thích nhé!`, "info");
       }
     }
 
     /* 4. CHAT GEMINI AI TRỰC TIẾP CÓ BỘ NHỚ LỊCH SỬ */
-    let conversationHistory = []; // Lưu 6 lượt chat gần nhất
+    let conversationHistory = [];
 
     function handleChatEnter(e) {
       if (e.key === 'Enter') sendChatMessage();
@@ -941,7 +873,6 @@
 
         if (response.ok && data.reply) {
           appendMessage("bot", data.reply);
-          // Lưu vào lịch sử hội thoại
           conversationHistory.push({ role: 'user', text: query });
           conversationHistory.push({ role: 'model', text: data.reply });
           if (conversationHistory.length > 6) conversationHistory = conversationHistory.slice(-6);
@@ -1110,39 +1041,189 @@
       }
     }
 
-    /* 6. BÀI NGHIÊN CỨU BIOMARKET */
-    const ARTICLES_DATA = {
-      1: {
-        title: "Di truyền học hành vi: Giải mã thói quen học tập qua ADN",
-        tag: "Di truyền học • Sinh học 12",
+    /* 6. HỆ THỐNG BIOMARKET: BÀI NGHIÊN CỨU ĐỔI MỚI MỖI NGÀY & DO GEMINI TẠO */
+    const DEFAULT_ARTICLES = [
+      {
+        id: "art_1",
+        title: "Công nghệ Chỉnh sửa Gen CRISPR-Cas9: Tương lai chữa lành đột biến ADN",
+        tag: "Công nghệ sinh học • Di truyền phân tử",
+        cost: 50,
+        summary: "Cơ chế 'chiếc kéo sinh học' nhận diện mục tiêu bằng ARN dẫn đường (sgRNA) và cắt đứt liên kết photphodieste để sửa sai bộ gen.",
         content: `
-          <h4 class="font-bold text-slate-800 text-sm">1. Khái niệm Di truyền học hành vi</h4>
-          <p>Các nghiên cứu trên gen <strong>CLOCK</strong> và <strong>PER2</strong> cho thấy đột biến ở các locus này quy định kiểu hình nhịp sinh học (Chronotype) của từng cá thể (người dậy sớm hay người thích làm việc khuya).</p>
-          <h4 class="font-bold text-slate-800 text-sm mt-3">2. Thụ thể Dopamine D4 và sự tập trung</h4>
-          <p>Gen <em>DRD4</em> quy định thụ thể Dopamine tại vỏ não trước trán. Tính dẻo của hệ thần kinh (Neuroplasticity) cho phép rèn luyện thói quen để làm chủ sự tập trung học đường.</p>
+          <h4 class='font-bold text-slate-800 text-sm'>1. Nguồn gốc sinh học từ vi khuẩn</h4>
+          <p>Hệ thống CRISPR-Cas vốn là cơ chế miễn dịch thích ứng tự nhiên của vi khuẩn chống lại thực khuẩn thể (Bacteriophage). Khi vi khuẩn phát hiện ADN ngoại lai, enzyme Cas9 cùng phức hợp crRNA sẽ tạo vết cắt kép (DSB) chính xác tại trình tự mục tiêu.</p>
+          <h4 class='font-bold text-slate-800 text-sm mt-3'>2. Ứng dụng điều trị trong Y học</h4>
+          <p>Hiện nay liệu pháp CRISPR đã được FDA phê chuẩn điều trị bệnh thiếu máu hồng cầu hình liềm (Sickle Cell Disease) bằng cách tái kích hoạt gen tổng hợp Hemoglobin bào thai (HbF).</p>
+          <div class='bg-bio-50 p-3 rounded-xl border border-bio-200 mt-2'>
+            <span class='font-bold text-bio-800 text-xs'>Góc nhìn Sinh học THPT:</span>
+            <p class='text-xs text-bio-900 mt-0.5'>CRISPR chứng minh rằng cấu trúc liên kết bổ sung A-U, G-X có thể biến thành công cụ định vị siêu chính xác bên trong nhân tế bào sinh vật nhân thực.</p>
+          </div>
         `
       },
-      2: {
-        title: "Cơ chế sinh học của trí nhớ dài hạn (LTP)",
-        tag: "Thần kinh học & Sinh lý học",
+      {
+        id: "art_2",
+        title: "Trục Não - Ruột (Gut-Brain Axis) và Hệ Vi Sinh Microbiome",
+        tag: "Sinh lý học người • Thần kinh học",
+        cost: 80,
+        summary: "Hơn 90% hormone hạnh phúc Serotonin được sản xuất tại ruột! Cách các vi khuẩn đường ruột kiểm soát tâm trạng và khả năng tập trung thi cử.",
         content: `
-          <h4 class="font-bold text-slate-800 text-sm">1. Synap và Hiện tượng LTP</h4>
-          <p>Để trở thành ký ức dài hạn, các nơ-ron phải trải qua hiện tượng <strong>Long-Term Potentiation</strong> - sự củng cố liên kết xinap kéo dài nhờ kích thích lặp lại ngắt quãng.</p>
-          <h4 class="font-bold text-slate-800 text-sm mt-3">2. Dòng ion Canxi (Ca2+)</h4>
-          <p>Dòng Canxi tràn vào tế bào kích hoạt gắn thêm nhiều thụ thể AMPA lên màng sau synap, giúp đường dẫn truyền ghi nhớ thông tin trở nên trơn tru và bền bỉ hơn.</p>
+          <h4 class='font-bold text-slate-800 text-sm'>1. Dây thần kinh phế vị (Vagus Nerve)</h4>
+          <p>Hàng ngàn tỷ vi khuẩn đường ruột lên men chất xơ thành các Axit béo chuỗi ngắn (SCFA như Butyrate, Acetate). Các phân tử này kích hoạt dây thần kinh số X truyền tín hiệu trực tiếp lên vùng dưới đồi và Hạch hạnh nhân (Amygdala).</p>
+          <h4 class='font-bold text-slate-800 text-sm mt-3'>2. Tại sao ăn uống ảnh hưởng đến điểm số?</h4>
+          <p>Loạn khuẩn đường ruột do đồ ngọt và thức ăn nhanh giải phóng độc tố nội mạc LPS (Lipopolysaccharide), gây viêm thần kinh mức độ nhẹ (Neuroinflammation) làm suy giảm trí nhớ ngắn hạn.</p>
+          <div class='bg-bio-50 p-3 rounded-xl border border-bio-200 mt-2'>
+            <span class='font-bold text-bio-800 text-xs'>Khuyến nghị học đường:</span>
+            <p class='text-xs text-bio-900 mt-0.5'>Bổ sung sữa chua và rau củ lên men tự nhiên vào mùa thi cử giúp giảm đáng kể hormone căng thẳng Cortisol.</p>
+          </div>
         `
       },
-      3: {
-        title: "Sinh học sự mệt mỏi & Tự thực bào (Autophagy)",
-        tag: "Sinh học tế bào • Nobel Y học 2016",
+      {
+        id: "art_3",
+        title: "Di truyền học Biểu sinh (Epigenetics): Lối sống có thể bật/tắt gen của bạn",
+        tag: "Di truyền học phân tử • Y học tương lai",
+        cost: 100,
+        summary: "ADN không thay đổi trình tự nucleotit, nhưng các nhóm Methyl hóa (-CH3) và acetyl hóa histone có thể khóa hoặc mở các gen thông minh.",
         content: `
-          <h4 class="font-bold text-slate-800 text-sm">1. Vì sao chúng ta mệt mỏi?</h4>
-          <p>ATP phân giải tạo thành <strong>Adenosine</strong> tích tụ ở khe synap gắn vào các thụ thể làm chậm dẫn truyền thần kinh, báo hiệu cơ thể cần nghỉ ngơi.</p>
-          <h4 class="font-bold text-slate-800 text-sm mt-3">2. Cơ chế Autophagy</h4>
-          <p>Khi ngủ sâu, túi tự thực kết hợp cùng Lysosome để bọc và tiêu hóa các bào quan hỏng hóc, tái sử dụng axit amin sạch cho ngày mới.</p>
+          <h4 class='font-bold text-slate-800 text-sm'>1. Cơ chế Methyl hóa ADN và cuộn xoắn Histone</h4>
+          <p>Khi các gốc -CH3 gắn vào đảo CpG ở vùng khởi động (Promoter), chúng ngăn cản enzyme ARN Polymerase tiếp cận gen, dẫn đến hiện tượng bất hoạt phiên mã. Ngược lại, acetyl hóa histone làm giãn xoắn cromatin để gen được dịch mã tối đa.</p>
+          <h4 class='font-bold text-slate-800 text-sm mt-3'>2. Vận động thể chất và kích hoạt gen BDNF</h4>
+          <p>Tập thể dục trên 20 phút mỗi ngày kích thích enzyme khử methyl hóa ở promoter của gen mã hóa yếu tố dưỡng thần kinh BDNF, giúp tế bào thần kinh sinh sôi thêm nhiều synap mới.</p>
+          <div class='bg-bio-50 p-3 rounded-xl border border-bio-200 mt-2'>
+            <span class='font-bold text-bio-800 text-xs'>Bài học Sinh học sâu sắc:</span>
+            <p class='text-xs text-bio-900 mt-0.5'>Gen cho bạn tiềm năng, nhưng lối sống và kỷ luật hằng ngày mới là bàn tay điều khiển những tiềm năng đó có được biểu hiện ra kiểu hình hay không!</p>
+          </div>
         `
       }
-    };
+    ];
+
+    let currentArticlesList = [];
+
+    function loadDailyArticles() {
+      const todayDate = new Date().toISOString().split('T')[0];
+      const savedDate = localStorage.getItem("BIOHABIT_ARTICLES_DATE");
+      const savedArticles = localStorage.getItem("BIOHABIT_DAILY_ARTICLES");
+
+      if (savedArticles && savedDate === todayDate) {
+        try {
+          currentArticlesList = JSON.parse(savedArticles);
+        } catch (e) {
+          currentArticlesList = DEFAULT_ARTICLES;
+        }
+      } else {
+        currentArticlesList = DEFAULT_ARTICLES;
+        localStorage.setItem("BIOHABIT_ARTICLES_DATE", todayDate);
+        localStorage.setItem("BIOHABIT_DAILY_ARTICLES", JSON.stringify(DEFAULT_ARTICLES));
+      }
+      renderArticlesMarket();
+    }
+
+    async function fetchGeminiArticles(isManualClick = false) {
+      const reloadIcon = document.getElementById('article-reload-icon');
+      const reloadText = document.getElementById('article-reload-text');
+
+      if (reloadIcon) reloadIcon.classList.add('animate-spin');
+      if (reloadText) reloadText.innerText = "Gemini đang viết bài...";
+
+      try {
+        const res = await fetch('/api/gemini', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ type: 'articles' })
+        });
+
+        const data = await res.json();
+
+        if (res.ok && Array.isArray(data.articles) && data.articles.length === 3) {
+          currentArticlesList = data.articles;
+          const todayDate = new Date().toISOString().split('T')[0];
+          localStorage.setItem("BIOHABIT_ARTICLES_DATE", todayDate);
+          localStorage.setItem("BIOHABIT_DAILY_ARTICLES", JSON.stringify(data.articles));
+          showToast("Gemini đã xuất bản 3 bài nghiên cứu Y sinh mới toanh!", "success");
+        } else {
+          if (isManualClick) showToast("Máy chủ đang bận, đang giữ bộ bài nghiên cứu xuất sắc hiện tại!", "info");
+        }
+      } catch (err) {
+        if (isManualClick) showToast("Lỗi kết nối khi tải bài mới, giữ bộ bài hiện tại!", "info");
+      } finally {
+        if (reloadIcon) reloadIcon.classList.remove('animate-spin');
+        if (reloadText) reloadText.innerText = "Xuất bản 3 bài mới (AI)";
+        renderArticlesMarket();
+      }
+    }
+
+    function renderArticlesMarket() {
+      const container = document.getElementById('article-cards-container');
+      if (!container) return;
+
+      container.innerHTML = currentArticlesList.map(art => {
+        const isUnlocked = AppState.unlockedArticles?.includes(art.id);
+        const actionBtn = isUnlocked
+          ? `<button type="button" onclick="openArticleModal('${art.id}')" class="w-full py-2.5 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 rounded-xl text-xs font-bold transition flex items-center justify-center">
+               <i class="fa-solid fa-book-open-reader mr-2"></i> Đọc bài nghiên cứu (Đã mở)
+             </button>`
+          : `<button type="button" onclick="unlockArticle('${art.id}', ${art.cost})" class="w-full py-2.5 bg-bio-600 hover:bg-bio-700 text-white rounded-xl text-xs font-bold transition flex items-center justify-center">
+               <i class="fa-solid fa-lock mr-2"></i> Mở khóa đề tài (${art.cost} Coins)
+             </button>`;
+
+        return `
+          <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden flex flex-col justify-between p-5 hover:shadow-md transition">
+            <div>
+              <div class="flex items-center justify-between text-xs mb-3">
+                <span class="px-2.5 py-1 rounded-full font-bold bg-blue-100 text-blue-700 truncate max-w-[200px]">${art.tag}</span>
+                <span class="font-bold text-amber-600 shrink-0"><i class="fa-solid fa-coins mr-1"></i>${art.cost} Coins</span>
+              </div>
+              <h3 class="font-extrabold text-slate-800 text-base mb-2 leading-snug">${art.title}</h3>
+              <p class="text-xs text-slate-500 leading-relaxed mb-4">${art.summary}</p>
+            </div>
+            <div>
+              ${actionBtn}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function unlockArticle(articleId, cost) {
+      if (!AppState.unlockedArticles) AppState.unlockedArticles = [];
+      if (AppState.unlockedArticles.includes(articleId)) {
+        openArticleModal(articleId);
+        return;
+      }
+
+      if ((AppState.user?.coins || 0) < cost) {
+        showToast(`Cần ${cost} coins, hiện bạn chỉ có ${AppState.user?.coins || 0} coins! Hãy điểm danh hoặc làm Quiz thêm nhé.`, "warning");
+        return;
+      }
+
+      AppState.user.coins -= cost;
+      AppState.unlockedArticles.push(articleId);
+      saveState();
+      showToast("Mở khóa đề tài nghiên cứu thành công!", "success");
+      openArticleModal(articleId);
+    }
+
+    function openArticleModal(articleId) {
+      const article = currentArticlesList.find(a => a.id === articleId) || DEFAULT_ARTICLES.find(a => a.id === articleId);
+      if (!article) return;
+
+      const titleEl = document.getElementById('modal-article-title');
+      const contentEl = document.getElementById('modal-article-content');
+      const modal = document.getElementById('article-modal');
+
+      if (titleEl) titleEl.innerHTML = `<i class="fa-solid fa-dna text-bio-600 mr-2"></i> ${article.title}`;
+      if (contentEl) contentEl.innerHTML = `
+        <div class="mb-3">
+          <span class="text-[11px] font-bold text-bio-700 bg-bio-100 px-2.5 py-1 rounded-full">${article.tag}</span>
+        </div>
+        ${article.content}
+      `;
+      if (modal) modal.classList.remove('hidden');
+    }
+
+    function closeArticleModal() {
+      const modal = document.getElementById('article-modal');
+      if (modal) modal.classList.add('hidden');
+    }
 
     /* 7. AUTH VÀ ĐỒNG BỘ FIREBASE */
     const firebaseConfig = { 
@@ -1170,7 +1251,6 @@
       console.warn("Firebase fallback:", e);
     }
 
-    // Kiểm tra xem có đang mở bằng Zalo, Facebook, Messenger không
     function checkInAppBrowser() {
       const ua = navigator.userAgent || navigator.vendor || window.opera;
       const isInApp = (/FBAN|FBAV|Instagram|Zalo|Line|Twitter|MicroMessenger/i.test(ua));
@@ -1193,7 +1273,6 @@
       }
 
       const provider = new firebase.auth.GoogleAuthProvider();
-      // Thử dùng Popup trước (hoạt động tốt trên Chrome/Safari mobile khi bấm trực tiếp)
       auth.signInWithPopup(provider)
         .then(() => showToast("Đăng nhập Google thành công!", "success"))
         .catch(error => {
@@ -1240,6 +1319,7 @@
                 db.collection("users").doc(user.uid).set(AppState);
               }
               updateGlobalUI();
+              renderArticlesMarket();
             }, err => {
               console.error("Lỗi Firestore:", err);
               loadLocalFallback();
@@ -1271,6 +1351,7 @@
         AppState = JSON.parse(JSON.stringify(DEFAULT_STORAGE));
       }
       updateGlobalUI();
+      renderArticlesMarket();
     }
 
     function saveState() {
@@ -1280,6 +1361,7 @@
       } else {
         localStorage.setItem("BIOHABIT_STATE", JSON.stringify(AppState));
         updateGlobalUI();
+        renderArticlesMarket();
       }
     }
 
@@ -1296,7 +1378,7 @@
         if (dCoins) dCoins.innerText = AppState.user?.coins ?? 50;
         if (mCoins) mCoins.innerText = AppState.user?.coins ?? 50;
         if (dStreak) dStreak.innerText = `${AppState.user?.streak ?? 1} ngày`;
-        if (dCount) dCount.innerText = `${AppState.unlockedArticles?.length ?? 1} / 3`;
+        if (dCount) dCount.innerText = `${AppState.unlockedArticles?.length ?? 1} bài`;
 
         const setVal = (id, val) => { const el = document.getElementById(id); if (el && val) el.value = val; };
         setVal('wake-time', AppState.schedule?.wake);
@@ -1326,7 +1408,6 @@
 
         checkBadges();
         renderBadges();
-        renderStoreButtons();
       } catch (err) {
         console.error("Lỗi UI:", err);
       }
@@ -1363,64 +1444,6 @@
 
       saveState();
       showToast("Tuyệt vời! +10 BioCoins và duy trì chuỗi Streak!", "success");
-    }
-
-    function renderStoreButtons() {
-      [1, 2, 3].forEach(id => {
-        const btnContainer = document.getElementById(`unlock-btn-container-${id}`);
-        if (!btnContainer) return;
-        const isUnlocked = AppState.unlockedArticles?.includes(id);
-
-        if (isUnlocked) {
-          btnContainer.innerHTML = `
-            <button type="button" onclick="openArticleModal(${id})" class="w-full py-2.5 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 rounded-xl text-xs font-bold transition flex items-center justify-center">
-              <i class="fa-solid fa-book-open-reader mr-2"></i> Đọc bài nghiên cứu (Đã mở)
-            </button>
-          `;
-        }
-      });
-    }
-
-    function unlockArticle(articleId, cost) {
-      if (AppState.unlockedArticles?.includes(articleId)) {
-        openArticleModal(articleId);
-        return;
-      }
-
-      if ((AppState.user?.coins || 0) < cost) {
-        showToast(`Cần ${cost} coins, hiện bạn chỉ có ${AppState.user?.coins || 0} coins!`, "warning");
-        return;
-      }
-
-      AppState.user.coins -= cost;
-      if (!AppState.unlockedArticles) AppState.unlockedArticles = [];
-      AppState.unlockedArticles.push(articleId);
-      saveState();
-      showToast("Mở khóa bài nghiên cứu thành công!", "success");
-      openArticleModal(articleId);
-    }
-
-    function openArticleModal(id) {
-      const article = ARTICLES_DATA[id];
-      if (!article) return;
-
-      const titleEl = document.getElementById('modal-article-title');
-      const contentEl = document.getElementById('modal-article-content');
-      const modal = document.getElementById('article-modal');
-
-      if (titleEl) titleEl.innerHTML = `<i class="fa-solid fa-dna text-bio-600 mr-2"></i> ${article.title}`;
-      if (contentEl) contentEl.innerHTML = `
-        <div class="mb-3">
-          <span class="text-[11px] font-bold text-bio-700 bg-bio-100 px-2.5 py-1 rounded-full">${article.tag}</span>
-        </div>
-        ${article.content}
-      `;
-      if (modal) modal.classList.remove('hidden');
-    }
-
-    function closeArticleModal() {
-      const modal = document.getElementById('article-modal');
-      if (modal) modal.classList.add('hidden');
     }
 
     document.getElementById('nutrition-toggle')?.addEventListener('change', function(e) {
@@ -1482,7 +1505,7 @@
         },
         {
           name: 'Tâm hồn Sinh học',
-          desc: 'Mở khóa toàn bộ bài nghiên cứu chuyên sâu',
+          desc: 'Mở khóa thành công ít nhất 3 đề tài nghiên cứu chuyên sâu',
           icon: 'fa-graduation-cap text-bio-600',
           active: AppState.badges?.bioScholar
         }
@@ -1532,6 +1555,7 @@
       checkInAppBrowser();
       loadLocalFallback();
       refreshRandomQuiz();
+      loadDailyArticles();
     });
   </script>
 </body>
