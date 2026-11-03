@@ -731,7 +731,7 @@
       }
     ];
 
-    /* 18 CHUYÊN ĐỀ XOAY VÒNG CHO GEMINI AI */
+    /* 20 CHUYÊN ĐỀ ĐA DẠNG CHO GEMINI AI TẠO QUIZ */
     const BIO_TOPICS = [
       "Hệ tim mạch, chu kỳ tim và điều hòa huyết áp ở người",
       "Hệ bài tiết, cấu tạo nephron và lọc máu ở cầu thận",
@@ -750,7 +750,9 @@
       "Tiến hóa: chọn lọc tự nhiên và các nhân tố tiến hóa",
       "Cấu tạo màng sinh chất và các hình thức vận chuyển qua màng",
       "Chu kỳ tế bào, nguyên phân, giảm phân và phát sinh giao tử",
-      "Dinh dưỡng tế bào: chuyển hóa lipid, glucid và protein"
+      "Dinh dưỡng tế bào: chuyển hóa lipid, glucid và protein",
+      "Cảm ứng ở sinh vật và tính hướng động ở thực vật",
+      "Sinh sản hữu tính và thụ tinh ở động vật"
     ];
 
     let currentSessionQuiz = [];
@@ -930,11 +932,11 @@
         if (response.ok && data.reply) {
           appendMessage("bot", data.reply);
         } else {
-          appendMessage("bot", `⚠️ Phản hồi: ${data.error || 'Đang bận, bạn đợi khoảng 10 giây rồi thử lại nhé!'}`);
+          appendMessage("bot", `⚠️ Phản hồi: ${data.error || 'Đang bận, bạn đợi khoảng 5-10 giây rồi thử lại nhé!'}`);
         }
       } catch (err) {
         removeLoadingBubble(loadingId);
-        appendMessage("bot", "⚠️ Lỗi kết nối. Bạn kiểm tra lại mạng hoặc thử lại sau 10 giây nhé!");
+        appendMessage("bot", "⚠️ Lỗi kết nối. Bạn kiểm tra lại mạng hoặc thử lại sau 5-10 giây nhé!");
       }
     }
 
@@ -1491,7 +1493,7 @@
     /* 9. KHỞI CHẠY LẦN ĐẦU KHI MỞ TRANG */
     window.addEventListener('DOMContentLoaded', () => {
       loadLocalFallback();
-      refreshRandomQuiz(); // Dùng Quiz cục bộ trước để tránh nghẽn quota!
+      refreshRandomQuiz();
     });
   </script>
 </body>
