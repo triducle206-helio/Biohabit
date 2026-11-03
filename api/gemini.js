@@ -1,8 +1,10 @@
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
+  // Chỉ nhận phương thức POST
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
+  // Lấy key từ Environment Variables trên Vercel
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
     return res.status(500).json({ error: 'Chưa cài đặt GEMINI_API_KEY trên Vercel' });
@@ -22,16 +24,15 @@ YÊU CẦU: Chỉ trả về JSON thuần túy (không dùng markdown, không c�
     "explain": "Giải thích ngắn gọn cơ chế sinh học"
   }
 ]
-Lưu ý: "answer" là số từ 0 đến 3.`;
+Lưu ý: "answer" là số từ 0 đến 3 tương ứng vị trí đúng trong options.`;
   } else {
-    prompt = `Bạn là Trợ lý AI Sinh học của nền tảng BioHabit (chuyên sâu Sinh học THPT & cơ thể người). Hãy trả lời câu hỏi sau bằng tiếng Việt thật dễ hiểu, chuẩn xác khoa học, có phân tích cơ chế rõ ràng: ${message}`;
+    prompt = `Bạn là Trợ lý AI Sinh học của nền tảng BioHabit (chuyên sâu Sinh học THPT & cơ thể người). Hãy giải đáp câu hỏi sau bằng tiếng Việt thật dễ hiểu, chuẩn xác khoa học, có phân tích cơ chế rõ ràng: ${message}`;
   }
 
-  // Danh sách model tối ưu quota (Flash-Lite được nhiều lượt gọi hơn)
+  // Ưu tiên gemini-3.5-flash-lite để có hạn mức cao nhất, không bị lỗi Rate Limit
   const models = [
     'gemini-3.5-flash-lite',
-    'gemini-3.8-flash',
-    'gemini-2.5-flash'
+    'gemini-3.8-flash'
   ];
 
   for (const model of models) {
@@ -58,11 +59,11 @@ Lưu ý: "answer" là số từ 0 đến 3.`;
         }
       }
     } catch (err) {
-      continue; // Tự động thử model tiếp theo nếu bị lỗi hoặc hết lượt
+      continue; // Tự động đổi model dự phòng nếu có trục trặc
     }
   }
 
-  // Dự phòng an toàn nếu tài khoản Google bị tạm khóa do spam quá nhiều lần
+  // Dự phòng nếu Google bảo trì tạm thời
   if (type === 'quiz') {
     return res.status(200).json({
       quiz: [
@@ -88,7 +89,7 @@ Lưu ý: "answer" là số từ 0 đến 3.`;
     });
   } else {
     return res.status(200).json({ 
-      reply: "Google Gemini đang tạm bận vì có nhiều lượt hỏi cùng lúc. Bạn hãy đợi khoảng 15 giây rồi gửi lại câu hỏi nhé! 🌱" 
+      reply: "Google Gemini đang xử lý nhiều tác vụ. Bạn hãy đợi khoảng 10 giây rồi thử gửi lại câu hỏi nhé! 🌱" 
     });
   }
-}
+};
