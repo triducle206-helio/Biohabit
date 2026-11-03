@@ -13,7 +13,7 @@ export default async function handler(req, res) {
   let prompt = "";
   if (type === 'quiz') {
     prompt = `Bạn là chuyên gia Sinh học THPT. Hãy tạo ngẫu nhiên 3 câu hỏi trắc nghiệm Sinh học & Cơ thể người (không trùng lặp, đa dạng chủ đề: hệ thần kinh, tuần hoàn, hô hấp, nội tiết, di truyền, tiêu hóa).
-YÊU CẦU BẮT BUỘC: Chỉ trả về định dạng JSON thuần túy (không dùng markdown, không có chữ thừa nào ngoài json), theo đúng cấu trúc sau:
+YÊU CẦU: Chỉ trả về JSON thuần túy (không dùng markdown, không có chữ thừa ngoài json):
 [
   {
     "question": "Nội dung câu hỏi ở đây?",
@@ -22,21 +22,18 @@ YÊU CẦU BẮT BUỘC: Chỉ trả về định dạng JSON thuần túy (khô
     "explain": "Giải thích ngắn gọn cơ chế sinh học"
   }
 ]
-Lưu ý: "answer" là số từ 0 đến 3 (tương ứng với vị trí đúng trong mảng options).`;
+Lưu ý: "answer" là số từ 0 đến 3.`;
   } else {
     prompt = `Bạn là Trợ lý AI Sinh học của nền tảng BioHabit (chuyên sâu Sinh học THPT & cơ thể người). Hãy trả lời câu hỏi sau bằng tiếng Việt thật dễ hiểu, chuẩn xác khoa học, có phân tích cơ chế rõ ràng: ${message}`;
   }
 
-  // Danh sách các mô hình dự phòng nếu một mô hình bị nghẽn Rate Limit
+  // Danh sách model tối ưu quota (Flash-Lite được nhiều lượt gọi hơn)
   const models = [
+    'gemini-3.5-flash-lite',
     'gemini-3.8-flash',
-    'gemini-2.0-flash',
-    'gemini-1.5-flash'
+    'gemini-2.5-flash'
   ];
 
-  let lastError = null;
-
-  // Tự động thử lần lượt các model để không bao giờ bị nghẽn quota
   for (const model of models) {
     try {
       const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`, {
@@ -59,18 +56,13 @@ Lưu ý: "answer" là số từ 0 đến 3 (tương ứng với vị trí đúng
         } else {
           return res.status(200).json({ reply: rawText });
         }
-      } else {
-        lastError = data.error?.message || 'Lỗi từ Gemini';
-        // Nếu bị quá lượt (429 Rate limit) thì tự động vòng lặp thử model tiếp theo ngay
-        continue;
       }
     } catch (err) {
-      lastError = err.message;
-      continue;
+      continue; // Tự động thử model tiếp theo nếu bị lỗi hoặc hết lượt
     }
   }
 
-  // Nếu tất cả các model của Google đều quá tải tạm thời
+  // Dự phòng an toàn nếu tài khoản Google bị tạm khóa do spam quá nhiều lần
   if (type === 'quiz') {
     return res.status(200).json({
       quiz: [
@@ -96,7 +88,7 @@ Lưu ý: "answer" là số từ 0 đến 3 (tương ứng với vị trí đúng
     });
   } else {
     return res.status(200).json({ 
-      reply: "Google Gemini đang xử lý quá nhiều yêu cầu cùng lúc (Rate limit). Bạn vui lòng đợi khoảng 10 giây rồi thử gửi lại câu hỏi nhé! 🌱" 
+      reply: "Google Gemini đang tạm bận vì có nhiều lượt hỏi cùng lúc. Bạn hãy đợi khoảng 15 giây rồi gửi lại câu hỏi nhé! 🌱" 
     });
   }
 }
