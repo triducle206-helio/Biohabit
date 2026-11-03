@@ -149,7 +149,7 @@
         </div>
         <div class="relative z-10 max-w-2xl space-y-3">
           <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-white/20 text-white backdrop-blur-md">
-            🔬 Chuyên đề Sinh Học Cấp 3 • Vercel Serverless & Gemini 2.5
+            🔬 Chuyên đề Sinh Học Cấp 3 • BioHabit Platform
           </span>
           <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight leading-tight">
             Xây dựng lối sống khoa học cùng <span class="underline decoration-bio-300">BioHabit</span>.
@@ -392,7 +392,7 @@
       </div>
     </section>
 
-    <!-- ================= TAB 3: THÓI QUEN & QUIZ GEMINI TỰ ĐỘNG ================= -->
+    <!-- ================= TAB 3: THÓI QUEN & QUIZ GEMINI ================= -->
     <section id="tab-habits" class="hidden space-y-6">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
         <!-- Điểm danh -->
@@ -475,7 +475,7 @@
       <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h2 class="text-xl font-black text-slate-900 tracking-tight flex items-center">
-            <i class="fa-solid fa-robot text-emerald-600 mr-2.5"></i> Trợ Lý Sinh Học Gemini 2.5
+            <i class="fa-solid fa-robot text-emerald-600 mr-2.5"></i> Trợ Lý Sinh Học Gemini AI
           </h2>
           <p class="text-xs sm:text-sm text-slate-600 mt-1">
             Kết nối bảo mật qua Vercel. Trả lời chuyên sâu mọi câu hỏi về cơ thể người, chuyển hóa tế bào, giải phẫu và di truyền học.
@@ -679,35 +679,95 @@
       }
     }
 
-    /* 3. TẠO QUIZ BẰNG GEMINI SERVERLESS API */
-    let currentSessionQuiz = [];
-
-    // Bộ câu hỏi dự phòng nếu API chập chờn
-    const FALLBACK_QUIZ = [
+    /* 3. NGÂN HÀNG CÂU HỎI TRẮC NGHIỆM */
+    const QUIZ_BANK = [
       {
-        question: "Hormone nào sau đây do tuyến tùng tiết ra mạnh nhất trong bóng tối để điều hòa giấc ngủ?",
+        question: "Hormone nào sau đây được tiết ra từ tuyến tùng để điều chỉnh chu kỳ thức - ngủ tự nhiên?",
         options: ["Melatonin", "Adrenaline", "Insulin", "Testosterone"],
         answer: 0,
-        explain: "Melatonin do tuyến tùng tiết ra giúp hạ thân nhiệt và ru ngủ sâu tự nhiên."
+        explain: "Melatonin do tuyến tùng tiết ra mạnh nhất trong bóng tối giúp cơ thể chìm vào giấc ngủ."
       },
       {
         question: "Khi vận động mạnh bị thiếu oxy, tế bào cơ xương người lên men tạo ra chất gì gây mỏi cơ?",
-        options: ["Axit Lactic", "Axit Axetic", "Khí CO2", "Rượu Ethanol"],
+        options: ["Axit Lactic", "Axit Axetic", "Khí Carbonic", "Rượu Ethanol"],
         answer: 0,
-        explain: "Lên men Axit Lactic tích tụ ion H+ làm giảm pH sợi cơ gây đau mỏi."
+        explain: "Lên men Axit Lactic xảy ra khi cơ thiếu oxy tạm thời, gây tích tụ ion H+ tạo cảm giác mỏi cơ."
       },
       {
         question: "Bào quan nào là 'nhà máy tiêu hóa và dọn rác' của tế bào trong cơ chế Tự thực bào (Autophagy)?",
         options: ["Lysosome", "Riboxom", "Lưới nội chất hạt", "Bộ máy Golgi"],
         answer: 0,
-        explain: "Lysosome chứa enzyme thủy phân để tiêu hóa bào quan cũ tái sử dụng axit amin."
+        explain: "Lysosome chứa nhiều enzyme thủy phân để phân hủy tế bào quan già cỗi tái tạo axit amin."
+      },
+      {
+        question: "Cấu trúc nào trong tế bào quang hợp của thực vật trực tiếp hấp thụ năng lượng photon ánh sáng?",
+        options: ["Hệ sắc tố diệp lục (Chlorophyll)", "Không bào trung tâm", "Thành Xenlulozo", "Riboxom 70S"],
+        answer: 0,
+        explain: "Các phân tử Diệp lục trên màng Thylakoid hấp thụ ánh sáng kích thích điện tử."
+      },
+      {
+        question: "Hiện tượng nào ở xinap thần kinh là cơ chế sinh học phân tử cốt lõi của việc ghi nhớ dài hạn?",
+        options: ["Long-Term Potentiation (LTP)", "Thẩm thấu nước", "Co nguyên sinh", "Phân bào giảm nhiễm"],
+        answer: 0,
+        explain: "LTP giúp tăng cường độ truyền dẫn tín hiệu kéo dài giữa 2 nơ-ron qua thụ thể NMDA."
+      },
+      {
+        question: "Phần lớn năng lượng ATP của tế bào động vật được tạo ra ở bào quan nào qua chuỗi truyền electron?",
+        options: ["Ty thể (Mitochondria)", "Lysosome", "Nhân con", "Trung thể"],
+        answer: 0,
+        explain: "Ty thể là nhà máy năng lượng, tạo ra khoảng 30-32 ATP cho mỗi phân tử Glucozo qua hô hấp hiếu khí."
+      },
+      {
+        question: "Vùng nào ở não bộ đóng vai trò là 'đồng hồ chủ' tiếp nhận tín hiệu ánh sáng để điều khiển nhịp Circadian?",
+        options: ["Nhân trên chéo (SCN - Vùng dưới đồi)", "Tiểu não", "Hành tủy", "Thùy chẩm"],
+        answer: 0,
+        explain: "Suprachiasmatic Nucleus (SCN) nằm ở vùng dưới đồi chỉ huy nhịp sinh học 24 giờ của toàn cơ thể."
+      },
+      {
+        question: "Quy tắc 20-20-20 khuyên bạn sau 20 phút nhìn màn hình thì nên nhìn vật ở khoảng cách bao xa?",
+        options: ["20 feet (khoảng 6 mét)", "2 feet (60 cm)", "20 mét", "Nhắm mắt hoàn toàn"],
+        answer: 0,
+        explain: "Khoảng cách 20 feet (6m) cho phép cơ thể mi mắt giãn ra hoàn toàn, giảm căng thẳng điều tiết."
       }
     ];
+
+    let currentSessionQuiz = [];
+
+    function shuffleArray(array) {
+      const arr = [...array];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function refreshRandomQuiz() {
+      try {
+        const shuffledBank = shuffleArray(QUIZ_BANK);
+        currentSessionQuiz = shuffledBank.slice(0, 3).map((item, idx) => {
+          const optionsWithIndex = item.options.map((opt, i) => ({ text: opt, isCorrect: i === item.answer }));
+          const shuffledOptions = shuffleArray(optionsWithIndex);
+          return {
+            id: idx,
+            question: item.question,
+            options: shuffledOptions.map(o => o.text),
+            answer: shuffledOptions.findIndex(o => o.isCorrect),
+            explain: item.explain
+          };
+        });
+
+        renderCurrentQuiz();
+        const resBox = document.getElementById('quiz-result-box');
+        if (resBox) resBox.classList.add('hidden');
+      } catch (e) {
+        console.error("Lỗi đảo Quiz:", e);
+      }
+    }
 
     async function generateGeminiQuiz() {
       const reloadIcon = document.getElementById('quiz-reload-icon');
       const reloadText = document.getElementById('quiz-reload-text');
-      const container = document.getElementById('quiz-container');
 
       if (reloadIcon) reloadIcon.classList.add('animate-spin');
       if (reloadText) reloadText.innerText = "Gemini đang tạo đề...";
@@ -725,12 +785,12 @@
           currentSessionQuiz = data.quiz;
           showToast("Gemini AI đã tạo 3 câu trắc nghiệm mới toanh!", "success");
         } else {
-          currentSessionQuiz = FALLBACK_QUIZ;
-          showToast("Dùng bộ câu hỏi sinh học chuẩn!", "info");
+          refreshRandomQuiz();
+          showToast("Đã tải bộ câu hỏi dự phòng!", "info");
         }
       } catch (err) {
-        currentSessionQuiz = FALLBACK_QUIZ;
-        showToast("Đã tải bộ câu hỏi sinh học dự phòng!", "info");
+        refreshRandomQuiz();
+        showToast("Đã tải bộ câu hỏi dự phòng!", "info");
       } finally {
         if (reloadIcon) reloadIcon.classList.remove('animate-spin');
         if (reloadText) reloadText.innerText = "Tạo đề mới (AI)";
@@ -770,7 +830,6 @@
         const selected = document.querySelector(`input[name="quiz-item-${idx}"]:checked`);
         if (!selected) allAnswered = false;
         else if (parseInt(selected.value) === q.answer) correctCount++;
-        // Hiện giải thích chi tiết
         const exp = document.getElementById(`quiz-explain-${idx}`);
         if (exp) exp.classList.remove('hidden');
       });
@@ -807,7 +866,7 @@
       }
     }
 
-    /* 4. CHAT GEMINI AI SERVERLESS (KHÔNG LỘ KEY) */
+    /* 4. CHAT GEMINI AI TRỰC TIẾP */
     function handleChatEnter(e) {
       if (e.key === 'Enter') sendChatMessage();
     }
@@ -844,11 +903,11 @@
         if (response.ok && data.reply) {
           appendMessage("bot", data.reply);
         } else {
-          appendMessage("bot", `⚠️ Phản hồi: ${data.error || 'Vui lòng kiểm tra lại cấu hình GEMINI_API_KEY trên Vercel.'}`);
+          appendMessage("bot", `⚠️ Phản hồi: ${data.error || 'Đang bận, bạn đợi khoảng 10 giây rồi thử lại nhé!'}`);
         }
       } catch (err) {
         removeLoadingBubble(loadingId);
-        appendMessage("bot", "⚠️ Lỗi kết nối tới máy chủ Vercel. Bạn kiểm tra lại mạng hoặc redeploy trên Vercel nhé!");
+        appendMessage("bot", "⚠️ Lỗi kết nối. Bạn kiểm tra lại mạng hoặc thử lại sau 10 giây nhé!");
       }
     }
 
@@ -1065,7 +1124,7 @@
         db = firebase.firestore();
       }
     } catch (e) {
-      console.warn("Firebase chạy fallback:", e);
+      console.warn("Firebase fallback:", e);
     }
 
     function loginWithGoogle() {
@@ -1402,8 +1461,11 @@
       setTimeout(() => toast.classList.add('opacity-0', 'translate-y-20', 'pointer-events-none'), 3500);
     }
 
-  /* 9. KHỞI CHẠY LẦN ĐẦU KHI MỞ TRANG */
+    /* 9. KHỞI CHẠY LẦN ĐẦU KHI MỞ TRANG */
     window.addEventListener('DOMContentLoaded', () => {
       loadLocalFallback();
-      refreshRandomQuiz(); // Dùng bộ câu hỏi có sẵn trước, khi nào người dùng bấm "Tạo đề mới (AI)" thì mới gọi Gemini!
+      refreshRandomQuiz(); // Dùng Quiz cục bộ trước, không tự động gọi API làm nghẽn mạng!
     });
+  </script>
+</body>
+</html>
