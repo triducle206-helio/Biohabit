@@ -1,38 +1,38 @@
 module.exports = async function handler(req, res) {
-  // Chỉ nhận phương thức POST
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
-  // Lấy key từ Environment Variables trên Vercel
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
     return res.status(500).json({ error: 'Chưa cài đặt GEMINI_API_KEY trên Vercel' });
   }
 
-  const { type, message } = req.body;
+  const { type, message, topic } = req.body;
 
   let prompt = "";
   if (type === 'quiz') {
-    prompt = `Bạn là chuyên gia Sinh học THPT. Hãy tạo ngẫu nhiên 3 câu hỏi trắc nghiệm Sinh học & Cơ thể người (không trùng lặp, đa dạng chủ đề: hệ thần kinh, tuần hoàn, hô hấp, nội tiết, di truyền, tiêu hóa).
-YÊU CẦU: Chỉ trả về JSON thuần túy (không dùng markdown, không có chữ thừa ngoài json):
+    const selectedTopic = topic || "Cơ thể người và chuyển hóa vật chất";
+    prompt = `Bạn là chuyên gia ra đề thi Sinh học THPT Quốc gia. Hãy tạo chính xác 3 câu hỏi trắc nghiệm Sinh học MỚI TOANH, ĐỘC ĐÁO thuộc chuyên đề: "${selectedTopic}".
+YÊU CẦU BẮT BUỘC:
+1. Các câu hỏi phải có tính tư duy khoa học, không ra các câu quá hiển nhiên.
+2. Chỉ trả về chuỗi JSON thuần túy (không dùng markdown, không có chữ thừa nào ngoài JSON):
 [
   {
-    "question": "Nội dung câu hỏi ở đây?",
+    "question": "Nội dung câu hỏi?",
     "options": ["Đáp án A", "Đáp án B", "Đáp án C", "Đáp án D"],
     "answer": 0,
-    "explain": "Giải thích ngắn gọn cơ chế sinh học"
+    "explain": "Giải thích ngắn gọn bản chất sinh học vì sao đúng"
   }
 ]
-Lưu ý: "answer" là số từ 0 đến 3 tương ứng vị trí đúng trong options.`;
+Lưu ý: "answer" là số từ 0 đến 3 chỉ vị trí đáp án đúng trong mảng options.`;
   } else {
     prompt = `Bạn là Trợ lý AI Sinh học của nền tảng BioHabit (chuyên sâu Sinh học THPT & cơ thể người). Hãy giải đáp câu hỏi sau bằng tiếng Việt thật dễ hiểu, chuẩn xác khoa học, có phân tích cơ chế rõ ràng: ${message}`;
   }
 
-  // Ưu tiên gemini-3.5-flash-lite để có hạn mức cao nhất, không bị lỗi Rate Limit
   const models = [
-    'gemini-3.5-flash-lite',
-    'gemini-3.8-flash'
+    'gemini-2.5-flash',
+    'gemini-2.0-flash'
   ];
 
   for (const model of models) {
@@ -41,7 +41,10 @@ Lưu ý: "answer" là số từ 0 đến 3 tương ứng vị trí đúng trong 
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }]
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: {
+            temperature: 0.9 // Tăng tính sáng tạo ngẫu nhiên, không lặp lại
+          }
         })
       });
 
@@ -59,37 +62,37 @@ Lưu ý: "answer" là số từ 0 đến 3 tương ứng vị trí đúng trong 
         }
       }
     } catch (err) {
-      continue; // Tự động đổi model dự phòng nếu có trục trặc
+      continue;
     }
   }
 
-  // Dự phòng nếu Google bảo trì tạm thời
+  // Fallback an toàn nếu mạng chập chờn
   if (type === 'quiz') {
     return res.status(200).json({
       quiz: [
         {
-          question: "Hormone nào do tuyến tùng tiết ra mạnh nhất trong bóng tối giúp ru ngủ sâu tự nhiên?",
-          options: ["Melatonin", "Adrenaline", "Insulin", "Testosterone"],
+          question: "Cơ chế nào giúp duy trì nồng độ ion Na+ ngoài tế bào luôn cao hơn bên trong tế bào?",
+          options: ["Bơm Na-K ATPase (Vận chuyển chủ động)", "Khuếch tán trực tiếp qua photpholipit", "Hiện tượng ẩm bào", "Thẩm thấu nước"],
           answer: 0,
-          explain: "Melatonin điều chỉnh nhịp sinh học ngày đêm của cơ thể."
+          explain: "Bơm Na-K tiêu tốn ATP để bơm 3 Na+ ra ngoài và đưa 2 K+ vào trong."
         },
         {
-          question: "Khi cơ xương vận động mạnh thiếu oxy, chất nào được tạo thành gây cảm giác mỏi cơ?",
-          options: ["Axit Lactic", "Axit Axetic", "Khí CO2", "Rượu Ethanol"],
+          question: "Tại sao khi ăn nhiều thức ăn có hàm lượng muối cao lại dẫn đến hiện tượng tăng huyết áp tạm thời?",
+          options: ["Làm tăng áp suất thẩm thấu máu, kích thích giữ nước", "Làm giảm nhịp đập của tim", "Làm giãn toàn bộ các mao mạch ngoại vi", "Làm hồng cầu vỡ hàng loạt"],
           answer: 0,
-          explain: "Quá trình lên men kị khí sinh ra Axit Lactic tích tụ trong sợi cơ."
+          explain: "Muối làm tăng áp suất thẩm thấu, kích thích tuyến yên tiết ADH giữ nước ở thận làm tăng thể tích máu."
         },
         {
-          question: "Bào quan nào giữ vai trò cốt lõi trong cơ chế Tự thực bào (Autophagy) dọn rác tế bào?",
-          options: ["Lysosome", "Riboxom", "Lưới nội chất", "Bộ máy Golgi"],
+          question: "Giai đoạn nào trong phân bào nguyên phân có các nhiễm sắc thể co xoắn cực đại và xếp thành một hàng trên mặt phẳng xích đạo?",
+          options: ["Kì giữa", "Kì đầu", "Kì sau", "Kì cuối"],
           answer: 0,
-          explain: "Lysosome chứa enzyme thủy phân để tiêu hóa bào quan cũ hỏng."
+          explain: "Ở kì giữa, NST đóng xoắn tối đa và tập trung tại mặt phẳng xích đạo của thoi phân bào."
         }
       ]
     });
   } else {
     return res.status(200).json({ 
-      reply: "Google Gemini đang xử lý nhiều tác vụ. Bạn hãy đợi khoảng 10 giây rồi thử gửi lại câu hỏi nhé! 🌱" 
+      reply: "Google Gemini đang xử lý nhiều tác vụ. Bạn đợi khoảng 10 giây rồi thử gửi lại nhé! 🌱" 
     });
   }
 };
