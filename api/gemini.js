@@ -13,23 +13,22 @@ module.exports = async function handler(req, res) {
   let prompt = "";
   if (type === 'quiz') {
     const selectedTopic = topic || "Cơ thể người và chuyển hóa vật chất";
-    prompt = `Bạn là chuyên gia ra đề thi Sinh học THPT Quốc gia. Hãy tạo chính xác 3 câu hỏi trắc nghiệm Sinh học MỚI TOANH, ĐỘC ĐÁO thuộc chuyên đề: "${selectedTopic}".
-YÊU CẦU BẮT BUỘC:
-1. Các câu hỏi phải có tính tư duy khoa học, không ra các câu quá hiển nhiên.
-2. Chỉ trả về chuỗi JSON thuần túy (không dùng markdown, không có chữ thừa nào ngoài JSON):
+    prompt = `Bạn là chuyên gia Sinh học THPT. Hãy tạo chính xác 3 câu hỏi trắc nghiệm Sinh học mới lạ thuộc chuyên đề: "${selectedTopic}".
+YÊU CẦU: Chỉ trả về chuỗi JSON thuần túy (không dùng markdown, không có chữ thừa nào ngoài JSON):
 [
   {
     "question": "Nội dung câu hỏi?",
     "options": ["Đáp án A", "Đáp án B", "Đáp án C", "Đáp án D"],
     "answer": 0,
-    "explain": "Giải thích ngắn gọn bản chất sinh học vì sao đúng"
+    "explain": "Giải thích ngắn gọn cơ chế sinh học"
   }
 ]
-Lưu ý: "answer" là số từ 0 đến 3 chỉ vị trí đáp án đúng trong mảng options.`;
+Lưu ý: "answer" là số từ 0 đến 3.`;
   } else {
     prompt = `Bạn là Trợ lý AI Sinh học của nền tảng BioHabit (chuyên sâu Sinh học THPT & cơ thể người). Hãy giải đáp câu hỏi sau bằng tiếng Việt thật dễ hiểu, chuẩn xác khoa học, có phân tích cơ chế rõ ràng: ${message}`;
   }
 
+  // Danh sách model Google hỗ trợ
   const models = [
     'gemini-2.5-flash',
     'gemini-2.0-flash'
@@ -42,9 +41,7 @@ Lưu ý: "answer" là số từ 0 đến 3 chỉ vị trí đáp án đúng tron
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: {
-            temperature: 0.9 // Tăng tính sáng tạo ngẫu nhiên, không lặp lại
-          }
+          generationConfig: { temperature: 0.9 }
         })
       });
 
@@ -66,27 +63,27 @@ Lưu ý: "answer" là số từ 0 đến 3 chỉ vị trí đáp án đúng tron
     }
   }
 
-  // Fallback an toàn nếu mạng chập chờn
+  // Fallback nếu mạng bận
   if (type === 'quiz') {
     return res.status(200).json({
       quiz: [
         {
-          question: "Cơ chế nào giúp duy trì nồng độ ion Na+ ngoài tế bào luôn cao hơn bên trong tế bào?",
-          options: ["Bơm Na-K ATPase (Vận chuyển chủ động)", "Khuếch tán trực tiếp qua photpholipit", "Hiện tượng ẩm bào", "Thẩm thấu nước"],
+          question: "Hormone nào do tuyến tùng tiết ra mạnh nhất trong bóng tối giúp ru ngủ sâu tự nhiên?",
+          options: ["Melatonin", "Adrenaline", "Insulin", "Testosterone"],
           answer: 0,
-          explain: "Bơm Na-K tiêu tốn ATP để bơm 3 Na+ ra ngoài và đưa 2 K+ vào trong."
+          explain: "Melatonin điều chỉnh nhịp sinh học ngày đêm của cơ thể."
         },
         {
-          question: "Tại sao khi ăn nhiều thức ăn có hàm lượng muối cao lại dẫn đến hiện tượng tăng huyết áp tạm thời?",
-          options: ["Làm tăng áp suất thẩm thấu máu, kích thích giữ nước", "Làm giảm nhịp đập của tim", "Làm giãn toàn bộ các mao mạch ngoại vi", "Làm hồng cầu vỡ hàng loạt"],
+          question: "Khi cơ xương vận động mạnh thiếu oxy, chất nào được tạo thành gây cảm giác mỏi cơ?",
+          options: ["Axit Lactic", "Axit Axetic", "Khí CO2", "Rượu Ethanol"],
           answer: 0,
-          explain: "Muối làm tăng áp suất thẩm thấu, kích thích tuyến yên tiết ADH giữ nước ở thận làm tăng thể tích máu."
+          explain: "Quá trình lên men kị khí sinh ra Axit Lactic tích tụ trong sợi cơ."
         },
         {
-          question: "Giai đoạn nào trong phân bào nguyên phân có các nhiễm sắc thể co xoắn cực đại và xếp thành một hàng trên mặt phẳng xích đạo?",
-          options: ["Kì giữa", "Kì đầu", "Kì sau", "Kì cuối"],
+          question: "Bào quan nào giữ vai trò cốt lõi trong cơ chế Tự thực bào (Autophagy) dọn rác tế bào?",
+          options: ["Lysosome", "Riboxom", "Lưới nội chất", "Bộ máy Golgi"],
           answer: 0,
-          explain: "Ở kì giữa, NST đóng xoắn tối đa và tập trung tại mặt phẳng xích đạo của thoi phân bào."
+          explain: "Lysosome chứa enzyme thủy phân để tiêu hóa bào quan cũ hỏng."
         }
       ]
     });
