@@ -56,6 +56,12 @@
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col antialiased selection:bg-bio-200 selection:text-bio-900">
 
+  <!-- CẢNH BÁO MỞ TRONG ZALO / FACEBOOK -->
+  <div id="inapp-browser-warning" class="hidden bg-amber-500 text-white px-4 py-2.5 text-xs font-bold text-center flex items-center justify-center space-x-2 shadow-md">
+    <i class="fa-solid fa-triangle-exclamation text-base"></i>
+    <span>Bạn đang mở trong ứng dụng! Hãy bấm dấu 3 chấm góc trên bên phải ➔ chọn "Mở bằng trình duyệt" (Chrome / Safari) để đăng nhập được Google nhé.</span>
+  </div>
+
   <!-- ================= NAVBAR ================= -->
   <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-bio-100 shadow-sm transition-all duration-300">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 py-3 flex items-center justify-between">
@@ -445,7 +451,7 @@
                 <h3 class="text-base font-bold text-slate-900 flex items-center">
                   <i class="fa-solid fa-wand-magic-sparkles text-purple-600 mr-2"></i> Quiz Sinh Học (Gemini AI Tạo Đề)
                 </h3>
-                <p class="text-xs text-slate-500">Mỗi lần bấm là 3 câu hỏi hoàn toàn mới không trùng lặp</p>
+                <p class="text-xs text-slate-500">20 chuyên đề xoay vòng • Không trùng lặp câu hỏi</p>
               </div>
               <button type="button" id="btn-generate-quiz" onclick="generateGeminiQuiz()" title="Nhờ Gemini tạo 3 câu hỏi mới" class="text-xs bg-purple-50 hover:bg-purple-100 text-purple-700 px-3 py-1.5 rounded-lg font-bold border border-purple-200 transition flex items-center">
                 <i class="fa-solid fa-rotate mr-1.5" id="quiz-reload-icon"></i>
@@ -453,9 +459,7 @@
               </button>
             </div>
 
-            <div id="quiz-container" class="mt-4 space-y-4">
-              <!-- Render via JS -->
-            </div>
+            <div id="quiz-container" class="mt-4 space-y-4"></div>
 
             <div id="quiz-result-box" class="hidden mt-4 p-4 rounded-xl bg-bio-50 border border-bio-200 text-center">
               <p class="text-sm font-bold text-bio-900" id="quiz-score-text"></p>
@@ -470,15 +474,15 @@
       </div>
     </section>
 
-    <!-- ================= TAB: TRỢ LÝ GEMINI AI TRỰC TIẾP ================= -->
+    <!-- ================= TAB: TRỢ LÝ GEMINI AI CÓ BỘ NHỚ ================= -->
     <section id="tab-ai-tutor" class="hidden space-y-5">
       <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h2 class="text-xl font-black text-slate-900 tracking-tight flex items-center">
-            <i class="fa-solid fa-robot text-emerald-600 mr-2.5"></i> Trợ Lý Sinh Học Gemini AI
+            <i class="fa-solid fa-robot text-emerald-600 mr-2.5"></i> Trợ Lý Sinh Học Gemini AI (Có Bộ Nhớ)
           </h2>
           <p class="text-xs sm:text-sm text-slate-600 mt-1">
-            Kết nối bảo mật qua Vercel. Trả lời chuyên sâu mọi câu hỏi về cơ thể người, chuyển hóa tế bào, giải phẫu và di truyền học.
+            Ghi nhớ câu chuyện. Nếu bạn <span class="font-bold text-emerald-700">"không hiểu"</span>, AI sẽ tự động lấy ví dụ đời sống để giải thích lại dễ hiểu hơn!
           </p>
         </div>
         <div class="flex items-center space-x-2">
@@ -496,7 +500,7 @@
               <i class="fa-solid fa-robot"></i>
             </div>
             <div class="bg-emerald-50 border border-emerald-100 text-slate-800 p-3.5 rounded-2xl rounded-tl-none max-w-lg leading-relaxed">
-              Chào bạn! Mình là <strong>BioHabit Gemini AI</strong>. Bạn có thể hỏi mình mọi câu hỏi về Sinh học THPT, cơ chế cơ thể người, chuyển hóa năng lượng, hệ thần kinh, hay giải các bài tập nâng cao. Hãy nhập câu hỏi bên dưới nhé! 🧬
+              Chào bạn! Mình là <strong>BioHabit Gemini AI</strong>. Bạn có thể hỏi mình mọi câu hỏi về Sinh học THPT & cơ thể người. Nếu lời giải thích nào khó hiểu, cứ nhắn <em>"tôi không hiểu"</em>, mình sẽ lấy ví dụ thực tế giải thích lại nhé! 🧬
             </div>
           </div>
         </div>
@@ -812,7 +816,7 @@
 
         if (res.ok && Array.isArray(data.quiz) && data.quiz.length === 3) {
           currentSessionQuiz = data.quiz;
-          showToast(`Đã tạo 3 câu hỏi mới chủ đề: ${randomTopic.split(',')[0]}!`, "success");
+          showToast(`Đã tạo 3 câu hỏi mới: ${randomTopic.split(',')[0]}!`, "success");
         } else {
           refreshRandomQuiz();
           showToast("Đã tải câu hỏi sinh học dự phòng!", "info");
@@ -895,7 +899,9 @@
       }
     }
 
-    /* 4. CHAT GEMINI AI TRỰC TIẾP */
+    /* 4. CHAT GEMINI AI TRỰC TIẾP CÓ BỘ NHỚ LỊCH SỬ */
+    let conversationHistory = []; // Lưu 6 lượt chat gần nhất
+
     function handleChatEnter(e) {
       if (e.key === 'Enter') sendChatMessage();
     }
@@ -923,7 +929,11 @@
         const response = await fetch('/api/gemini', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ type: 'chat', message: query })
+          body: JSON.stringify({ 
+            type: 'chat', 
+            message: query,
+            history: conversationHistory 
+          })
         });
 
         const data = await response.json();
@@ -931,12 +941,16 @@
 
         if (response.ok && data.reply) {
           appendMessage("bot", data.reply);
+          // Lưu vào lịch sử hội thoại
+          conversationHistory.push({ role: 'user', text: query });
+          conversationHistory.push({ role: 'model', text: data.reply });
+          if (conversationHistory.length > 6) conversationHistory = conversationHistory.slice(-6);
         } else {
-          appendMessage("bot", `⚠️ Phản hồi: ${data.error || 'Đang bận, bạn đợi khoảng 5-10 giây rồi thử lại nhé!'}`);
+          appendMessage("bot", `⚠️ Phản hồi: ${data.error || 'Đang bận, bạn đợi khoảng 5 giây rồi thử lại nhé!'}`);
         }
       } catch (err) {
         removeLoadingBubble(loadingId);
-        appendMessage("bot", "⚠️ Lỗi kết nối. Bạn kiểm tra lại mạng hoặc thử lại sau 5-10 giây nhé!");
+        appendMessage("bot", "⚠️ Lỗi kết nối. Bạn kiểm tra lại mạng hoặc thử lại sau vài giây nhé!");
       }
     }
 
@@ -974,7 +988,7 @@
           <i class="fa-solid fa-circle text-[6px] animate-bounce"></i>
           <i class="fa-solid fa-circle text-[6px] animate-bounce [animation-delay:0.2s]"></i>
           <i class="fa-solid fa-circle text-[6px] animate-bounce [animation-delay:0.4s]"></i>
-          <span class="ml-1 text-[11px]">Gemini AI đang phân tích dữ liệu chuyên sâu...</span>
+          <span class="ml-1 text-[11px]">Gemini AI đang suy nghĩ...</span>
         </div>
       `;
       box.appendChild(div);
@@ -1156,26 +1170,49 @@
       console.warn("Firebase fallback:", e);
     }
 
+    // Kiểm tra xem có đang mở bằng Zalo, Facebook, Messenger không
+    function checkInAppBrowser() {
+      const ua = navigator.userAgent || navigator.vendor || window.opera;
+      const isInApp = (/FBAN|FBAV|Instagram|Zalo|Line|Twitter|MicroMessenger/i.test(ua));
+      const warningBanner = document.getElementById('inapp-browser-warning');
+      if (isInApp && warningBanner) {
+        warningBanner.classList.remove('hidden');
+      }
+      return isInApp;
+    }
+
     function loginWithGoogle() {
       if (!auth) {
         showToast("Firebase chưa sẵn sàng, đang chạy offline!", "info");
         return;
       }
-      const provider = new firebase.auth.GoogleAuthProvider();
-      if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-        auth.signInWithRedirect(provider);
-      } else {
-        auth.signInWithPopup(provider)
-          .then(() => showToast("Đăng nhập Google thành công!", "success"))
-          .catch(error => {
-            if (error.code === 'auth/popup-blocked') auth.signInWithRedirect(provider);
-            else showToast("Lỗi: " + error.message, "warning");
-          });
+
+      if (checkInAppBrowser()) {
+        alert("Google chặn đăng nhập bên trong Zalo/Facebook!\n\nBạn vui lòng bấm dấu 3 chấm (...) ở góc trên bên phải màn hình ➔ chọn 'Mở bằng trình duyệt' (Chrome hoặc Safari) để đăng nhập nhé!");
+        return;
       }
+
+      const provider = new firebase.auth.GoogleAuthProvider();
+      // Thử dùng Popup trước (hoạt động tốt trên Chrome/Safari mobile khi bấm trực tiếp)
+      auth.signInWithPopup(provider)
+        .then(() => showToast("Đăng nhập Google thành công!", "success"))
+        .catch(error => {
+          if (error.code === 'auth/popup-blocked' || error.code === 'auth/cancelled-popup-request') {
+            auth.signInWithRedirect(provider);
+          } else if (error.code === 'auth/unauthorized-domain') {
+            showToast("Tên miền này chưa được thêm vào Firebase Authorized Domains!", "warning");
+          } else {
+            showToast("Lỗi: " + error.message, "warning");
+          }
+        });
     }
 
     if (auth) {
-      auth.getRedirectResult().catch(err => console.log(err));
+      auth.getRedirectResult().catch(err => {
+        if (err.code === 'auth/unauthorized-domain') {
+          showToast("Tên miền chưa được ủy quyền trên Firebase!", "warning");
+        }
+      });
 
       auth.onAuthStateChanged(user => {
         const btnLogin = document.getElementById('btn-login-google');
@@ -1492,6 +1529,7 @@
 
     /* 9. KHỞI CHẠY LẦN ĐẦU KHI MỞ TRANG */
     window.addEventListener('DOMContentLoaded', () => {
+      checkInAppBrowser();
       loadLocalFallback();
       refreshRandomQuiz();
     });
