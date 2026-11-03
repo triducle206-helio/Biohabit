@@ -1402,11 +1402,8 @@
       setTimeout(() => toast.classList.add('opacity-0', 'translate-y-20', 'pointer-events-none'), 3500);
     }
 
-    /* 9. KHỞI CHẠY LẦN ĐẦU KHI MỞ TRANG */
+  /* 9. KHỞI CHẠY LẦN ĐẦU KHI MỞ TRANG */
     window.addEventListener('DOMContentLoaded', () => {
       loadLocalFallback();
-      generateGeminiQuiz(); // Gọi Gemini sinh Quiz ngay khi mở web
+      refreshRandomQuiz(); // Dùng bộ câu hỏi có sẵn trước, khi nào người dùng bấm "Tạo đề mới (AI)" thì mới gọi Gemini!
     });
-  </script>
-</body>
-</html>
