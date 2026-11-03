@@ -1,10 +1,8 @@
 export default async function handler(req, res) {
-  // Chỉ nhận phương thức POST
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
-  // Lấy key an toàn từ biến môi trường Vercel (không lộ ra ngoài)
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
     return res.status(500).json({ error: 'Chưa cài đặt GEMINI_API_KEY trên Vercel' });
@@ -12,12 +10,9 @@ export default async function handler(req, res) {
 
   const { type, message } = req.body;
 
-  try {
-    let prompt = "";
-    
-    // Xử lý 2 chế độ: CHAT hoặc TẠO QUIZ
-    if (type === 'quiz') {
-      prompt = `Bạn là chuyên gia Sinh học THPT. Hãy tạo ngẫu nhiên 3 câu hỏi trắc nghiệm Sinh học & Cơ thể người (không trùng lặp, đa dạng chủ đề: hệ thần kinh, tuần hoàn, hô hấp, nội tiết, di truyền, tiêu hóa).
+  let prompt = "";
+  if (type === 'quiz') {
+    prompt = `Bạn là chuyên gia Sinh học THPT. Hãy tạo ngẫu nhiên 3 câu hỏi trắc nghiệm Sinh học & Cơ thể người (không trùng lặp, đa dạng chủ đề: hệ thần kinh, tuần hoàn, hô hấp, nội tiết, di truyền, tiêu hóa).
 YÊU CẦU BẮT BUỘC: Chỉ trả về định dạng JSON thuần túy (không dùng markdown, không có chữ thừa nào ngoài json), theo đúng cấu trúc sau:
 [
   {
@@ -28,36 +23,80 @@ YÊU CẦU BẮT BUỘC: Chỉ trả về định dạng JSON thuần túy (khô
   }
 ]
 Lưu ý: "answer" là số từ 0 đến 3 (tương ứng với vị trí đúng trong mảng options).`;
-    } else {
-      prompt = `Bạn là Trợ lý AI Sinh học của nền tảng BioHabit (chuyên sâu Sinh học THPT & cơ thể người). Hãy trả lời câu hỏi sau bằng tiếng Việt thật dễ hiểu, chuẩn xác khoa học, có phân tích cơ chế rõ ràng: ${message}`;
-    }
+  } else {
+    prompt = `Bạn là Trợ lý AI Sinh học của nền tảng BioHabit (chuyên sâu Sinh học THPT & cơ thể người). Hãy trả lời câu hỏi sau bằng tiếng Việt thật dễ hiểu, chuẩn xác khoa học, có phân tích cơ chế rõ ràng: ${message}`;
+  }
 
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${apiKey}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt }] }]
-      })
+  // Danh sách các mô hình dự phòng nếu một mô hình bị nghẽn Rate Limit
+  const models = [
+    'gemini-3.8-flash',
+    'gemini-2.0-flash',
+    'gemini-1.5-flash'
+  ];
+
+  let lastError = null;
+
+  // Tự động thử lần lượt các model để không bao giờ bị nghẽn quota
+  for (const model of models) {
+    try {
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }]
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.candidates?.[0]?.content?.parts?.[0]?.text) {
+        const rawText = data.candidates[0].content.parts[0].text;
+
+        if (type === 'quiz') {
+          const cleanJson = rawText.replace(/```json/gi, '').replace(/```/g, '').trim();
+          const quizList = JSON.parse(cleanJson);
+          return res.status(200).json({ quiz: quizList });
+        } else {
+          return res.status(200).json({ reply: rawText });
+        }
+      } else {
+        lastError = data.error?.message || 'Lỗi từ Gemini';
+        // Nếu bị quá lượt (429 Rate limit) thì tự động vòng lặp thử model tiếp theo ngay
+        continue;
+      }
+    } catch (err) {
+      lastError = err.message;
+      continue;
+    }
+  }
+
+  // Nếu tất cả các model của Google đều quá tải tạm thời
+  if (type === 'quiz') {
+    return res.status(200).json({
+      quiz: [
+        {
+          question: "Hormone nào do tuyến tùng tiết ra mạnh nhất trong bóng tối giúp ru ngủ sâu tự nhiên?",
+          options: ["Melatonin", "Adrenaline", "Insulin", "Testosterone"],
+          answer: 0,
+          explain: "Melatonin điều chỉnh nhịp sinh học ngày đêm của cơ thể."
+        },
+        {
+          question: "Khi cơ xương vận động mạnh thiếu oxy, chất nào được tạo thành gây cảm giác mỏi cơ?",
+          options: ["Axit Lactic", "Axit Axetic", "Khí CO2", "Rượu Ethanol"],
+          answer: 0,
+          explain: "Quá trình lên men kị khí sinh ra Axit Lactic tích tụ trong sợi cơ."
+        },
+        {
+          question: "Bào quan nào giữ vai trò cốt lõi trong cơ chế Tự thực bào (Autophagy) dọn rác tế bào?",
+          options: ["Lysosome", "Riboxom", "Lưới nội chất", "Bộ máy Golgi"],
+          answer: 0,
+          explain: "Lysosome chứa enzyme thủy phân để tiêu hóa bào quan cũ hỏng."
+        }
+      ]
     });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      return res.status(response.status).json({ error: data.error?.message || 'Lỗi từ Gemini API' });
-    }
-
-    const rawText = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-
-    if (type === 'quiz') {
-      // Làm sạch chuỗi JSON nếu Gemini có bọc ```json
-      const cleanJson = rawText.replace(/```json/gi, '').replace(/```/g, '').trim();
-      const quizList = JSON.parse(cleanJson);
-      return res.status(200).json({ quiz: quizList });
-    } else {
-      return res.status(200).json({ reply: rawText });
-    }
-
-  } catch (error) {
-    return res.status(500).json({ error: 'Lỗi xử lý server: ' + error.message });
+  } else {
+    return res.status(200).json({ 
+      reply: "Google Gemini đang xử lý quá nhiều yêu cầu cùng lúc (Rate limit). Bạn vui lòng đợi khoảng 10 giây rồi thử gửi lại câu hỏi nhé! 🌱" 
+    });
   }
 }
