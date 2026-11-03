@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BioHabit - Lối sống khoa học qua góc nhìn Sinh học</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Font: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Firebase SDKs (v9 Compat) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            bio: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              200: '#bbf7d0',
+              300: '#86efac',
+              400: '#4ade80',
+              500: '#22c55e',
+              600: '#16a34a',
+              700: '#15803d',
+              800: '#166534',
+              900: '#14532d',
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; }
+    ::-webkit-scrollbar-thumb { background: #86efac; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #22c55e; }
+    .custom-gradient {
+      background: linear-gradient(135deg, #15803d 0%, #16a34a 50%, #22c55e 100%);
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col antialiased selection:bg-bio-200 selection:text-bio-900">
+
+  <!-- ================= NAVBAR ================= -->
+  <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-bio-100 shadow-sm transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 py-3 flex items-center justify-between">
+      
+      <!-- Logo: BioHabit -->
+      <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('dashboard')">
+        <div class="w-10 h-10 rounded-2xl bg-bio-600 flex items-center justify-center text-white text-xl shadow-md shadow-bio-200">
+          <i class="fa-solid fa-dna animate-pulse"></i>
+        </div>
+        <div>
+          <span class="text-xl font-extrabold tracking-tight text-slate-900">Bio<span class="text-bio-600">Habit</span></span>
+          <p class="text-[10px] text-bio-700 font-semibold tracking-wider uppercase -mt-1">Nhịp Sống Sinh Học</p>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="hidden md:flex items-center space-x-1 lg:space-x-2 text-sm font-semibold text-slate-600">
+        <button onclick="switchTab('dashboard')" id="nav-dashboard" class="tab-btn px-3 py-2 rounded-xl text-bio-700 bg-bio-50 hover:bg-bio-100 transition">
+          <i class="fa-solid fa-house mr-1"></i> Tổng quan
+        </button>
+        <button onclick="switchTab('planner')" id="nav-planner" class="tab-btn px-3 py-2 rounded-xl hover:bg-slate-100 transition">
+          <i class="fa-solid fa-clock mr-1"></i> Nhịp sinh học & Thực đơn
+        </button>
+        <button onclick="switchTab('habits')" id="nav-habits" class="tab-btn px-3 py-2 rounded-xl hover:bg-slate-100 transition">
+          <i class="fa-solid fa-calendar-check mr-1"></i> Thói quen & Quiz
+        </button>
+        <button onclick="switchTab('ai-tutor')" id="nav-ai-tutor" class="tab-btn px-3 py-2 rounded-xl hover:bg-slate-100 transition text-emerald-600 font-bold">
+          <i class="fa-solid fa-robot mr-1"></i> Trợ lý Bio-AI
+        </button>
+        <button onclick="switchTab('market')" id="nav-market" class="tab-btn px-3 py-2 rounded-xl hover:bg-slate-100 transition">
+          <i class="fa-solid fa-store mr-1"></i> BioMarket
+        </button>
+      </nav>
+
+      <!-- User Stats / Authentication Box -->
+      <div class="flex items-center space-x-3">
+        <!-- Coin Counter -->
+        <div class="flex items-center bg-amber-50 border border-amber-200 text-amber-700 px-3 py-1.5 rounded-full text-xs sm:text-sm font-bold shadow-xs">
+          <i class="fa-solid fa-coins text-amber-500 mr-1.5 text-base"></i>
+          <span id="user-coins">0</span>
+          <span class="ml-1 text-[11px] hidden sm:inline text-amber-600 font-medium">BioCoins</span>
+        </div>
+
+        <!-- Auth State Button -->
+        <div id="auth-container">
+          <button id="btn-login-google" onclick="loginWithGoogle()" class="flex items-center space-x-2 bg-white text-slate-700 border border-slate-300 hover:bg-slate-50 px-3.5 py-1.5 rounded-full text-xs font-bold transition shadow-xs">
+            <i class="fa-brands fa-google text-red-500 text-sm"></i>
+            <span class="hidden sm:inline">Đăng nhập Google</span>
+            <span class="sm:hidden">Login</span>
+          </button>
+
+          <div id="user-logged-pill" class="hidden flex items-center space-x-2 bg-slate-100 pl-1.5 pr-2 py-1 rounded-full border border-slate-200">
+            <img id="user-avatar-img" src="" alt="Avatar" class="w-7 h-7 rounded-full border border-bio-400 object-cover">
+            <span id="user-display-name" class="text-xs sm:text-sm font-bold text-slate-700 truncate max-w-[85px] sm:max-w-[110px]">Học sinh</span>
+            <button onclick="logoutGoogle()" title="Đăng xuất" class="text-slate-400 hover:text-rose-600 transition pl-1 text-xs">
+              <i class="fa-solid fa-right-from-bracket"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Bottom Nav -->
+  <div class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 px-2 py-2 flex justify-around z-40 shadow-lg text-[11px] font-semibold text-slate-500">
+    <button onclick="switchTab('dashboard')" class="flex flex-col items-center py-1 text-bio-600">
+      <i class="fa-solid fa-house text-base mb-0.5"></i> Tổng quan
+    </button>
+    <button onclick="switchTab('planner')" class="flex flex-col items-center py-1">
+      <i class="fa-solid fa-clock text-base mb-0.5"></i> Nhịp sinh
+    </button>
+    <button onclick="switchTab('habits')" class="flex flex-col items-center py-1">
+      <i class="fa-solid fa-check-circle text-base mb-0.5"></i> Quiz
+    </button>
+    <button onclick="switchTab('ai-tutor')" class="flex flex-col items-center py-1 text-emerald-600 font-bold">
+      <i class="fa-solid fa-robot text-base mb-0.5"></i> Bio-AI
+    </button>
+    <button onclick="switchTab('market')" class="flex flex-col items-center py-1">
+      <i class="fa-solid fa-store text-base mb-0.5"></i> Đổi thưởng
+    </button>
+  </div>
+
+  <!-- ================= MAIN CONTENT WRAPPER ================= -->
+  <main class="flex-grow max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6 mb-16 md:mb-8">
+
+    <!-- ================= TAB 1: DASHBOARD ================= -->
+    <section id="tab-dashboard" class="space-y-6">
+      <div class="custom-gradient rounded-3xl p-6 sm:p-10 text-white relative overflow-hidden shadow-xl shadow-bio-900/10">
+        <div class="absolute -right-10 -bottom-10 opacity-15 pointer-events-none">
+          <i class="fa-solid fa-microscope text-9xl"></i>
+        </div>
+        <div class="relative z-10 max-w-2xl space-y-3">
+          <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-white/20 text-white backdrop-blur-md">
+            🔬 Chuyên đề Sinh Học Cấp 3 • Vercel & Firebase Sync
+          </span>
+          <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight leading-tight">
+            Xây dựng lối sống khoa học cùng <span class="underline decoration-bio-300">BioHabit</span>.
+          </h1>
+          <p class="text-bio-100 text-sm sm:text-base leading-relaxed">
+            Khám phá quy luật tự nhiên của nhịp sinh học Circadian, cân bằng nội tiết tố, thực đơn chuẩn khoa học và hỏi đáp bài tập trực tiếp với Gemini AI.
+          </p>
+          <div class="pt-2 flex flex-wrap gap-3">
+            <button onclick="switchTab('ai-tutor')" class="px-5 py-2.5 rounded-xl bg-white text-bio-800 font-bold text-sm shadow-md hover:bg-bio-50 transition transform hover:-translate-y-0.5 flex items-center">
+              <i class="fa-solid fa-robot mr-1.5 text-bio-600"></i> Hỏi đáp cùng Bio-AI ngay
+            </button>
+            <button onclick="switchTab('planner')" class="px-5 py-2.5 rounded-xl bg-bio-700/60 text-white font-bold text-sm border border-white/20 hover:bg-bio-700 transition">
+              <i class="fa-solid fa-sliders mr-1.5"></i> Xem Thực Đơn & Nhịp Sinh Học
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Stats -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center space-x-4">
+          <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl shrink-0">
+            <i class="fa-solid fa-fire-flame-curved"></i>
+          </div>
+          <div>
+            <div class="text-xs text-slate-500 font-semibold uppercase">Chuỗi ngày kỷ luật</div>
+            <div class="text-2xl font-black text-slate-800" id="dash-streak">0 ngày</div>
+          </div>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center space-x-4">
+          <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center text-xl shrink-0">
+            <i class="fa-solid fa-sack-dollar"></i>
+          </div>
+          <div>
+            <div class="text-xs text-slate-500 font-semibold uppercase">BioCoins tích lũy</div>
+            <div class="text-2xl font-black text-slate-800" id="dash-coins">0</div>
+          </div>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center space-x-4">
+          <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-xl shrink-0">
+            <i class="fa-solid fa-book-bookmark"></i>
+          </div>
+          <div>
+            <div class="text-xs text-slate-500 font-semibold uppercase">Bài nghiên cứu đã mở</div>
+            <div class="text-2xl font-black text-slate-800" id="dash-unlocked-count">0 / 3</div>
+          </div>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center space-x-4">
+          <div class="w-12 h-12 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center text-xl shrink-0">
+            <i class="fa-solid fa-award"></i>
+          </div>
+          <div>
+            <div class="text-xs text-slate-500 font-semibold uppercase">Danh hiệu hiện tại</div>
+            <div class="text-sm font-black text-purple-700 truncate" id="dash-badge-current">Mầm sinh học 🌱</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Badges Showcase Section -->
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-lg font-bold text-slate-800 flex items-center">
+            <i class="fa-solid fa-medal text-amber-500 mr-2"></i> Bộ sưu tập Huy hiệu Sinh học
+          </h2>
+          <span class="text-xs text-slate-400 font-medium">Tự động đạt khi hoàn thành chỉ số</span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4" id="badges-container"></div>
+      </div>
+    </section>
+
+    <!-- ================= TAB 2: CÁ NHÂN HÓA LỐI SỐNG & THỰC ĐƠN ================= -->
+    <section id="tab-planner" class="hidden space-y-6">
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs">
+        <h2 class="text-xl font-black text-slate-900 tracking-tight flex items-center">
+          <i class="fa-solid fa-sliders text-bio-600 mr-2.5"></i> Thiết Lập Cá Nhân Hóa & Dinh Dưỡng Thực Đơn
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-600 mt-1">
+          Nhập chiều cao, cân nặng và lịch trình để BioHabit đề xuất bảng thực đơn chi tiết (món nên ăn, món kiêng) cùng đồng hồ sinh học.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Form nhập -->
+        <div class="lg:col-span-5 space-y-5">
+          <form id="bio-profile-form" class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-5">
+            <div class="border-b border-slate-100 pb-3">
+              <span class="text-xs font-extrabold text-bio-600 uppercase tracking-wider">Bước 1</span>
+              <h3 class="text-base font-bold text-slate-800">Đối tượng & Thời gian biểu</h3>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-600 mb-1.5">Đối tượng người dùng</label>
+              <select id="user-role-select" class="w-full text-sm border border-slate-200 rounded-xl px-3 py-2.5 font-medium focus:ring-2 focus:ring-bio-500 outline-none">
+                <option value="student">Học sinh / Sinh viên (Mặc định)</option>
+                <option value="freelancer">Làm việc tự do / Nghiên cứu</option>
+              </select>
+            </div>
+
+            <div class="space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-100">
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-[11px] font-bold text-slate-500 mb-1"><i class="fa-regular fa-sun text-amber-500 mr-1"></i> Thức dậy</label>
+                  <input type="time" id="wake-time" value="06:00" class="w-full text-xs font-bold border border-slate-200 rounded-lg px-2.5 py-2 bg-white">
+                </div>
+                <div>
+                  <label class="block text-[11px] font-bold text-slate-500 mb-1"><i class="fa-solid fa-school text-blue-500 mr-1"></i> Vào học</label>
+                  <input type="time" id="school-time" value="07:15" class="w-full text-xs font-bold border border-slate-200 rounded-lg px-2.5 py-2 bg-white">
+                </div>
+              </div>
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-[11px] font-bold text-slate-500 mb-1"><i class="fa-solid fa-house text-emerald-500 mr-1"></i> Về nhà</label>
+                  <input type="time" id="home-time" value="17:00" class="w-full text-xs font-bold border border-slate-200 rounded-lg px-2.5 py-2 bg-white">
+                </div>
+                <div>
+                  <label class="block text-[11px] font-bold text-slate-500 mb-1"><i class="fa-solid fa-moon text-indigo-500 mr-1"></i> Đi ngủ</label>
+                  <input type="time" id="sleep-time" value="22:30" class="w-full text-xs font-bold border border-slate-200 rounded-lg px-2.5 py-2 bg-white">
+                </div>
+              </div>
+            </div>
+
+            <div class="border-t border-slate-100 pt-4">
+              <div class="flex items-center justify-between">
+                <div>
+                  <span class="text-xs font-extrabold text-bio-600 uppercase tracking-wider">Bước 2</span>
+                  <h3 class="text-base font-bold text-slate-800">Bật Chế Độ Dinh Dưỡng & Thực Đơn</h3>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" id="nutrition-toggle" class="sr-only peer">
+                  <div class="w-11 h-6 bg-slate-200 peer-
