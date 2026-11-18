@@ -984,3 +984,1157 @@
             }
           }
         });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } catch (err) {
+        console.error("Lỗi chuyển tab:", err);
+      }
+    }
+
+    /* 2. STUDIO THIẾT KẾ GIAO DIỆN THEO SỞ THÍCH */
+    const THEME_PALETTES = {
+      green: {
+        50: '240 253 244', 100: '220 252 231', 200: '187 247 208', 300: '134 239 172', 400: '74 222 128',
+        500: '34 197 94',  600: '22 163 74',   700: '21 128 61',   800: '22 101 52',   900: '20 83 45'
+      },
+      blue: {
+        50: '239 246 255', 100: '219 234 254', 200: '191 219 254', 300: '147 197 253', 400: '96 165 250',
+        500: '59 130 246', 600: '37 99 235',   700: '29 78 216',   800: '30 64 175',   900: '30 58 138'
+      },
+      purple: {
+        50: '250 245 255', 100: '243 232 255', 200: '233 213 255', 300: '216 180 254', 400: '192 132 252',
+        500: '168 85 247', 600: '147 51 234',  700: '126 34 206',  800: '107 33 168',  900: '88 28 135'
+      },
+      amber: {
+        50: '255 251 235', 100: '254 243 199', 200: '253 230 138', 300: '252 211 77',  400: '251 191 36',
+        500: '245 158 11', 600: '217 119 6',   700: '180 83 9',    800: '146 64 14',   900: '120 53 15'
+      },
+      rose: {
+        50: '255 241 242', 100: '255 228 230', 200: '254 205 211', 300: '253 164 175', 400: '251 113 133',
+        500: '244 63 94',  600: '225 29 72',   700: '190 18 60',   800: '159 18 57',   900: '136 19 55'
+      }
+    };
+
+    const FONT_MAP = {
+      jakarta: '"Plus Jakarta Sans", sans-serif',
+      nunito: '"Nunito", sans-serif',
+      lora: '"Lora", serif'
+    };
+
+    function applyTheme(themeObj) {
+      const theme = { ...DEFAULT_THEME, ...(themeObj || {}) };
+      const root = document.documentElement;
+      const palette = THEME_PALETTES[theme.color] || THEME_PALETTES.green;
+
+      Object.keys(palette).forEach(shade => {
+        root.style.setProperty(`--bio-${shade}`, palette[shade]);
+      });
+
+      root.style.setProperty('--app-font', FONT_MAP[theme.font] || FONT_MAP.jakarta);
+
+      document.body.classList.toggle('theme-dark', theme.mode === 'dark');
+      document.body.classList.toggle('radius-sharp', theme.radius === 'sharp');
+      document.body.classList.remove('bg-pattern-grid', 'bg-pattern-dots');
+      if (theme.pattern === 'grid') document.body.classList.add('bg-pattern-grid');
+      if (theme.pattern === 'dots') document.body.classList.add('bg-pattern-dots');
+
+      updateThemeModalActiveUI(theme);
+    }
+
+    function updateThemeModalActiveUI(theme) {
+      const markActive = (selector, activeId) => {
+        document.querySelectorAll(selector).forEach(el => {
+          if (el.id === activeId) {
+            el.classList.add('border-bio-600', 'bg-bio-50', 'text-bio-800');
+            el.classList.remove('border-slate-200');
+          } else {
+            el.classList.remove('border-bio-600', 'bg-bio-50', 'text-bio-800');
+            el.classList.add('border-slate-200');
+          }
+        });
+      };
+
+      markActive('.theme-opt-mode', `opt-mode-${theme.mode}`);
+      markActive('.theme-opt-color', `opt-color-${theme.color}`);
+      markActive('.theme-opt-font', `opt-font-${theme.font}`);
+      markActive('.theme-opt-radius', `opt-radius-${theme.radius}`);
+      markActive('.theme-opt-pattern', `opt-pattern-${theme.pattern}`);
+    }
+
+    function setThemeProp(key, value) {
+      if (!AppState.theme) AppState.theme = { ...DEFAULT_THEME };
+      AppState.theme[key] = value;
+      applyTheme(AppState.theme);
+      saveState();
+    }
+
+    function resetThemeToDefault() {
+      AppState.theme = { ...DEFAULT_THEME };
+      applyTheme(AppState.theme);
+      saveState();
+      showToast("Đã khôi phục giao diện mặc định!", "info");
+    }
+
+    function openThemeModal() {
+      updateThemeModalActiveUI(AppState.theme || DEFAULT_THEME);
+      document.getElementById('theme-modal')?.classList.remove('hidden');
+    }
+
+    function closeThemeModal() {
+      document.getElementById('theme-modal')?.classList.add('hidden');
+    }
+
+    /* 3. NGÂN HÀNG CÂU HỎI & QUIZ GEMINI */
+    const QUIZ_BANK = [
+      {
+        question: "Hormone nào sau đây được tiết ra từ tuyến tùng để điều chỉnh chu kỳ thức - ngủ tự nhiên?",
+        options: ["Melatonin", "Adrenaline", "Insulin", "Testosterone"],
+        answer: 0,
+        explain: "Melatonin do tuyến tùng tiết ra mạnh nhất trong bóng tối giúp cơ thể chìm vào giấc ngủ."
+      },
+      {
+        question: "Khi vận động mạnh bị thiếu oxy, tế bào cơ xương người lên men tạo ra chất gì gây mỏi cơ?",
+        options: ["Axit Lactic", "Axit Axetic", "Khí Carbonic", "Rượu Ethanol"],
+        answer: 0,
+        explain: "Lên men Axit Lactic xảy ra khi cơ thiếu oxy tạm thời, gây tích tụ ion H+ tạo cảm giác mỏi cơ."
+      },
+      {
+        question: "Bào quan nào là 'nhà máy tiêu hóa và dọn rác' của tế bào trong cơ chế Tự thực bào (Autophagy)?",
+        options: ["Lysosome", "Riboxom", "Lưới nội chất hạt", "Bộ máy Golgi"],
+        answer: 0,
+        explain: "Lysosome chứa nhiều enzyme thủy phân để phân hủy tế bào quan già cỗi tái tạo axit amin."
+      }
+    ];
+
+    const BIO_TOPICS = [
+      "Hệ tim mạch, chu kỳ tim và điều hòa huyết áp ở người",
+      "Hệ bài tiết, cấu tạo nephron và lọc máu ở cầu thận",
+      "Cơ chế dẫn truyền xung thần kinh và điện thế hoạt động",
+      "Hệ nội tiết, tương tác giữa tuyến yên, tuyến giáp và tuyến trên thận",
+      "Hệ miễn dịch, tế bào lympho B, lympho T và cơ chế tạo kháng thể",
+      "Hô hấp tế bào, chuỗi chuyền electron hô hấp và ti thể",
+      "Quang hợp ở thực vật C3, C4, CAM và chu trình Calvin",
+      "Cấu trúc ADN, phiên mã, dịch mã và mã di truyền",
+      "Đột biến gen, đột biến cấu trúc và số lượng nhiễm sắc thể",
+      "Quy luật di truyền Mendel và di truyền liên kết giới tính",
+      "Cân bằng nội môi, điều hòa thân nhiệt và áp suất thẩm thấu",
+      "Tiêu hóa ở người: enzym tiêu hóa ở dạ dày và ruột non",
+      "Nhịp sinh học Circadian, hormone melatonin và giấc ngủ sâu",
+      "Sinh thái học: chuỗi thức ăn, lưới thức ăn và dòng năng lượng",
+      "Tiến hóa: chọn lọc tự nhiên và các nhân tố tiến hóa",
+      "Cấu tạo màng sinh chất và các hình thức vận chuyển qua màng",
+      "Chu kỳ tế bào, nguyên phân, giảm phân và phát sinh giao tử",
+      "Dinh dưỡng tế bào: chuyển hóa lipid, glucid và protein"
+    ];
+
+    let currentSessionQuiz = [];
+    let isCurrentQuizSubmitted = false;
+
+    function shuffleArray(array) {
+      const arr = [...array];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function refreshRandomQuiz() {
+      try {
+        isCurrentQuizSubmitted = false;
+        const shuffledBank = shuffleArray(QUIZ_BANK);
+        currentSessionQuiz = shuffledBank.slice(0, 3).map((item, idx) => {
+          const optionsWithIndex = item.options.map((opt, i) => ({ text: opt, isCorrect: i === item.answer }));
+          const shuffledOptions = shuffleArray(optionsWithIndex);
+          return {
+            id: idx,
+            question: item.question,
+            options: shuffledOptions.map(o => o.text),
+            answer: shuffledOptions.findIndex(o => o.isCorrect),
+            explain: item.explain
+          };
+        });
+
+        renderCurrentQuiz();
+        const resBox = document.getElementById('quiz-result-box');
+        if (resBox) resBox.classList.add('hidden');
+      } catch (e) {
+        console.error("Lỗi đảo Quiz:", e);
+      }
+    }
+
+    async function generateGeminiQuiz() {
+      const reloadIcon = document.getElementById('quiz-reload-icon');
+      const reloadText = document.getElementById('quiz-reload-text');
+
+      if (reloadIcon) reloadIcon.classList.add('animate-spin');
+      if (reloadText) reloadText.innerText = "Gemini đang tạo đề...";
+
+      isCurrentQuizSubmitted = false;
+      const randomTopic = BIO_TOPICS[Math.floor(Math.random() * BIO_TOPICS.length)];
+
+      try {
+        const res = await fetch('/api/gemini', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ type: 'quiz', topic: randomTopic })
+        });
+
+        const data = await res.json();
+
+        if (res.ok && Array.isArray(data.quiz) && data.quiz.length === 3) {
+          currentSessionQuiz = data.quiz;
+          showToast(`Đã tạo 3 câu hỏi mới: ${randomTopic.split(',')[0]}!`, "success");
+        } else {
+          refreshRandomQuiz();
+          showToast("Đã tải câu hỏi sinh học dự phòng!", "info");
+        }
+      } catch (err) {
+        refreshRandomQuiz();
+        showToast("Đã tải câu hỏi sinh học dự phòng!", "info");
+      } finally {
+        if (reloadIcon) reloadIcon.classList.remove('animate-spin');
+        if (reloadText) reloadText.innerText = "Tạo đề mới (AI)";
+        renderCurrentQuiz();
+        const resBox = document.getElementById('quiz-result-box');
+        if (resBox) resBox.classList.add('hidden');
+      }
+    }
+
+    function renderCurrentQuiz() {
+      const container = document.getElementById('quiz-container');
+      if (!container) return;
+      container.innerHTML = currentSessionQuiz.map((q, idx) => `
+        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2.5">
+          <p class="text-xs font-bold text-slate-800">
+            <span class="text-purple-600 font-black mr-1">Câu ${idx + 1}:</span> ${q.question}
+          </p>
+          <div class="space-y-1.5">
+            ${q.options.map((opt, optIdx) => `
+              <label class="flex items-center space-x-2.5 p-2 rounded-lg bg-white border border-slate-200 hover:border-purple-300 text-xs font-medium cursor-pointer transition">
+                <input type="radio" name="quiz-item-${idx}" value="${optIdx}" class="text-purple-600 focus:ring-purple-500 border-slate-300">
+                <span class="text-slate-700">${opt}</span>
+              </label>
+            `).join('')}
+          </div>
+          ${q.explain ? `<div id="quiz-explain-${idx}" class="hidden text-[11px] text-purple-700 bg-purple-50/70 p-2 rounded-lg border border-purple-100 font-medium"><i class="fa-regular fa-lightbulb mr-1"></i> <strong>Giải thích:</strong> ${q.explain}</div>` : ''}
+        </div>
+      `).join('');
+    }
+
+    function evaluateQuiz() {
+      if (isCurrentQuizSubmitted) {
+        showToast("Bạn đã nhận BioCoins cho đề này rồi! Hãy bấm 'Tạo đề mới (AI)' để tiếp tục kiếm coin nhé!", "info");
+        return;
+      }
+
+      let correctCount = 0;
+      let allAnswered = true;
+
+      currentSessionQuiz.forEach((q, idx) => {
+        const selected = document.querySelector(`input[name="quiz-item-${idx}"]:checked`);
+        if (!selected) allAnswered = false;
+        else if (parseInt(selected.value) === q.answer) correctCount++;
+        const exp = document.getElementById(`quiz-explain-${idx}`);
+        if (exp) exp.classList.remove('hidden');
+      });
+
+      if (!allAnswered) {
+        showToast("Vui lòng trả lời đủ cả 3 câu trắc nghiệm!", "warning");
+        return;
+      }
+
+      isCurrentQuizSubmitted = true;
+      const coinsEarned = correctCount * 5;
+
+      if (coinsEarned > 0) {
+        AppState.user.coins = (AppState.user.coins || 0) + coinsEarned;
+        if (correctCount === 3) {
+          if (!AppState.badges) AppState.badges = {};
+          AppState.badges.quizMaster = true;
+        }
+        saveState();
+        showToast(`Tuyệt vời! Đúng ${correctCount}/3 câu: +${coinsEarned} BioCoins!`, "success");
+      } else {
+        showToast("Chưa đúng câu nào lần này. Đọc giải thích và thử đề mới nhé!", "info");
+      }
+
+      const resultBox = document.getElementById('quiz-result-box');
+      if (resultBox) resultBox.classList.remove('hidden');
+
+      const scoreEl = document.getElementById('quiz-score-text');
+      const bonusEl = document.getElementById('quiz-bonus-text');
+
+      if (scoreEl) scoreEl.innerText = `Bạn trả lời đúng ${correctCount}/3 câu!`;
+      if (bonusEl) {
+        if (coinsEarned > 0) {
+          bonusEl.innerHTML = `<span class="text-amber-600 font-extrabold text-sm">+${coinsEarned} BioCoins</span> đã được cộng vào tài khoản của bạn! 🪙`;
+        } else {
+          bonusEl.innerText = "Chưa nhận được coin lần này. Hãy đọc kỹ phần giải thích chi tiết ở dưới mỗi câu và bấm 'Tạo đề mới' để thử sức lại nhé!";
+        }
+      }
+    }
+
+    /* 4. CHAT GEMINI AI */
+    let conversationHistory = [];
+
+    function handleChatEnter(e) {
+      if (e.key === 'Enter') sendChatMessage();
+    }
+
+    function askPreset(text) {
+      const input = document.getElementById('chat-input');
+      if (input) {
+        input.value = text;
+        sendChatMessage();
+      }
+    }
+
+    function escapeHTML(str) {
+      return str
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    async function sendChatMessage() {
+      const input = document.getElementById('chat-input');
+      if (!input) return;
+      const query = input.value.trim();
+      if (!query) return;
+
+      input.value = "";
+      appendMessage("user", query);
+
+      const loadingId = appendLoadingBubble();
+
+      try {
+        const response = await fetch('/api/gemini', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            type: 'chat', 
+            message: query,
+            history: conversationHistory 
+          })
+        });
+
+        const data = await response.json();
+        removeLoadingBubble(loadingId);
+
+        if (response.ok && data.reply) {
+          appendMessage("bot", data.reply);
+          conversationHistory.push({ role: 'user', text: query });
+          conversationHistory.push({ role: 'model', text: data.reply });
+          if (conversationHistory.length > 6) conversationHistory = conversationHistory.slice(-6);
+        } else {
+          appendMessage("bot", `⚠️ Phản hồi: ${data.error || 'Đang bận, bạn đợi khoảng 5 giây rồi thử lại nhé!'}`);
+        }
+      } catch (err) {
+        removeLoadingBubble(loadingId);
+        appendMessage("bot", "⚠️ Lỗi kết nối. Bạn kiểm tra lại mạng hoặc API /api/gemini nhé!");
+      }
+    }
+
+    function appendMessage(sender, text) {
+      const box = document.getElementById('chat-messages');
+      if (!box) return;
+      const div = document.createElement('div');
+      div.className = `flex items-start space-x-3 ${sender === 'user' ? 'flex-row-reverse space-x-reverse' : ''}`;
+      
+      const avatar = sender === 'user'
+        ? `<div class="w-8 h-8 rounded-full bg-slate-800 text-white flex items-center justify-center shrink-0 text-xs font-bold">Bạn</div>`
+        : `<div class="w-8 h-8 rounded-full bg-bio-600 text-white flex items-center justify-center shrink-0 text-sm font-bold shadow-sm"><i class="fa-solid fa-robot"></i></div>`;
+
+      const safeText = escapeHTML(text);
+      const formattedText = safeText.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+      const bubble = sender === 'user'
+        ? `<div class="bg-bio-600 text-white p-3.5 rounded-2xl rounded-tr-none max-w-lg leading-relaxed shadow-sm">${formattedText}</div>`
+        : `<div class="bg-slate-100 text-slate-800 p-3.5 rounded-2xl rounded-tl-none max-w-lg leading-relaxed border border-slate-200/80">${formattedText}</div>`;
+
+      div.innerHTML = `${avatar}${bubble}`;
+      box.appendChild(div);
+      box.scrollTop = box.scrollHeight;
+    }
+
+    function appendLoadingBubble() {
+      const box = document.getElementById('chat-messages');
+      if (!box) return "";
+      const id = "loading-" + Date.now();
+      const div = document.createElement('div');
+      div.id = id;
+      div.className = "flex items-start space-x-3";
+      div.innerHTML = `
+        <div class="w-8 h-8 rounded-full bg-bio-600 text-white flex items-center justify-center shrink-0 text-sm font-bold"><i class="fa-solid fa-robot"></i></div>
+        <div class="bg-slate-100 p-3 rounded-2xl rounded-tl-none text-slate-400 text-xs flex items-center space-x-1.5">
+          <i class="fa-solid fa-circle text-[6px] animate-bounce"></i>
+          <i class="fa-solid fa-circle text-[6px] animate-bounce [animation-delay:0.2s]"></i>
+          <i class="fa-solid fa-circle text-[6px] animate-bounce [animation-delay:0.4s]"></i>
+          <span class="ml-1 text-[11px]">Gemini AI đang suy nghĩ...</span>
+        </div>
+      `;
+      box.appendChild(div);
+      box.scrollTop = box.scrollHeight;
+      return id;
+    }
+
+    function removeLoadingBubble(id) {
+      const el = document.getElementById(id);
+      if (el) el.remove();
+    }
+
+    /* 5. TÍNH TOÁN & HIỂN THỊ THỰC ĐƠN + NHỊP SINH HỌC CÁ NHÂN HÓA */
+    function addMinutesToTimeStr(timeStr, minsToAdd) {
+      if (!timeStr || !timeStr.includes(":")) return "06:00";
+      const [h, m] = timeStr.split(":").map(Number);
+      let total = (h * 60 + m + minsToAdd) % 1440;
+      if (total < 0) total += 1440;
+      const nh = Math.floor(total / 60).toString().padStart(2, '0');
+      const nm = (total % 60).toString().padStart(2, '0');
+      return `${nh}:${nm}`;
+    }
+
+    function calculateSleepDuration(wakeStr, sleepStr) {
+      if (!wakeStr || !sleepStr) return 7.5;
+      const [wh, wm] = wakeStr.split(":").map(Number);
+      const [sh, sm] = sleepStr.split(":").map(Number);
+      let diff = (wh * 60 + wm) - (sh * 60 + sm);
+      if (diff <= 0) diff += 1440;
+      return (diff / 60).toFixed(1);
+    }
+
+    function fillSampleSchedule() {
+      const setVal = (id, v) => { const el = document.getElementById(id); if (el) el.value = v; };
+      setVal('user-nickname', document.getElementById('user-nickname')?.value || 'Học sinh BioHabit');
+      setVal('wake-time', '06:00');
+      setVal('school-time', '07:15');
+      setVal('home-time', '17:00');
+      setVal('sleep-time', '22:30');
+      setVal('user-height', '165');
+      setVal('user-weight', '55');
+      showToast("Đã điền mẫu thông tin! Hãy bấm 'Lưu & Tạo Lộ Trình' để xem kết quả.", "info");
+    }
+
+    function resetBioProfile() {
+      AppState.schedule = JSON.parse(JSON.stringify(DEFAULT_STORAGE.schedule));
+      saveState();
+      showToast("Đã đặt lại hồ sơ cá nhân!", "info");
+    }
+
+    function renderNutritionAdvice() {
+      try {
+        const s = AppState.schedule || {};
+        const hCm = parseFloat(s.height) || 165;
+        const h = hCm / 100;
+        const w = parseFloat(s.weight) || 55;
+        const bmi = (w / (h * h)).toFixed(1);
+        const goal = s.goal || "maintain";
+        const gender = s.gender || "male";
+
+        // Tóm tắt chỉ số cơ bản
+        const sleepHrs = calculateSleepDuration(s.wake, s.sleep);
+        const waterLiters = (w * 0.035).toFixed(1);
+        // BMR (Mifflin-St Jeor ước lượng cho lứa tuổi 16-20) * 1.45 hoạt động vừa
+        const bmr = 10 * w + 6.25 * hCm - 5 * 17 + (gender === 'male' ? 5 : -161);
+        let tdee = Math.round(bmr * 1.45);
+        if (goal === 'muscle') tdee += 250;
+        else if (goal === 'fatloss') tdee -= 300;
+
+        const elSleep = document.getElementById('summary-sleep-hours');
+        const elWater = document.getElementById('summary-water-liters');
+        const elCal = document.getElementById('summary-calories');
+        const elName = document.getElementById('summary-user-name');
+        const elRole = document.getElementById('summary-role-label');
+
+        if (elSleep) elSleep.innerText = `${sleepHrs} giờ/đêm`;
+        if (elWater) elWater.innerText = `${waterLiters} Lít`;
+        if (elCal) elCal.innerText = `${tdee} kcal`;
+        if (elName) elName.innerText = s.nickname?.trim() ? s.nickname : (AppState.user?.name || "bạn");
+        if (elRole) elRole.innerText = s.role === 'freelancer' ? 'Làm việc / Nghiên cứu' : 'Học sinh / Sinh viên';
+
+        let bmiStatus = "Cân đối";
+        let statusColor = "text-emerald-700 bg-emerald-100 border border-emerald-300";
+        if (bmi < 18.5) { bmiStatus = "Hơi gầy"; statusColor = "text-amber-700 bg-amber-100 border border-amber-300"; }
+        else if (bmi >= 23) { bmiStatus = "Thừa cân nhẹ"; statusColor = "text-rose-700 bg-rose-100 border border-rose-300"; }
+
+        const pill = document.getElementById('nutrition-bmi-pill');
+        if (pill) {
+          pill.className = `text-xs font-extrabold px-3 py-1 rounded-full ${statusColor}`;
+          pill.innerText = `BMI: ${bmi} (${bmiStatus})`;
+        }
+
+        let menuData = {};
+        if (goal === "muscle") {
+          menuData = {
+            title: "Chế Độ Tăng Cơ & Phát Triển Chiều Cao Tuổi Dậy Thì",
+            allowed: [
+              "<strong>Đạm động vật sạch:</strong> Ức gà áp chảo, trứng gà luộc (2 quả/ngày), phi lê cá basa/cá hồi, thịt bò nạc.",
+              "<strong>Đạm thực vật & Hạt:</strong> Đậu phụ luộc/sốt cà chua, sữa đậu nành nguyên chất, hạt óc chó, hạnh nhân.",
+              "<strong>Tinh bột chuyển hóa:</strong> Cơm gạo lứt, yến mạch, khoai lang vàng luộc.",
+              "<strong>Rau & Vi chất:</strong> Bông cải xanh (súp lơ), rau bina (chân vịt), chuối tiêu (giàu Kali chống chuột rút)."
+            ],
+            forbidden: [
+              "<strong>Xúc xích, thịt xông khói, đồ hộp:</strong> Quá nhiều muối nitrat gây giữ nước và ức chế hormone tăng trưởng (GH).",
+              "<strong>Trà sữa, nước ngọt tăng lực:</strong> Đường fructose công nghiệp gây tích mỡ nội tạng thay vì phát triển cơ bắp.",
+              "<strong>Đồ chiên rán dầu mỡ tái chế:</strong> Chất béo trans-fat làm viêm tế bào cơ và chậm phục hồi sau vận động."
+            ],
+            restrictions: `<strong>Lưu ý cá nhân hóa (${tdee} kcal/ngày):</strong> Không nạp quá 2.2g Protein/kg cân nặng (${Math.round(w * 2.2)}g/ngày) để tránh áp lực lọc cầu thận. Luôn uống đủ ${waterLiters} Lít nước.`
+          };
+        } else if (goal === "fatloss") {
+          menuData = {
+            title: "Chế Độ Giảm Mỡ Tự Nhiên & Nhẹ Nhàng Cơ Thể",
+            allowed: [
+              "<strong>Chất xơ tạo no & Lợi khuẩn:</strong> Canh rau ngót, rau mồng tơi, dưa chuột, xà lách trộn giấm táo, sữa chua không đường.",
+              "<strong>Đạm nạc ít calo:</strong> Tôm hấp, ức gà hấp gừng, đậu phụ trắng, cá thu/cá rô phi kho nhạt.",
+              "<strong>Tinh bột chậm (GI thấp):</strong> Nửa chén cơm gạo lứt, ngô luộc, yến mạch ngâm hạt chia.",
+              "<strong>Thức uống:</strong> Trà xanh ấm (giàu EGCG kích hoạt oxy hóa mỡ), nước chanh gừng ấm buổi sáng."
+            ],
+            forbidden: [
+              "<strong>Bánh ngọt, bánh mì trắng, mỳ tôm:</strong> Tinh bột tinh chế làm đường huyết tăng vọt kích thích tích mỡ bụng.",
+              "<strong>Nước ép đóng chai, trà sữa:</strong> Calo lỏng đánh lừa thụ thể no leptin khiến bạn thèm ăn liên tục.",
+              "<strong>Nội tạng động vật, mỡ heo, da gà:</strong> Chứa nhiều chất béo bão hòa và cholesterol xấu (LDL)."
+            ],
+            restrictions: `<strong>Lưu ý cá nhân hóa (${tdee} kcal/ngày):</strong> Không nhịn ăn sáng gây hạ đường huyết giảm trí nhớ; hạn chế tinh bột sau ${addMinutesToTimeStr(s.sleep || '22:30', -180)} để cơ thể đốt mỡ thừa khi ngủ.`
+          };
+        } else {
+          menuData = {
+            title: "Chế Độ Duy Trì Thể Lực & Tăng Cường Trí Nhớ Học Đường",
+            allowed: [
+              "<strong>Đĩa thức ăn chuẩn (50-25-25):</strong> 50% rau củ nhiều màu sắc, 25% đạm (thịt lợn nạc, cá, trứng), 25% cơm gạo.",
+              "<strong>Thực phẩm vàng cho não bộ:</strong> Cá hồi/cá mòi (giàu Omega-3 tạo màng nơ-ron), quả óc chó, quả bơ, trứng gà.",
+              "<strong>Rau xanh đậm:</strong> Rau muống, cải thìa, cải ngọt (cung cấp Acid Folic và Sắt tạo máu nuôi não).",
+              "<strong>Trái cây tươi:</strong> Táo, cam, ổi (giàu Vitamin C tăng đề kháng mùa thi cử)."
+            ],
+            forbidden: [
+              "<strong>Đồ chiên ngập dầu nhiều lần:</strong> Gây oxy hóa phá hủy ty thể, tạo cảm giác lờ đờ, buồn ngủ trong giờ học.",
+              "<strong>Ăn mặn, chấm nhiều nước mắm mặn:</strong> Làm tăng áp lực máu lên mao mạch não và gây thiếu nước tế bào vi mô.",
+              "<strong>Đồ uống có cồn, chất kích thích nhân tạo:</strong> Ức chế thụ thể NMDA làm suy giảm khả năng ghi nhớ dài hạn (LTP)."
+            ],
+            restrictions: `<strong>Lưu ý cá nhân hóa (${tdee} kcal/ngày):</strong> Hạn chế cà phê/trà đậm đặc sau 15:00 chiều để tránh ức chế Adenosine làm rối loạn giấc ngủ lúc ${formatTimeToAMPM(s.sleep)}.`
+          };
+        }
+
+        const container = document.getElementById('nutrition-details');
+        if (container) {
+          container.innerHTML = `
+            <div class="p-3.5 bg-bio-50/70 border border-bio-200 rounded-xl">
+              <h5 class="font-extrabold text-bio-900 text-sm mb-1">${menuData.title}</h5>
+              <p class="text-xs text-bio-700 leading-relaxed">Được tính toán theo thể trạng (${hCm}cm - ${w}kg) và lịch sinh hoạt riêng của bạn.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+              <div class="bg-emerald-50/40 p-4 rounded-xl border border-emerald-200">
+                <h6 class="font-bold text-emerald-800 text-xs flex items-center mb-2.5">
+                  <i class="fa-solid fa-circle-check text-emerald-600 mr-1.5"></i> CÁC MÓN NÊN ĂN (Ưu tiên nạp)
+                </h6>
+                <ul class="text-xs space-y-2 text-slate-700 leading-relaxed list-disc list-inside">
+                  ${menuData.allowed.map(m => `<li>${m}</li>`).join('')}
+                </ul>
+              </div>
+
+              <div class="bg-rose-50/50 p-4 rounded-xl border border-rose-200">
+                <h6 class="font-bold text-rose-800 text-xs flex items-center mb-2.5">
+                  <i class="fa-solid fa-ban text-rose-600 mr-1.5"></i> MÓN NÊN TRÁNH & HẠN CHẾ
+                </h6>
+                <ul class="text-xs space-y-2 text-slate-700 leading-relaxed list-disc list-inside">
+                  ${menuData.forbidden.map(m => `<li>${m}</li>`).join('')}
+                </ul>
+              </div>
+            </div>
+
+            <div class="p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-900 leading-relaxed">
+              <i class="fa-solid fa-triangle-exclamation text-amber-600 mr-1"></i> ${menuData.restrictions}
+            </div>
+          `;
+        }
+      } catch (err) {
+        console.error("Lỗi xuất thực đơn:", err);
+      }
+    }
+
+    /* 6. HỆ THỐNG BIOMARKET */
+    const DEFAULT_ARTICLES = [
+      {
+        id: "art_1",
+        title: "Công nghệ Chỉnh sửa Gen CRISPR-Cas9: Tương lai chữa lành đột biến ADN",
+        tag: "Công nghệ sinh học • Di truyền phân tử",
+        cost: 50,
+        summary: "Cơ chế 'chiếc kéo sinh học' nhận diện mục tiêu bằng ARN dẫn đường (sgRNA) và cắt đứt liên kết photphodieste để sửa sai bộ gen.",
+        content: `
+          <h4 class='font-bold text-slate-800 text-sm'>1. Nguồn gốc sinh học từ vi khuẩn</h4>
+          <p>Hệ thống CRISPR-Cas vốn là cơ chế miễn dịch thích ứng tự nhiên của vi khuẩn chống lại thực khuẩn thể (Bacteriophage). Khi vi khuẩn phát hiện ADN ngoại lai, enzyme Cas9 cùng phức hợp crRNA sẽ tạo vết cắt kép (DSB) chính xác tại trình tự mục tiêu.</p>
+          <h4 class='font-bold text-slate-800 text-sm mt-3'>2. Ứng dụng điều trị trong Y học</h4>
+          <p>Hiện nay liệu pháp CRISPR đã được FDA phê chuẩn điều trị bệnh thiếu máu hồng cầu hình liềm (Sickle Cell Disease) bằng cách tái kích hoạt gen tổng hợp Hemoglobin bào thai (HbF).</p>
+          <div class='bg-bio-50 p-3 rounded-xl border border-bio-200 mt-2'>
+            <span class='font-bold text-bio-800 text-xs'>Góc nhìn Sinh học THPT:</span>
+            <p class='text-xs text-bio-900 mt-0.5'>CRISPR chứng minh rằng cấu trúc liên kết bổ sung A-U, G-X có thể biến thành công cụ định vị siêu chính xác bên trong nhân tế bào sinh vật nhân thực.</p>
+          </div>
+        `
+      },
+      {
+        id: "art_2",
+        title: "Trục Não - Ruột (Gut-Brain Axis) và Hệ Vi Sinh Microbiome",
+        tag: "Sinh lý học người • Thần kinh học",
+        cost: 80,
+        summary: "Hơn 90% hormone hạnh phúc Serotonin được sản xuất tại ruột! Cách các vi khuẩn đường ruột kiểm soát tâm trạng và khả năng tập trung thi cử.",
+        content: `
+          <h4 class='font-bold text-slate-800 text-sm'>1. Dây thần kinh phế vị (Vagus Nerve)</h4>
+          <p>Hàng ngàn tỷ vi khuẩn đường ruột lên men chất xơ thành các Axit béo chuỗi ngắn (SCFA như Butyrate, Acetate). Các phân tử này kích hoạt dây thần kinh số X truyền tín hiệu trực tiếp lên vùng dưới đồi và Hạch hạnh nhân (Amygdala).</p>
+          <h4 class='font-bold text-slate-800 text-sm mt-3'>2. Tại sao ăn uống ảnh hưởng đến điểm số?</h4>
+          <p>Loạn khuẩn đường ruột do đồ ngọt và thức ăn nhanh giải phóng độc tố nội mạc LPS (Lipopolysaccharide), gây viêm thần kinh mức độ nhẹ (Neuroinflammation) làm suy giảm trí nhớ ngắn hạn.</p>
+          <div class='bg-bio-50 p-3 rounded-xl border border-bio-200 mt-2'>
+            <span class='font-bold text-bio-800 text-xs'>Khuyến nghị học đường:</span>
+            <p class='text-xs text-bio-900 mt-0.5'>Bổ sung sữa chua và rau củ lên men tự nhiên vào mùa thi cử giúp giảm đáng kể hormone căng thẳng Cortisol.</p>
+          </div>
+        `
+      },
+      {
+        id: "art_3",
+        title: "Di truyền học Biểu sinh (Epigenetics): Lối sống có thể bật/tắt gen của bạn",
+        tag: "Di truyền học phân tử • Y học tương lai",
+        cost: 100,
+        summary: "ADN không thay đổi trình tự nucleotit, nhưng các nhóm Methyl hóa (-CH3) và acetyl hóa histone có thể khóa hoặc mở các gen thông minh.",
+        content: `
+          <h4 class='font-bold text-slate-800 text-sm'>1. Cơ chế Methyl hóa ADN và cuộn xoắn Histone</h4>
+          <p>Khi các gốc -CH3 gắn vào đảo CpG ở vùng khởi động (Promoter), chúng ngăn cản enzyme ARN Polymerase tiếp cận gen, dẫn đến hiện tượng bất hoạt phiên mã. Ngược lại, acetyl hóa histone làm giãn xoắn cromatin để gen được dịch mã tối đa.</p>
+          <h4 class='font-bold text-slate-800 text-sm mt-3'>2. Vận động thể chất và kích hoạt gen BDNF</h4>
+          <p>Tập thể dục trên 20 phút mỗi ngày kích thích enzyme khử methyl hóa ở promoter của gen mã hóa yếu tố dưỡng thần kinh BDNF, giúp tế bào thần kinh sinh sôi thêm nhiều synap mới.</p>
+          <div class='bg-bio-50 p-3 rounded-xl border border-bio-200 mt-2'>
+            <span class='font-bold text-bio-800 text-xs'>Bài học Sinh học sâu sắc:</span>
+            <p class='text-xs text-bio-900 mt-0.5'>Gen cho bạn tiềm năng, nhưng lối sống và kỷ luật hằng ngày mới là bàn tay điều khiển những tiềm năng đó có được biểu hiện ra kiểu hình hay không!</p>
+          </div>
+        `
+      }
+    ];
+
+    let currentArticlesList = [];
+
+    function loadDailyArticles() {
+      const todayDate = new Date().toISOString().split('T')[0];
+      const savedDate = localStorage.getItem("BIOHABIT_ARTICLES_DATE");
+      const savedArticles = localStorage.getItem("BIOHABIT_DAILY_ARTICLES");
+
+      if (savedArticles && savedDate === todayDate) {
+        try {
+          currentArticlesList = JSON.parse(savedArticles);
+        } catch (e) {
+          currentArticlesList = DEFAULT_ARTICLES;
+        }
+      } else {
+        currentArticlesList = DEFAULT_ARTICLES;
+        localStorage.setItem("BIOHABIT_ARTICLES_DATE", todayDate);
+        localStorage.setItem("BIOHABIT_DAILY_ARTICLES", JSON.stringify(DEFAULT_ARTICLES));
+      }
+      renderArticlesMarket();
+    }
+
+    async function fetchGeminiArticles(isManualClick = false) {
+      const reloadIcon = document.getElementById('article-reload-icon');
+      const reloadText = document.getElementById('article-reload-text');
+
+      if (reloadIcon) reloadIcon.classList.add('animate-spin');
+      if (reloadText) reloadText.innerText = "Gemini đang viết bài...";
+
+      try {
+        const res = await fetch('/api/gemini', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ type: 'articles' })
+        });
+
+        const data = await res.json();
+
+        if (res.ok && Array.isArray(data.articles) && data.articles.length === 3) {
+          currentArticlesList = data.articles;
+          const todayDate = new Date().toISOString().split('T')[0];
+          localStorage.setItem("BIOHABIT_ARTICLES_DATE", todayDate);
+          localStorage.setItem("BIOHABIT_DAILY_ARTICLES", JSON.stringify(data.articles));
+          showToast("Gemini đã xuất bản 3 bài nghiên cứu Y sinh mới toanh!", "success");
+        } else {
+          if (isManualClick) showToast("Máy chủ đang bận, đang giữ bộ bài nghiên cứu xuất sắc hiện tại!", "info");
+        }
+      } catch (err) {
+        if (isManualClick) showToast("Lỗi kết nối khi tải bài mới, giữ bộ bài hiện tại!", "info");
+      } finally {
+        if (reloadIcon) reloadIcon.classList.remove('animate-spin');
+        if (reloadText) reloadText.innerText = "Xuất bản 3 bài mới (AI)";
+        renderArticlesMarket();
+      }
+    }
+
+    function renderArticlesMarket() {
+      const container = document.getElementById('article-cards-container');
+      if (!container) return;
+
+      container.innerHTML = currentArticlesList.map(art => {
+        const isUnlocked = AppState.unlockedArticles?.includes(art.id);
+        const actionBtn = isUnlocked
+          ? `<button type="button" onclick="openArticleModal('${art.id}')" class="w-full py-2.5 bg-bio-100 hover:bg-bio-200 text-bio-800 rounded-xl text-xs font-bold transition flex items-center justify-center">
+               <i class="fa-solid fa-book-open-reader mr-2"></i> Đọc bài nghiên cứu (Đã mở)
+             </button>`
+          : `<button type="button" onclick="unlockArticle('${art.id}', ${art.cost})" class="w-full py-2.5 bg-bio-600 hover:bg-bio-700 text-white rounded-xl text-xs font-bold transition flex items-center justify-center">
+               <i class="fa-solid fa-lock mr-2"></i> Mở khóa đề tài (${art.cost} Coins)
+             </button>`;
+
+        return `
+          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col justify-between p-5 hover:shadow-md transition">
+            <div>
+              <div class="flex items-center justify-between text-xs mb-3">
+                <span class="px-2.5 py-1 rounded-full font-bold bg-blue-100 text-blue-700 truncate max-w-[200px]">${art.tag}</span>
+                <span class="font-bold text-amber-600 shrink-0"><i class="fa-solid fa-coins mr-1"></i>${art.cost} Coins</span>
+              </div>
+              <h3 class="font-extrabold text-slate-800 text-base mb-2 leading-snug">${art.title}</h3>
+              <p class="text-xs text-slate-500 leading-relaxed mb-4">${art.summary}</p>
+            </div>
+            <div>
+              ${actionBtn}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function unlockArticle(articleId, cost) {
+      if (!AppState.unlockedArticles) AppState.unlockedArticles = [];
+      if (AppState.unlockedArticles.includes(articleId)) {
+        openArticleModal(articleId);
+        return;
+      }
+
+      if ((AppState.user?.coins || 0) < cost) {
+        showToast(`Cần ${cost} coins, hiện bạn chỉ có ${AppState.user?.coins || 0} coins! Hãy điểm danh hoặc làm Quiz thêm nhé.`, "warning");
+        return;
+      }
+
+      AppState.user.coins -= cost;
+      AppState.unlockedArticles.push(articleId);
+      saveState();
+      showToast("Mở khóa đề tài nghiên cứu thành công!", "success");
+      openArticleModal(articleId);
+    }
+
+    function openArticleModal(articleId) {
+      const article = currentArticlesList.find(a => a.id === articleId) || DEFAULT_ARTICLES.find(a => a.id === articleId);
+      if (!article) return;
+
+      const titleEl = document.getElementById('modal-article-title');
+      const contentEl = document.getElementById('modal-article-content');
+      const modal = document.getElementById('article-modal');
+
+      if (titleEl) titleEl.innerHTML = `<i class="fa-solid fa-dna text-bio-600 mr-2"></i> ${article.title}`;
+      if (contentEl) contentEl.innerHTML = `
+        <div class="mb-3">
+          <span class="text-[11px] font-bold text-bio-700 bg-bio-100 px-2.5 py-1 rounded-full">${article.tag}</span>
+        </div>
+        ${article.content}
+      `;
+      if (modal) modal.classList.remove('hidden');
+    }
+
+    function closeArticleModal() {
+      const modal = document.getElementById('article-modal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    /* 7. AUTH VÀ ĐỒNG BỘ FIREBASE */
+    const firebaseConfig = { 
+      apiKey : "AIzaSyBs8IE9u231Sbpr5jbghNAKFEHkM0v8sOs", 
+      authDomain : "biohabit-f8a7f.firebaseapp.com", 
+      projectId : "biohabit-f8a7f", 
+      storageBucket : "biohabit-f8a7f.firebasestorage.app", 
+      messagingSenderId : "455369675252", 
+      appId : "1:455369675252:web:2d91ba6b4e13f08b46a9a1", 
+      measurementId : "G-P11VQXNKBS" 
+    };
+
+    let auth = null;
+    let db = null;
+    let currentUser = null;
+    let unsubscribeFirestore = null;
+
+    try {
+      if (typeof firebase !== 'undefined') {
+        firebase.initializeApp(firebaseConfig);
+        auth = firebase.auth();
+        db = firebase.firestore();
+      }
+    } catch (e) {
+      console.warn("Firebase fallback:", e);
+    }
+
+    function mergeWithDefaults(rawData) {
+      const def = JSON.parse(JSON.stringify(DEFAULT_STORAGE));
+      if (!rawData) return def;
+      return {
+        user: { ...def.user, ...(rawData.user || {}) },
+        schedule: { ...def.schedule, ...(rawData.schedule || {}) },
+        theme: { ...def.theme, ...(rawData.theme || {}) },
+        unlockedArticles: Array.isArray(rawData.unlockedArticles) ? rawData.unlockedArticles : def.unlockedArticles,
+        badges: { ...def.badges, ...(rawData.badges || {}) }
+      };
+    }
+
+    function checkInAppBrowser() {
+      const ua = navigator.userAgent || navigator.vendor || window.opera;
+      const isInApp = (/FBAN|FBAV|Instagram|Zalo|Line|Twitter|MicroMessenger/i.test(ua));
+      const warningBanner = document.getElementById('inapp-browser-warning');
+      if (isInApp && warningBanner) {
+        warningBanner.classList.remove('hidden');
+      }
+      return isInApp;
+    }
+
+    function loginWithGoogle() {
+      if (!auth) {
+        showToast("Firebase chưa sẵn sàng, đang chạy offline!", "info");
+        return;
+      }
+
+      if (checkInAppBrowser()) {
+        alert("Google chặn đăng nhập bên trong Zalo/Facebook!\n\nBạn vui lòng bấm dấu 3 chấm (...) ở góc trên bên phải màn hình ➔ chọn 'Mở bằng trình duyệt' (Chrome hoặc Safari) để đăng nhập nhé!");
+        return;
+      }
+
+      const provider = new firebase.auth.GoogleAuthProvider();
+      auth.signInWithPopup(provider)
+        .then(() => showToast("Đăng nhập Google thành công!", "success"))
+        .catch(error => {
+          if (error.code === 'auth/popup-blocked' || error.code === 'auth/cancelled-popup-request') {
+            auth.signInWithRedirect(provider);
+          } else if (error.code === 'auth/unauthorized-domain') {
+            showToast("Tên miền này chưa được thêm vào Firebase Authorized Domains!", "warning");
+          } else {
+            showToast("Lỗi: " + error.message, "warning");
+          }
+        });
+    }
+
+    if (auth) {
+      auth.getRedirectResult().catch(err => {
+        if (err.code === 'auth/unauthorized-domain') {
+          showToast("Tên miền chưa được ủy quyền trên Firebase!", "warning");
+        }
+      });
+
+      auth.onAuthStateChanged(user => {
+        const btnLogin = document.getElementById('btn-login-google');
+        const userBox = document.getElementById('user-logged-pill');
+
+        if (user) {
+          currentUser = user;
+          if (btnLogin) btnLogin.classList.add('hidden');
+          if (userBox) userBox.classList.remove('hidden');
+
+          const nameEl = document.getElementById('user-display-name');
+          const imgEl = document.getElementById('user-avatar-img');
+          if (nameEl) nameEl.innerText = user.displayName || "Học sinh";
+          if (imgEl) imgEl.src = user.photoURL || 'https://api.dicebear.com/7.x/bottts/svg?seed=biohabit';
+
+          if (unsubscribeFirestore) unsubscribeFirestore();
+          
+          if (db) {
+            unsubscribeFirestore = db.collection("users").doc(user.uid).onSnapshot(doc => {
+              if (doc.exists) {
+                AppState = mergeWithDefaults(doc.data());
+              } else {
+                AppState = JSON.parse(JSON.stringify(DEFAULT_STORAGE));
+                AppState.user.name = user.displayName || "Học sinh";
+                db.collection("users").doc(user.uid).set(AppState);
+              }
+              applyTheme(AppState.theme);
+              updateGlobalUI();
+              renderArticlesMarket();
+            }, err => {
+              console.error("Lỗi Firestore:", err);
+              loadLocalFallback();
+            });
+          }
+
+        } else {
+          currentUser = null;
+          if (unsubscribeFirestore) unsubscribeFirestore();
+
+          if (btnLogin) btnLogin.classList.remove('hidden');
+          if (userBox) userBox.classList.add('hidden');
+          loadLocalFallback();
+        }
+      });
+    }
+
+    function logoutGoogle() {
+      if (auth) {
+        auth.signOut().then(() => showToast("Đã đăng xuất tài khoản", "info"));
+      }
+    }
+
+    function loadLocalFallback() {
+      const saved = localStorage.getItem("BIOHABIT_STATE");
+      if (saved) {
+        try { AppState = mergeWithDefaults(JSON.parse(saved)); }
+        catch(e) { AppState = JSON.parse(JSON.stringify(DEFAULT_STORAGE)); }
+      } else {
+        AppState = JSON.parse(JSON.stringify(DEFAULT_STORAGE));
+      }
+      applyTheme(AppState.theme);
+      updateGlobalUI();
+      renderArticlesMarket();
+    }
+
+    function saveState() {
+      if (currentUser && db) {
+        db.collection("users").doc(currentUser.uid).set(AppState)
+          .catch(err => console.error("Lỗi Firestore:", err));
+      } else {
+        localStorage.setItem("BIOHABIT_STATE", JSON.stringify(AppState));
+        updateGlobalUI();
+        renderArticlesMarket();
+      }
+    }
+
+    /* 8. CẬP NHẬT GIAO DIỆN CHUNG */
+    function updateGlobalUI() {
+      try {
+        const uCoins = document.getElementById('user-coins');
+        const dCoins = document.getElementById('dash-coins');
+        const mCoins = document.getElementById('market-coins-display');
+        const dStreak = document.getElementById('dash-streak');
+        const dCount = document.getElementById('dash-unlocked-count');
+
+        if (uCoins) uCoins.innerText = AppState.user?.coins ?? 50;
+        if (dCoins) dCoins.innerText = AppState.user?.coins ?? 50;
+        if (mCoins) mCoins.innerText = AppState.user?.coins ?? 50;
+        if (dStreak) dStreak.innerText = `${AppState.user?.streak ?? 1} ngày`;
+        if (dCount) dCount.innerText = `${AppState.unlockedArticles?.length ?? 1} bài`;
+
+        // Đồng bộ toàn bộ Form Tab 2
+        const s = AppState.schedule || {};
+        const setVal = (id, val) => { const el = document.getElementById(id); if (el) el.value = val ?? ""; };
+        setVal('user-nickname', s.nickname);
+        setVal('user-role-select', s.role || 'student');
+        setVal('wake-time', s.wake);
+        setVal('school-time', s.school);
+        setVal('home-time', s.home);
+        setVal('sleep-time', s.sleep);
+        setVal('user-height', s.height);
+        setVal('user-weight', s.weight);
+        setVal('user-gender', s.gender || 'male');
+        setVal('user-goal', s.goal || 'maintain');
+
+        const nutCheck = document.getElementById('nutrition-toggle');
+        const nutInputs = document.getElementById('nutrition-inputs-area');
+        if (nutCheck) nutCheck.checked = !!s.nutritionEnabled;
+        if (nutInputs) nutInputs.classList.toggle('hidden', !s.nutritionEnabled);
+
+        // Kiểm tra xem người dùng đã điền thông tin xong chưa
+        const emptyStateEl = document.getElementById('planner-empty-state');
+        const resultsAreaEl = document.getElementById('planner-results-area');
+        const nutCardEl = document.getElementById('nutrition-result-card');
+        const resetBtnEl = document.getElementById('btn-reset-profile');
+        const statusBadgeEl = document.getElementById('planner-status-badge');
+
+        if (s.isConfigured) {
+          emptyStateEl?.classList.add('hidden');
+          resultsAreaEl?.classList.remove('hidden');
+          resetBtnEl?.classList.remove('hidden');
+
+          if (statusBadgeEl) {
+            statusBadgeEl.innerHTML = `<span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold bg-bio-100 text-bio-800 border border-bio-200"><i class="fa-solid fa-circle-check mr-1.5"></i> Đã tạo lộ trình cá nhân</span>`;
+          }
+
+          // Tính các mốc giờ động cho Lược đồ Circadian
+          const setTxt = (id, txt) => { const el = document.getElementById(id); if (el) el.innerText = txt; };
+          const wakeStart = s.wake || "06:00";
+          const schoolStart = addMinutesToTimeStr(s.school || "07:15", 30);
+          const schoolPeakEnd = addMinutesToTimeStr(s.school || "07:15", 210);
+          const homeStart = s.home || "17:00";
+          const homeEnd = addMinutesToTimeStr(homeStart, 60);
+          const sleepStart = s.sleep || "22:30";
+          const blueLightOff = addMinutesToTimeStr(sleepStart, -45);
+
+          setTxt('time-wake-display', `${formatTimeToAMPM(wakeStart)} - Đánh thức cơ thể`);
+          setTxt('time-school-display', `${formatTimeToAMPM(schoolStart)} - ${formatTimeToAMPM(schoolPeakEnd)}`);
+          setTxt('time-home-display', `${formatTimeToAMPM(homeStart)} - ${formatTimeToAMPM(homeEnd)}`);
+          setTxt('time-sleep-display', `${formatTimeToAMPM(blueLightOff)} - ${formatTimeToAMPM(sleepStart)}`);
+
+          if (nutCardEl) nutCardEl.classList.toggle('hidden', !s.nutritionEnabled);
+          renderNutritionAdvice();
+        } else {
+          emptyStateEl?.classList.remove('hidden');
+          resultsAreaEl?.classList.add('hidden');
+          resetBtnEl?.classList.add('hidden');
+          if (statusBadgeEl) {
+            statusBadgeEl.innerHTML = `<span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-200"><i class="fa-solid fa-pen-to-square mr-1.5"></i> Chờ nhập thông tin</span>`;
+          }
+        }
+
+        checkBadges();
+        renderBadges();
+      } catch (err) {
+        console.error("Lỗi UI:", err);
+      }
+    }
+
+    function formatTimeToAMPM(timeStr) {
+      if (!timeStr || !timeStr.includes(":")) return "06:00 AM";
+      const [h, m] = timeStr.split(":");
+      let hour = parseInt(h);
+      const period = hour >= 12 ? "PM" : "AM";
+      hour = hour % 12 || 12;
+      return `${hour.toString().padStart(2, '0')}:${m} ${period}`;
+    }
+
+    function checkInHabits() {
+      const todayStr = new Date().toISOString().split('T')[0];
+      if (AppState.user?.lastCheckInDate === todayStr) {
+        showToast("Hôm nay bạn đã điểm danh rồi!", "info");
+        return;
+      }
+
+      const h1 = document.getElementById('habit-sleep')?.checked;
+      const h2 = document.getElementById('habit-water')?.checked;
+      const h3 = document.getElementById('habit-move')?.checked;
+
+      if (!h1 && !h2 && !h3) {
+        showToast("Vui lòng tích chọn ít nhất 1 thói quen bạn đã làm!", "warning");
+        return;
+      }
+
+      AppState.user.coins = (AppState.user.coins || 0) + 10;
+      AppState.user.streak = (AppState.user.streak || 0) + 1;
+      AppState.user.lastCheckInDate = todayStr;
+
+      saveState();
+      showToast("Tuyệt vời! +10 BioCoins và duy trì chuỗi Streak!", "success");
+    }
+
+    document.getElementById('nutrition-toggle')?.addEventListener('change', function(e) {
+      const area = document.getElementById('nutrition-inputs-area');
+      const hInput = document.getElementById('user-height');
+      const wInput = document.getElementById('user-weight');
+      if (area) area.classList.toggle('hidden', !e.target.checked);
+      if (hInput) hInput.required = e.target.checked;
+      if (wInput) wInput.required = e.target.checked;
+    });
+
+    document.getElementById('bio-profile-form')?.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const wake = document.getElementById('wake-time')?.value;
+      const school = document.getElementById('school-time')?.value;
+      const home = document.getElementById('home-time')?.value;
+      const sleep = document.getElementById('sleep-time')?.value;
+      const nutritionEnabled = document.getElementById('nutrition-toggle')?.checked ?? true;
+      const height = parseFloat(document.getElementById('user-height')?.value);
+      const weight = parseFloat(document.getElementById('user-weight')?.value);
+
+      if (!wake || !school || !home || !sleep) {
+        showToast("Vui lòng điền đầy đủ 4 mốc thời gian sinh hoạt!", "warning");
+        return;
+      }
+
+      if (nutritionEnabled && (!height || !weight || height < 100 || weight < 25)) {
+        showToast("Vui lòng nhập chiều cao và cân nặng hợp lệ!", "warning");
+        return;
+      }
+
+      AppState.schedule = {
+        isConfigured: true,
+        nickname: document.getElementById('user-nickname')?.value.trim() || "",
+        role: document.getElementById('user-role-select')?.value || 'student',
+        wake,
+        school,
+        home,
+        sleep,
+        nutritionEnabled,
+        height: height || 165,
+        weight: weight || 55,
+        gender: document.getElementById('user-gender')?.value || 'male',
+        goal: document.getElementById('user-goal')?.value || 'maintain'
+      };
+
+      saveState();
+      showToast("Đã phân tích xong! Mở khóa Thực đơn & Nhịp sinh học của bạn.", "success");
+    });
+
+    function checkBadges() {
+      if (!AppState.badges) AppState.badges = {};
+      if ((AppState.user?.streak || 0) >= 7) AppState.badges.streak7 = true;
+      if ((AppState.unlockedArticles?.length || 0) >= 3) AppState.badges.bioScholar = true;
+    }
+
+    function renderBadges() {
+      const container = document.getElementById('badges-container');
+      if (!container) return;
+
+      const badgeList = [
+        {
+          name: 'Chiến thần Nhịp sinh học',
+          desc: 'Duy trì chuỗi Streak kỷ luật 7 ngày liên tiếp',
+          icon: 'fa-fire text-orange-500',
+          active: AppState.badges?.streak7
+        },
+        {
+          name: 'Bác sĩ tế bào',
+          desc: 'Đạt điểm tuyệt đối trong bài Quiz ngẫu nhiên',
+          icon: 'fa-brain text-purple-500',
+          active: AppState.badges?.quizMaster
+        },
+        {
+          name: 'Tâm hồn Sinh học',
+          desc: 'Mở khóa thành công ít nhất 3 đề tài nghiên cứu chuyên sâu',
+          icon: 'fa-graduation-cap text-bio-600',
+          active: AppState.badges?.bioScholar
+        }
+      ];
+
+      let currentBadge = "Mầm Sinh Học 🌱";
+      if (AppState.badges?.bioScholar) currentBadge = "Tâm Hồn Sinh Học 🎓";
+      else if (AppState.badges?.quizMaster) currentBadge = "Bác Sĩ Tế Bào 🧠";
+      else if (AppState.badges?.streak7) currentBadge = "Chiến Thần Sinh Học 🔥";
+      
+      const badgeCurrentEl = document.getElementById('dash-badge-current');
+      if (badgeCurrentEl) badgeCurrentEl.innerText = currentBadge;
+
+      container.innerHTML = badgeList.map(b => `
+        <div class="p-4 rounded-xl border ${b.active ? 'bg-bio-50/70 border-bio-300' : 'bg-slate-50 border-slate-200 opacity-60'} flex items-start space-x-3 transition">
+          <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-lg shrink-0 ${b.active ? 'border border-bio-200' : ''}">
+            <i class="fa-solid ${b.icon}"></i>
+          </div>
+          <div class="text-xs">
+            <div class="flex items-center space-x-1.5">
+              <span class="font-bold text-slate-800">${b.name}</span>
+              ${b.active ? '<span class="text-[9px] bg-bio-600 text-white font-extrabold px-1.5 py-0.5 rounded-full">ĐÃ ĐẠT</span>' : '<span class="text-[9px] text-slate-400 font-bold">KHÓA</span>'}
+            </div>
+            <p class="text-slate-500 mt-1 leading-snug">${b.desc}</p>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function showToast(msg, type = "success") {
+      const toast = document.getElementById('toast');
+      const icon = document.getElementById('toast-icon');
+      const text = document.getElementById('toast-msg');
+      if (!toast || !icon || !text) return;
+
+      text.innerText = msg;
+      if (type === "warning") icon.className = "fa-solid fa-triangle-exclamation text-amber-400 text-base";
+      else if (type === "info") icon.className = "fa-solid fa-circle-info text-blue-400 text-base";
+      else icon.className = "fa-solid fa-circle-check text-bio-400 text-base";
+
+      toast.classList.remove('opacity-0', 'translate-y-20', 'pointer-events-none');
+      setTimeout(() => toast.classList.add('opacity-0', 'translate-y-20', 'pointer-events-none'), 3500);
+    }
+
+    /* 9. KHỞI CHẠY LẦN ĐẦU KHI MỞ TRANG */
+    window.addEventListener('DOMContentLoaded', () => {
+      checkInAppBrowser();
+      loadLocalFallback();
+      refreshRandomQuiz();
+      loadDailyArticles();
+    });
+  </script>
+</body>
+</html>
