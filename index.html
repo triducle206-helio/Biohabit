@@ -61,7 +61,7 @@
 
     body {
       font-family: var(--app-font);
-      transition: background-color 0.25s ease, color 0.25s ease;
+      transition: background-color 0.2s ease, color 0.2s ease;
     }
 
     ::-webkit-scrollbar { width: 6px; height: 6px; }
@@ -96,7 +96,7 @@
     body.radius-sharp .rounded-2xl { border-radius: 0.45rem !important; }
     body.radius-sharp .rounded-xl  { border-radius: 0.35rem !important; }
 
-    /* Chế độ tối (Dark Mode) dịu mắt ban đêm */
+    /* Chế độ tối (Dark Mode) */
     body.theme-dark {
       background-color: #0b1120 !important;
       color: #e2e8f0 !important;
@@ -104,7 +104,7 @@
     body.theme-dark ::-webkit-scrollbar-track { background: #0f172a; }
     body.theme-dark header,
     body.theme-dark .mobile-bottom-nav {
-      background-color: rgba(15, 23, 42, 0.94) !important;
+      background-color: rgba(15, 23, 42, 0.95) !important;
       border-color: #1e293b !important;
     }
     body.theme-dark .bg-white {
@@ -171,7 +171,14 @@
       to { opacity: 1; transform: translateY(0); }
     }
     .animate-reveal {
-      animation: fadeSlideUp 0.35s ease-out forwards;
+      animation: fadeSlideUp 0.3s ease-out forwards;
+    }
+    @keyframes spinSlow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .animate-spin-slow {
+      animation: spinSlow 6s linear infinite;
     }
   </style>
 </head>
@@ -188,61 +195,60 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-2">
       
       <!-- Logo: BioHabit -->
-      <div class="flex items-center space-x-3 cursor-pointer shrink-0" onclick="switchTab('dashboard')">
-        <div class="w-10 h-10 rounded-2xl bg-bio-600 flex items-center justify-center text-white text-xl shadow-md shadow-bio-200">
+      <div class="flex items-center space-x-2.5 cursor-pointer shrink-0" onclick="switchTab('dashboard')">
+        <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-bio-600 flex items-center justify-center text-white text-lg sm:text-xl shadow-md shadow-bio-200">
           <i class="fa-solid fa-dna animate-pulse"></i>
         </div>
         <div>
-          <span class="text-xl font-extrabold tracking-tight text-slate-900">Bio<span class="text-bio-600">Habit</span></span>
-          <p class="text-[10px] text-bio-700 font-semibold tracking-wider uppercase -mt-1">Nhịp Sống Sinh Học</p>
+          <span class="text-lg sm:text-xl font-extrabold tracking-tight text-slate-900">Bio<span class="text-bio-600">Habit</span></span>
+          <p class="text-[9px] sm:text-[10px] text-bio-700 font-semibold tracking-wider uppercase -mt-1">Nhịp Sống Sinh Học</p>
         </div>
       </div>
 
       <!-- Navigation Tabs -->
-      <nav class="hidden md:flex items-center space-x-1 lg:space-x-2 text-sm font-semibold text-slate-600">
-        <button type="button" onclick="switchTab('dashboard')" id="nav-dashboard" class="tab-btn px-3 py-2 rounded-xl text-bio-700 bg-bio-50 hover:bg-bio-100 transition">
+      <nav class="hidden md:flex items-center space-x-1 text-xs lg:text-sm font-semibold text-slate-600">
+        <button type="button" onclick="switchTab('dashboard')" id="nav-dashboard" class="tab-btn px-2.5 py-2 rounded-xl text-bio-700 bg-bio-50 hover:bg-bio-100 transition whitespace-nowrap">
           <i class="fa-solid fa-house mr-1"></i> Tổng quan
         </button>
-        <button type="button" onclick="switchTab('planner')" id="nav-planner" class="tab-btn px-3 py-2 rounded-xl hover:bg-slate-100 transition">
-          <i class="fa-solid fa-clock mr-1"></i> Nhịp sinh học & Thực đơn
+        <button type="button" onclick="switchTab('planner')" id="nav-planner" class="tab-btn px-2.5 py-2 rounded-xl hover:bg-slate-100 transition whitespace-nowrap">
+          <i class="fa-solid fa-clock mr-1"></i> Nhịp sinh & Thực đơn
         </button>
-        <button type="button" onclick="switchTab('habits')" id="nav-habits" class="tab-btn px-3 py-2 rounded-xl hover:bg-slate-100 transition">
+        <button type="button" onclick="switchTab('habits')" id="nav-habits" class="tab-btn px-2.5 py-2 rounded-xl hover:bg-slate-100 transition whitespace-nowrap">
           <i class="fa-solid fa-calendar-check mr-1"></i> Thói quen & Quiz
         </button>
-        <button type="button" onclick="switchTab('ai-tutor')" id="nav-ai-tutor" class="tab-btn px-3 py-2 rounded-xl hover:bg-slate-100 transition text-bio-600 font-bold">
-          <i class="fa-solid fa-robot mr-1"></i> Trợ lý Gemini AI
+        <button type="button" onclick="switchTab('focus')" id="nav-focus" class="tab-btn px-2.5 py-2 rounded-xl hover:bg-slate-100 transition whitespace-nowrap">
+          <i class="fa-solid fa-headphones mr-1"></i> Học & Nhạc
         </button>
-        <button type="button" onclick="switchTab('market')" id="nav-market" class="tab-btn px-3 py-2 rounded-xl hover:bg-slate-100 transition">
-          <i class="fa-solid fa-newspaper mr-1"></i> Tạp chí BioMarket
+        <button type="button" onclick="switchTab('ai-tutor')" id="nav-ai-tutor" class="tab-btn px-2.5 py-2 rounded-xl hover:bg-slate-100 transition text-bio-600 font-bold whitespace-nowrap">
+          <i class="fa-solid fa-robot mr-1"></i> Gemini AI
+        </button>
+        <button type="button" onclick="switchTab('market')" id="nav-market" class="tab-btn px-2.5 py-2 rounded-xl hover:bg-slate-100 transition whitespace-nowrap">
+          <i class="fa-solid fa-newspaper mr-1"></i> BioMarket
         </button>
       </nav>
 
-      <!-- User Stats / Theme Studio / Authentication Box -->
-      <div class="flex items-center space-x-2 sm:space-x-3">
-        <!-- Theme Customizer Button -->
-        <button type="button" onclick="openThemeModal()" title="Thiết kế giao diện theo sở thích" class="flex items-center space-x-1.5 bg-bio-50 hover:bg-bio-100 text-bio-700 border border-bio-200 px-2.5 sm:px-3 py-1.5 rounded-full text-xs font-bold transition shadow-sm">
+      <!-- User Stats / Theme Studio / Auth -->
+      <div class="flex items-center space-x-1.5 sm:space-x-2.5 shrink-0">
+        <button type="button" onclick="openThemeModal()" title="Thiết kế giao diện theo sở thích" class="flex items-center space-x-1.5 bg-bio-50 hover:bg-bio-100 text-bio-700 border border-bio-200 px-2.5 py-1.5 rounded-full text-xs font-bold transition shadow-sm">
           <i class="fa-solid fa-palette text-sm"></i>
-          <span class="hidden lg:inline">Giao diện</span>
+          <span class="hidden xl:inline">Giao diện</span>
         </button>
 
-        <!-- Coin Counter -->
-        <div class="flex items-center bg-amber-50 border border-amber-200 text-amber-700 px-2.5 sm:px-3 py-1.5 rounded-full text-xs sm:text-sm font-bold shadow-sm">
-          <i class="fa-solid fa-coins text-amber-500 mr-1.5 text-base"></i>
+        <div class="flex items-center bg-amber-50 border border-amber-200 text-amber-700 px-2.5 py-1.5 rounded-full text-xs font-bold shadow-sm">
+          <i class="fa-solid fa-coins text-amber-500 mr-1 text-sm"></i>
           <span id="user-coins">50</span>
-          <span class="ml-1 text-[11px] hidden sm:inline text-amber-600 font-medium">BioCoins</span>
+          <span class="ml-1 text-[10px] hidden sm:inline text-amber-600 font-medium">Coins</span>
         </div>
 
-        <!-- Auth State Button -->
         <div id="auth-container">
-          <button type="button" id="btn-login-google" onclick="loginWithGoogle()" class="flex items-center space-x-2 bg-white text-slate-700 border border-slate-300 hover:bg-slate-50 px-3 sm:px-3.5 py-1.5 rounded-full text-xs font-bold transition shadow-sm">
+          <button type="button" id="btn-login-google" onclick="loginWithGoogle()" class="flex items-center space-x-1.5 bg-white text-slate-700 border border-slate-300 hover:bg-slate-50 px-2.5 sm:px-3 py-1.5 rounded-full text-xs font-bold transition shadow-sm">
             <i class="fa-brands fa-google text-red-500 text-sm"></i>
-            <span class="hidden sm:inline">Đăng nhập Google</span>
-            <span class="sm:hidden">Login</span>
+            <span class="hidden sm:inline">Đăng nhập</span>
           </button>
 
-          <div id="user-logged-pill" class="hidden flex items-center space-x-2 bg-slate-100 pl-1.5 pr-2 py-1 rounded-full border border-slate-200">
-            <img id="user-avatar-img" src="https://api.dicebear.com/7.x/bottts/svg?seed=biohabit" alt="Avatar" class="w-7 h-7 rounded-full border border-bio-400 object-cover">
-            <span id="user-display-name" class="text-xs sm:text-sm font-bold text-slate-700 truncate max-w-[85px] sm:max-w-[110px]">Học sinh</span>
+          <div id="user-logged-pill" class="hidden flex items-center space-x-1.5 bg-slate-100 pl-1 pr-2 py-1 rounded-full border border-slate-200">
+            <img id="user-avatar-img" src="https://api.dicebear.com/7.x/bottts/svg?seed=biohabit" alt="Avatar" class="w-6 h-6 sm:w-7 sm:h-7 rounded-full border border-bio-400 object-cover">
+            <span id="user-display-name" class="text-xs font-bold text-slate-700 truncate max-w-[75px] sm:max-w-[95px]">Học sinh</span>
             <button type="button" onclick="logoutGoogle()" title="Đăng xuất" class="text-slate-400 hover:text-rose-600 transition pl-1 text-xs">
               <i class="fa-solid fa-right-from-bracket"></i>
             </button>
@@ -253,26 +259,29 @@
   </header>
 
   <!-- Mobile Bottom Nav -->
-  <div class="mobile-bottom-nav md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 px-2 py-2 flex justify-around z-40 shadow-lg text-[11px] font-semibold text-slate-500">
+  <div class="mobile-bottom-nav md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 px-1 py-2 flex justify-around z-40 shadow-lg text-[10px] font-semibold text-slate-500">
     <button type="button" id="mob-nav-dashboard" onclick="switchTab('dashboard')" class="mob-tab-btn flex flex-col items-center py-1 text-bio-600 font-bold">
-      <i class="fa-solid fa-house text-base mb-0.5"></i> Tổng quan
+      <i class="fa-solid fa-house text-sm mb-0.5"></i> Trang chủ
     </button>
     <button type="button" id="mob-nav-planner" onclick="switchTab('planner')" class="mob-tab-btn flex flex-col items-center py-1">
-      <i class="fa-solid fa-clock text-base mb-0.5"></i> Nhịp sinh
+      <i class="fa-solid fa-clock text-sm mb-0.5"></i> Thực đơn
     </button>
     <button type="button" id="mob-nav-habits" onclick="switchTab('habits')" class="mob-tab-btn flex flex-col items-center py-1">
-      <i class="fa-solid fa-check-circle text-base mb-0.5"></i> Quiz
+      <i class="fa-solid fa-check-circle text-sm mb-0.5"></i> Quiz
+    </button>
+    <button type="button" id="mob-nav-focus" onclick="switchTab('focus')" class="mob-tab-btn flex flex-col items-center py-1">
+      <i class="fa-solid fa-headphones text-sm mb-0.5"></i> Học&Nhạc
     </button>
     <button type="button" id="mob-nav-ai-tutor" onclick="switchTab('ai-tutor')" class="mob-tab-btn flex flex-col items-center py-1">
-      <i class="fa-solid fa-robot text-base mb-0.5"></i> Gemini
+      <i class="fa-solid fa-robot text-sm mb-0.5"></i> Gemini
     </button>
     <button type="button" id="mob-nav-market" onclick="switchTab('market')" class="mob-tab-btn flex flex-col items-center py-1">
-      <i class="fa-solid fa-newspaper text-base mb-0.5"></i> Tạp chí
+      <i class="fa-solid fa-newspaper text-sm mb-0.5"></i> Tạp chí
     </button>
   </div>
 
   <!-- ================= MAIN CONTENT WRAPPER ================= -->
-  <main class="flex-grow max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6 mb-16 md:mb-8">
+  <main class="flex-grow max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6 mb-24 md:mb-12">
 
     <!-- ================= TAB 1: DASHBOARD ================= -->
     <section id="tab-dashboard" class="space-y-6">
@@ -288,55 +297,58 @@
             Xây dựng lối sống khoa học cùng <span class="underline decoration-bio-300">BioHabit</span>.
           </h1>
           <p class="text-bio-100 text-sm sm:text-base leading-relaxed">
-            Khám phá quy luật tự nhiên của nhịp sinh học Circadian, cân bằng nội tiết tố, thực đơn chuẩn khoa học và hỏi đáp bài tập trực tiếp với Gemini AI thông minh.
+            Khám phá nhịp sinh học Circadian, thực đơn chuẩn khoa học, học bài tập trung cùng âm nhạc yêu thích và hỏi đáp trực tiếp với Gemini AI.
           </p>
-          <div class="pt-2 flex flex-wrap gap-3">
-            <button type="button" onclick="switchTab('planner')" class="px-5 py-2.5 rounded-xl bg-white text-bio-800 font-bold text-sm shadow-md hover:bg-bio-50 transition transform hover:-translate-y-0.5 flex items-center">
-              <i class="fa-solid fa-sliders mr-1.5 text-bio-600"></i> Thiết lập Thực Đơn & Nhịp Sinh Học
+          <div class="pt-2 flex flex-wrap gap-2.5">
+            <button type="button" onclick="switchTab('focus')" class="px-4 sm:px-5 py-2.5 rounded-xl bg-white text-bio-800 font-bold text-xs sm:text-sm shadow-md hover:bg-bio-50 transition transform hover:-translate-y-0.5 flex items-center">
+              <i class="fa-solid fa-headphones mr-1.5 text-bio-600"></i> Vào Chế độ Học & Nghe nhạc
             </button>
-            <button type="button" onclick="openThemeModal()" class="px-5 py-2.5 rounded-xl bg-bio-900/40 text-white font-bold text-sm border border-white/25 hover:bg-bio-900/60 transition flex items-center">
-              <i class="fa-solid fa-palette mr-1.5"></i> Thiết kế Giao diện
+            <button type="button" onclick="switchTab('planner')" class="px-4 sm:px-5 py-2.5 rounded-xl bg-bio-900/40 text-white font-bold text-xs sm:text-sm border border-white/25 hover:bg-bio-900/60 transition flex items-center">
+              <i class="fa-solid fa-sliders mr-1.5"></i> Thực Đơn & Nhịp Sinh Học
+            </button>
+            <button type="button" onclick="openThemeModal()" class="px-4 py-2.5 rounded-xl bg-white/15 text-white font-bold text-xs sm:text-sm border border-white/25 hover:bg-white/25 transition flex items-center">
+              <i class="fa-solid fa-palette mr-1.5"></i> Giao diện
             </button>
           </div>
         </div>
       </div>
 
       <!-- Quick Stats -->
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center space-x-4">
-          <div class="w-12 h-12 rounded-xl bg-bio-100 text-bio-600 flex items-center justify-center text-xl shrink-0">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center space-x-3 sm:space-x-4">
+          <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-bio-100 text-bio-600 flex items-center justify-center text-lg sm:text-xl shrink-0">
             <i class="fa-solid fa-fire-flame-curved"></i>
           </div>
           <div>
-            <div class="text-xs text-slate-500 font-semibold uppercase">Chuỗi ngày kỷ luật</div>
-            <div class="text-2xl font-black text-slate-800" id="dash-streak">1 ngày</div>
+            <div class="text-[11px] text-slate-500 font-semibold uppercase">Chuỗi kỷ luật</div>
+            <div class="text-xl sm:text-2xl font-black text-slate-800" id="dash-streak">1 ngày</div>
           </div>
         </div>
-        <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center space-x-4">
-          <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center text-xl shrink-0">
+        <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center space-x-3 sm:space-x-4">
+          <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center text-lg sm:text-xl shrink-0">
             <i class="fa-solid fa-sack-dollar"></i>
           </div>
           <div>
-            <div class="text-xs text-slate-500 font-semibold uppercase">BioCoins tích lũy</div>
-            <div class="text-2xl font-black text-slate-800" id="dash-coins">50</div>
+            <div class="text-[11px] text-slate-500 font-semibold uppercase">BioCoins</div>
+            <div class="text-xl sm:text-2xl font-black text-slate-800" id="dash-coins">50</div>
           </div>
         </div>
-        <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center space-x-4">
-          <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-xl shrink-0">
+        <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center space-x-3 sm:space-x-4">
+          <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-lg sm:text-xl shrink-0">
             <i class="fa-solid fa-book-bookmark"></i>
           </div>
           <div>
-            <div class="text-xs text-slate-500 font-semibold uppercase">Đề tài đã mở khóa</div>
-            <div class="text-2xl font-black text-slate-800" id="dash-unlocked-count">1 bài</div>
+            <div class="text-[11px] text-slate-500 font-semibold uppercase">Đề tài đã mở</div>
+            <div class="text-xl sm:text-2xl font-black text-slate-800" id="dash-unlocked-count">1 bài</div>
           </div>
         </div>
-        <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center space-x-4">
-          <div class="w-12 h-12 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center text-xl shrink-0">
+        <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center space-x-3 sm:space-x-4">
+          <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center text-lg sm:text-xl shrink-0">
             <i class="fa-solid fa-award"></i>
           </div>
-          <div>
-            <div class="text-xs text-slate-500 font-semibold uppercase">Danh hiệu hiện tại</div>
-            <div class="text-sm font-black text-purple-700 truncate" id="dash-badge-current">Mầm sinh học 🌱</div>
+          <div class="min-w-0">
+            <div class="text-[11px] text-slate-500 font-semibold uppercase">Danh hiệu</div>
+            <div class="text-xs sm:text-sm font-black text-purple-700 truncate" id="dash-badge-current">Mầm sinh học 🌱</div>
           </div>
         </div>
       </div>
@@ -374,7 +386,7 @@
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
         <!-- CỘT TRÁI: FORM NHẬP THÔNG TIN CÁ NHÂN -->
         <div class="lg:col-span-5 space-y-5">
-          <form id="bio-profile-form" class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
+          <form id="bio-profile-form" novalidate class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
             <div class="border-b border-slate-100 pb-3 flex items-center justify-between">
               <div>
                 <span class="text-xs font-extrabold text-bio-600 uppercase tracking-wider">Bước 1</span>
@@ -404,21 +416,21 @@
               <div class="grid grid-cols-2 gap-3">
                 <div>
                   <label class="block text-[11px] font-bold text-slate-600 mb-1"><i class="fa-regular fa-sun text-amber-500 mr-1"></i> Thức dậy</label>
-                  <input type="time" id="wake-time" required class="w-full text-xs font-bold border border-slate-200 rounded-lg px-2.5 py-2 bg-white focus:ring-2 focus:ring-bio-500 outline-none">
+                  <input type="time" id="wake-time" class="w-full text-xs font-bold border border-slate-200 rounded-lg px-2.5 py-2 bg-white focus:ring-2 focus:ring-bio-500 outline-none">
                 </div>
                 <div>
                   <label class="block text-[11px] font-bold text-slate-600 mb-1"><i class="fa-solid fa-school text-blue-500 mr-1"></i> Bắt đầu học/làm</label>
-                  <input type="time" id="school-time" required class="w-full text-xs font-bold border border-slate-200 rounded-lg px-2.5 py-2 bg-white focus:ring-2 focus:ring-bio-500 outline-none">
+                  <input type="time" id="school-time" class="w-full text-xs font-bold border border-slate-200 rounded-lg px-2.5 py-2 bg-white focus:ring-2 focus:ring-bio-500 outline-none">
                 </div>
               </div>
               <div class="grid grid-cols-2 gap-3">
                 <div>
                   <label class="block text-[11px] font-bold text-slate-600 mb-1"><i class="fa-solid fa-house text-emerald-500 mr-1"></i> Về nhà / Chiều</label>
-                  <input type="time" id="home-time" required class="w-full text-xs font-bold border border-slate-200 rounded-lg px-2.5 py-2 bg-white focus:ring-2 focus:ring-bio-500 outline-none">
+                  <input type="time" id="home-time" class="w-full text-xs font-bold border border-slate-200 rounded-lg px-2.5 py-2 bg-white focus:ring-2 focus:ring-bio-500 outline-none">
                 </div>
                 <div>
                   <label class="block text-[11px] font-bold text-slate-600 mb-1"><i class="fa-solid fa-moon text-indigo-500 mr-1"></i> Đi ngủ</label>
-                  <input type="time" id="sleep-time" required class="w-full text-xs font-bold border border-slate-200 rounded-lg px-2.5 py-2 bg-white focus:ring-2 focus:ring-bio-500 outline-none">
+                  <input type="time" id="sleep-time" class="w-full text-xs font-bold border border-slate-200 rounded-lg px-2.5 py-2 bg-white focus:ring-2 focus:ring-bio-500 outline-none">
                 </div>
               </div>
             </div>
@@ -439,11 +451,11 @@
                 <div class="grid grid-cols-3 gap-2.5">
                   <div>
                     <label class="block text-[11px] font-bold text-slate-600 mb-1">Chiều cao (cm)*</label>
-                    <input type="number" id="user-height" min="100" max="230" placeholder="VD: 165" required class="w-full text-xs font-medium border border-slate-200 rounded-lg px-2.5 py-2 bg-white focus:ring-2 focus:ring-bio-500 outline-none">
+                    <input type="number" id="user-height" min="100" max="230" placeholder="VD: 165" class="w-full text-xs font-medium border border-slate-200 rounded-lg px-2.5 py-2 bg-white focus:ring-2 focus:ring-bio-500 outline-none">
                   </div>
                   <div>
                     <label class="block text-[11px] font-bold text-slate-600 mb-1">Cân nặng (kg)*</label>
-                    <input type="number" id="user-weight" min="25" max="200" step="0.5" placeholder="VD: 55" required class="w-full text-xs font-medium border border-slate-200 rounded-lg px-2.5 py-2 bg-white focus:ring-2 focus:ring-bio-500 outline-none">
+                    <input type="number" id="user-weight" min="25" max="200" step="0.5" placeholder="VD: 55" class="w-full text-xs font-medium border border-slate-200 rounded-lg px-2.5 py-2 bg-white focus:ring-2 focus:ring-bio-500 outline-none">
                   </div>
                   <div>
                     <label class="block text-[11px] font-bold text-slate-600 mb-1">Giới tính</label>
@@ -479,7 +491,6 @@
         <!-- CỘT PHẢI: TRẠNG THÁI CHỜ HOẶC KẾT QUẢ CÁ NHÂN HÓA -->
         <div class="lg:col-span-7 space-y-5">
 
-          <!-- 1. KHUNG CHỜ KHI CHƯA ĐIỀN THÔNG TIN -->
           <div id="planner-empty-state" class="bg-white p-8 sm:p-12 rounded-2xl border-2 border-dashed border-bio-200 text-center flex flex-col items-center justify-center min-h-[460px] space-y-5">
             <div class="w-20 h-20 rounded-3xl bg-bio-50 text-bio-600 flex items-center justify-center text-4xl shadow-inner border border-bio-100">
               <i class="fa-solid fa-clipboard-user"></i>
@@ -492,7 +503,7 @@
                 Thực đơn & Nhịp sinh học đang được khóa
               </h3>
               <p class="text-xs sm:text-sm text-slate-500 leading-relaxed">
-                Mỗi cơ thể có một đồng hồ sinh học và tốc độ chuyển hóa khác nhau. Hãy điền khung giờ sinh hoạt, chiều cao, cân nặng ở bảng bên trái rồi nhấn <strong>"Lưu & Tạo Lộ Trình Sinh Học"</strong> để mở khóa kết quả dành riêng cho bạn!
+                Hãy điền khung giờ sinh hoạt, chiều cao, cân nặng ở bảng bên trái rồi nhấn <strong>"Lưu & Tạo Lộ Trình Sinh Học"</strong> để mở khóa thực đơn và đồng hồ sinh học dành riêng cho bạn!
               </p>
             </div>
             <div class="grid grid-cols-3 gap-3 w-full max-w-md pt-2 text-[11px] font-bold text-slate-600">
@@ -511,35 +522,31 @@
             </div>
           </div>
 
-          <!-- 2. KẾT QUẢ SAU KHI ĐIỀN THÔNG TIN -->
           <div id="planner-results-area" class="hidden space-y-5 animate-reveal">
-            
-            <!-- Thẻ tóm tắt chỉ số cơ thể -->
             <div class="custom-gradient rounded-2xl p-5 text-white shadow-md">
               <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
                 <h4 class="font-extrabold text-sm sm:text-base flex items-center">
                   <i class="fa-solid fa-id-card-clip mr-2"></i>
                   Lộ trình sinh học của <span id="summary-user-name" class="underline decoration-bio-200 ml-1">bạn</span>
                 </h4>
-                <span class="text-[11px] font-bold bg-white/20 px-2.5 py-0.5 rounded-full backdrop-blur-sm" id="summary-role-label">Học sinh</span>
+                <span class="text-[11px] font-bold bg-white/20 px-2.5 py-0.5 rounded-full" id="summary-role-label">Học sinh</span>
               </div>
               <div class="grid grid-cols-3 gap-2.5 text-center">
-                <div class="bg-white/15 backdrop-blur-sm rounded-xl p-2.5 border border-white/15">
+                <div class="bg-white/15 rounded-xl p-2.5 border border-white/15">
                   <span class="block text-[10px] text-bio-100 uppercase font-bold">Thời lượng ngủ</span>
                   <span class="text-sm sm:text-base font-black" id="summary-sleep-hours">7.5 giờ</span>
                 </div>
-                <div class="bg-white/15 backdrop-blur-sm rounded-xl p-2.5 border border-white/15">
+                <div class="bg-white/15 rounded-xl p-2.5 border border-white/15">
                   <span class="block text-[10px] text-bio-100 uppercase font-bold">Nước cần nạp/ngày</span>
                   <span class="text-sm sm:text-base font-black" id="summary-water-liters">1.9 Lít</span>
                 </div>
-                <div class="bg-white/15 backdrop-blur-sm rounded-xl p-2.5 border border-white/15">
+                <div class="bg-white/15 rounded-xl p-2.5 border border-white/15">
                   <span class="block text-[10px] text-bio-100 uppercase font-bold">Năng lượng mục tiêu</span>
                   <span class="text-sm sm:text-base font-black" id="summary-calories">2000 kcal</span>
                 </div>
               </div>
             </div>
 
-            <!-- BẢNG THỰC ĐƠN CHI TIẾT -->
             <div id="nutrition-result-card" class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
               <div class="flex items-center justify-between border-b border-slate-100 pb-3 flex-wrap gap-2">
                 <h4 class="font-extrabold text-base flex items-center text-bio-700">
@@ -550,7 +557,6 @@
               <div id="nutrition-details" class="space-y-4"></div>
             </div>
 
-            <!-- LƯỢC ĐỒ NHỊP SINH HỌC (TÍNH ĐỘNG THEO GIỜ NHẬP) -->
             <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
               <div class="flex items-center justify-between pb-4 border-b border-slate-100">
                 <h3 class="text-base font-bold text-slate-900 flex items-center">
@@ -570,7 +576,7 @@
                       <span class="text-[11px] font-bold text-slate-400">Cortisol Đỉnh Cao</span>
                     </div>
                     <h4 class="text-sm font-bold text-slate-800 mt-2">Bình minh: Đánh thức hệ nội tiết & Bù nước</h4>
-                    <p class="text-xs text-slate-600 mt-1" id="desc-wake-display">Cơ thể tiết Cortisol tự nhiên giúp tỉnh táo. Uống ngay 300ml nước ấm và tiếp xúc ánh sáng mặt trời để tế bào hạch võng mạc (ipRGCs) đồng bộ đồng hồ SCN.</p>
+                    <p class="text-xs text-slate-600 mt-1">Cơ thể tiết Cortisol tự nhiên giúp tỉnh táo. Uống ngay 300ml nước ấm và tiếp xúc ánh sáng mặt trời để tế bào hạch võng mạc (ipRGCs) đồng bộ đồng hồ SCN.</p>
                   </div>
                 </div>
 
@@ -612,7 +618,7 @@
                       <span class="text-[11px] font-bold text-indigo-500">Tuyến tùng & Melatonin</span>
                     </div>
                     <h4 class="text-sm font-bold text-slate-800 mt-2">Tắt ánh sáng xanh – Kích hoạt Melatonin</h4>
-                    <p class="text-xs text-slate-600 mt-1" id="desc-sleep-display">Ngưng dùng điện thoại trước khi ngủ 45 phút để không triệt tiêu Melatonin, chuẩn bị cho chu trình tự thực bào Autophagy dọn rác tế bào ban đêm.</p>
+                    <p class="text-xs text-slate-600 mt-1">Ngưng dùng điện thoại trước khi ngủ 45 phút để không triệt tiêu Melatonin, chuẩn bị cho chu trình tự thực bào Autophagy dọn rác tế bào ban đêm.</p>
                   </div>
                 </div>
               </div>
@@ -626,7 +632,6 @@
     <!-- ================= TAB 3: THÓI QUEN & QUIZ GEMINI ================= -->
     <section id="tab-habits" class="hidden space-y-6">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <!-- Điểm danh -->
         <div class="lg:col-span-5 space-y-4">
           <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
             <div class="flex items-center justify-between pb-3 border-b border-slate-100">
@@ -668,7 +673,6 @@
           </div>
         </div>
 
-        <!-- Daily Quiz Gemini AI tạo ngẫu nhiên -->
         <div class="lg:col-span-7 space-y-4">
           <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
             <div class="flex items-center justify-between pb-3 border-b border-slate-100 flex-wrap gap-2">
@@ -704,7 +708,133 @@
       </div>
     </section>
 
-    <!-- ================= TAB 4: TRỢ LÝ GEMINI AI CÓ BỘ NHỚ ================= -->
+    <!-- ================= TAB 4: CHẾ ĐỘ HỌC TẬP & NHẠC YÊU THÍCH (YOUTUBE) ================= -->
+    <section id="tab-focus" class="hidden space-y-6">
+      <div class="custom-gradient rounded-3xl p-6 sm:p-8 text-white shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div class="space-y-1.5">
+          <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-white/20 text-white">
+            🎧 Chế độ Tập trung (Study With Me) • Nhạc phát liên tục khi chuyển tab
+          </span>
+          <h2 class="text-xl sm:text-3xl font-extrabold tracking-tight">Học Tập Cùng Nhạc Yêu Thích</h2>
+          <p class="text-xs sm:text-sm text-bio-100 max-w-2xl">
+            Bật đồng hồ Pomodoro rèn luyện vỏ não trước trán và tìm ngay ca sĩ / bài hát yêu thích trên YouTube. Nhạc sẽ thu gọn xuống góc dưới để bạn vừa nghe vừa sang tab Gemini AI hay Quiz mà không bị tắt!
+          </p>
+        </div>
+        <div class="bg-white/15 px-4 py-3 rounded-2xl border border-white/20 text-center shrink-0">
+          <span class="block text-[11px] text-bio-100 font-semibold">Phiên học đã xong</span>
+          <span class="text-2xl font-black text-amber-300" id="focus-sessions-count">0</span>
+          <span class="block text-[10px] text-white">+5 Coins / phiên tập trung</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- CỘT TRÁI: ĐỒNG HỒ POMODORO SINH HỌC -->
+        <div class="lg:col-span-5 space-y-4">
+          <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+              <h3 class="text-base font-bold text-slate-900 flex items-center">
+                <i class="fa-solid fa-stopwatch text-bio-600 mr-2"></i> Đồng Hồ Pomodoro Sinh Học
+              </h3>
+              <span id="pomodoro-mode-badge" class="text-[11px] font-extrabold px-2.5 py-1 rounded-full bg-bio-100 text-bio-700">Tập trung</span>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-2 gap-2 text-xs font-bold">
+              <button type="button" onclick="setPomodoroMode(25, 'focus', 'Tập trung 25p')" id="pomo-btn-25" class="pomo-mode-btn p-2.5 rounded-xl border-2 border-bio-600 bg-bio-50 text-bio-800 transition">
+                🧠 Học 25 phút
+              </button>
+              <button type="button" onclick="setPomodoroMode(45, 'focus', 'Chuyên sâu 45p')" id="pomo-btn-45" class="pomo-mode-btn p-2.5 rounded-xl border-2 border-slate-200 hover:border-bio-300 transition">
+                🔥 Sâu 45 phút
+              </button>
+              <button type="button" onclick="setPomodoroMode(5, 'break', 'Nghỉ ngắn 5p')" id="pomo-btn-5" class="pomo-mode-btn p-2.5 rounded-xl border-2 border-slate-200 hover:border-bio-300 transition">
+                ☕ Nghỉ 5 phút
+              </button>
+              <button type="button" onclick="setPomodoroMode(15, 'break', 'Nghỉ dài 15p')" id="pomo-btn-15" class="pomo-mode-btn p-2.5 rounded-xl border-2 border-slate-200 hover:border-bio-300 transition">
+                🌿 Nghỉ 15 phút
+              </button>
+            </div>
+
+            <div class="py-6 px-4 rounded-2xl bg-slate-50 border border-slate-200 text-center space-y-2">
+              <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400" id="pomodoro-status-text">Sẵn sàng bắt đầu phiên học</p>
+              <div class="text-5xl sm:text-6xl font-black tracking-tight text-slate-900 tabular-nums" id="pomodoro-display">25:00</div>
+              <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden mt-3">
+                <div id="pomodoro-progress-bar" class="bg-bio-600 h-full transition-all duration-500" style="width: 100%"></div>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2.5">
+              <button type="button" id="btn-pomo-toggle" onclick="togglePomodoro()" class="flex-grow py-3 bg-bio-600 hover:bg-bio-700 text-white font-bold text-sm rounded-xl transition shadow-md shadow-bio-200 flex items-center justify-center">
+                <i class="fa-solid fa-play mr-2"></i> Bắt đầu học
+              </button>
+              <button type="button" onclick="resetPomodoro()" title="Đặt lại đồng hồ" class="px-4 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-sm rounded-xl border border-slate-200 transition">
+                <i class="fa-solid fa-rotate-left"></i>
+              </button>
+            </div>
+
+            <div class="p-3.5 rounded-xl bg-bio-50/70 border border-bio-100 text-[11px] text-bio-800 leading-relaxed">
+              <i class="fa-solid fa-brain mr-1"></i> <strong>Mẹo Sinh học:</strong> Sau 25–45 phút tập trung cao độ, nghỉ 5 phút nhìn ra xa giúp cơ thể mi ở mắt thư giãn và tái nạp chất dẫn truyền thần kinh Dopamine.
+            </div>
+          </div>
+        </div>
+
+        <!-- CỘT PHẢI: TÌM NHẠC YOUTUBE & TỦ NHẠC YÊU THÍCH -->
+        <div class="lg:col-span-7 space-y-5">
+          
+          <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+            <div class="flex items-center justify-between flex-wrap gap-2">
+              <h3 class="text-base font-bold text-slate-900 flex items-center">
+                <i class="fa-brands fa-youtube text-red-500 mr-2 text-lg"></i> Tìm Ca Sĩ / Bài Hát Yêu Thích
+              </h3>
+              <span class="text-[11px] font-semibold text-slate-400">Nghe trọn bài trực tiếp trên web</span>
+            </div>
+
+            <form onsubmit="searchYouTubeMusic(event)" class="flex items-center gap-2">
+              <div class="relative flex-grow">
+                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                <input type="text" id="music-search-input" placeholder="Gõ tên ca sĩ hoặc bài hát (VD: Sơn Tùng, Đen Vâu, Lofi Chill...)" class="w-full border border-slate-200 rounded-xl pl-9 pr-4 py-2.5 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-bio-500">
+              </div>
+              <button type="submit" id="btn-search-music" class="px-4 sm:px-5 py-2.5 bg-bio-600 hover:bg-bio-700 text-white font-bold rounded-xl text-xs sm:text-sm transition shadow-sm shrink-0 flex items-center">
+                <span>Tìm nhạc</span>
+              </button>
+            </form>
+
+            <div class="flex items-center gap-1.5 overflow-x-auto pb-1 text-[11px]">
+              <span class="font-bold text-bio-700 shrink-0">Gợi ý:</span>
+              <button type="button" onclick="quickSearchMusic('Lofi hip hop chill học bài')" class="px-2.5 py-1 bg-slate-100 hover:bg-bio-50 hover:text-bio-700 rounded-full shrink-0 font-semibold transition">🎧 Lofi học bài</button>
+              <button type="button" onclick="quickSearchMusic('Nhạc piano không lời thư giãn')" class="px-2.5 py-1 bg-slate-100 hover:bg-bio-50 hover:text-bio-700 rounded-full shrink-0 font-semibold transition">🎹 Piano không lời</button>
+              <button type="button" onclick="quickSearchMusic('Sóng alpha tăng tập trung học tập')" class="px-2.5 py-1 bg-slate-100 hover:bg-bio-50 hover:text-bio-700 rounded-full shrink-0 font-semibold transition">🧠 Sóng Alpha</button>
+              <button type="button" onclick="quickSearchMusic('Nhạc Acoustic Việt Nam chill')" class="px-2.5 py-1 bg-slate-100 hover:bg-bio-50 hover:text-bio-700 rounded-full shrink-0 font-semibold transition">🎸 Acoustic Việt</button>
+              <button type="button" onclick="quickSearchMusic('Tiếng mưa rơi trắng giúp tập trung')" class="px-2.5 py-1 bg-slate-100 hover:bg-bio-50 hover:text-bio-700 rounded-full shrink-0 font-semibold transition">🌧️ Tiếng mưa rơi</button>
+            </div>
+
+            <div id="music-search-status" class="hidden text-xs text-slate-500 text-center py-4"></div>
+            <div id="music-results-container" class="space-y-2.5 max-h-[300px] overflow-y-auto pr-1"></div>
+
+            <div class="pt-3 border-t border-slate-100">
+              <p class="text-[11px] font-bold text-slate-500 mb-2">Hoặc dán trực tiếp link YouTube bất kỳ để phát & lưu:</p>
+              <div class="flex items-center gap-2">
+                <input type="text" id="custom-yt-url" placeholder="Dán link youtube.com/watch?v=... hoặc youtu.be/..." class="flex-grow border border-slate-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-bio-500">
+                <button type="button" onclick="playAndSaveCustomYouTube()" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-xl text-xs transition shrink-0">
+                  <i class="fa-solid fa-play mr-1"></i> Phát link
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
+              <h3 class="text-sm sm:text-base font-bold text-slate-900 flex items-center">
+                <i class="fa-solid fa-heart text-rose-500 mr-2"></i> Danh Sách Nhạc Yêu Thích Của Bạn
+              </h3>
+              <span class="text-[11px] font-bold text-slate-400" id="fav-tracks-count">0 bài</span>
+            </div>
+            <div id="favorite-tracks-container" class="space-y-2 max-h-[240px] overflow-y-auto pr-1"></div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= TAB 5: TRỢ LÝ GEMINI AI ================= -->
     <section id="tab-ai-tutor" class="hidden space-y-5">
       <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
@@ -722,7 +852,6 @@
         </div>
       </div>
 
-      <!-- Khung Chat Trực Tiếp Với Gemini -->
       <div class="bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col h-[540px] overflow-hidden">
         <div id="chat-messages" class="flex-grow p-4 sm:p-6 overflow-y-auto space-y-4 text-xs sm:text-sm">
           <div class="flex items-start space-x-3">
@@ -735,7 +864,6 @@
           </div>
         </div>
 
-        <!-- Gợi ý nhanh các chủ đề -->
         <div class="px-4 py-2 border-t border-slate-100 bg-slate-50 flex items-center space-x-2 overflow-x-auto text-[11px] text-slate-600">
           <span class="font-bold text-bio-700 shrink-0"><i class="fa-regular fa-lightbulb"></i> Gợi ý:</span>
           <button type="button" onclick="askPreset('Gan và Tuyến tụy phối hợp điều hòa đường huyết ra sao?')" class="px-2.5 py-1 bg-white border border-slate-200 hover:border-bio-400 rounded-full shrink-0 transition">Điều hòa đường huyết</button>
@@ -744,7 +872,6 @@
           <button type="button" onclick="askPreset('Hệ miễn dịch tiêu diệt virus qua tế bào T và B như thế nào?')" class="px-2.5 py-1 bg-white border border-slate-200 hover:border-bio-400 rounded-full shrink-0 transition">Miễn dịch cơ thể</button>
         </div>
 
-        <!-- Input Bar -->
         <div class="p-3 border-t border-slate-100 flex items-center space-x-2 bg-white">
           <input type="text" id="chat-input" onkeypress="handleChatEnter(event)" placeholder="Hỏi Gemini AI về cơ thể người và Sinh học..." class="flex-grow border border-slate-200 rounded-xl px-4 py-2.5 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-bio-500">
           <button type="button" onclick="sendChatMessage()" id="btn-send-chat" class="px-5 py-2.5 bg-bio-600 hover:bg-bio-700 text-white font-bold rounded-xl text-xs sm:text-sm transition flex items-center shadow-md shadow-bio-200">
@@ -755,7 +882,7 @@
       </div>
     </section>
 
-    <!-- ================= TAB 5: BIOMARKET ================= -->
+    <!-- ================= TAB 6: BIOMARKET ================= -->
     <section id="tab-market" class="hidden space-y-6">
       <div class="custom-gradient p-6 sm:p-8 rounded-3xl text-white shadow-lg flex flex-col md:flex-row items-center justify-between gap-6">
         <div class="space-y-2">
@@ -786,8 +913,40 @@
 
   </main>
 
+  <!-- ================= MINI PLAYER NỔI XUYÊN SUỐT CÁC TAB ================= -->
+  <div id="yt-mini-player" class="hidden fixed bottom-16 md:bottom-4 left-3 right-3 md:right-auto md:left-4 md:w-80 z-40 bg-white rounded-2xl border border-bio-200 shadow-2xl overflow-hidden transition-all duration-300">
+    <div class="px-3 py-2 bg-bio-50 border-b border-bio-100 flex items-center justify-between gap-2">
+      <div class="flex items-center space-x-2 min-w-0">
+        <div class="w-6 h-6 rounded-full bg-bio-600 text-white flex items-center justify-center text-[10px] shrink-0 animate-spin-slow">
+          <i class="fa-solid fa-compact-disc"></i>
+        </div>
+        <div class="min-w-0">
+          <p id="mini-player-title" class="text-[11px] font-extrabold text-slate-800 truncate">Đang phát nhạc...</p>
+          <p id="mini-player-channel" class="text-[9px] text-slate-500 truncate">YouTube</p>
+        </div>
+      </div>
+      <div class="flex items-center space-x-1 shrink-0">
+        <button type="button" onclick="toggleMinimizePlayer()" title="Thu gọn / Mở rộng" class="w-6 h-6 rounded-lg hover:bg-bio-200/70 text-slate-600 flex items-center justify-center text-xs transition">
+          <i id="mini-player-toggle-icon" class="fa-solid fa-chevron-down"></i>
+        </button>
+        <button type="button" onclick="closeMiniPlayer()" title="Tắt nhạc" class="w-6 h-6 rounded-lg hover:bg-rose-100 text-slate-500 hover:text-rose-600 flex items-center justify-center text-xs transition">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+    </div>
+
+    <div id="mini-player-video-wrap" class="bg-black transition-all duration-300 w-full h-44">
+      <iframe
+        id="yt-player-iframe"
+        class="w-full h-full border-0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen>
+      </iframe>
+    </div>
+  </div>
+
   <!-- ================= MODAL TÙY CHỈNH GIAO DIỆN (THEME STUDIO) ================= -->
-  <div id="theme-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+  <div id="theme-modal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm items-center justify-center p-4">
     <div class="bg-white rounded-3xl max-w-lg w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden border border-slate-200">
       <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-bio-50/60">
         <div class="flex items-center space-x-2.5">
@@ -805,7 +964,6 @@
       </div>
 
       <div class="p-6 overflow-y-auto space-y-6 text-xs">
-        <!-- 1. Chế độ Sáng / Tối -->
         <div>
           <label class="block font-extrabold text-slate-700 uppercase tracking-wider text-[11px] mb-2.5">1. Chế độ hiển thị</label>
           <div class="grid grid-cols-2 gap-3">
@@ -820,7 +978,6 @@
           </div>
         </div>
 
-        <!-- 2. Bảng màu chủ đạo -->
         <div>
           <label class="block font-extrabold text-slate-700 uppercase tracking-wider text-[11px] mb-2.5">2. Bảng màu chủ đạo</label>
           <div class="grid grid-cols-5 gap-2.5">
@@ -847,7 +1004,6 @@
           </div>
         </div>
 
-        <!-- 3. Kiểu Font chữ -->
         <div>
           <label class="block font-extrabold text-slate-700 uppercase tracking-wider text-[11px] mb-2.5">3. Phông chữ yêu thích</label>
           <div class="grid grid-cols-3 gap-2.5">
@@ -866,7 +1022,6 @@
           </div>
         </div>
 
-        <!-- 4. Bo góc & Họa tiết nền -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label class="block font-extrabold text-slate-700 uppercase tracking-wider text-[11px] mb-2">4. Kiểu bo góc thẻ</label>
@@ -899,7 +1054,7 @@
   </div>
 
   <!-- ================= MODAL BÀI VIẾT ================= -->
-  <div id="article-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+  <div id="article-modal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm items-center justify-center p-4">
     <div class="bg-white rounded-3xl max-w-2xl w-full max-h-[85vh] flex flex-col shadow-2xl overflow-hidden">
       <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-bio-50/50">
         <h3 id="modal-article-title" class="font-extrabold text-slate-800 text-base sm:text-lg">Tên Bài Viết</h3>
@@ -915,7 +1070,7 @@
   </div>
 
   <!-- Toast Notification -->
-  <div id="toast" class="fixed bottom-5 right-5 z-50 bg-slate-900 text-white px-4 py-3 rounded-2xl shadow-xl flex items-center space-x-3 text-xs font-bold transform translate-y-20 opacity-0 pointer-events-none transition-all duration-300">
+  <div id="toast" class="fixed bottom-20 md:bottom-5 right-5 z-50 bg-slate-900 text-white px-4 py-3 rounded-2xl shadow-xl flex items-center space-x-3 text-xs font-bold transform translate-y-20 opacity-0 pointer-events-none transition-all duration-300">
     <i class="fa-solid fa-circle-check text-bio-400 text-base" id="toast-icon"></i>
     <span id="toast-msg">Thông báo</span>
   </div>
@@ -952,6 +1107,8 @@
         goal: "maintain"
       },
       theme: { ...DEFAULT_THEME },
+      favoriteTracks: [],
+      focusSessions: 0,
       unlockedArticles: ["art_1"],
       badges: {
         streak7: false,
@@ -962,10 +1119,32 @@
 
     let AppState = JSON.parse(JSON.stringify(DEFAULT_STORAGE));
 
-    /* 1. HỆ THỐNG CHUYỂN TAB (DESKTOP + MOBILE) */
+    function safeGetLocal(key) {
+      try { return localStorage.getItem(key); } catch (e) { return null; }
+    }
+    function safeSetLocal(key, val) {
+      try { localStorage.setItem(key, val); } catch (e) {}
+    }
+
+    function escapeHTML(str) {
+      return String(str || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function decodeHTMLEntities(str) {
+      const txt = document.createElement('textarea');
+      txt.innerHTML = String(str || "");
+      return txt.value;
+    }
+
+    /* 1. CHUYỂN TAB (DESKTOP + MOBILE) */
     function switchTab(tabId) {
       try {
-        const tabs = ['dashboard', 'planner', 'habits', 'ai-tutor', 'market'];
+        const tabs = ['dashboard', 'planner', 'habits', 'focus', 'ai-tutor', 'market'];
         tabs.forEach(t => {
           const section = document.getElementById(`tab-${t}`);
           const navBtn = document.getElementById(`nav-${t}`);
@@ -977,18 +1156,14 @@
               navBtn.classList.add('text-bio-700', 'bg-bio-50');
               navBtn.classList.remove('hover:bg-slate-100');
             }
-            if (mobBtn) {
-              mobBtn.classList.add('text-bio-600', 'font-bold');
-            }
+            if (mobBtn) mobBtn.classList.add('text-bio-600', 'font-bold');
           } else {
             if (section) section.classList.add('hidden');
             if (navBtn) {
               navBtn.classList.remove('text-bio-700', 'bg-bio-50');
               navBtn.classList.add('hover:bg-slate-100');
             }
-            if (mobBtn) {
-              mobBtn.classList.remove('text-bio-600', 'font-bold');
-            }
+            if (mobBtn) mobBtn.classList.remove('text-bio-600', 'font-bold');
           }
         });
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1083,14 +1258,395 @@
 
     function openThemeModal() {
       updateThemeModalActiveUI(AppState.theme || DEFAULT_THEME);
-      document.getElementById('theme-modal')?.classList.remove('hidden');
+      const modal = document.getElementById('theme-modal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
     }
 
     function closeThemeModal() {
-      document.getElementById('theme-modal')?.classList.add('hidden');
+      const modal = document.getElementById('theme-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
     }
 
-    /* 3. NGÂN HÀNG CÂU HỎI & QUIZ GEMINI */
+    /* 3. CHẾ ĐỘ HỌC TẬP POMODORO + TÌM NHẠC YOUTUBE + MINI PLAYER */
+    let pomoTotalSeconds = 25 * 60;
+    let pomoSecondsLeft = 25 * 60;
+    let pomoMode = 'focus';
+    let pomoInterval = null;
+    let isPomoRunning = false;
+
+    function setPomodoroMode(minutes, mode, label) {
+      clearInterval(pomoInterval);
+      isPomoRunning = false;
+      pomoMode = mode;
+      pomoTotalSeconds = minutes * 60;
+      pomoSecondsLeft = pomoTotalSeconds;
+
+      document.querySelectorAll('.pomo-mode-btn').forEach(btn => {
+        btn.classList.remove('border-bio-600', 'bg-bio-50', 'text-bio-800');
+        btn.classList.add('border-slate-200');
+      });
+      const activeBtn = document.getElementById(`pomo-btn-${minutes}`);
+      if (activeBtn) {
+        activeBtn.classList.add('border-bio-600', 'bg-bio-50', 'text-bio-800');
+        activeBtn.classList.remove('border-slate-200');
+      }
+
+      const badge = document.getElementById('pomodoro-mode-badge');
+      const statusTxt = document.getElementById('pomodoro-status-text');
+      const toggleBtn = document.getElementById('btn-pomo-toggle');
+
+      if (badge) badge.innerText = mode === 'focus' ? 'Tập trung' : 'Thư giãn';
+      if (statusTxt) statusTxt.innerText = `Sẵn sàng: ${label}`;
+      if (toggleBtn) toggleBtn.innerHTML = `<i class="fa-solid fa-play mr-2"></i> Bắt đầu`;
+
+      updatePomodoroDisplay();
+    }
+
+    function updatePomodoroDisplay() {
+      const mins = Math.floor(pomoSecondsLeft / 60).toString().padStart(2, '0');
+      const secs = (pomoSecondsLeft % 60).toString().padStart(2, '0');
+      const display = document.getElementById('pomodoro-display');
+      const bar = document.getElementById('pomodoro-progress-bar');
+
+      if (display) display.innerText = `${mins}:${secs}`;
+      if (bar) {
+        const pct = Math.max(0, Math.min(100, (pomoSecondsLeft / pomoTotalSeconds) * 100));
+        bar.style.width = `${pct}%`;
+      }
+    }
+
+    function togglePomodoro() {
+      const toggleBtn = document.getElementById('btn-pomo-toggle');
+      const statusTxt = document.getElementById('pomodoro-status-text');
+
+      if (isPomoRunning) {
+        clearInterval(pomoInterval);
+        isPomoRunning = false;
+        if (toggleBtn) toggleBtn.innerHTML = `<i class="fa-solid fa-play mr-2"></i> Tiếp tục`;
+        if (statusTxt) statusTxt.innerText = 'Đang tạm dừng';
+      } else {
+        isPomoRunning = true;
+        if (toggleBtn) toggleBtn.innerHTML = `<i class="fa-solid fa-pause mr-2"></i> Tạm dừng`;
+        if (statusTxt) statusTxt.innerText = pomoMode === 'focus' ? 'Đang học tập tập trung...' : 'Đang nghỉ giải lao...';
+
+        pomoInterval = setInterval(() => {
+          pomoSecondsLeft--;
+          updatePomodoroDisplay();
+
+          if (pomoSecondsLeft <= 0) {
+            clearInterval(pomoInterval);
+            isPomoRunning = false;
+            playGentleChime();
+
+            if (pomoMode === 'focus') {
+              AppState.user.coins = (AppState.user.coins || 0) + 5;
+              AppState.focusSessions = (AppState.focusSessions || 0) + 1;
+              saveState();
+              showToast("Hoàn thành phiên học tập! +5 BioCoins 🎉", "success");
+              if (statusTxt) statusTxt.innerText = 'Tuyệt vời! Bạn đã hoàn thành phiên học.';
+            } else {
+              showToast("Hết giờ nghỉ ngơi, quay lại học tiếp nhé!", "info");
+              if (statusTxt) statusTxt.innerText = 'Hết giờ nghỉ giải lao!';
+            }
+            if (toggleBtn) toggleBtn.innerHTML = `<i class="fa-solid fa-play mr-2"></i> Bắt đầu lại`;
+            pomoSecondsLeft = pomoTotalSeconds;
+            updatePomodoroDisplay();
+          }
+        }, 1000);
+      }
+    }
+
+    function resetPomodoro() {
+      clearInterval(pomoInterval);
+      isPomoRunning = false;
+      pomoSecondsLeft = pomoTotalSeconds;
+      updatePomodoroDisplay();
+      const toggleBtn = document.getElementById('btn-pomo-toggle');
+      const statusTxt = document.getElementById('pomodoro-status-text');
+      if (toggleBtn) toggleBtn.innerHTML = `<i class="fa-solid fa-play mr-2"></i> Bắt đầu`;
+      if (statusTxt) statusTxt.innerText = 'Đã đặt lại đồng hồ';
+    }
+
+    function playGentleChime() {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+        [523.25, 659.25, 783.99].forEach((freq, i) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.value = freq;
+          gain.gain.setValueAtTime(0.08, ctx.currentTime + i * 0.18);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.18 + 0.5);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(ctx.currentTime + i * 0.18);
+          osc.stop(ctx.currentTime + i * 0.18 + 0.55);
+        });
+      } catch (e) {}
+    }
+
+    /* TÌM NHẠC YOUTUBE & MINI PLAYER */
+    let currentSearchResults = [];
+    let isPlayerMinimized = false;
+
+    function quickSearchMusic(q) {
+      const input = document.getElementById('music-search-input');
+      if (input) {
+        input.value = q;
+        searchYouTubeMusic();
+      }
+    }
+
+    async function searchYouTubeMusic(e) {
+      if (e) e.preventDefault();
+      const input = document.getElementById('music-search-input');
+      const statusEl = document.getElementById('music-search-status');
+      const resultsEl = document.getElementById('music-results-container');
+      const btn = document.getElementById('btn-search-music');
+
+      const query = input?.value.trim();
+      if (!query) {
+        showToast("Hãy nhập tên ca sĩ hoặc bài hát bạn muốn tìm!", "warning");
+        return;
+      }
+
+      if (btn) btn.disabled = true;
+      if (statusEl) {
+        statusEl.classList.remove('hidden');
+        statusEl.innerHTML = `<i class="fa-solid fa-spinner animate-spin mr-1.5 text-bio-600"></i> Đang tìm "${escapeHTML(query)}" trên YouTube...`;
+      }
+      if (resultsEl) resultsEl.innerHTML = "";
+
+      try {
+        const res = await fetch('/api/youtube', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ query })
+        });
+        const data = await res.json();
+
+        if (res.ok && Array.isArray(data.tracks)) {
+          currentSearchResults = data.tracks.map(t => ({
+            id: t.id,
+            title: decodeHTMLEntities(t.title),
+            channel: decodeHTMLEntities(t.channel),
+            thumb: t.thumb
+          }));
+
+          if (currentSearchResults.length === 0) {
+            if (statusEl) statusEl.innerText = "Không tìm thấy kết quả phù hợp. Thử từ khóa khác nhé!";
+          } else {
+            if (statusEl) statusEl.classList.add('hidden');
+            renderMusicSearchResults();
+          }
+        } else {
+          if (statusEl) {
+            statusEl.innerHTML = `<span class="text-amber-600 font-semibold">⚠️ ${escapeHTML(data.error || 'Chưa cấu hình /api/youtube')}. Bạn vẫn có thể dán link YouTube ở ô bên dưới để nghe ngay!</span>`;
+          }
+        }
+      } catch (err) {
+        if (statusEl) {
+          statusEl.innerHTML = `<span class="text-amber-600 font-semibold">⚠️ Không kết nối được /api/youtube (nếu đang mở file trực tiếp, hãy deploy kèm thư mục api/ hoặc dán link YouTube ở ô bên dưới để nghe ngay!).</span>`;
+        }
+      } finally {
+        if (btn) btn.disabled = false;
+      }
+    }
+
+    function renderMusicSearchResults() {
+      const container = document.getElementById('music-results-container');
+      if (!container) return;
+
+      const favIds = new Set((AppState.favoriteTracks || []).map(f => f.id));
+
+      container.innerHTML = currentSearchResults.map((track, idx) => {
+        const isFav = favIds.has(track.id);
+        return `
+          <div class="flex items-center justify-between gap-3 p-2.5 rounded-xl bg-slate-50 border border-slate-200 hover:border-bio-300 transition">
+            <div class="flex items-center space-x-3 min-w-0 flex-grow cursor-pointer" onclick="playSearchTrack(${idx})">
+              <img src="${escapeHTML(track.thumb)}" alt="thumb" class="w-16 h-11 rounded-lg object-cover shrink-0 bg-slate-200">
+              <div class="min-w-0">
+                <p class="text-xs font-bold text-slate-800 truncate">${escapeHTML(track.title)}</p>
+                <p class="text-[11px] text-slate-500 truncate">${escapeHTML(track.channel)}</p>
+              </div>
+            </div>
+            <div class="flex items-center space-x-1.5 shrink-0">
+              <button type="button" onclick="toggleFavoriteFromSearch(${idx})" title="${isFav ? 'Bỏ yêu thích' : 'Lưu vào Yêu thích'}" class="w-8 h-8 rounded-lg border border-slate-200 bg-white flex items-center justify-center text-xs transition ${isFav ? 'text-rose-500 border-rose-200' : 'text-slate-400 hover:text-rose-500'}">
+                <i class="fa-${isFav ? 'solid' : 'regular'} fa-heart"></i>
+              </button>
+              <button type="button" onclick="playSearchTrack(${idx})" class="px-3 py-1.5 rounded-lg bg-bio-600 hover:bg-bio-700 text-white text-xs font-bold transition flex items-center">
+                <i class="fa-solid fa-play mr-1 text-[10px]"></i> Nghe
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function playSearchTrack(idx) {
+      const track = currentSearchResults[idx];
+      if (!track) return;
+      playYouTubeTrack(track.id, track.title, track.channel);
+    }
+
+    function toggleFavoriteFromSearch(idx) {
+      const track = currentSearchResults[idx];
+      if (!track) return;
+      if (!Array.isArray(AppState.favoriteTracks)) AppState.favoriteTracks = [];
+
+      const existingIdx = AppState.favoriteTracks.findIndex(t => t.id === track.id);
+      if (existingIdx >= 0) {
+        AppState.favoriteTracks.splice(existingIdx, 1);
+        showToast("Đã xóa khỏi danh sách Yêu thích", "info");
+      } else {
+        AppState.favoriteTracks.unshift(track);
+        showToast("Đã lưu bài hát vào Yêu thích ❤️", "success");
+      }
+      saveState();
+      renderMusicSearchResults();
+      renderFavoriteTracks();
+    }
+
+    function extractYouTubeId(url) {
+      if (!url) return null;
+      const patterns = [
+        /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/shorts\/|music\.youtube\.com\/watch\?v=)([a-zA-Z0-9_-]{11})/
+      ];
+      for (const p of patterns) {
+        const match = url.match(p);
+        if (match && match[1]) return match[1];
+      }
+      if (/^[a-zA-Z0-9_-]{11}$/.test(url.trim())) return url.trim();
+      return null;
+    }
+
+    function playAndSaveCustomYouTube() {
+      const input = document.getElementById('custom-yt-url');
+      const url = input?.value.trim();
+      const videoId = extractYouTubeId(url);
+      if (!videoId) {
+        showToast("Link YouTube không hợp lệ! Hãy dán link youtube.com/watch?v=... hoặc youtu.be/...", "warning");
+        return;
+      }
+
+      const customTrack = {
+        id: videoId,
+        title: `Nhạc YouTube đã lưu (${videoId})`,
+        channel: "Link cá nhân",
+        thumb: `https://i.ytimg.com/vi/${videoId}/mqdefault.jpg`
+      };
+
+      if (!Array.isArray(AppState.favoriteTracks)) AppState.favoriteTracks = [];
+      if (!AppState.favoriteTracks.some(t => t.id === videoId)) {
+        AppState.favoriteTracks.unshift(customTrack);
+        saveState();
+      }
+      if (input) input.value = "";
+      playYouTubeTrack(customTrack.id, customTrack.title, customTrack.channel);
+      renderFavoriteTracks();
+    }
+
+    function renderFavoriteTracks() {
+      const container = document.getElementById('favorite-tracks-container');
+      const countEl = document.getElementById('fav-tracks-count');
+      const list = AppState.favoriteTracks || [];
+
+      if (countEl) countEl.innerText = `${list.length} bài`;
+      if (!container) return;
+
+      if (list.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-6 text-xs text-slate-400">
+            <i class="fa-regular fa-heart text-2xl mb-2 block text-slate-300"></i>
+            Chưa có bài hát yêu thích nào. Hãy tìm bài hát ở trên và bấm biểu tượng ❤️ để lưu lại nhé!
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = list.map((track, idx) => `
+        <div class="flex items-center justify-between gap-2.5 p-2 rounded-xl bg-slate-50 border border-slate-200">
+          <div class="flex items-center space-x-2.5 min-w-0 flex-grow cursor-pointer" onclick="playFavoriteTrack(${idx})">
+            <img src="${escapeHTML(track.thumb || `https://i.ytimg.com/vi/${track.id}/mqdefault.jpg`)}" alt="thumb" class="w-12 h-9 rounded-lg object-cover shrink-0 bg-slate-200">
+            <div class="min-w-0">
+              <p class="text-xs font-bold text-slate-800 truncate">${escapeHTML(track.title)}</p>
+              <p class="text-[10px] text-slate-500 truncate">${escapeHTML(track.channel || 'YouTube')}</p>
+            </div>
+          </div>
+          <div class="flex items-center space-x-1 shrink-0">
+            <button type="button" onclick="playFavoriteTrack(${idx})" class="px-2.5 py-1.5 rounded-lg bg-bio-600 hover:bg-bio-700 text-white text-[11px] font-bold transition">
+              <i class="fa-solid fa-play"></i>
+            </button>
+            <button type="button" onclick="removeFavoriteTrack(${idx})" title="Xóa" class="w-7 h-7 rounded-lg hover:bg-rose-100 text-slate-400 hover:text-rose-600 text-xs transition flex items-center justify-center">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function playFavoriteTrack(idx) {
+      const track = (AppState.favoriteTracks || [])[idx];
+      if (!track) return;
+      playYouTubeTrack(track.id, track.title, track.channel);
+    }
+
+    function removeFavoriteTrack(idx) {
+      if (!Array.isArray(AppState.favoriteTracks)) return;
+      AppState.favoriteTracks.splice(idx, 1);
+      saveState();
+      renderFavoriteTracks();
+      if (currentSearchResults.length > 0) renderMusicSearchResults();
+    }
+
+    function playYouTubeTrack(videoId, title, channel) {
+      const player = document.getElementById('yt-mini-player');
+      const iframe = document.getElementById('yt-player-iframe');
+      const titleEl = document.getElementById('mini-player-title');
+      const channelEl = document.getElementById('mini-player-channel');
+
+      if (!player || !iframe) return;
+
+      if (titleEl) titleEl.innerText = title || 'Đang phát nhạc';
+      if (channelEl) channelEl.innerText = channel || 'YouTube';
+      iframe.src = `https://www.youtube.com/embed/${encodeURIComponent(videoId)}?autoplay=1&rel=0`;
+      player.classList.remove('hidden');
+    }
+
+    function toggleMinimizePlayer() {
+      const wrap = document.getElementById('mini-player-video-wrap');
+      const icon = document.getElementById('mini-player-toggle-icon');
+      const player = document.getElementById('yt-mini-player');
+      if (!wrap || !icon || !player) return;
+
+      isPlayerMinimized = !isPlayerMinimized;
+      if (isPlayerMinimized) {
+        wrap.classList.remove('h-44');
+        wrap.classList.add('h-12');
+        icon.className = 'fa-solid fa-chevron-up';
+      } else {
+        wrap.classList.remove('h-12');
+        wrap.classList.add('h-44');
+        icon.className = 'fa-solid fa-chevron-down';
+      }
+    }
+
+    function closeMiniPlayer() {
+      const player = document.getElementById('yt-mini-player');
+      const iframe = document.getElementById('yt-player-iframe');
+      if (iframe) iframe.src = '';
+      if (player) player.classList.add('hidden');
+    }
+
+    /* 4. NGÂN HÀNG CÂU HỎI & QUIZ GEMINI */
     const QUIZ_BANK = [
       {
         question: "Hormone nào sau đây được tiết ra từ tuyến tùng để điều chỉnh chu kỳ thức - ngủ tự nhiên?",
@@ -1281,7 +1837,7 @@
       }
     }
 
-    /* 4. CHAT GEMINI AI */
+    /* 5. CHAT GEMINI AI */
     let conversationHistory = [];
 
     function handleChatEnter(e) {
@@ -1294,15 +1850,6 @@
         input.value = text;
         sendChatMessage();
       }
-    }
-
-    function escapeHTML(str) {
-      return str
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
     }
 
     async function sendChatMessage() {
@@ -1392,7 +1939,7 @@
       if (el) el.remove();
     }
 
-    /* 5. TÍNH TOÁN & HIỂN THỊ THỰC ĐƠN + NHỊP SINH HỌC CÁ NHÂN HÓA */
+    /* 6. THỰC ĐƠN & NHỊP SINH HỌC CÁ NHÂN HÓA */
     function addMinutesToTimeStr(timeStr, minsToAdd) {
       if (!timeStr || !timeStr.includes(":")) return "06:00";
       const [h, m] = timeStr.split(":").map(Number);
@@ -1440,10 +1987,8 @@
         const goal = s.goal || "maintain";
         const gender = s.gender || "male";
 
-        // Tóm tắt chỉ số cơ bản
         const sleepHrs = calculateSleepDuration(s.wake, s.sleep);
         const waterLiters = (w * 0.035).toFixed(1);
-        // BMR (Mifflin-St Jeor ước lượng cho lứa tuổi 16-20) * 1.45 hoạt động vừa
         const bmr = 10 * w + 6.25 * hCm - 5 * 17 + (gender === 'male' ? 5 : -161);
         let tdee = Math.round(bmr * 1.45);
         if (goal === 'muscle') tdee += 250;
@@ -1458,7 +2003,7 @@
         if (elSleep) elSleep.innerText = `${sleepHrs} giờ/đêm`;
         if (elWater) elWater.innerText = `${waterLiters} Lít`;
         if (elCal) elCal.innerText = `${tdee} kcal`;
-        if (elName) elName.innerText = s.nickname?.trim() ? s.nickname : (AppState.user?.name || "bạn");
+        if (elName) elName.innerText = String(s.nickname || "").trim() || (AppState.user?.name || "bạn");
         if (elRole) elRole.innerText = s.role === 'freelancer' ? 'Làm việc / Nghiên cứu' : 'Học sinh / Sinh viên';
 
         let bmiStatus = "Cân đối";
@@ -1561,7 +2106,7 @@
       }
     }
 
-    /* 6. HỆ THỐNG BIOMARKET */
+    /* 7. HỆ THỐNG BIOMARKET */
     const DEFAULT_ARTICLES = [
       {
         id: "art_1",
@@ -1620,8 +2165,8 @@
 
     function loadDailyArticles() {
       const todayDate = new Date().toISOString().split('T')[0];
-      const savedDate = localStorage.getItem("BIOHABIT_ARTICLES_DATE");
-      const savedArticles = localStorage.getItem("BIOHABIT_DAILY_ARTICLES");
+      const savedDate = safeGetLocal("BIOHABIT_ARTICLES_DATE");
+      const savedArticles = safeGetLocal("BIOHABIT_DAILY_ARTICLES");
 
       if (savedArticles && savedDate === todayDate) {
         try {
@@ -1631,8 +2176,8 @@
         }
       } else {
         currentArticlesList = DEFAULT_ARTICLES;
-        localStorage.setItem("BIOHABIT_ARTICLES_DATE", todayDate);
-        localStorage.setItem("BIOHABIT_DAILY_ARTICLES", JSON.stringify(DEFAULT_ARTICLES));
+        safeSetLocal("BIOHABIT_ARTICLES_DATE", todayDate);
+        safeSetLocal("BIOHABIT_DAILY_ARTICLES", JSON.stringify(DEFAULT_ARTICLES));
       }
       renderArticlesMarket();
     }
@@ -1656,8 +2201,8 @@
         if (res.ok && Array.isArray(data.articles) && data.articles.length === 3) {
           currentArticlesList = data.articles;
           const todayDate = new Date().toISOString().split('T')[0];
-          localStorage.setItem("BIOHABIT_ARTICLES_DATE", todayDate);
-          localStorage.setItem("BIOHABIT_DAILY_ARTICLES", JSON.stringify(data.articles));
+          safeSetLocal("BIOHABIT_ARTICLES_DATE", todayDate);
+          safeSetLocal("BIOHABIT_DAILY_ARTICLES", JSON.stringify(data.articles));
           showToast("Gemini đã xuất bản 3 bài nghiên cứu Y sinh mới toanh!", "success");
         } else {
           if (isManualClick) showToast("Máy chủ đang bận, đang giữ bộ bài nghiên cứu xuất sắc hiện tại!", "info");
@@ -1737,15 +2282,21 @@
         </div>
         ${article.content}
       `;
-      if (modal) modal.classList.remove('hidden');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
     }
 
     function closeArticleModal() {
       const modal = document.getElementById('article-modal');
-      if (modal) modal.classList.add('hidden');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
     }
 
-    /* 7. AUTH VÀ ĐỒNG BỘ FIREBASE */
+    /* 8. AUTH VÀ ĐỒNG BỘ FIREBASE */
     const firebaseConfig = { 
       apiKey : "AIzaSyBs8IE9u231Sbpr5jbghNAKFEHkM0v8sOs", 
       authDomain : "biohabit-f8a7f.firebaseapp.com", 
@@ -1778,6 +2329,8 @@
         user: { ...def.user, ...(rawData.user || {}) },
         schedule: { ...def.schedule, ...(rawData.schedule || {}) },
         theme: { ...def.theme, ...(rawData.theme || {}) },
+        favoriteTracks: Array.isArray(rawData.favoriteTracks) ? rawData.favoriteTracks : [],
+        focusSessions: typeof rawData.focusSessions === 'number' ? rawData.focusSessions : 0,
         unlockedArticles: Array.isArray(rawData.unlockedArticles) ? rawData.unlockedArticles : def.unlockedArticles,
         badges: { ...def.badges, ...(rawData.badges || {}) }
       };
@@ -1853,6 +2406,7 @@
               applyTheme(AppState.theme);
               updateGlobalUI();
               renderArticlesMarket();
+              renderFavoriteTracks();
             }, err => {
               console.error("Lỗi Firestore:", err);
               loadLocalFallback();
@@ -1877,7 +2431,7 @@
     }
 
     function loadLocalFallback() {
-      const saved = localStorage.getItem("BIOHABIT_STATE");
+      const saved = safeGetLocal("BIOHABIT_STATE");
       if (saved) {
         try { AppState = mergeWithDefaults(JSON.parse(saved)); }
         catch(e) { AppState = JSON.parse(JSON.stringify(DEFAULT_STORAGE)); }
@@ -1887,6 +2441,7 @@
       applyTheme(AppState.theme);
       updateGlobalUI();
       renderArticlesMarket();
+      renderFavoriteTracks();
     }
 
     function saveState() {
@@ -1894,13 +2449,13 @@
         db.collection("users").doc(currentUser.uid).set(AppState)
           .catch(err => console.error("Lỗi Firestore:", err));
       } else {
-        localStorage.setItem("BIOHABIT_STATE", JSON.stringify(AppState));
+        safeSetLocal("BIOHABIT_STATE", JSON.stringify(AppState));
         updateGlobalUI();
         renderArticlesMarket();
       }
     }
 
-    /* 8. CẬP NHẬT GIAO DIỆN CHUNG */
+    /* 9. CẬP NHẬT GIAO DIỆN CHUNG */
     function updateGlobalUI() {
       try {
         const uCoins = document.getElementById('user-coins');
@@ -1908,14 +2463,15 @@
         const mCoins = document.getElementById('market-coins-display');
         const dStreak = document.getElementById('dash-streak');
         const dCount = document.getElementById('dash-unlocked-count');
+        const fSessions = document.getElementById('focus-sessions-count');
 
         if (uCoins) uCoins.innerText = AppState.user?.coins ?? 50;
         if (dCoins) dCoins.innerText = AppState.user?.coins ?? 50;
         if (mCoins) mCoins.innerText = AppState.user?.coins ?? 50;
         if (dStreak) dStreak.innerText = `${AppState.user?.streak ?? 1} ngày`;
         if (dCount) dCount.innerText = `${AppState.unlockedArticles?.length ?? 1} bài`;
+        if (fSessions) fSessions.innerText = AppState.focusSessions ?? 0;
 
-        // Đồng bộ toàn bộ Form Tab 2
         const s = AppState.schedule || {};
         const setVal = (id, val) => { const el = document.getElementById(id); if (el) el.value = val ?? ""; };
         setVal('user-nickname', s.nickname);
@@ -1934,7 +2490,6 @@
         if (nutCheck) nutCheck.checked = !!s.nutritionEnabled;
         if (nutInputs) nutInputs.classList.toggle('hidden', !s.nutritionEnabled);
 
-        // Kiểm tra xem người dùng đã điền thông tin xong chưa
         const emptyStateEl = document.getElementById('planner-empty-state');
         const resultsAreaEl = document.getElementById('planner-results-area');
         const nutCardEl = document.getElementById('nutrition-result-card');
@@ -1950,7 +2505,6 @@
             statusBadgeEl.innerHTML = `<span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold bg-bio-100 text-bio-800 border border-bio-200"><i class="fa-solid fa-circle-check mr-1.5"></i> Đã tạo lộ trình cá nhân</span>`;
           }
 
-          // Tính các mốc giờ động cho Lược đồ Circadian
           const setTxt = (id, txt) => { const el = document.getElementById(id); if (el) el.innerText = txt; };
           const wakeStart = s.wake || "06:00";
           const schoolStart = addMinutesToTimeStr(s.school || "07:15", 30);
@@ -2018,11 +2572,7 @@
 
     document.getElementById('nutrition-toggle')?.addEventListener('change', function(e) {
       const area = document.getElementById('nutrition-inputs-area');
-      const hInput = document.getElementById('user-height');
-      const wInput = document.getElementById('user-weight');
       if (area) area.classList.toggle('hidden', !e.target.checked);
-      if (hInput) hInput.required = e.target.checked;
-      if (wInput) wInput.required = e.target.checked;
     });
 
     document.getElementById('bio-profile-form')?.addEventListener('submit', function(e) {
@@ -2042,7 +2592,7 @@
       }
 
       if (nutritionEnabled && (!height || !weight || height < 100 || weight < 25)) {
-        showToast("Vui lòng nhập chiều cao và cân nặng hợp lệ!", "warning");
+        showToast("Vui lòng nhập chiều cao (≥100cm) và cân nặng (≥25kg) hợp lệ!", "warning");
         return;
       }
 
@@ -2135,12 +2685,13 @@
       setTimeout(() => toast.classList.add('opacity-0', 'translate-y-20', 'pointer-events-none'), 3500);
     }
 
-    /* 9. KHỞI CHẠY LẦN ĐẦU KHI MỞ TRANG */
+    /* 10. KHỞI CHẠY LẦN ĐẦU */
     window.addEventListener('DOMContentLoaded', () => {
       checkInAppBrowser();
       loadLocalFallback();
       refreshRandomQuiz();
       loadDailyArticles();
+      updatePomodoroDisplay();
     });
   </script>
 </body>
