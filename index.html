@@ -3285,4 +3285,416 @@
     const firebaseConfig = { 
       apiKey : "AIzaSyBs8IE9u231Sbpr5jbghNAKFEHkM0v8sOs", 
       authDomain : "biohabit-f8a7f.firebaseapp.com", 
-      projectId : "biohabit
+      projectId : "biohabit-f8a7f", 
+      storageBucket : "biohabit-f8a7f.firebasestorage.app", 
+      messagingSenderId : "455369675252", 
+      appId : "1:455369675252:web:2d91ba6b4e13f08b46a9a1", 
+      measurementId : "G-P11VQXNKBS" 
+    };
+
+    let auth = null;
+    let db = null;
+    let currentUser = null;
+    let unsubscribeFirestore = null;
+
+    try {
+      if (typeof firebase !== 'undefined') {
+        firebase.initializeApp(firebaseConfig);
+        auth = firebase.auth();
+        db = firebase.firestore();
+      }
+    } catch (e) {
+      console.warn("Firebase fallback:", e);
+    }
+
+    function mergeWithDefaults(rawData) {
+      const def = JSON.parse(JSON.stringify(DEFAULT_STORAGE));
+      if (!rawData) return def;
+      return {
+        user: { ...def.user, ...(rawData.user || {}) },
+        schedule: { ...def.schedule, ...(rawData.schedule || {}) },
+        theme: { ...def.theme, ...(rawData.theme || {}) },
+        favoriteTracks: Array.isArray(rawData.favoriteTracks) ? rawData.favoriteTracks : [],
+        focusSessions: typeof rawData.focusSessions === 'number' ? rawData.focusSessions : 0,
+        unlockedArticles: Array.isArray(rawData.unlockedArticles) ? rawData.unlockedArticles : def.unlockedArticles,
+        savedArticles: Array.isArray(rawData.savedArticles) ? rawData.savedArticles : [],
+        foodLogs: (rawData.foodLogs && typeof rawData.foodLogs === 'object') ? rawData.foodLogs : {},
+        foodAnalysis: (rawData.foodAnalysis && typeof rawData.foodAnalysis === 'object') ? rawData.foodAnalysis : {},
+        badges: { ...def.badges, ...(rawData.badges || {}) }
+      };
+    }
+
+    function checkInAppBrowser() {
+      const ua = navigator.userAgent || navigator.vendor || window.opera;
+      const isInApp = (/FBAN|FBAV|Instagram|Zalo|Line|Twitter|MicroMessenger/i.test(ua));
+      const warningBanner = document.getElementById('inapp-browser-warning');
+      if (isInApp && warningBanner) {
+        warningBanner.classList.remove('hidden');
+      }
+      return isInApp;
+    }
+
+    function loginWithGoogle() {
+      if (!auth) {
+        showToast("Firebase chưa sẵn sàng, đang chạy offline!", "info");
+        return;
+      }
+
+      if (checkInAppBrowser()) {
+        alert("Google chặn đăng nhập bên trong Zalo/Facebook!\n\nBạn vui lòng bấm dấu 3 chấm (...) ở góc trên bên phải màn hình ➔ chọn 'Mở bằng trình duyệt' (Chrome hoặc Safari) để đăng nhập nhé!");
+        return;
+      }
+
+      const provider = new firebase.auth.GoogleAuthProvider();
+      auth.signInWithPopup(provider)
+        .then(() => showToast("Đăng nhập Google thành công!", "success"))
+        .catch(error => {
+          if (error.code === 'auth/popup-blocked' || error.code === 'auth/cancelled-popup-request') {
+            auth.signInWithRedirect(provider);
+          } else if (error.code === 'auth/unauthorized-domain') {
+            showToast("Tên miền này chưa được thêm vào Firebase Authorized Domains!", "warning");
+          } else {
+            showToast("Lỗi: " + error.message, "warning");
+          }
+        });
+    }
+
+    if (auth) {
+      auth.getRedirectResult().catch(err => {
+        if (err.code === 'auth/unauthorized-domain') {
+          showToast("Tên miền chưa được ủy quyền trên Firebase!", "warning");
+        }
+      });
+
+      auth.onAuthStateChanged(user => {
+        const btnLogin = document.getElementById('btn-login-google');
+        const userBox = document.getElementById('user-logged-pill');
+
+        if (user) {
+          currentUser = user;
+          if (btnLogin) btnLogin.classList.add('hidden');
+          if (userBox) userBox.classList.remove('hidden');
+
+          const nameEl = document.getElementById('user-display-name');
+          const imgEl = document.getElementById('user-avatar-img');
+          if (nameEl) nameEl.innerText = user.displayName || "Học sinh";
+          if (imgEl) imgEl.src = user.photoURL || 'https://api.dicebear.com/7.x/bottts/svg?seed=biohabit';
+
+          if (unsubscribeFirestore) unsubscribeFirestore();
+          
+          if (db) {
+            unsubscribeFirestore = db.collection("users").doc(user.uid).onSnapshot(doc => {
+              if (doc.exists) {
+                AppState = mergeWithDefaults(doc.data());
+              } else {
+                AppState = JSON.parse(JSON.stringify(DEFAULT_STORAGE));
+                AppState.user.name = user.displayName || "Học sinh";
+                db.collection("users").doc(user.uid).set(AppState);
+              }
+              applyTheme(AppState.theme);
+              updateGlobalUI();
+              renderArticlesMarket();
+              renderFavoriteTracks();
+              renderFoodLogs();
+            }, err => {
+              console.error("Lỗi Firestore:", err);
+              loadLocalFallback();
+            });
+          }
+
+        } else {
+          currentUser = null;
+          if (unsubscribeFirestore) unsubscribeFirestore();
+
+          if (btnLogin) btnLogin.classList.remove('hidden');
+          if (userBox) userBox.classList.add('hidden');
+          loadLocalFallback();
+        }
+      });
+    }
+
+    function logoutGoogle() {
+      if (auth) {
+        auth.signOut().then(() => showToast("Đã đăng xuất tài khoản", "info"));
+      }
+    }
+
+    function loadLocalFallback() {
+      const saved = safeGetLocal("BIOHABIT_STATE");
+      if (saved) {
+        try { AppState = mergeWithDefaults(JSON.parse(saved)); }
+        catch(e) { AppState = JSON.parse(JSON.stringify(DEFAULT_STORAGE)); }
+      } else {
+        AppState = JSON.parse(JSON.stringify(DEFAULT_STORAGE));
+      }
+      applyTheme(AppState.theme);
+      updateGlobalUI();
+      renderArticlesMarket();
+      renderFavoriteTracks();
+      renderFoodLogs();
+    }
+
+    function saveState() {
+      safeSetLocal("BIOHABIT_STATE", JSON.stringify(AppState));
+      updateGlobalUI();
+      renderArticlesMarket();
+      renderFavoriteTracks();
+      renderFoodLogs();
+
+      if (currentUser && db) {
+        db.collection("users").doc(currentUser.uid).set(AppState)
+          .catch(err => console.error("Lỗi Firestore:", err));
+      }
+    }
+
+    /* 9. CẬP NHẬT GIAO DIỆN CHUNG */
+    function updateGlobalUI() {
+      try {
+        const uCoins = document.getElementById('user-coins');
+        const dCoins = document.getElementById('dash-coins');
+        const mCoins = document.getElementById('market-coins-display');
+        const dStreak = document.getElementById('dash-streak');
+        const dCount = document.getElementById('dash-unlocked-count');
+        const fSessions = document.getElementById('focus-sessions-count');
+
+        if (uCoins) uCoins.innerText = AppState.user?.coins ?? 50;
+        if (dCoins) dCoins.innerText = AppState.user?.coins ?? 50;
+        if (mCoins) mCoins.innerText = AppState.user?.coins ?? 50;
+        if (dStreak) dStreak.innerText = `${AppState.user?.streak ?? 0} ngày`;
+        if (dCount) dCount.innerText = `${AppState.unlockedArticles?.length ?? 1} bài`;
+        if (fSessions) fSessions.innerText = AppState.focusSessions ?? 0;
+
+        const s = AppState.schedule || {};
+        const setVal = (id, val) => { const el = document.getElementById(id); if (el) el.value = val ?? ""; };
+        setVal('user-nickname', s.nickname);
+        setVal('user-age', s.age);
+        setVal('user-role-select', s.role || 'student');
+        setVal('wake-time', s.wake);
+        setVal('school-time', s.school);
+        setVal('home-time', s.home);
+        setVal('sleep-time', s.sleep);
+        setVal('user-height', s.height);
+        setVal('user-weight', s.weight);
+        setVal('user-gender', s.gender || 'male');
+        setVal('user-goal', s.goal || 'maintain');
+
+        const nutCheck = document.getElementById('nutrition-toggle');
+        const nutInputs = document.getElementById('nutrition-inputs-area');
+        if (nutCheck) nutCheck.checked = !!s.nutritionEnabled;
+        if (nutInputs) nutInputs.classList.toggle('hidden', !s.nutritionEnabled);
+
+        const emptyStateEl = document.getElementById('planner-empty-state');
+        const resultsAreaEl = document.getElementById('planner-results-area');
+        const nutCardEl = document.getElementById('nutrition-result-card');
+        const resetBtnEl = document.getElementById('btn-reset-profile');
+        const statusBadgeEl = document.getElementById('planner-status-badge');
+
+        if (s.isConfigured) {
+          emptyStateEl?.classList.add('hidden');
+          resultsAreaEl?.classList.remove('hidden');
+          resetBtnEl?.classList.remove('hidden');
+
+          if (statusBadgeEl) {
+            statusBadgeEl.innerHTML = `<span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold bg-bio-100 text-bio-800 border border-bio-200"><i class="fa-solid fa-circle-check mr-1.5"></i> Đã tạo lộ trình cá nhân</span>`;
+          }
+
+          const setTxt = (id, txt) => { const el = document.getElementById(id); if (el) el.innerText = txt; };
+          const wakeStart = s.wake || "06:00";
+          const schoolStart = addMinutesToTimeStr(s.school || "07:15", 30);
+          const schoolPeakEnd = addMinutesToTimeStr(s.school || "07:15", 210);
+          const homeStart = s.home || "17:00";
+          const homeEnd = addMinutesToTimeStr(homeStart, 60);
+          const sleepStart = s.sleep || "22:30";
+          const blueLightOff = addMinutesToTimeStr(sleepStart, -45);
+
+          setTxt('time-wake-display', `${formatTimeToAMPM(wakeStart)} - Đánh thức cơ thể`);
+          setTxt('time-school-display', `${formatTimeToAMPM(schoolStart)} - ${formatTimeToAMPM(schoolPeakEnd)}`);
+          setTxt('time-home-display', `${formatTimeToAMPM(homeStart)} - ${formatTimeToAMPM(homeEnd)}`);
+          setTxt('time-sleep-display', `${formatTimeToAMPM(blueLightOff)} - ${formatTimeToAMPM(sleepStart)}`);
+
+          if (nutCardEl) nutCardEl.classList.toggle('hidden', !s.nutritionEnabled);
+          renderNutritionAdvice();
+        } else {
+          emptyStateEl?.classList.remove('hidden');
+          resultsAreaEl?.classList.add('hidden');
+          resetBtnEl?.classList.add('hidden');
+          if (statusBadgeEl) {
+            statusBadgeEl.innerHTML = `<span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-200"><i class="fa-solid fa-pen-to-square mr-1.5"></i> Chờ nhập thông tin</span>`;
+          }
+        }
+
+        checkBadges();
+        renderBadges();
+      } catch (err) {
+        console.error("Lỗi UI:", err);
+      }
+    }
+
+    function formatTimeToAMPM(timeStr) {
+      if (!timeStr || !timeStr.includes(":")) return "06:00 AM";
+      const [h, m] = timeStr.split(":");
+      let hour = parseInt(h);
+      const period = hour >= 12 ? "PM" : "AM";
+      hour = hour % 12 || 12;
+      return `${hour.toString().padStart(2, '0')}:${m} ${period}`;
+    }
+
+    function checkInHabits() {
+      const todayStr = getLocalDateStr(0);
+      const yesterdayStr = getLocalDateStr(-1);
+      if (AppState.user?.lastCheckInDate === todayStr) {
+        showToast("Hôm nay bạn đã điểm danh rồi!", "info");
+        return;
+      }
+
+      const h1 = document.getElementById('habit-sleep')?.checked;
+      const h2 = document.getElementById('habit-water')?.checked;
+      const h3 = document.getElementById('habit-move')?.checked;
+
+      if (!h1 && !h2 && !h3) {
+        showToast("Vui lòng tích chọn ít nhất 1 thói quen bạn đã làm!", "warning");
+        return;
+      }
+
+      AppState.user.coins = (AppState.user.coins || 0) + 10;
+      if (AppState.user?.lastCheckInDate === yesterdayStr) {
+        AppState.user.streak = (AppState.user.streak || 0) + 1;
+      } else {
+        AppState.user.streak = 1;
+      }
+      AppState.user.lastCheckInDate = todayStr;
+
+      saveState();
+      showToast(`Tuyệt vời! +10 BioCoins • Chuỗi kỷ luật: ${AppState.user.streak} ngày!`, "success");
+    }
+
+    document.getElementById('nutrition-toggle')?.addEventListener('change', function(e) {
+      const area = document.getElementById('nutrition-inputs-area');
+      if (area) area.classList.toggle('hidden', !e.target.checked);
+    });
+
+    document.getElementById('bio-profile-form')?.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const wake = document.getElementById('wake-time')?.value;
+      const school = document.getElementById('school-time')?.value;
+      const home = document.getElementById('home-time')?.value;
+      const sleep = document.getElementById('sleep-time')?.value;
+      const nutritionEnabled = document.getElementById('nutrition-toggle')?.checked ?? true;
+      const height = parseFloat(document.getElementById('user-height')?.value);
+      const weight = parseFloat(document.getElementById('user-weight')?.value);
+      const role = document.getElementById('user-role-select')?.value || 'student';
+      const ageVal = parseInt(document.getElementById('user-age')?.value);
+
+      if (!wake || !school || !home || !sleep) {
+        showToast("Vui lòng điền đầy đủ 4 mốc thời gian sinh hoạt!", "warning");
+        return;
+      }
+
+      if (nutritionEnabled && (!height || !weight || height < 100 || weight < 25)) {
+        showToast("Vui lòng nhập chiều cao (≥100cm) và cân nặng (≥25kg) hợp lệ!", "warning");
+        return;
+      }
+
+      AppState.schedule = {
+        isConfigured: true,
+        nickname: document.getElementById('user-nickname')?.value.trim() || "",
+        age: (ageVal >= 10 && ageVal <= 90) ? ageVal : (role === 'freelancer' ? 25 : 17),
+        role,
+        wake,
+        school,
+        home,
+        sleep,
+        nutritionEnabled,
+        height: height || 165,
+        weight: weight || 55,
+        gender: document.getElementById('user-gender')?.value || 'male',
+        goal: document.getElementById('user-goal')?.value || 'maintain'
+      };
+
+      saveState();
+      showToast("Đã phân tích xong! Mở khóa Thực đơn & Nhịp sinh học của bạn.", "success");
+    });
+
+    function checkBadges() {
+      if (!AppState.badges) AppState.badges = {};
+      if ((AppState.user?.streak || 0) >= 7) AppState.badges.streak7 = true;
+      if ((AppState.unlockedArticles?.length || 0) >= 3) AppState.badges.bioScholar = true;
+    }
+
+    function renderBadges() {
+      const container = document.getElementById('badges-container');
+      if (!container) return;
+
+      const badgeList = [
+        {
+          name: 'Chiến thần Nhịp sinh học',
+          desc: 'Duy trì chuỗi Streak kỷ luật 7 ngày liên tiếp',
+          icon: 'fa-fire text-orange-500',
+          active: AppState.badges?.streak7
+        },
+        {
+          name: 'Bác sĩ tế bào',
+          desc: 'Đạt điểm tuyệt đối trong bài Quiz ngẫu nhiên',
+          icon: 'fa-brain text-purple-500',
+          active: AppState.badges?.quizMaster
+        },
+        {
+          name: 'Tâm hồn Sinh học',
+          desc: 'Mở khóa thành công ít nhất 3 đề tài nghiên cứu chuyên sâu',
+          icon: 'fa-graduation-cap text-bio-600',
+          active: AppState.badges?.bioScholar
+        }
+      ];
+
+      let currentBadge = "Mầm Sinh Học 🌱";
+      if (AppState.badges?.bioScholar) currentBadge = "Tâm Hồn Sinh Học 🎓";
+      else if (AppState.badges?.quizMaster) currentBadge = "Bác Sĩ Tế Bào 🧠";
+      else if (AppState.badges?.streak7) currentBadge = "Chiến Thần Sinh Học 🔥";
+      
+      const badgeCurrentEl = document.getElementById('dash-badge-current');
+      if (badgeCurrentEl) badgeCurrentEl.innerText = currentBadge;
+
+      container.innerHTML = badgeList.map(b => `
+        <div class="p-4 rounded-xl border ${b.active ? 'bg-bio-50/70 border-bio-300' : 'bg-slate-50 border-slate-200 opacity-60'} flex items-start space-x-3 transition">
+          <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-lg shrink-0 ${b.active ? 'border border-bio-200' : ''}">
+            <i class="fa-solid ${b.icon}"></i>
+          </div>
+          <div class="text-xs">
+            <div class="flex items-center space-x-1.5">
+              <span class="font-bold text-slate-800">${b.name}</span>
+              ${b.active ? '<span class="text-[9px] bg-bio-600 text-white font-extrabold px-1.5 py-0.5 rounded-full">ĐÃ ĐẠT</span>' : '<span class="text-[9px] text-slate-400 font-bold">KHÓA</span>'}
+            </div>
+            <p class="text-slate-500 mt-1 leading-snug">${b.desc}</p>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function showToast(msg, type = "success") {
+      const toast = document.getElementById('toast');
+      const icon = document.getElementById('toast-icon');
+      const text = document.getElementById('toast-msg');
+      if (!toast || !icon || !text) return;
+
+      text.innerText = msg;
+      if (type === "warning") icon.className = "fa-solid fa-triangle-exclamation text-amber-400 text-base";
+      else if (type === "info") icon.className = "fa-solid fa-circle-info text-blue-400 text-base";
+      else icon.className = "fa-solid fa-circle-check text-bio-400 text-base";
+
+      toast.classList.remove('opacity-0', 'translate-y-20', 'pointer-events-none');
+      setTimeout(() => toast.classList.add('opacity-0', 'translate-y-20', 'pointer-events-none'), 3500);
+    }
+
+    /* 10. KHỞI CHẠY LẦN ĐẦU */
+    window.addEventListener('DOMContentLoaded', () => {
+      checkInAppBrowser();
+      loadLocalFallback();
+      refreshRandomQuiz();
+      loadDailyArticles();
+      updatePomodoroDisplay();
+      renderFoodLogs();
+    });
+  </script>
+</body>
+</html>
