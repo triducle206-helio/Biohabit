@@ -96,7 +96,7 @@
     body.radius-sharp .rounded-2xl { border-radius: 0.45rem !important; }
     body.radius-sharp .rounded-xl  { border-radius: 0.35rem !important; }
 
-    /* Chế độ tối (Dark Mode) */
+    /* Chế độ tối (Dark Mode) - Đã sửa lỗi tương phản đầy đủ */
     body.theme-dark {
       background-color: #0b1120 !important;
       color: #e2e8f0 !important;
@@ -135,7 +135,8 @@
       color: #94a3b8 !important;
     }
     body.theme-dark input,
-    body.theme-dark select {
+    body.theme-dark select,
+    body.theme-dark textarea {
       background-color: #0f172a !important;
       color: #f8fafc !important;
       border-color: #334155 !important;
@@ -143,27 +144,77 @@
     body.theme-dark .bg-amber-400.text-slate-900 {
       color: #0f172a !important;
     }
+    /* Fix tương phản các khối màu bio / pastel ở Dark Mode */
+    body.theme-dark .bg-bio-50,
+    body.theme-dark .bg-bio-50\/50,
+    body.theme-dark .bg-bio-50\/60,
+    body.theme-dark .bg-bio-50\/70 {
+      background-color: rgb(var(--bio-900) / 0.35) !important;
+    }
+    body.theme-dark .bg-bio-100 {
+      background-color: rgb(var(--bio-900) / 0.55) !important;
+    }
+    body.theme-dark .border-bio-100,
+    body.theme-dark .border-bio-200,
+    body.theme-dark .border-bio-300 {
+      border-color: rgb(var(--bio-700) / 0.55) !important;
+    }
+    body.theme-dark .text-bio-700,
+    body.theme-dark .text-bio-800,
+    body.theme-dark .text-bio-900 {
+      color: rgb(var(--bio-300)) !important;
+    }
     body.theme-dark .bg-emerald-50\/70,
     body.theme-dark .bg-emerald-50\/50,
     body.theme-dark .bg-emerald-50\/40,
-    body.theme-dark .bg-emerald-50 {
-      background-color: rgba(16, 185, 129, 0.12) !important;
+    body.theme-dark .bg-emerald-50,
+    body.theme-dark .bg-emerald-100 {
+      background-color: rgba(16, 185, 129, 0.16) !important;
     }
-    body.theme-dark .bg-rose-50\/50 {
-      background-color: rgba(244, 63, 94, 0.12) !important;
+    body.theme-dark .bg-rose-50\/50,
+    body.theme-dark .bg-rose-50,
+    body.theme-dark .bg-rose-100 {
+      background-color: rgba(244, 63, 94, 0.16) !important;
     }
-    body.theme-dark .bg-amber-50 {
-      background-color: rgba(245, 158, 11, 0.12) !important;
+    body.theme-dark .bg-amber-50,
+    body.theme-dark .bg-amber-100 {
+      background-color: rgba(245, 158, 11, 0.16) !important;
+    }
+    body.theme-dark .bg-purple-50,
+    body.theme-dark .bg-purple-50\/70,
+    body.theme-dark .bg-purple-100 {
+      background-color: rgba(147, 51, 234, 0.16) !important;
+    }
+    body.theme-dark .bg-blue-50,
+    body.theme-dark .bg-blue-100 {
+      background-color: rgba(59, 130, 246, 0.16) !important;
+    }
+    body.theme-dark .bg-indigo-100 {
+      background-color: rgba(99, 102, 241, 0.18) !important;
     }
     body.theme-dark .text-emerald-900,
-    body.theme-dark .text-emerald-800 {
+    body.theme-dark .text-emerald-800,
+    body.theme-dark .text-emerald-700 {
       color: #6ee7b7 !important;
     }
-    body.theme-dark .text-rose-800 {
+    body.theme-dark .text-rose-800,
+    body.theme-dark .text-rose-700 {
       color: #fda4af !important;
     }
-    body.theme-dark .text-amber-900 {
+    body.theme-dark .text-amber-900,
+    body.theme-dark .text-amber-800,
+    body.theme-dark .text-amber-700 {
       color: #fcd34d !important;
+    }
+    body.theme-dark .text-purple-700,
+    body.theme-dark .text-purple-800 {
+      color: #d8b4fe !important;
+    }
+    body.theme-dark .text-blue-700 {
+      color: #93c5fd !important;
+    }
+    body.theme-dark .text-indigo-700 {
+      color: #a5b4fc !important;
     }
 
     @keyframes fadeSlideUp {
@@ -291,20 +342,20 @@
         </div>
         <div class="relative z-10 max-w-2xl space-y-3">
           <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-white/20 text-white backdrop-blur-sm">
-            🔬 Chuyên đề Sinh Học Cấp 3 • BioHabit Platform
+            🔬 Khoa học Sinh học & Lối sống • BioHabit Platform
           </span>
           <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight leading-tight">
             Xây dựng lối sống khoa học cùng <span class="underline decoration-bio-300">BioHabit</span>.
           </h1>
           <p class="text-bio-100 text-sm sm:text-base leading-relaxed">
-            Khám phá nhịp sinh học Circadian, thực đơn chuẩn khoa học, học bài tập trung cùng âm nhạc yêu thích và hỏi đáp trực tiếp với Gemini AI.
+            Khám phá nhịp sinh học Circadian, phân tích thực đơn ăn uống hằng ngày, học bài tập trung cùng âm nhạc yêu thích và hỏi đáp không giới hạn với Gemini AI.
           </p>
           <div class="pt-2 flex flex-wrap gap-2.5">
             <button type="button" onclick="switchTab('focus')" class="px-4 sm:px-5 py-2.5 rounded-xl bg-white text-bio-800 font-bold text-xs sm:text-sm shadow-md hover:bg-bio-50 transition transform hover:-translate-y-0.5 flex items-center">
               <i class="fa-solid fa-headphones mr-1.5 text-bio-600"></i> Vào Chế độ Học & Nghe nhạc
             </button>
             <button type="button" onclick="switchTab('planner')" class="px-4 sm:px-5 py-2.5 rounded-xl bg-bio-900/40 text-white font-bold text-xs sm:text-sm border border-white/25 hover:bg-bio-900/60 transition flex items-center">
-              <i class="fa-solid fa-sliders mr-1.5"></i> Thực Đơn & Nhịp Sinh Học
+              <i class="fa-solid fa-utensils mr-1.5"></i> Thực Đơn & Phân Tích Bữa Ăn
             </button>
             <button type="button" onclick="openThemeModal()" class="px-4 py-2.5 rounded-xl bg-white/15 text-white font-bold text-xs sm:text-sm border border-white/25 hover:bg-white/25 transition flex items-center">
               <i class="fa-solid fa-palette mr-1.5"></i> Giao diện
@@ -321,7 +372,7 @@
           </div>
           <div>
             <div class="text-[11px] text-slate-500 font-semibold uppercase">Chuỗi kỷ luật</div>
-            <div class="text-xl sm:text-2xl font-black text-slate-800" id="dash-streak">1 ngày</div>
+            <div class="text-xl sm:text-2xl font-black text-slate-800" id="dash-streak">0 ngày</div>
           </div>
         </div>
         <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center space-x-3 sm:space-x-4">
@@ -365,15 +416,15 @@
       </div>
     </section>
 
-    <!-- ================= TAB 2: CÁ NHÂN HÓA LỐI SỐNG & THỰC ĐƠN ================= -->
+    <!-- ================= TAB 2: NHỊP SINH HỌC, THỰC ĐƠN & PHÂN TÍCH ĐỒ ĂN ================= -->
     <section id="tab-planner" class="hidden space-y-6">
       <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h2 class="text-xl font-black text-slate-900 tracking-tight flex items-center">
-            <i class="fa-solid fa-sliders text-bio-600 mr-2.5"></i> Hồ Sơ Cá Nhân, Nhịp Sinh Học & Thực Đơn
+            <i class="fa-solid fa-sliders text-bio-600 mr-2.5"></i> Hồ Sơ Cá Nhân, Nhịp Sinh Học & Phân Tích Bữa Ăn
           </h2>
           <p class="text-xs sm:text-sm text-slate-600 mt-1">
-            Điền đầy đủ thông tin cá nhân và thời gian biểu bên dưới. Hệ thống sẽ phân tích và mở khóa lộ trình riêng dành cho bạn.
+            Thiết lập lộ trình sinh học của bạn và nhập các món ăn/thức uống đã nạp hôm nay để hệ thống & Gemini AI phân tích dinh dưỡng.
           </p>
         </div>
         <div id="planner-status-badge" class="shrink-0">
@@ -384,7 +435,7 @@
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <!-- CỘT TRÁI: FORM NHẬP THÔNG TIN CÁ NHÂN -->
+        <!-- CỘT TRÁI: FORM NHẬP THÔNG TIN + NHẬT KÝ ĂN UỐNG -->
         <div class="lg:col-span-5 space-y-5">
           <form id="bio-profile-form" novalidate class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
             <div class="border-b border-slate-100 pb-3 flex items-center justify-between">
@@ -397,16 +448,20 @@
               </button>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
               <div>
                 <label class="block text-xs font-bold text-slate-600 mb-1.5">Tên / Biệt danh</label>
-                <input type="text" id="user-nickname" placeholder="VD: Minh Anh" class="w-full text-xs sm:text-sm border border-slate-200 rounded-xl px-3 py-2.5 font-medium focus:ring-2 focus:ring-bio-500 outline-none">
+                <input type="text" id="user-nickname" placeholder="VD: Minh Anh" class="w-full text-xs border border-slate-200 rounded-xl px-3 py-2.5 font-medium focus:ring-2 focus:ring-bio-500 outline-none">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-600 mb-1.5">Tuổi</label>
+                <input type="number" id="user-age" min="10" max="90" placeholder="VD: 17" class="w-full text-xs border border-slate-200 rounded-xl px-3 py-2.5 font-medium focus:ring-2 focus:ring-bio-500 outline-none">
               </div>
               <div>
                 <label class="block text-xs font-bold text-slate-600 mb-1.5">Đối tượng</label>
-                <select id="user-role-select" class="w-full text-xs sm:text-sm border border-slate-200 rounded-xl px-3 py-2.5 font-medium focus:ring-2 focus:ring-bio-500 outline-none">
-                  <option value="student">Học sinh / Sinh viên</option>
-                  <option value="freelancer">Làm việc / Nghiên cứu</option>
+                <select id="user-role-select" class="w-full text-xs border border-slate-200 rounded-xl px-2.5 py-2.5 font-medium focus:ring-2 focus:ring-bio-500 outline-none">
+                  <option value="student">Học sinh / SV</option>
+                  <option value="freelancer">Đi làm / NC</option>
                 </select>
               </div>
             </div>
@@ -486,39 +541,145 @@
               </button>
             </div>
           </form>
+
+          <!-- MỤC NHẬP ĐỒ ĂN THỨC UỐNG HÔM NAY -->
+          <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+            <div class="border-b border-slate-100 pb-3 flex items-center justify-between">
+              <div>
+                <span class="text-xs font-extrabold text-amber-600 uppercase tracking-wider">Nhật ký hôm nay</span>
+                <h3 class="text-base font-bold text-slate-800 flex items-center">
+                  <i class="fa-solid fa-bowl-food text-bio-600 mr-2"></i> Nhập Đồ Ăn & Thức Uống Đã Nạp
+                </h3>
+              </div>
+              <span class="text-[11px] font-bold text-slate-400" id="food-today-date-label"></span>
+            </div>
+
+            <form id="food-log-form" onsubmit="addFoodLogItem(event)" class="space-y-3">
+              <div class="grid grid-cols-2 gap-2.5">
+                <div>
+                  <label class="block text-[11px] font-bold text-slate-600 mb-1">Bữa / Loại</label>
+                  <select id="food-meal-type" class="w-full text-xs font-medium border border-slate-200 rounded-xl px-2.5 py-2 focus:ring-2 focus:ring-bio-500 outline-none">
+                    <option value="Sáng">🌅 Bữa sáng</option>
+                    <option value="Trưa">☀️ Bữa trưa</option>
+                    <option value="Tối">🌙 Bữa tối</option>
+                    <option value="Ăn vặt / Nước">🥤 Ăn vặt / Thức uống</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-[11px] font-bold text-slate-600 mb-1">Thời điểm ăn/uống</label>
+                  <input type="time" id="food-time-input" class="w-full text-xs font-bold border border-slate-200 rounded-xl px-2.5 py-2 focus:ring-2 focus:ring-bio-500 outline-none">
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-[11px] font-bold text-slate-600 mb-1">Tên món ăn / thức uống & khẩu phần</label>
+                <div class="flex gap-2">
+                  <input type="text" id="food-name-input" placeholder="VD: 1 tô phở bò, 2 quả trứng luộc, 1 ly trà sữa..." class="flex-grow text-xs border border-slate-200 rounded-xl px-3 py-2.5 focus:ring-2 focus:ring-bio-500 outline-none">
+                  <button type="submit" class="px-4 py-2.5 bg-bio-600 hover:bg-bio-700 text-white font-bold text-xs rounded-xl transition shrink-0 shadow-sm">
+                    <i class="fa-solid fa-plus mr-1"></i> Thêm
+                  </button>
+                </div>
+              </div>
+            </form>
+
+            <!-- Gợi ý thêm nhanh -->
+            <div class="space-y-1.5">
+              <span class="text-[11px] font-bold text-slate-500">Thêm nhanh món phổ biến:</span>
+              <div class="flex flex-wrap gap-1.5 text-[11px]">
+                <button type="button" onclick="quickAddFood('1 tô phở bò', 'Sáng')" class="px-2.5 py-1 bg-slate-100 hover:bg-bio-50 hover:text-bio-700 rounded-full font-semibold transition">🍜 Phở bò</button>
+                <button type="button" onclick="quickAddFood('1 đĩa cơm sườn', 'Trưa')" class="px-2.5 py-1 bg-slate-100 hover:bg-bio-50 hover:text-bio-700 rounded-full font-semibold transition">🍚 Cơm sườn</button>
+                <button type="button" onclick="quickAddFood('1 ổ bánh mì thịt', 'Sáng')" class="px-2.5 py-1 bg-slate-100 hover:bg-bio-50 hover:text-bio-700 rounded-full font-semibold transition">🥖 Bánh mì</button>
+                <button type="button" onclick="quickAddFood('2 quả trứng luộc', 'Sáng')" class="px-2.5 py-1 bg-slate-100 hover:bg-bio-50 hover:text-bio-700 rounded-full font-semibold transition">🥚 2 Trứng luộc</button>
+                <button type="button" onclick="quickAddFood('150g ức gà + rau luộc', 'Tối')" class="px-2.5 py-1 bg-slate-100 hover:bg-bio-50 hover:text-bio-700 rounded-full font-semibold transition">🍗 Ức gà & Rau</button>
+                <button type="button" onclick="quickAddFood('1 ly trà sữa trân châu', 'Ăn vặt / Nước')" class="px-2.5 py-1 bg-slate-100 hover:bg-bio-50 hover:text-bio-700 rounded-full font-semibold transition">🧋 Trà sữa</button>
+                <button type="button" onclick="quickAddFood('1 ly cà phê sữa đá', 'Ăn vặt / Nước')" class="px-2.5 py-1 bg-slate-100 hover:bg-bio-50 hover:text-bio-700 rounded-full font-semibold transition">☕ Cà phê sữa</button>
+                <button type="button" onclick="quickAddFood('500ml nước lọc', 'Ăn vặt / Nước')" class="px-2.5 py-1 bg-slate-100 hover:bg-bio-50 hover:text-bio-700 rounded-full font-semibold transition">💧 500ml Nước</button>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <!-- CỘT PHẢI: TRẠNG THÁI CHỜ HOẶC KẾT QUẢ CÁ NHÂN HÓA -->
+        <!-- CỘT PHẢI: PHÂN TÍCH ĐỒ ĂN HÔM NAY + LỘ TRÌNH SINH HỌC -->
         <div class="lg:col-span-7 space-y-5">
 
-          <div id="planner-empty-state" class="bg-white p-8 sm:p-12 rounded-2xl border-2 border-dashed border-bio-200 text-center flex flex-col items-center justify-center min-h-[460px] space-y-5">
-            <div class="w-20 h-20 rounded-3xl bg-bio-50 text-bio-600 flex items-center justify-center text-4xl shadow-inner border border-bio-100">
+          <!-- CARD PHÂN TÍCH ĐỒ ĂN THỨC UỐNG HÔM NAY (LUÔN HIỂN THỊ) -->
+          <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3 flex-wrap gap-2">
+              <div>
+                <h3 class="text-base font-extrabold text-slate-900 flex items-center">
+                  <i class="fa-solid fa-magnifying-glass-chart text-bio-600 mr-2"></i> Phân Tích Đồ Ăn & Thức Uống Hôm Nay
+                </h3>
+                <p class="text-xs text-slate-500 mt-0.5">Ước lượng năng lượng tự động & đánh giá sinh học bằng Gemini AI</p>
+              </div>
+              <div class="flex items-center gap-2">
+                <button type="button" onclick="clearTodayFoodLogs()" class="text-[11px] font-bold text-slate-500 hover:text-rose-600 px-2.5 py-1.5 rounded-lg border border-slate-200 transition">
+                  <i class="fa-solid fa-trash-can mr-1"></i> Xóa ngày
+                </button>
+                <button type="button" id="btn-analyze-food-ai" onclick="analyzeFoodWithGemini()" class="text-xs bg-bio-600 hover:bg-bio-700 text-white px-3.5 py-1.5 rounded-xl font-bold transition shadow-sm flex items-center">
+                  <i class="fa-solid fa-wand-magic-sparkles mr-1.5" id="food-ai-icon"></i>
+                  <span id="food-ai-btn-text">Phân tích sâu (AI)</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Thanh tổng hợp Calo & Macros -->
+            <div id="food-summary-bars" class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
+              <div class="flex items-center justify-between text-xs font-bold">
+                <span class="text-slate-700">Tổng năng lượng đã nạp: <strong id="food-total-kcal" class="text-bio-700 text-sm">0</strong> / <span id="food-target-kcal">2000</span> kcal</span>
+                <span id="food-kcal-status" class="px-2 py-0.5 rounded-full text-[11px] bg-slate-200 text-slate-700">Chưa có món</span>
+              </div>
+              <div class="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden">
+                <div id="food-kcal-progress" class="bg-bio-600 h-full transition-all duration-500" style="width: 0%"></div>
+              </div>
+              <div class="grid grid-cols-3 gap-2 text-center text-[11px]">
+                <div class="bg-white p-2 rounded-lg border border-slate-200">
+                  <span class="block text-slate-400 font-semibold">Đạm (Protein)</span>
+                  <span class="font-extrabold text-emerald-700" id="food-total-protein">0g</span>
+                </div>
+                <div class="bg-white p-2 rounded-lg border border-slate-200">
+                  <span class="block text-slate-400 font-semibold">Tinh bột (Carb)</span>
+                  <span class="font-extrabold text-amber-700" id="food-total-carb">0g</span>
+                </div>
+                <div class="bg-white p-2 rounded-lg border border-slate-200">
+                  <span class="block text-slate-400 font-semibold">Chất béo (Fat)</span>
+                  <span class="font-extrabold text-rose-700" id="food-total-fat">0g</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Danh sách món đã ăn hôm nay -->
+            <div id="food-log-list" class="space-y-2 max-h-[240px] overflow-y-auto pr-1"></div>
+
+            <!-- Cảnh báo Sinh học tự động -->
+            <div id="food-local-insights" class="space-y-2"></div>
+
+            <!-- Kết quả phân tích chuyên sâu từ Gemini AI -->
+            <div id="food-ai-analysis-box" class="hidden bg-bio-50/70 border border-bio-200 rounded-xl p-4 space-y-2 animate-reveal">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-extrabold text-bio-800 flex items-center">
+                  <i class="fa-solid fa-robot mr-1.5"></i> Nhận xét Dinh dưỡng & Sinh học từ Gemini AI
+                </span>
+                <span class="text-[10px] text-slate-500" id="food-ai-timestamp"></span>
+              </div>
+              <div id="food-ai-analysis-content" class="text-xs text-slate-700 leading-relaxed space-y-1.5"></div>
+            </div>
+          </div>
+
+          <!-- TRẠNG THÁI CHỜ HOẶC KẾT QUẢ HỒ SƠ SINH HỌC -->
+          <div id="planner-empty-state" class="bg-white p-8 sm:p-10 rounded-2xl border-2 border-dashed border-bio-200 text-center flex flex-col items-center justify-center min-h-[340px] space-y-4">
+            <div class="w-16 h-16 rounded-3xl bg-bio-50 text-bio-600 flex items-center justify-center text-3xl shadow-inner border border-bio-100">
               <i class="fa-solid fa-clipboard-user"></i>
             </div>
             <div class="max-w-md space-y-2">
               <span class="inline-block px-3 py-1 rounded-full text-[11px] font-extrabold bg-bio-100 text-bio-700 uppercase tracking-wider">
-                Đang chờ thông tin của bạn
+                Đang chờ hồ sơ cá nhân
               </span>
-              <h3 class="text-lg sm:text-xl font-extrabold text-slate-800">
-                Thực đơn & Nhịp sinh học đang được khóa
+              <h3 class="text-lg font-extrabold text-slate-800">
+                Gợi ý Thực đơn & Nhịp sinh học đang được khóa
               </h3>
               <p class="text-xs sm:text-sm text-slate-500 leading-relaxed">
-                Hãy điền khung giờ sinh hoạt, chiều cao, cân nặng ở bảng bên trái rồi nhấn <strong>"Lưu & Tạo Lộ Trình Sinh Học"</strong> để mở khóa thực đơn và đồng hồ sinh học dành riêng cho bạn!
+                Hãy điền khung giờ sinh hoạt, chiều cao, cân nặng ở bảng bên trái rồi nhấn <strong>"Lưu & Tạo Lộ Trình Sinh Học"</strong> để tính chuẩn TDEE và đồng bộ với nhật ký ăn uống!
               </p>
-            </div>
-            <div class="grid grid-cols-3 gap-3 w-full max-w-md pt-2 text-[11px] font-bold text-slate-600">
-              <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex flex-col items-center gap-1.5">
-                <i class="fa-solid fa-heart-pulse text-rose-500 text-base"></i>
-                <span>Chỉ số BMI & Nước</span>
-              </div>
-              <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex flex-col items-center gap-1.5">
-                <i class="fa-solid fa-utensils text-bio-600 text-base"></i>
-                <span>Thực đơn chi tiết</span>
-              </div>
-              <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex flex-col items-center gap-1.5">
-                <i class="fa-solid fa-wave-square text-indigo-500 text-base"></i>
-                <span>Đồng hồ Circadian</span>
-              </div>
             </div>
           </div>
 
@@ -629,7 +790,7 @@
       </div>
     </section>
 
-    <!-- ================= TAB 3: THÓI QUEN & QUIZ GEMINI ================= -->
+    <!-- ================= TAB 3: THÓI QUEN & QUIZ GEMINI (KHÔNG GIỚI HẠN ĐỀ TÀI) ================= -->
     <section id="tab-habits" class="hidden space-y-6">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
         <div class="lg:col-span-5 space-y-4">
@@ -674,33 +835,48 @@
         </div>
 
         <div class="lg:col-span-7 space-y-4">
-          <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+          <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
             <div class="flex items-center justify-between pb-3 border-b border-slate-100 flex-wrap gap-2">
               <div>
                 <h3 class="text-base font-bold text-slate-900 flex items-center">
-                  <i class="fa-solid fa-wand-magic-sparkles text-purple-600 mr-2"></i> Quiz Sinh Học (Gemini AI Tạo Đề)
+                  <i class="fa-solid fa-wand-magic-sparkles text-purple-600 mr-2"></i> Quiz Khoa Học & Sinh Học (Không Giới Hạn Đề Tài)
                 </h3>
-                <p class="text-xs text-slate-500">18 chuyên đề xoay vòng • Cứ đúng 1 câu nhận ngay +5 BioCoins</p>
+                <p class="text-xs text-slate-500">Tự nhập bất kỳ chủ đề nào hoặc chọn ngẫu nhiên đa lĩnh vực • +5 BioCoins/câu đúng</p>
               </div>
-              <div class="flex items-center space-x-2">
-                <span class="text-xs font-black text-amber-700 bg-amber-100 px-2.5 py-1 rounded-full border border-amber-200">
-                  +5 Coins/câu đúng
-                </span>
-                <button type="button" id="btn-generate-quiz" onclick="generateGeminiQuiz()" title="Nhờ Gemini tạo 3 câu hỏi mới" class="text-xs bg-purple-50 hover:bg-purple-100 text-purple-700 px-3 py-1.5 rounded-lg font-bold border border-purple-200 transition flex items-center">
-                  <i class="fa-solid fa-rotate mr-1.5" id="quiz-reload-icon"></i>
-                  <span id="quiz-reload-text">Tạo đề mới (AI)</span>
-                </button>
-              </div>
+              <span class="text-xs font-black text-amber-700 bg-amber-100 px-2.5 py-1 rounded-full border border-amber-200">
+                +5 Coins/câu đúng
+              </span>
             </div>
 
-            <div id="quiz-container" class="mt-4 space-y-4"></div>
+            <!-- Bộ chọn chủ đề tự do không giới hạn -->
+            <div class="bg-purple-50/70 p-3.5 rounded-xl border border-purple-200 space-y-2.5">
+              <div class="flex flex-col sm:flex-row gap-2">
+                <input type="text" id="quiz-custom-topic" placeholder="Nhập đề tài bất kỳ (VD: Tế bào gốc, Giấc mơ REM, Sinh học vũ trụ, AI Y sinh...)" class="flex-grow border border-slate-200 rounded-xl px-3 py-2 text-xs bg-white focus:outline-none focus:ring-2 focus:ring-purple-500">
+                <button type="button" id="btn-generate-quiz" onclick="generateGeminiQuiz()" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-xs font-bold transition flex items-center justify-center shrink-0 shadow-sm">
+                  <i class="fa-solid fa-rotate mr-1.5" id="quiz-reload-icon"></i>
+                  <span id="quiz-reload-text">Tạo đề AI mới</span>
+                </button>
+              </div>
+              <div class="flex items-center gap-1.5 overflow-x-auto pb-0.5 text-[11px]">
+                <span class="font-bold text-purple-700 shrink-0">Lĩnh vực rộng:</span>
+                <button type="button" onclick="pickQuizTopic('')" class="px-2.5 py-1 bg-white border border-purple-200 hover:border-purple-400 rounded-full shrink-0 font-semibold transition">🎲 Ngẫu nhiên</button>
+                <button type="button" onclick="pickQuizTopic('Thần kinh học, Dopamine và Tâm lý hành vi')" class="px-2.5 py-1 bg-white border border-purple-200 hover:border-purple-400 rounded-full shrink-0 font-semibold transition">🧠 Thần kinh & Tâm lý</button>
+                <button type="button" onclick="pickQuizTopic('Di truyền học phân tử, CRISPR và Đột biến gen')" class="px-2.5 py-1 bg-white border border-purple-200 hover:border-purple-400 rounded-full shrink-0 font-semibold transition">🧬 Di truyền & CRISPR</button>
+                <button type="button" onclick="pickQuizTopic('Dinh dưỡng thể thao, chuyển hóa năng lượng và cơ bắp')" class="px-2.5 py-1 bg-white border border-purple-200 hover:border-purple-400 rounded-full shrink-0 font-semibold transition">🥗 Dinh dưỡng & Thể thao</button>
+                <button type="button" onclick="pickQuizTopic('Sinh học biển sâu, Tiến hóa và Sinh thái học toàn cầu')" class="px-2.5 py-1 bg-white border border-purple-200 hover:border-purple-400 rounded-full shrink-0 font-semibold transition">🌊 Sinh thái & Tiến hóa</button>
+                <button type="button" onclick="pickQuizTopic('Sinh học vũ trụ (Astrobiology) và sự sống ngoài Trái Đất')" class="px-2.5 py-1 bg-white border border-purple-200 hover:border-purple-400 rounded-full shrink-0 font-semibold transition">🚀 Sinh học Vũ trụ</button>
+              </div>
+              <p class="text-[11px] font-semibold text-purple-700" id="quiz-current-topic-label">Chủ đề hiện tại: Tổng hợp Sinh học & Đời sống</p>
+            </div>
 
-            <div id="quiz-result-box" class="hidden mt-4 p-4 rounded-xl bg-bio-50 border border-bio-200 text-center space-y-1">
+            <div id="quiz-container" class="space-y-4"></div>
+
+            <div id="quiz-result-box" class="hidden p-4 rounded-xl bg-bio-50 border border-bio-200 text-center space-y-1">
               <p class="text-base font-extrabold text-bio-900" id="quiz-score-text"></p>
               <p class="text-xs text-bio-700" id="quiz-bonus-text"></p>
             </div>
 
-            <button type="button" id="btn-submit-quiz" onclick="evaluateQuiz()" class="mt-4 w-full py-3 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs sm:text-sm rounded-xl transition shadow-md shadow-purple-200 flex items-center justify-center">
+            <button type="button" id="btn-submit-quiz" onclick="evaluateQuiz()" class="w-full py-3 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs sm:text-sm rounded-xl transition shadow-md shadow-purple-200 flex items-center justify-center">
               <i class="fa-solid fa-circle-check mr-2"></i> Chấm điểm & Nhận BioCoins
             </button>
           </div>
@@ -859,7 +1035,7 @@
               <i class="fa-solid fa-robot"></i>
             </div>
             <div class="bg-bio-50 border border-bio-100 text-slate-800 p-3.5 rounded-2xl rounded-tl-none max-w-lg leading-relaxed">
-              Chào bạn! Mình là <strong>BioHabit Gemini AI</strong>. Bạn có thể hỏi mình mọi câu hỏi về Sinh học THPT & cơ thể người. Nếu lời giải thích nào khó hiểu, cứ nhắn <em>"tôi không hiểu"</em>, mình sẽ lấy ví dụ thực tế giải thích lại nhé! 🧬
+              Chào bạn! Mình là <strong>BioHabit Gemini AI</strong>. Bạn có thể hỏi mình mọi câu hỏi về Sinh học, Y học, Dinh dưỡng hay Khoa học đời sống. Nếu lời giải thích nào khó hiểu, cứ nhắn <em>"tôi không hiểu"</em>, mình sẽ lấy ví dụ thực tế giải thích lại nhé! 🧬
             </div>
           </div>
         </div>
@@ -873,7 +1049,7 @@
         </div>
 
         <div class="p-3 border-t border-slate-100 flex items-center space-x-2 bg-white">
-          <input type="text" id="chat-input" onkeypress="handleChatEnter(event)" placeholder="Hỏi Gemini AI về cơ thể người và Sinh học..." class="flex-grow border border-slate-200 rounded-xl px-4 py-2.5 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-bio-500">
+          <input type="text" id="chat-input" onkeypress="handleChatEnter(event)" placeholder="Hỏi Gemini AI về cơ thể người, dinh dưỡng và Sinh học..." class="flex-grow border border-slate-200 rounded-xl px-4 py-2.5 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-bio-500">
           <button type="button" onclick="sendChatMessage()" id="btn-send-chat" class="px-5 py-2.5 bg-bio-600 hover:bg-bio-700 text-white font-bold rounded-xl text-xs sm:text-sm transition flex items-center shadow-md shadow-bio-200">
             <span>Gửi</span>
             <i class="fa-solid fa-paper-plane ml-1.5 text-xs"></i>
@@ -882,29 +1058,52 @@
       </div>
     </section>
 
-    <!-- ================= TAB 6: BIOMARKET ================= -->
+    <!-- ================= TAB 6: BIOMARKET (KHÔNG GIỚI HẠN CHỦ ĐỀ) ================= -->
     <section id="tab-market" class="hidden space-y-6">
       <div class="custom-gradient p-6 sm:p-8 rounded-3xl text-white shadow-lg flex flex-col md:flex-row items-center justify-between gap-6">
         <div class="space-y-2">
           <span class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-white/20 text-bio-100">
-            Tạp chí Y Sinh học • Tự động đổi mới mỗi ngày
+            Tạp chí Khoa học Y Sinh • Mở rộng đa lĩnh vực & Lưu trữ vĩnh viễn bài đã mở
           </span>
-          <h2 class="text-xl sm:text-3xl font-extrabold tracking-tight">BioMarket: Đề Tài Nghiên Cứu Mới Nhất</h2>
+          <h2 class="text-xl sm:text-3xl font-extrabold tracking-tight">BioMarket: Kho Đề Tài Nghiên Cứu Không Giới Hạn</h2>
           <p class="text-xs sm:text-sm text-bio-100 max-w-xl">
-            Sử dụng BioCoins tích lũy để mở khóa các bài báo nghiên cứu chuyên sâu do Gemini AI cập nhật mỗi ngày. Mở khóa từ 3 đề tài để nhận danh hiệu học thuật!
+            Dùng BioCoins mở khóa các bài nghiên cứu chuyên sâu hoặc tự đặt bất kỳ chủ đề nào để Gemini AI biên soạn bài viết riêng cho bạn. Mọi bài đã mở khóa đều được lưu lại vĩnh viễn!
           </p>
         </div>
         
         <div class="flex items-center space-x-3 shrink-0">
-          <div class="bg-white/10 backdrop-blur-sm p-4 rounded-2xl border border-white/20 text-center min-w-[120px]">
+          <div class="bg-white/10 backdrop-blur-sm p-4 rounded-2xl border border-white/20 text-center min-w-[115px]">
             <span class="text-xs text-bio-100 block">Số dư hiện tại</span>
             <span class="text-2xl font-black text-amber-300" id="market-coins-display">50</span>
             <span class="text-[11px] text-white block">BioCoins</span>
           </div>
           <button type="button" id="btn-refresh-articles" onclick="fetchGeminiArticles(true)" class="px-4 py-3 bg-amber-400 hover:bg-amber-500 text-slate-900 font-extrabold text-xs rounded-2xl transition flex flex-col items-center shadow-md">
             <i class="fa-solid fa-wand-magic-sparkles text-base mb-1" id="article-reload-icon"></i>
-            <span id="article-reload-text">Xuất bản 3 bài mới (AI)</span>
+            <span id="article-reload-text">Thêm 3 bài mới (AI)</span>
           </button>
+        </div>
+      </div>
+
+      <!-- Thanh tìm / tạo bài nghiên cứu theo chủ đề tự do + bộ lọc -->
+      <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+        <form onsubmit="generateCustomTopicArticle(event)" class="flex flex-col sm:flex-row gap-2.5">
+          <div class="relative flex-grow">
+            <i class="fa-solid fa-microscope absolute left-3.5 top-1/2 -translate-y-1/2 text-bio-600 text-xs"></i>
+            <input type="text" id="market-custom-topic" placeholder="Nhập chủ đề bất kỳ để AI xuất bản bài nghiên cứu (VD: Liệu pháp tế bào CAR-T, Sinh vật phát quang, Tác động của giấc ngủ REM...)" class="w-full border border-slate-200 rounded-xl pl-9 pr-4 py-2.5 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-bio-500">
+          </div>
+          <button type="submit" id="btn-custom-article" class="px-5 py-2.5 bg-bio-600 hover:bg-bio-700 text-white font-bold rounded-xl text-xs sm:text-sm transition shadow-sm shrink-0 flex items-center justify-center">
+            <i class="fa-solid fa-feather-pointed mr-1.5" id="custom-article-icon"></i>
+            <span id="custom-article-text">AI Viết bài theo chủ đề</span>
+          </button>
+        </form>
+
+        <div class="flex items-center gap-2 overflow-x-auto pb-1 text-xs font-bold">
+          <button type="button" onclick="setMarketFilter('all')" id="mfilter-all" class="mfilter-btn px-3 py-1.5 rounded-full bg-bio-600 text-white shrink-0 transition">Tất cả (<span id="market-count-all">0</span>)</button>
+          <button type="button" onclick="setMarketFilter('unlocked')" id="mfilter-unlocked" class="mfilter-btn px-3 py-1.5 rounded-full bg-slate-100 text-slate-600 hover:bg-bio-50 shrink-0 transition">📚 Đã mở khóa (<span id="market-count-unlocked">0</span>)</button>
+          <button type="button" onclick="setMarketFilter('genetics')" id="mfilter-genetics" class="mfilter-btn px-3 py-1.5 rounded-full bg-slate-100 text-slate-600 hover:bg-bio-50 shrink-0 transition">🧬 Di truyền & Y sinh</button>
+          <button type="button" onclick="setMarketFilter('neuro')" id="mfilter-neuro" class="mfilter-btn px-3 py-1.5 rounded-full bg-slate-100 text-slate-600 hover:bg-bio-50 shrink-0 transition">🧠 Thần kinh & Tâm lý</button>
+          <button type="button" onclick="setMarketFilter('nutrition')" id="mfilter-nutrition" class="mfilter-btn px-3 py-1.5 rounded-full bg-slate-100 text-slate-600 hover:bg-bio-50 shrink-0 transition">🥗 Dinh dưỡng & Thể chất</button>
+          <button type="button" onclick="setMarketFilter('eco')" id="mfilter-eco" class="mfilter-btn px-3 py-1.5 rounded-full bg-slate-100 text-slate-600 hover:bg-bio-50 shrink-0 transition">🌍 Sinh thái & Vũ trụ</button>
         </div>
       </div>
 
@@ -935,7 +1134,7 @@
       </div>
     </div>
 
-    <div id="mini-player-video-wrap" class="bg-black transition-all duration-300 w-full h-44">
+    <div id="mini-player-video-wrap" class="bg-black transition-all duration-300 w-full h-44 overflow-hidden">
       <iframe
         id="yt-player-iframe"
         class="w-full h-full border-0"
@@ -1089,12 +1288,13 @@
       user: {
         name: "Học sinh",
         coins: 50,
-        streak: 1,
+        streak: 0,
         lastCheckInDate: null,
       },
       schedule: {
         isConfigured: false,
         nickname: "",
+        age: "",
         role: "student",
         wake: "",
         school: "",
@@ -1110,6 +1310,9 @@
       favoriteTracks: [],
       focusSessions: 0,
       unlockedArticles: ["art_1"],
+      savedArticles: [],
+      foodLogs: {},
+      foodAnalysis: {},
       badges: {
         streak7: false,
         quizMaster: false,
@@ -1126,6 +1329,21 @@
       try { localStorage.setItem(key, val); } catch (e) {}
     }
 
+    /* Helper ngày địa phương (khắc phục lỗi lệch múi giờ UTC của toISOString) */
+    function getLocalDateStr(offsetDays = 0) {
+      const d = new Date();
+      if (offsetDays !== 0) d.setDate(d.getDate() + offsetDays);
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${y}-${m}-${day}`;
+    }
+
+    function getCurrentHHMM() {
+      const d = new Date();
+      return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+    }
+
     function escapeHTML(str) {
       return String(str || "")
         .replace(/&/g, "&amp;")
@@ -1133,6 +1351,23 @@
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
+    }
+
+    function sanitizeHTML(html) {
+      const template = document.createElement('template');
+      template.innerHTML = String(html || "");
+      const blockedTags = template.content.querySelectorAll('script, iframe, object, embed, link, style');
+      blockedTags.forEach(el => el.remove());
+      template.content.querySelectorAll('*').forEach(el => {
+        Array.from(el.attributes).forEach(attr => {
+          const name = attr.name.toLowerCase();
+          const val = attr.value.toLowerCase().trim();
+          if (name.startsWith('on') || val.startsWith('javascript:')) {
+            el.removeAttribute(attr.name);
+          }
+        });
+      });
+      return template.innerHTML;
     }
 
     function decodeHTMLEntities(str) {
@@ -1273,9 +1508,10 @@
       }
     }
 
-    /* 3. CHẾ ĐỘ HỌC TẬP POMODORO + TÌM NHẠC YOUTUBE + MINI PLAYER */
+    /* 3. CHẾ ĐỘ HỌC TẬP POMODORO (DÙNG DATE.NOW CHUẨN XÁC) + YOUTUBE */
     let pomoTotalSeconds = 25 * 60;
     let pomoSecondsLeft = 25 * 60;
+    let pomoEndTime = null;
     let pomoMode = 'focus';
     let pomoInterval = null;
     let isPomoRunning = false;
@@ -1283,6 +1519,7 @@
     function setPomodoroMode(minutes, mode, label) {
       clearInterval(pomoInterval);
       isPomoRunning = false;
+      pomoEndTime = null;
       pomoMode = mode;
       pomoTotalSeconds = minutes * 60;
       pomoSecondsLeft = pomoTotalSeconds;
@@ -1321,50 +1558,66 @@
       }
     }
 
+    function tickPomodoro() {
+      if (!isPomoRunning || !pomoEndTime) return;
+      pomoSecondsLeft = Math.max(0, Math.ceil((pomoEndTime - Date.now()) / 1000));
+      updatePomodoroDisplay();
+
+      if (pomoSecondsLeft <= 0) {
+        clearInterval(pomoInterval);
+        isPomoRunning = false;
+        pomoEndTime = null;
+        playGentleChime();
+
+        const toggleBtn = document.getElementById('btn-pomo-toggle');
+        const statusTxt = document.getElementById('pomodoro-status-text');
+
+        if (pomoMode === 'focus') {
+          AppState.user.coins = (AppState.user.coins || 0) + 5;
+          AppState.focusSessions = (AppState.focusSessions || 0) + 1;
+          saveState();
+          showToast("Hoàn thành phiên học tập! +5 BioCoins 🎉", "success");
+          if (statusTxt) statusTxt.innerText = 'Tuyệt vời! Bạn đã hoàn thành phiên học.';
+        } else {
+          showToast("Hết giờ nghỉ ngơi, quay lại học tiếp nhé!", "info");
+          if (statusTxt) statusTxt.innerText = 'Hết giờ nghỉ giải lao!';
+        }
+        if (toggleBtn) toggleBtn.innerHTML = `<i class="fa-solid fa-play mr-2"></i> Bắt đầu lại`;
+        pomoSecondsLeft = pomoTotalSeconds;
+        updatePomodoroDisplay();
+      }
+    }
+
     function togglePomodoro() {
       const toggleBtn = document.getElementById('btn-pomo-toggle');
       const statusTxt = document.getElementById('pomodoro-status-text');
 
       if (isPomoRunning) {
+        tickPomodoro();
         clearInterval(pomoInterval);
         isPomoRunning = false;
+        pomoEndTime = null;
         if (toggleBtn) toggleBtn.innerHTML = `<i class="fa-solid fa-play mr-2"></i> Tiếp tục`;
         if (statusTxt) statusTxt.innerText = 'Đang tạm dừng';
       } else {
         isPomoRunning = true;
+        pomoEndTime = Date.now() + pomoSecondsLeft * 1000;
         if (toggleBtn) toggleBtn.innerHTML = `<i class="fa-solid fa-pause mr-2"></i> Tạm dừng`;
         if (statusTxt) statusTxt.innerText = pomoMode === 'focus' ? 'Đang học tập tập trung...' : 'Đang nghỉ giải lao...';
 
-        pomoInterval = setInterval(() => {
-          pomoSecondsLeft--;
-          updatePomodoroDisplay();
-
-          if (pomoSecondsLeft <= 0) {
-            clearInterval(pomoInterval);
-            isPomoRunning = false;
-            playGentleChime();
-
-            if (pomoMode === 'focus') {
-              AppState.user.coins = (AppState.user.coins || 0) + 5;
-              AppState.focusSessions = (AppState.focusSessions || 0) + 1;
-              saveState();
-              showToast("Hoàn thành phiên học tập! +5 BioCoins 🎉", "success");
-              if (statusTxt) statusTxt.innerText = 'Tuyệt vời! Bạn đã hoàn thành phiên học.';
-            } else {
-              showToast("Hết giờ nghỉ ngơi, quay lại học tiếp nhé!", "info");
-              if (statusTxt) statusTxt.innerText = 'Hết giờ nghỉ giải lao!';
-            }
-            if (toggleBtn) toggleBtn.innerHTML = `<i class="fa-solid fa-play mr-2"></i> Bắt đầu lại`;
-            pomoSecondsLeft = pomoTotalSeconds;
-            updatePomodoroDisplay();
-          }
-        }, 1000);
+        clearInterval(pomoInterval);
+        pomoInterval = setInterval(tickPomodoro, 500);
       }
     }
+
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden && isPomoRunning) tickPomodoro();
+    });
 
     function resetPomodoro() {
       clearInterval(pomoInterval);
       isPomoRunning = false;
+      pomoEndTime = null;
       pomoSecondsLeft = pomoTotalSeconds;
       updatePomodoroDisplay();
       const toggleBtn = document.getElementById('btn-pomo-toggle');
@@ -1454,7 +1707,7 @@
         }
       } catch (err) {
         if (statusEl) {
-          statusEl.innerHTML = `<span class="text-amber-600 font-semibold">⚠️ Không kết nối được /api/youtube (nếu đang mở file trực tiếp, hãy deploy kèm thư mục api/ hoặc dán link YouTube ở ô bên dưới để nghe ngay!).</span>`;
+          statusEl.innerHTML = `<span class="text-amber-600 font-semibold">⚠️ Không kết nối được /api/youtube. Bạn có thể dán link YouTube ở ô bên dưới để nghe ngay!</span>`;
         }
       } finally {
         if (btn) btn.disabled = false;
@@ -1624,16 +1877,15 @@
     function toggleMinimizePlayer() {
       const wrap = document.getElementById('mini-player-video-wrap');
       const icon = document.getElementById('mini-player-toggle-icon');
-      const player = document.getElementById('yt-mini-player');
-      if (!wrap || !icon || !player) return;
+      if (!wrap || !icon) return;
 
       isPlayerMinimized = !isPlayerMinimized;
       if (isPlayerMinimized) {
         wrap.classList.remove('h-44');
-        wrap.classList.add('h-12');
+        wrap.classList.add('h-0');
         icon.className = 'fa-solid fa-chevron-up';
       } else {
-        wrap.classList.remove('h-12');
+        wrap.classList.remove('h-0');
         wrap.classList.add('h-44');
         icon.className = 'fa-solid fa-chevron-down';
       }
@@ -1646,7 +1898,7 @@
       if (player) player.classList.add('hidden');
     }
 
-    /* 4. NGÂN HÀNG CÂU HỎI & QUIZ GEMINI */
+    /* 4. NGÂN HÀNG CÂU HỎI RỘNG (18 CÂU OFFLINE + KHÔNG GIỚI HẠN CHỦ ĐỀ GEMINI) */
     const QUIZ_BANK = [
       {
         question: "Hormone nào sau đây được tiết ra từ tuyến tùng để điều chỉnh chu kỳ thức - ngủ tự nhiên?",
@@ -1664,29 +1916,129 @@
         question: "Bào quan nào là 'nhà máy tiêu hóa và dọn rác' của tế bào trong cơ chế Tự thực bào (Autophagy)?",
         options: ["Lysosome", "Riboxom", "Lưới nội chất hạt", "Bộ máy Golgi"],
         answer: 0,
-        explain: "Lysosome chứa nhiều enzyme thủy phân để phân hủy tế bào quan già cỗi tái tạo axit amin."
+        explain: "Lysosome chứa nhiều enzyme thủy phân để phân hủy bào quan già cỗi tái tạo axit amin."
+      },
+      {
+        question: "Chất dẫn truyền thần kinh nào liên quan mật thiết đến động lực, cảm giác phần thưởng và khả năng tập trung?",
+        options: ["Dopamine", "Melatonin", "Glucagon", "Hemoglobin"],
+        answer: 0,
+        explain: "Dopamine truyền tín hiệu qua các synap ở hệ viền và vỏ não trước trán để duy trì động lực học tập."
+      },
+      {
+        question: "Caffeine trong cà phê giúp tỉnh táo bằng cách cạnh tranh và khóa thụ thể của phân tử nào trong não?",
+        options: ["Adenosine", "Acetylcholine", "Oxytocin", "Serotonin"],
+        answer: 0,
+        explain: "Adenosine tích tụ gây buồn ngủ; Caffeine có cấu trúc tương tự nên gắn vào thụ thể Adenosine để chặn tín hiệu mệt mỏi."
+      },
+      {
+        question: "Trong công nghệ CRISPR-Cas9, thành phần nào đóng vai trò định vị chính xác trình tự ADN mục tiêu cần cắt?",
+        options: ["ARN dẫn đường (sgRNA)", "Enzyme Ligase", "Riboxom 80S", "Phân tử ATP"],
+        answer: 0,
+        explain: "sgRNA bắt cặp bổ sung đặc hiệu với đoạn ADN đích để dẫn enzyme Cas9 cắt đúng vị trí."
+      },
+      {
+        question: "Hơn 90% lượng hormone Serotonin của cơ thể người được tổng hợp tại cơ quan nào?",
+        options: ["Đường ruột", "Tuyến giáp", "Phổi", "Thận"],
+        answer: 0,
+        explain: "Các tế bào ưa crôm đường ruột và hệ vi sinh vật đóng vai trò chủ chốt trong sản xuất Serotonin (Trục Não - Ruột)."
+      },
+      {
+        question: "Loại tế bào miễn dịch nào có khả năng ghi nhớ kháng nguyên lâu dài sau khi tiêm vắc-xin?",
+        options: ["Tế bào Lympho B và T nhớ", "Hồng cầu trưởng thành", "Tiểu cầu", "Tế bào cơ vân"],
+        answer: 0,
+        explain: "Tế bào nhớ miễn dịch giúp cơ thể phản ứng nhanh và mạnh hơn khi tái nhiễm mầm bệnh."
+      },
+      {
+        question: "Quá trình phân giải 1 phân tử Glucose qua đường phân, chu trình Krebs và chuỗi chuyền electron tạo ra khoảng bao nhiêu ATP?",
+        options: ["30 - 32 ATP", "2 ATP", "100 ATP", "4 ATP"],
+        answer: 0,
+        explain: "Hô hấp tế bào hiếu khí ở ty thể cho hiệu suất năng lượng cao gấp ~15 lần so với lên men kỵ khí."
+      },
+      {
+        question: "Yếu tố dưỡng thần kinh BDNF (Brain-Derived Neurotrophic Factor) tăng mạnh nhất nhờ hoạt động nào?",
+        options: ["Vận động thể thao hiếu khí", "Thức khuya lướt điện thoại", "Ăn nhiều đường tinh luyện", "Nhịn uống nước"],
+        answer: 0,
+        explain: "Tập thể dục nhịp điệu kích thích biểu hiện gen BDNF giúp nơ-ron hình thành thêm các synap mới."
+      },
+      {
+        question: "Thực vật thích nghi vùng khí hậu khô hạn nóng bức (như xương rồng, dứa) thường quang hợp theo con đường nào?",
+        options: ["Thực vật CAM", "Thực vật C3", "Lên men rượu", "Hóa tổng hợp"],
+        answer: 0,
+        explain: "Thực vật CAM mở khí khổng vào ban đêm để cố định CO2 và đóng vào ban ngày nhằm chống mất nước."
+      },
+      {
+        question: "Hiện tượng Di truyền học Biểu sinh (Epigenetics) làm thay đổi biểu hiện gen thông qua cơ chế nào?",
+        options: ["Methyl hóa ADN và biến đổi histone", "Thay đổi trình tự các Nucleotit", "Xóa bỏ hoàn toàn nhiễm sắc thể", "Biến đổi ADN thành Lipid"],
+        answer: 0,
+        explain: "Epigenetics bật/tắt gen bằng các nhóm hóa học gắn bên ngoài ADN mà không làm thay đổi trình tự mã di truyền."
+      },
+      {
+        question: "Động vật sống ở vùng biển sâu không có ánh sáng mặt trời (quanh miệng phun thủy nhiệt) dựa vào nguồn sinh vật sản xuất nào?",
+        options: ["Vi khuẩn hóa tổng hợp lưu huỳnh", "Thực vật hạt kín", "Tảo lục quang hợp", "Nấm men"],
+        answer: 0,
+        explain: "Vi khuẩn hóa tự dưỡng oxy hóa H2S để tổng hợp chất hữu cơ làm nền tảng cho lưới thức ăn đáy đại dương."
+      },
+      {
+        question: "Các nhà Sinh học Vũ trụ (Astrobiology) ưu tiên tìm kiếm nguyên tố nào làm dung môi cho sự sống ngoài Trái Đất?",
+        options: ["Nước lỏng (H2O)", "Thủy ngân lỏng", "Khí Heli", "Sắt nóng chảy"],
+        answer: 0,
+        explain: "Nước lỏng có tính phân cực, nhiệt dung riêng lớn và khả năng hòa tan tuyệt vời cho các phản ứng sinh hóa."
+      },
+      {
+        question: "Giai đoạn giấc ngủ nào đóng vai trò chính trong việc tổng hợp và củng cố trí nhớ sáng tạo, điều hòa cảm xúc?",
+        options: ["Giấc ngủ REM (Chuyển động mắt nhanh)", "Trạng thái tỉnh táo", "Nhịp thở gấp", "Co giật cơ"],
+        answer: 0,
+        explain: "Trong giấc ngủ REM (thường xuất hiện nhiều về gần sáng), não bộ hoạt động mạnh mẽ để sắp xếp ký ức và giải tỏa cảm xúc."
+      },
+      {
+        question: "Đơn vị chức năng lọc máu tạo nước tiểu bên trong mỗi quả thận của người gọi là gì?",
+        options: ["Nephron", "Phế nang", "Tế bào hình nón", "Nơ-ron vận động"],
+        answer: 0,
+        explain: "Mỗi quả thận chứa khoảng 1 triệu đơn vị thận (Nephron) gồm cầu thận và hệ thống ống thận."
+      },
+      {
+        question: "Cơ chế vận chuyển nước qua màng bán thấm của tế bào từ nơi có thế nước cao đến nơi có thế nước thấp gọi là gì?",
+        options: ["Thẩm thấu (Osmosis)", "Thực bào", "Xuất bào", "Vận chuyển chủ động cần ATP"],
+        answer: 0,
+        explain: "Thẩm thấu là sự khuếch tán thụ động của phân tử nước qua màng sinh chất (thường qua kênh Aquaporin)."
+      },
+      {
+        question: "Tác động chính của việc tiếp xúc ánh sáng xanh từ màn hình điện thoại ngay trước khi ngủ là gì?",
+        options: ["Ức chế tế bào hạch võng mạc làm giảm tiết Melatonin", "Kích thích tuyến tụy tiết Insulin", "Làm tăng tốc độ phân giải Glycogen ở cơ", "Tăng hấp thụ Canxi ở xương"],
+        answer: 0,
+        explain: "Ánh sáng xanh (~480nm) đánh lừa nhân trên giao thoa thị giác (SCN) rằng đang là ban ngày, gây trễ giấc ngủ."
       }
     ];
 
-    const BIO_TOPICS = [
+    const BROAD_TOPICS = [
       "Hệ tim mạch, chu kỳ tim và điều hòa huyết áp ở người",
       "Hệ bài tiết, cấu tạo nephron và lọc máu ở cầu thận",
       "Cơ chế dẫn truyền xung thần kinh và điện thế hoạt động",
-      "Hệ nội tiết, tương tác giữa tuyến yên, tuyến giáp và tuyến trên thận",
-      "Hệ miễn dịch, tế bào lympho B, lympho T và cơ chế tạo kháng thể",
-      "Hô hấp tế bào, chuỗi chuyền electron hô hấp và ti thể",
-      "Quang hợp ở thực vật C3, C4, CAM và chu trình Calvin",
-      "Cấu trúc ADN, phiên mã, dịch mã và mã di truyền",
-      "Đột biến gen, đột biến cấu trúc và số lượng nhiễm sắc thể",
-      "Quy luật di truyền Mendel và di truyền liên kết giới tính",
-      "Cân bằng nội môi, điều hòa thân nhiệt và áp suất thẩm thấu",
-      "Tiêu hóa ở người: enzym tiêu hóa ở dạ dày và ruột non",
-      "Nhịp sinh học Circadian, hormone melatonin và giấc ngủ sâu",
-      "Sinh thái học: chuỗi thức ăn, lưới thức ăn và dòng năng lượng",
-      "Tiến hóa: chọn lọc tự nhiên và các nhân tố tiến hóa",
-      "Cấu tạo màng sinh chất và các hình thức vận chuyển qua màng",
-      "Chu kỳ tế bào, nguyên phân, giảm phân và phát sinh giao tử",
-      "Dinh dưỡng tế bào: chuyển hóa lipid, glucid và protein"
+      "Thần kinh học hành vi: Dopamine, Serotonin và động lực học tập",
+      "Khoa học giấc ngủ: chu kỳ REM/NREM, Melatonin và Adenosine",
+      "Hệ nội tiết: tương tác tuyến yên, tuyến giáp và tuyến trên thận",
+      "Hệ miễn dịch: tế bào lympho B, lympho T, vắc-xin và kháng thể",
+      "Hô hấp tế bào, chuỗi chuyền electron và tạo ATP ở ty thể",
+      "Quang hợp C3, C4, CAM và thích nghi của thực vật",
+      "Công nghệ chỉnh sửa gen CRISPR-Cas9 và liệu pháp gen y học",
+      "Di truyền học Biểu sinh (Epigenetics): lối sống bật/tắt gen",
+      "Tế bào gốc, tái tạo mô và sinh học về sự lão hóa",
+      "Trục Não - Ruột (Gut-Brain Axis) và hệ vi sinh đường ruột",
+      "Dinh dưỡng thể thao: chuyển hóa Glucid, Lipid, Protein và cơ bắp",
+      "Sinh lý vận động: thiếu oxy cơ, axit lactic và hormone BDNF",
+      "Tin sinh học (Bioinformatics) và ứng dụng AI trong dự đoán cấu trúc Protein",
+      "Sinh thái học toàn cầu, biến đổi khí hậu và đa dạng sinh học",
+      "Sinh học biển sâu: sinh vật phát quang và hệ sinh thái miệng phun thủy nhiệt",
+      "Sinh học vũ trụ (Astrobiology): điều kiện sự sống trên các hành tinh khác",
+      "Tiến hóa phân tử, chọn lọc tự nhiên và nguồn gốc loài người",
+      "Cân bằng nội môi: điều hòa đường huyết, thân nhiệt và áp suất thẩm thấu",
+      "Virus học: cơ chế xâm nhập tế bào chủ của virus ARN và ADN",
+      "Sinh học ung thư: đột biến gen tiền ung thư và ức chế khối u",
+      "Dược lý sinh học: cơ chế tác động của Caffeine, Vitamin và khoáng chất",
+      "Tâm sinh lý stress: trục HPA, Cortisol và kỹ thuật điều hòa hơi thở",
+      "Cấu trúc màng sinh chất, kênh ion và vận chuyển qua màng tế bào",
+      "Phôi sinh học và cơ chế biệt hóa tế bào từ hợp tử",
+      "Công nghệ sinh học nông nghiệp và cây trồng biến đổi gen"
     ];
 
     let currentSessionQuiz = [];
@@ -1701,11 +2053,30 @@
       return arr;
     }
 
-    function refreshRandomQuiz() {
+    function pickQuizTopic(topic) {
+      const input = document.getElementById('quiz-custom-topic');
+      if (input) input.value = topic;
+      generateGeminiQuiz();
+    }
+
+    function refreshRandomQuiz(preferredTopic = "") {
       try {
         isCurrentQuizSubmitted = false;
-        const shuffledBank = shuffleArray(QUIZ_BANK);
-        currentSessionQuiz = shuffledBank.slice(0, 3).map((item, idx) => {
+        let pool = QUIZ_BANK;
+        if (preferredTopic) {
+          const keywords = preferredTopic.toLowerCase().split(/[\s,()]+/).filter(w => w.length > 2);
+          const matched = QUIZ_BANK.filter(item => {
+            const text = (item.question + " " + item.explain).toLowerCase();
+            return keywords.some(k => text.includes(k));
+          });
+          if (matched.length >= 3) pool = matched;
+          else if (matched.length > 0) {
+            const others = shuffleArray(QUIZ_BANK.filter(i => !matched.includes(i)));
+            pool = [...matched, ...others];
+          }
+        }
+        const selected = pool === QUIZ_BANK ? shuffleArray(pool).slice(0, 3) : pool.slice(0, 3);
+        currentSessionQuiz = selected.map((item, idx) => {
           const optionsWithIndex = item.options.map((opt, i) => ({ text: opt, isCorrect: i === item.answer }));
           const shuffledOptions = shuffleArray(optionsWithIndex);
           return {
@@ -1728,35 +2099,40 @@
     async function generateGeminiQuiz() {
       const reloadIcon = document.getElementById('quiz-reload-icon');
       const reloadText = document.getElementById('quiz-reload-text');
+      const customInput = document.getElementById('quiz-custom-topic');
+      const topicLabel = document.getElementById('quiz-current-topic-label');
+
+      const userTopic = customInput?.value.trim();
+      const chosenTopic = userTopic || BROAD_TOPICS[Math.floor(Math.random() * BROAD_TOPICS.length)];
 
       if (reloadIcon) reloadIcon.classList.add('animate-spin');
       if (reloadText) reloadText.innerText = "Gemini đang tạo đề...";
+      if (topicLabel) topicLabel.innerText = `Chủ đề hiện tại: ${chosenTopic}`;
 
       isCurrentQuizSubmitted = false;
-      const randomTopic = BIO_TOPICS[Math.floor(Math.random() * BIO_TOPICS.length)];
 
       try {
         const res = await fetch('/api/gemini', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ type: 'quiz', topic: randomTopic })
+          body: JSON.stringify({ type: 'quiz', topic: chosenTopic })
         });
 
         const data = await res.json();
 
-        if (res.ok && Array.isArray(data.quiz) && data.quiz.length === 3) {
-          currentSessionQuiz = data.quiz;
-          showToast(`Đã tạo 3 câu hỏi mới: ${randomTopic.split(',')[0]}!`, "success");
+        if (res.ok && Array.isArray(data.quiz) && data.quiz.length >= 1) {
+          currentSessionQuiz = data.quiz.slice(0, 3);
+          showToast(`Đã tạo câu hỏi AI: ${chosenTopic.split(',')[0]}!`, "success");
         } else {
-          refreshRandomQuiz();
-          showToast("Đã tải câu hỏi sinh học dự phòng!", "info");
+          refreshRandomQuiz(chosenTopic);
+          showToast("Đã tải bộ câu hỏi mở rộng dự phòng!", "info");
         }
       } catch (err) {
-        refreshRandomQuiz();
-        showToast("Đã tải câu hỏi sinh học dự phòng!", "info");
+        refreshRandomQuiz(chosenTopic);
+        showToast("Đã tải bộ câu hỏi mở rộng dự phòng!", "info");
       } finally {
         if (reloadIcon) reloadIcon.classList.remove('animate-spin');
-        if (reloadText) reloadText.innerText = "Tạo đề mới (AI)";
+        if (reloadText) reloadText.innerText = "Tạo đề AI mới";
         renderCurrentQuiz();
         const resBox = document.getElementById('quiz-result-box');
         if (resBox) resBox.classList.add('hidden');
@@ -1769,24 +2145,24 @@
       container.innerHTML = currentSessionQuiz.map((q, idx) => `
         <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2.5">
           <p class="text-xs font-bold text-slate-800">
-            <span class="text-purple-600 font-black mr-1">Câu ${idx + 1}:</span> ${q.question}
+            <span class="text-purple-600 font-black mr-1">Câu ${idx + 1}:</span> ${escapeHTML(q.question)}
           </p>
           <div class="space-y-1.5">
-            ${q.options.map((opt, optIdx) => `
+            ${(q.options || []).map((opt, optIdx) => `
               <label class="flex items-center space-x-2.5 p-2 rounded-lg bg-white border border-slate-200 hover:border-purple-300 text-xs font-medium cursor-pointer transition">
                 <input type="radio" name="quiz-item-${idx}" value="${optIdx}" class="text-purple-600 focus:ring-purple-500 border-slate-300">
-                <span class="text-slate-700">${opt}</span>
+                <span class="text-slate-700">${escapeHTML(opt)}</span>
               </label>
             `).join('')}
           </div>
-          ${q.explain ? `<div id="quiz-explain-${idx}" class="hidden text-[11px] text-purple-700 bg-purple-50/70 p-2 rounded-lg border border-purple-100 font-medium"><i class="fa-regular fa-lightbulb mr-1"></i> <strong>Giải thích:</strong> ${q.explain}</div>` : ''}
+          ${q.explain ? `<div id="quiz-explain-${idx}" class="hidden text-[11px] text-purple-700 bg-purple-50/70 p-2 rounded-lg border border-purple-100 font-medium"><i class="fa-regular fa-lightbulb mr-1"></i> <strong>Giải thích:</strong> ${escapeHTML(q.explain)}</div>` : ''}
         </div>
       `).join('');
     }
 
     function evaluateQuiz() {
       if (isCurrentQuizSubmitted) {
-        showToast("Bạn đã nhận BioCoins cho đề này rồi! Hãy bấm 'Tạo đề mới (AI)' để tiếp tục kiếm coin nhé!", "info");
+        showToast("Bạn đã nhận BioCoins cho đề này rồi! Hãy bấm 'Tạo đề AI mới' để tiếp tục nhé!", "info");
         return;
       }
 
@@ -1802,7 +2178,7 @@
       });
 
       if (!allAnswered) {
-        showToast("Vui lòng trả lời đủ cả 3 câu trắc nghiệm!", "warning");
+        showToast(`Vui lòng trả lời đủ ${currentSessionQuiz.length} câu trắc nghiệm!`, "warning");
         return;
       }
 
@@ -1811,12 +2187,12 @@
 
       if (coinsEarned > 0) {
         AppState.user.coins = (AppState.user.coins || 0) + coinsEarned;
-        if (correctCount === 3) {
+        if (correctCount === currentSessionQuiz.length) {
           if (!AppState.badges) AppState.badges = {};
           AppState.badges.quizMaster = true;
         }
         saveState();
-        showToast(`Tuyệt vời! Đúng ${correctCount}/3 câu: +${coinsEarned} BioCoins!`, "success");
+        showToast(`Tuyệt vời! Đúng ${correctCount}/${currentSessionQuiz.length} câu: +${coinsEarned} BioCoins!`, "success");
       } else {
         showToast("Chưa đúng câu nào lần này. Đọc giải thích và thử đề mới nhé!", "info");
       }
@@ -1827,12 +2203,12 @@
       const scoreEl = document.getElementById('quiz-score-text');
       const bonusEl = document.getElementById('quiz-bonus-text');
 
-      if (scoreEl) scoreEl.innerText = `Bạn trả lời đúng ${correctCount}/3 câu!`;
+      if (scoreEl) scoreEl.innerText = `Bạn trả lời đúng ${correctCount}/${currentSessionQuiz.length} câu!`;
       if (bonusEl) {
         if (coinsEarned > 0) {
           bonusEl.innerHTML = `<span class="text-amber-600 font-extrabold text-sm">+${coinsEarned} BioCoins</span> đã được cộng vào tài khoản của bạn! 🪙`;
         } else {
-          bonusEl.innerText = "Chưa nhận được coin lần này. Hãy đọc kỹ phần giải thích chi tiết ở dưới mỗi câu và bấm 'Tạo đề mới' để thử sức lại nhé!";
+          bonusEl.innerText = "Chưa nhận được coin lần này. Hãy đọc kỹ phần giải thích và thử đề khác nhé!";
         }
       }
     }
@@ -1939,7 +2315,7 @@
       if (el) el.remove();
     }
 
-    /* 6. THỰC ĐƠN & NHỊP SINH HỌC CÁ NHÂN HÓA */
+    /* 6. THỰC ĐƠN, NHỊP SINH HỌC & PHÂN TÍCH ĐỒ ĂN THỨC UỐNG TRONG NGÀY */
     function addMinutesToTimeStr(timeStr, minsToAdd) {
       if (!timeStr || !timeStr.includes(":")) return "06:00";
       const [h, m] = timeStr.split(":").map(Number);
@@ -1959,9 +2335,26 @@
       return (diff / 60).toFixed(1);
     }
 
+    function getUserTargetTDEE() {
+      const s = AppState.schedule || {};
+      if (!s.isConfigured) return 2000;
+      const hCm = parseFloat(s.height) || 165;
+      const w = parseFloat(s.weight) || 55;
+      const age = parseInt(s.age) || (s.role === 'freelancer' ? 25 : 17);
+      const gender = s.gender || 'male';
+      const goal = s.goal || 'maintain';
+
+      const bmr = 10 * w + 6.25 * hCm - 5 * age + (gender === 'male' ? 5 : -161);
+      let tdee = Math.round(bmr * 1.45);
+      if (goal === 'muscle') tdee += 250;
+      else if (goal === 'fatloss') tdee -= 300;
+      return Math.max(1200, tdee);
+    }
+
     function fillSampleSchedule() {
       const setVal = (id, v) => { const el = document.getElementById(id); if (el) el.value = v; };
       setVal('user-nickname', document.getElementById('user-nickname')?.value || 'Học sinh BioHabit');
+      setVal('user-age', '17');
       setVal('wake-time', '06:00');
       setVal('school-time', '07:15');
       setVal('home-time', '17:00');
@@ -1977,22 +2370,382 @@
       showToast("Đã đặt lại hồ sơ cá nhân!", "info");
     }
 
+    /* --- CƠ SỞ DỮ LIỆU DINH DƯỠNG CỤC BỘ ĐỂ PHÂN TÍCH TỨC THÌ --- */
+    const LOCAL_FOOD_DB = [
+      { keys: ["phở", "pho"], kcal: 450, p: 24, c: 58, f: 12, tags: [] },
+      { keys: ["bún bò", "bún chả", "bún riêu", "hủ tiếu", "mì quảng"], kcal: 480, p: 25, c: 60, f: 14, tags: [] },
+      { keys: ["cơm tấm", "cơm sườn", "cơm gà", "cơm chiên"], kcal: 620, p: 28, c: 75, f: 22, tags: [] },
+      { keys: ["cơm trắng", "chén cơm", "bát cơm", "cơm"], kcal: 210, p: 4, c: 46, f: 0.5, tags: [] },
+      { keys: ["gạo lứt"], kcal: 170, p: 4, c: 36, f: 1.5, tags: ["fiber"] },
+      { keys: ["bánh mì", "banh mi"], kcal: 380, p: 14, c: 48, f: 13, tags: [] },
+      { keys: ["xôi"], kcal: 360, p: 10, c: 58, f: 9, tags: [] },
+      { keys: ["mì tôm", "mì gói", "mỳ tôm"], kcal: 370, p: 8, c: 52, f: 14, tags: ["processed"] },
+      { keys: ["trứng", "ốp la", "trứng luộc"], kcal: 78, p: 6.5, c: 0.6, f: 5.5, tags: [] },
+      { keys: ["ức gà"], kcal: 165, p: 31, c: 0, f: 3.6, tags: [] },
+      { keys: ["gà rán", "khoai tây chiên", "xúc xích", "pizza", "burger"], kcal: 420, p: 16, c: 36, f: 24, tags: ["fried", "processed"] },
+      { keys: ["thịt bò", "bò", "thịt heo", "thịt lợn", "sườn"], kcal: 220, p: 22, c: 0, f: 14, tags: [] },
+      { keys: ["cá", "cá hồi", "tôm", "hải sản"], kcal: 175, p: 24, c: 0, f: 8, tags: [] },
+      { keys: ["đậu phụ", "đậu hũ"], kcal: 100, p: 10, c: 2, f: 5, tags: [] },
+      { keys: ["rau", "xà lách", "salad", "canh", "súp lơ", "bông cải", "dưa chuột"], kcal: 45, p: 2.5, c: 7, f: 0.5, tags: ["fiber"] },
+      { keys: ["khoai lang"], kcal: 130, p: 2, c: 30, f: 0.2, tags: ["fiber"] },
+      { keys: ["yến mạch"], kcal: 150, p: 5, c: 27, f: 3, tags: ["fiber"] },
+      { keys: ["chuối", "táo", "cam", "ổi", "trái cây", "hoa quả", "bơ"], kcal: 85, p: 1, c: 20, f: 0.5, tags: ["fiber"] },
+      { keys: ["sữa chua"], kcal: 110, p: 4, c: 15, f: 3, tags: [] },
+      { keys: ["sữa tươi", "sữa đậu nành", "sữa"], kcal: 140, p: 7, c: 12, f: 6, tags: [] },
+      { keys: ["trà sữa", "trân châu"], kcal: 380, p: 3, c: 62, f: 12, tags: ["sugar", "caffeine"] },
+      { keys: ["nước ngọt", "coca", "pepsi", "sting", "bò húc", "tăng lực"], kcal: 160, p: 0, c: 40, f: 0, tags: ["sugar", "caffeine"] },
+      { keys: ["cà phê", "cafe", "bạc xỉu", "espresso"], kcal: 95, p: 1.5, c: 12, f: 3.5, tags: ["caffeine"] },
+      { keys: ["bánh ngọt", "bánh kem", "snack", "bim bim", "trà chanh", "chè"], kcal: 240, p: 3, c: 38, f: 9, tags: ["sugar"] },
+      { keys: ["trà xanh", "trà ấm"], kcal: 5, p: 0, c: 1, f: 0, tags: ["water"] },
+      { keys: ["nước lọc", "nước ấm", "nước suối", "nước"], kcal: 0, p: 0, c: 0, f: 0, tags: ["water"] }
+    ];
+
+    function estimateFoodItemNutrition(rawText) {
+      const lower = rawText.toLowerCase();
+      // Tách nhiều món nếu người dùng nhập dấu phẩy hoặc "+"
+      const segments = lower.split(/[,+;]+/).map(s => s.trim()).filter(Boolean);
+      let totalKcal = 0, totalP = 0, totalC = 0, totalF = 0;
+      const tags = new Set();
+      let matchedAny = false;
+
+      segments.forEach(seg => {
+        // Tìm hệ số số lượng ở đầu (VD: "2 quả trứng", "0.5 bát", "nửa tô")
+        let qty = 1;
+        const numMatch = seg.match(/^(\d+(?:[.,]\d+)?)/);
+        if (numMatch) {
+          qty = Math.min(10, Math.max(0.2, parseFloat(numMatch[1].replace(',', '.'))));
+        } else if (seg.includes("nửa")) {
+          qty = 0.5;
+        }
+
+        // Bỏ qua nhân 500 nếu là "500ml nước"
+        if (/\d+\s*ml/.test(seg) && (seg.includes("nước") || seg.includes("trà xanh"))) {
+          qty = 1;
+        }
+
+        const matched = LOCAL_FOOD_DB.find(item => item.keys.some(k => seg.includes(k)));
+        if (matched) {
+          matchedAny = true;
+          totalKcal += matched.kcal * qty;
+          totalP += matched.p * qty;
+          totalC += matched.c * qty;
+          totalF += matched.f * qty;
+          matched.tags.forEach(t => tags.add(t));
+        } else {
+          // Giá trị ước lượng mặc định cho món lạ
+          totalKcal += 200;
+          totalP += 8;
+          totalC += 25;
+          totalF += 7;
+        }
+      });
+
+      return {
+        kcal: Math.round(totalKcal),
+        p: Math.round(totalP),
+        c: Math.round(totalC),
+        f: Math.round(totalF),
+        tags: Array.from(tags),
+        estimated: matchedAny
+      };
+    }
+
+    function quickAddFood(text, mealType) {
+      const nameInput = document.getElementById('food-name-input');
+      const mealSelect = document.getElementById('food-meal-type');
+      const timeInput = document.getElementById('food-time-input');
+      if (mealSelect) mealSelect.value = mealType;
+      if (timeInput && !timeInput.value) timeInput.value = getCurrentHHMM();
+      if (nameInput) nameInput.value = text;
+      addFoodLogItem();
+    }
+
+    function addFoodLogItem(e) {
+      if (e) e.preventDefault();
+      const nameInput = document.getElementById('food-name-input');
+      const mealSelect = document.getElementById('food-meal-type');
+      const timeInput = document.getElementById('food-time-input');
+
+      const name = nameInput?.value.trim();
+      if (!name) {
+        showToast("Hãy nhập tên món ăn hoặc thức uống bạn đã dùng!", "warning");
+        return;
+      }
+
+      const todayStr = getLocalDateStr(0);
+      if (!AppState.foodLogs || typeof AppState.foodLogs !== 'object') AppState.foodLogs = {};
+      if (!Array.isArray(AppState.foodLogs[todayStr])) AppState.foodLogs[todayStr] = [];
+
+      const time = timeInput?.value || getCurrentHHMM();
+      const meal = mealSelect?.value || 'Ăn vặt / Nước';
+      const nutri = estimateFoodItemNutrition(name);
+
+      AppState.foodLogs[todayStr].push({
+        id: 'food_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+        name,
+        meal,
+        time,
+        ...nutri
+      });
+
+      if (nameInput) nameInput.value = "";
+      saveState();
+      showToast(`Đã thêm "${name}" (~${nutri.kcal} kcal) vào nhật ký hôm nay!`, "success");
+    }
+
+    function removeFoodLogItem(itemId) {
+      const todayStr = getLocalDateStr(0);
+      if (!AppState.foodLogs || !Array.isArray(AppState.foodLogs[todayStr])) return;
+      AppState.foodLogs[todayStr] = AppState.foodLogs[todayStr].filter(item => item.id !== itemId);
+      saveState();
+    }
+
+    function clearTodayFoodLogs() {
+      const todayStr = getLocalDateStr(0);
+      if (!AppState.foodLogs) AppState.foodLogs = {};
+      AppState.foodLogs[todayStr] = [];
+      if (AppState.foodAnalysis) delete AppState.foodAnalysis[todayStr];
+      saveState();
+      showToast("Đã xóa nhật ký ăn uống hôm nay!", "info");
+    }
+
+    function timeToMinutes(tStr) {
+      if (!tStr || !tStr.includes(':')) return 0;
+      const [h, m] = tStr.split(':').map(Number);
+      return h * 60 + m;
+    }
+
+    function renderFoodLogs() {
+      const todayStr = getLocalDateStr(0);
+      const dateLabel = document.getElementById('food-today-date-label');
+      const timeInput = document.getElementById('food-time-input');
+      if (dateLabel) dateLabel.innerText = `Ngày ${todayStr.split('-').reverse().join('/')}`;
+      if (timeInput && !timeInput.value) timeInput.value = getCurrentHHMM();
+
+      const items = (AppState.foodLogs && Array.isArray(AppState.foodLogs[todayStr])) ? AppState.foodLogs[todayStr] : [];
+      const targetKcal = getUserTargetTDEE();
+
+      let totalKcal = 0, totalP = 0, totalC = 0, totalF = 0;
+      const allTags = new Set();
+      let lateCaffeine = false;
+      let lateMeal = false;
+
+      const s = AppState.schedule || {};
+      const sleepMins = timeToMinutes(s.sleep || '22:30');
+
+      items.forEach(item => {
+        totalKcal += item.kcal || 0;
+        totalP += item.p || 0;
+        totalC += item.c || 0;
+        totalF += item.f || 0;
+        (item.tags || []).forEach(t => allTags.add(t));
+
+        const itemMins = timeToMinutes(item.time || '12:00');
+        if ((item.tags || []).includes('caffeine') && itemMins >= 15 * 60) {
+          lateCaffeine = true;
+        }
+        // Kiểm tra ăn sát giờ ngủ (trong vòng 2 tiếng trước giờ ngủ, có tính qua nửa đêm)
+        let diffBeforeSleep = sleepMins - itemMins;
+        if (diffBeforeSleep < -720) diffBeforeSleep += 1440;
+        if (item.kcal >= 150 && diffBeforeSleep >= 0 && diffBeforeSleep <= 120) {
+          lateMeal = true;
+        }
+      });
+
+      const elKcal = document.getElementById('food-total-kcal');
+      const elTarget = document.getElementById('food-target-kcal');
+      const elStatus = document.getElementById('food-kcal-status');
+      const elBar = document.getElementById('food-kcal-progress');
+      const elP = document.getElementById('food-total-protein');
+      const elC = document.getElementById('food-total-carb');
+      const elF = document.getElementById('food-total-fat');
+
+      if (elKcal) elKcal.innerText = totalKcal;
+      if (elTarget) elTarget.innerText = targetKcal;
+      if (elP) elP.innerText = `${totalP}g`;
+      if (elC) elC.innerText = `${totalC}g`;
+      if (elF) elF.innerText = `${totalF}g`;
+
+      const pct = Math.min(100, Math.round((totalKcal / targetKcal) * 100));
+      if (elBar) {
+        elBar.style.width = `${pct}%`;
+        elBar.className = `h-full transition-all duration-500 ${totalKcal > targetKcal * 1.1 ? 'bg-rose-500' : totalKcal >= targetKcal * 0.75 ? 'bg-bio-600' : 'bg-amber-500'}`;
+      }
+
+      if (elStatus) {
+        if (items.length === 0) {
+          elStatus.className = "px-2 py-0.5 rounded-full text-[11px] bg-slate-200 text-slate-700";
+          elStatus.innerText = "Chưa có món";
+        } else if (totalKcal > targetKcal * 1.1) {
+          elStatus.className = "px-2 py-0.5 rounded-full text-[11px] bg-rose-100 text-rose-700";
+          elStatus.innerText = `Vượt mục tiêu (+${totalKcal - targetKcal} kcal)`;
+        } else if (totalKcal >= targetKcal * 0.75) {
+          elStatus.className = "px-2 py-0.5 rounded-full text-[11px] bg-emerald-100 text-emerald-700";
+          elStatus.innerText = `Cân đối (${pct}% TDEE)`;
+        } else {
+          elStatus.className = "px-2 py-0.5 rounded-full text-[11px] bg-amber-100 text-amber-700";
+          elStatus.innerText = `Còn thiếu ~${targetKcal - totalKcal} kcal`;
+        }
+      }
+
+      // Render danh sách món đã nhập
+      const listEl = document.getElementById('food-log-list');
+      if (listEl) {
+        if (items.length === 0) {
+          listEl.innerHTML = `
+            <div class="text-center py-4 text-xs text-slate-400 border border-dashed border-slate-200 rounded-xl">
+              Chưa ghi nhận món ăn / thức uống nào hôm nay. Hãy nhập ở ô bên trái để xem phân tích tức thì!
+            </div>
+          `;
+        } else {
+          listEl.innerHTML = items.map(item => `
+            <div class="flex items-center justify-between gap-2.5 p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs">
+              <div class="min-w-0 flex-grow">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <span class="px-2 py-0.5 rounded-md bg-bio-100 text-bio-800 font-bold text-[10px]">${escapeHTML(item.meal)}</span>
+                  <span class="text-[10px] font-bold text-slate-400">${escapeHTML(item.time)}</span>
+                  <span class="font-bold text-slate-800 truncate">${escapeHTML(item.name)}</span>
+                </div>
+                <p class="text-[10px] text-slate-500 mt-1">
+                  Ước lượng: <strong>${item.kcal} kcal</strong> • Đạm ${item.p}g • Carb ${item.c}g • Béo ${item.f}g
+                </p>
+              </div>
+              <button type="button" onclick="removeFoodLogItem('${escapeHTML(item.id)}')" title="Xóa món" class="w-7 h-7 rounded-lg hover:bg-rose-100 text-slate-400 hover:text-rose-600 transition flex items-center justify-center shrink-0">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+          `).join('');
+        }
+      }
+
+      // Sinh cảnh báo Sinh học tức thì
+      const insightsEl = document.getElementById('food-local-insights');
+      if (insightsEl) {
+        if (items.length === 0) {
+          insightsEl.innerHTML = "";
+        } else {
+          const alerts = [];
+          if (lateCaffeine) {
+            alerts.push({ type: 'rose', icon: 'fa-mug-hot', text: '<strong>Cảnh báo Caffeine muộn:</strong> Nạp caffeine sau 15:00 sẽ cạnh tranh với thụ thể <em>Adenosine</em> và làm chậm tiết <em>Melatonin</em> vào tối nay.' });
+          }
+          if (lateMeal) {
+            alerts.push({ type: 'amber', icon: 'fa-moon', text: `<strong>Ăn sát giờ ngủ (${s.sleep || '22:30'}):</strong> Nạp năng lượng trong vòng 2 giờ trước khi ngủ khiến Insulin tăng cao, ức chế hormone tăng trưởng (GH) và cơ chế tự thực bào <em>Autophagy</em>.` });
+          }
+          if (allTags.has('sugar')) {
+            alerts.push({ type: 'amber', icon: 'fa-cubes-stacked', text: '<strong>Lưu ý Đường tinh luyện:</strong> Đồ ngọt/trà sữa gây tăng vọt đường huyết nhanh rồi tụt giảm đột ngột, dễ làm giảm tập trung học tập.' });
+          }
+          if (allTags.has('fried') || allTags.has('processed')) {
+            alerts.push({ type: 'amber', icon: 'fa-burger', text: '<strong>Đồ chiên rán / Chế biến sẵn:</strong> Chất béo chuyển hóa và muối cao dễ gây viêm tế bào mức nhẹ và cảm giác lờ đờ.' });
+          }
+          if (!allTags.has('fiber')) {
+            alerts.push({ type: 'blue', icon: 'fa-seedling', text: '<strong>Gợi ý Chất xơ:</strong> Hôm nay chưa thấy ghi nhận rau xanh hay trái cây tươi – đừng quên bổ sung để nuôi hệ vi sinh đường ruột (Trục Não - Ruột) nhé!' });
+          }
+          if (!allTags.has('water')) {
+            alerts.push({ type: 'blue', icon: 'fa-droplet', text: '<strong>Nhắc bù nước:</strong> Hãy ghi nhận thêm các cốc nước lọc đã uống để theo dõi áp suất thẩm thấu tế bào.' });
+          }
+          if (alerts.length === 0) {
+            alerts.push({ type: 'emerald', icon: 'fa-circle-check', text: '<strong>Tuyệt vời!</strong> Chế độ ăn hôm nay của bạn rất cân bằng theo nhịp sinh học, giàu chất xơ và không có tác nhân gây rối loạn giấc ngủ.' });
+          }
+
+          insightsEl.innerHTML = alerts.map(a => {
+            const cls = a.type === 'rose' ? 'bg-rose-50 border-rose-200 text-rose-800'
+              : a.type === 'amber' ? 'bg-amber-50 border-amber-200 text-amber-900'
+              : a.type === 'blue' ? 'bg-blue-50 border-blue-200 text-blue-700'
+              : 'bg-emerald-50 border-emerald-200 text-emerald-800';
+            return `<div class="p-2.5 rounded-xl border text-[11px] leading-relaxed flex items-start gap-2 ${cls}"><i class="fa-solid ${a.icon} mt-0.5 shrink-0"></i><div>${a.text}</div></div>`;
+          }).join('');
+        }
+      }
+
+      // Hiển thị kết quả phân tích Gemini AI đã lưu trong ngày (nếu có)
+      const aiBox = document.getElementById('food-ai-analysis-box');
+      const aiContent = document.getElementById('food-ai-analysis-content');
+      const aiTime = document.getElementById('food-ai-timestamp');
+      const savedAI = AppState.foodAnalysis && AppState.foodAnalysis[todayStr];
+      if (aiBox && aiContent) {
+        if (savedAI && savedAI.text) {
+          aiBox.classList.remove('hidden');
+          aiContent.innerHTML = escapeHTML(savedAI.text).replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+          if (aiTime) aiTime.innerText = savedAI.at ? `Cập nhật lúc ${savedAI.at}` : '';
+        } else {
+          aiBox.classList.add('hidden');
+        }
+      }
+    }
+
+    async function analyzeFoodWithGemini() {
+      const todayStr = getLocalDateStr(0);
+      const items = (AppState.foodLogs && Array.isArray(AppState.foodLogs[todayStr])) ? AppState.foodLogs[todayStr] : [];
+
+      if (items.length === 0) {
+        showToast("Hãy nhập ít nhất 1 món ăn hoặc thức uống hôm nay trước khi phân tích AI!", "warning");
+        return;
+      }
+
+      const btn = document.getElementById('btn-analyze-food-ai');
+      const icon = document.getElementById('food-ai-icon');
+      const btnText = document.getElementById('food-ai-btn-text');
+
+      if (btn) btn.disabled = true;
+      if (icon) icon.className = "fa-solid fa-spinner animate-spin mr-1.5";
+      if (btnText) btnText.innerText = "AI đang phân tích...";
+
+      const s = AppState.schedule || {};
+      const targetKcal = getUserTargetTDEE();
+      const profileNote = s.isConfigured
+        ? `Chiều cao ${s.height}cm, Cân nặng ${s.weight}kg, Mục tiêu: ${s.goal}, TDEE mục tiêu: ${targetKcal} kcal/ngày, Giờ đi ngủ: ${s.sleep}.`
+        : `Chưa cài hồ sơ chi tiết (mục tiêu mặc định ~${targetKcal} kcal/ngày).`;
+
+      const foodListText = items.map((it, idx) => `${idx + 1}. [${it.meal} - ${it.time}] ${it.name}`).join('\n');
+
+      const prompt = `Bạn là chuyên gia dinh dưỡng & sinh học người. Hãy phân tích thực đơn thực tế hôm nay của tôi:\n- Thông tin cơ thể: ${profileNote}\n- Các đồ ăn thức uống đã nạp hôm nay:\n${foodListText}\n\nHãy trả lời ngắn gọn, khoa học theo 3 ý rõ ràng:\n1. **Ước lượng Calo & Cân đối chất** (Đạm, Tinh bột, Béo, Xơ, Đường) so với nhu cầu.\n2. **Đánh giá Sinh học & Nhịp sinh học** (tác động tới đường huyết/Insulin, não bộ, giấc ngủ/Melatonin dựa theo giờ ăn uống).\n3. **Gợi ý điều chỉnh cụ thể** cho bữa tiếp theo hoặc ngày mai.`;
+
+      try {
+        const res = await fetch('/api/gemini', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ type: 'chat', message: prompt, history: [] })
+        });
+        const data = await res.json();
+
+        if (res.ok && data.reply) {
+          if (!AppState.foodAnalysis) AppState.foodAnalysis = {};
+          AppState.foodAnalysis[todayStr] = {
+            text: data.reply,
+            at: getCurrentHHMM()
+          };
+          saveState();
+          showToast("Gemini AI đã phân tích xong thực đơn hôm nay!", "success");
+        } else {
+          showToast(data.error || "Gemini đang bận, bạn xem phân tích dinh dưỡng tức thì ở trên nhé!", "warning");
+        }
+      } catch (err) {
+        showToast("Không kết nối được /api/gemini, đã hiển thị phân tích tự động phía trên!", "info");
+      } finally {
+        if (btn) btn.disabled = false;
+        if (icon) icon.className = "fa-solid fa-wand-magic-sparkles mr-1.5";
+        if (btnText) btnText.innerText = "Phân tích sâu (AI)";
+      }
+    }
+
     function renderNutritionAdvice() {
       try {
         const s = AppState.schedule || {};
         const hCm = parseFloat(s.height) || 165;
         const h = hCm / 100;
         const w = parseFloat(s.weight) || 55;
+        const age = parseInt(s.age) || (s.role === 'freelancer' ? 25 : 17);
         const bmi = (w / (h * h)).toFixed(1);
         const goal = s.goal || "maintain";
         const gender = s.gender || "male";
 
         const sleepHrs = calculateSleepDuration(s.wake, s.sleep);
         const waterLiters = (w * 0.035).toFixed(1);
-        const bmr = 10 * w + 6.25 * hCm - 5 * 17 + (gender === 'male' ? 5 : -161);
+        const bmr = 10 * w + 6.25 * hCm - 5 * age + (gender === 'male' ? 5 : -161);
         let tdee = Math.round(bmr * 1.45);
         if (goal === 'muscle') tdee += 250;
         else if (goal === 'fatloss') tdee -= 300;
+        tdee = Math.max(1200, tdee);
 
         const elSleep = document.getElementById('summary-sleep-hours');
         const elWater = document.getElementById('summary-water-liters');
@@ -2004,7 +2757,7 @@
         if (elWater) elWater.innerText = `${waterLiters} Lít`;
         if (elCal) elCal.innerText = `${tdee} kcal`;
         if (elName) elName.innerText = String(s.nickname || "").trim() || (AppState.user?.name || "bạn");
-        if (elRole) elRole.innerText = s.role === 'freelancer' ? 'Làm việc / Nghiên cứu' : 'Học sinh / Sinh viên';
+        if (elRole) elRole.innerText = s.role === 'freelancer' ? `Đi làm / NC (${age} tuổi)` : `Học sinh / SV (${age} tuổi)`;
 
         let bmiStatus = "Cân đối";
         let statusColor = "text-emerald-700 bg-emerald-100 border border-emerald-300";
@@ -2020,7 +2773,7 @@
         let menuData = {};
         if (goal === "muscle") {
           menuData = {
-            title: "Chế Độ Tăng Cơ & Phát Triển Chiều Cao Tuổi Dậy Thì",
+            title: "Chế Độ Tăng Cơ & Phát Triển Chiều Cao",
             allowed: [
               "<strong>Đạm động vật sạch:</strong> Ức gà áp chảo, trứng gà luộc (2 quả/ngày), phi lê cá basa/cá hồi, thịt bò nạc.",
               "<strong>Đạm thực vật & Hạt:</strong> Đậu phụ luộc/sốt cà chua, sữa đậu nành nguyên chất, hạt óc chó, hạnh nhân.",
@@ -2044,7 +2797,7 @@
               "<strong>Thức uống:</strong> Trà xanh ấm (giàu EGCG kích hoạt oxy hóa mỡ), nước chanh gừng ấm buổi sáng."
             ],
             forbidden: [
-              "<strong>Bánh ngọt, bánh mì trắng, mỳ tôm:</strong> Tinh bột tinh chế làm đường huyết tăng vọt kích thích tích mỡ bụng.",
+              "<strong>Bánh ngọt, bánh mì trắng, mì tôm:</strong> Tinh bột tinh chế làm đường huyết tăng vọt kích thích tích mỡ bụng.",
               "<strong>Nước ép đóng chai, trà sữa:</strong> Calo lỏng đánh lừa thụ thể no leptin khiến bạn thèm ăn liên tục.",
               "<strong>Nội tạng động vật, mỡ heo, da gà:</strong> Chứa nhiều chất béo bão hòa và cholesterol xấu (LDL)."
             ],
@@ -2052,17 +2805,17 @@
           };
         } else {
           menuData = {
-            title: "Chế Độ Duy Trì Thể Lực & Tăng Cường Trí Nhớ Học Đường",
+            title: "Chế Độ Duy Trì Thể Lực & Tăng Cường Trí Nhớ",
             allowed: [
-              "<strong>Đĩa thức ăn chuẩn (50-25-25):</strong> 50% rau củ nhiều màu sắc, 25% đạm (thịt lợn nạc, cá, trứng), 25% cơm gạo.",
+              "<strong>Đĩa thức ăn chuẩn (50-25-25):</strong> 50% rau củ nhiều màu sắc, 25% đạm (thịt nạc, cá, trứng), 25% cơm gạo.",
               "<strong>Thực phẩm vàng cho não bộ:</strong> Cá hồi/cá mòi (giàu Omega-3 tạo màng nơ-ron), quả óc chó, quả bơ, trứng gà.",
               "<strong>Rau xanh đậm:</strong> Rau muống, cải thìa, cải ngọt (cung cấp Acid Folic và Sắt tạo máu nuôi não).",
-              "<strong>Trái cây tươi:</strong> Táo, cam, ổi (giàu Vitamin C tăng đề kháng mùa thi cử)."
+              "<strong>Trái cây tươi:</strong> Táo, cam, ổi (giàu Vitamin C tăng đề kháng)."
             ],
             forbidden: [
               "<strong>Đồ chiên ngập dầu nhiều lần:</strong> Gây oxy hóa phá hủy ty thể, tạo cảm giác lờ đờ, buồn ngủ trong giờ học.",
               "<strong>Ăn mặn, chấm nhiều nước mắm mặn:</strong> Làm tăng áp lực máu lên mao mạch não và gây thiếu nước tế bào vi mô.",
-              "<strong>Đồ uống có cồn, chất kích thích nhân tạo:</strong> Ức chế thụ thể NMDA làm suy giảm khả năng ghi nhớ dài hạn (LTP)."
+              "<strong>Đồ uống có cồn, chất kích thích:</strong> Ức chế thụ thể NMDA làm suy giảm khả năng ghi nhớ dài hạn (LTP)."
             ],
             restrictions: `<strong>Lưu ý cá nhân hóa (${tdee} kcal/ngày):</strong> Hạn chế cà phê/trà đậm đặc sau 15:00 chiều để tránh ức chế Adenosine làm rối loạn giấc ngủ lúc ${formatTimeToAMPM(s.sleep)}.`
           };
@@ -2073,7 +2826,7 @@
           container.innerHTML = `
             <div class="p-3.5 bg-bio-50/70 border border-bio-200 rounded-xl">
               <h5 class="font-extrabold text-bio-900 text-sm mb-1">${menuData.title}</h5>
-              <p class="text-xs text-bio-700 leading-relaxed">Được tính toán theo thể trạng (${hCm}cm - ${w}kg) và lịch sinh hoạt riêng của bạn.</p>
+              <p class="text-xs text-bio-700 leading-relaxed">Được tính toán theo thể trạng (${hCm}cm - ${w}kg - ${age} tuổi) và lịch sinh hoạt riêng của bạn.</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
@@ -2106,10 +2859,11 @@
       }
     }
 
-    /* 7. HỆ THỐNG BIOMARKET */
+    /* 7. HỆ THỐNG BIOMARKET ĐA LĨNH VỰC + CHỦ ĐỀ KHÔNG GIỚI HẠN + LƯU TRỮ BÀI ĐÃ MỞ */
     const DEFAULT_ARTICLES = [
       {
         id: "art_1",
+        category: "genetics",
         title: "Công nghệ Chỉnh sửa Gen CRISPR-Cas9: Tương lai chữa lành đột biến ADN",
         tag: "Công nghệ sinh học • Di truyền phân tử",
         cost: 50,
@@ -2118,66 +2872,187 @@
           <h4 class='font-bold text-slate-800 text-sm'>1. Nguồn gốc sinh học từ vi khuẩn</h4>
           <p>Hệ thống CRISPR-Cas vốn là cơ chế miễn dịch thích ứng tự nhiên của vi khuẩn chống lại thực khuẩn thể (Bacteriophage). Khi vi khuẩn phát hiện ADN ngoại lai, enzyme Cas9 cùng phức hợp crRNA sẽ tạo vết cắt kép (DSB) chính xác tại trình tự mục tiêu.</p>
           <h4 class='font-bold text-slate-800 text-sm mt-3'>2. Ứng dụng điều trị trong Y học</h4>
-          <p>Hiện nay liệu pháp CRISPR đã được FDA phê chuẩn điều trị bệnh thiếu máu hồng cầu hình liềm (Sickle Cell Disease) bằng cách tái kích hoạt gen tổng hợp Hemoglobin bào thai (HbF).</p>
+          <p>Hiện nay liệu pháp CRISPR đã được phê chuẩn điều trị bệnh thiếu máu hồng cầu hình liềm (Sickle Cell Disease) bằng cách tái kích hoạt gen tổng hợp Hemoglobin bào thai (HbF).</p>
           <div class='bg-bio-50 p-3 rounded-xl border border-bio-200 mt-2'>
-            <span class='font-bold text-bio-800 text-xs'>Góc nhìn Sinh học THPT:</span>
-            <p class='text-xs text-bio-900 mt-0.5'>CRISPR chứng minh rằng cấu trúc liên kết bổ sung A-U, G-X có thể biến thành công cụ định vị siêu chính xác bên trong nhân tế bào sinh vật nhân thực.</p>
+            <span class='font-bold text-bio-800 text-xs'>Góc nhìn Sinh học:</span>
+            <p class='text-xs text-bio-900 mt-0.5'>CRISPR chứng minh rằng nguyên tắc bắt cặp bổ sung A-U, G-X có thể biến thành công cụ định vị siêu chính xác bên trong nhân tế bào.</p>
           </div>
         `
       },
       {
         id: "art_2",
+        category: "neuro",
         title: "Trục Não - Ruột (Gut-Brain Axis) và Hệ Vi Sinh Microbiome",
         tag: "Sinh lý học người • Thần kinh học",
-        cost: 80,
-        summary: "Hơn 90% hormone hạnh phúc Serotonin được sản xuất tại ruột! Cách các vi khuẩn đường ruột kiểm soát tâm trạng và khả năng tập trung thi cử.",
+        cost: 60,
+        summary: "Hơn 90% hormone hạnh phúc Serotonin được sản xuất tại ruột! Cách các vi khuẩn đường ruột kiểm soát tâm trạng và khả năng tập trung.",
         content: `
           <h4 class='font-bold text-slate-800 text-sm'>1. Dây thần kinh phế vị (Vagus Nerve)</h4>
           <p>Hàng ngàn tỷ vi khuẩn đường ruột lên men chất xơ thành các Axit béo chuỗi ngắn (SCFA như Butyrate, Acetate). Các phân tử này kích hoạt dây thần kinh số X truyền tín hiệu trực tiếp lên vùng dưới đồi và Hạch hạnh nhân (Amygdala).</p>
           <h4 class='font-bold text-slate-800 text-sm mt-3'>2. Tại sao ăn uống ảnh hưởng đến điểm số?</h4>
-          <p>Loạn khuẩn đường ruột do đồ ngọt và thức ăn nhanh giải phóng độc tố nội mạc LPS (Lipopolysaccharide), gây viêm thần kinh mức độ nhẹ (Neuroinflammation) làm suy giảm trí nhớ ngắn hạn.</p>
+          <p>Loạn khuẩn đường ruột do đồ ngọt và thức ăn nhanh giải phóng độc tố nội mạc LPS, gây viêm thần kinh mức độ nhẹ làm suy giảm trí nhớ ngắn hạn.</p>
           <div class='bg-bio-50 p-3 rounded-xl border border-bio-200 mt-2'>
             <span class='font-bold text-bio-800 text-xs'>Khuyến nghị học đường:</span>
-            <p class='text-xs text-bio-900 mt-0.5'>Bổ sung sữa chua và rau củ lên men tự nhiên vào mùa thi cử giúp giảm đáng kể hormone căng thẳng Cortisol.</p>
+            <p class='text-xs text-bio-900 mt-0.5'>Bổ sung sữa chua và rau củ nhiều chất xơ mỗi ngày giúp giảm đáng kể hormone căng thẳng Cortisol.</p>
           </div>
         `
       },
       {
         id: "art_3",
+        category: "genetics",
         title: "Di truyền học Biểu sinh (Epigenetics): Lối sống có thể bật/tắt gen của bạn",
         tag: "Di truyền học phân tử • Y học tương lai",
-        cost: 100,
+        cost: 70,
         summary: "ADN không thay đổi trình tự nucleotit, nhưng các nhóm Methyl hóa (-CH3) và acetyl hóa histone có thể khóa hoặc mở các gen thông minh.",
         content: `
           <h4 class='font-bold text-slate-800 text-sm'>1. Cơ chế Methyl hóa ADN và cuộn xoắn Histone</h4>
-          <p>Khi các gốc -CH3 gắn vào đảo CpG ở vùng khởi động (Promoter), chúng ngăn cản enzyme ARN Polymerase tiếp cận gen, dẫn đến hiện tượng bất hoạt phiên mã. Ngược lại, acetyl hóa histone làm giãn xoắn cromatin để gen được dịch mã tối đa.</p>
+          <p>Khi các gốc -CH3 gắn vào đảo CpG ở vùng khởi động (Promoter), chúng ngăn cản enzyme ARN Polymerase tiếp cận gen. Ngược lại, acetyl hóa histone làm giãn xoắn cromatin để gen được dịch mã tối đa.</p>
           <h4 class='font-bold text-slate-800 text-sm mt-3'>2. Vận động thể chất và kích hoạt gen BDNF</h4>
           <p>Tập thể dục trên 20 phút mỗi ngày kích thích enzyme khử methyl hóa ở promoter của gen mã hóa yếu tố dưỡng thần kinh BDNF, giúp tế bào thần kinh sinh sôi thêm nhiều synap mới.</p>
-          <div class='bg-bio-50 p-3 rounded-xl border border-bio-200 mt-2'>
-            <span class='font-bold text-bio-800 text-xs'>Bài học Sinh học sâu sắc:</span>
-            <p class='text-xs text-bio-900 mt-0.5'>Gen cho bạn tiềm năng, nhưng lối sống và kỷ luật hằng ngày mới là bàn tay điều khiển những tiềm năng đó có được biểu hiện ra kiểu hình hay không!</p>
-          </div>
+        `
+      },
+      {
+        id: "art_4",
+        category: "neuro",
+        title: "Khoa học về Giấc ngủ REM & Hệ thống Glymphatic dọn rác não bộ",
+        tag: "Thần kinh học • Giấc ngủ",
+        cost: 40,
+        summary: "Khi bạn ngủ say, các tế bào thần kinh đệm co lại 60% để dịch não tủy rửa trôi mảng bám Beta-amyloid tích tụ suốt ngày dài.",
+        content: `
+          <h4 class='font-bold text-slate-800 text-sm'>1. Hệ thống Glymphatic hoạt động thế nào?</h4>
+          <p>Khác với cơ thể có hệ bạch huyết, não bộ sử dụng kênh nước Aquaporin-4 trên tế bào hình sao (Astrocytes) để bơm dịch não tủy quét sạch chất thải chuyển hóa trong giai đoạn ngủ sâu NREM.</p>
+          <h4 class='font-bold text-slate-800 text-sm mt-3'>2. Vai trò của giấc ngủ REM với học tập</h4>
+          <p>Giấc ngủ REM giúp tái cấu trúc kết nối synap ở hồi hải mã (Hippocampus) và chuyển trí nhớ ngắn hạn sang vỏ não để lưu trữ dài hạn.</p>
+        `
+      },
+      {
+        id: "art_5",
+        category: "nutrition",
+        title: "Cơ chế Tự thực bào (Autophagy): Giải Nobel Y học về tái tạo tế bào",
+        tag: "Dinh dưỡng & Chuyển hóa • Sinh học tế bào",
+        cost: 50,
+        summary: "Khi cơ thể bước vào trạng thái nghỉ tiêu hóa hợp lý, Lysosome tự động phân hủy protein lỗi và bào quan già cỗi để tái tạo năng lượng mới.",
+        content: `
+          <h4 class='font-bold text-slate-800 text-sm'>1. Công trình của Yoshinori Ohsumi</h4>
+          <p>Autophagy (tự thực bào) là cơ chế sống còn giúp tế bào tái chế rác nội bào thành axit amin sạch. Quá trình này được kích hoạt mạnh khi nồng độ Insulin giảm xuống ổn định vào ban đêm.</p>
+          <h4 class='font-bold text-slate-800 text-sm mt-3'>2. Ứng dụng vào thói quen ăn tối</h4>
+          <p>Kết thúc bữa tối trước khi đi ngủ tối thiểu 2.5 - 3 giờ giúp cơ thể bước vào trạng thái phục hồi tế bào hiệu quả nhất.</p>
+        `
+      },
+      {
+        id: "art_6",
+        category: "nutrition",
+        title: "Dopamine Detox & Sinh hóa của sự tập trung ở tuổi học sinh",
+        tag: "Thần kinh & Dinh dưỡng • Hiệu suất",
+        cost: 45,
+        summary: "Tại sao lướt video ngắn liên tục khiến việc đọc sách trở nên nhàm chán? Khám phá cơ chế điều chỉnh ngưỡng thụ thể Dopamine D2.",
+        content: `
+          <h4 class='font-bold text-slate-800 text-sm'>1. Quy luật cân bằng nội môi của Dopamine</h4>
+          <p>Khi não nhận quá nhiều kích thích rẻ tiền cường độ cao (mạng xã hội, đường tinh luyện), não bộ tự giảm số lượng thụ thể Dopamine (down-regulation) để tự vệ, dẫn đến mất động lực học tập.</p>
+          <h4 class='font-bold text-slate-800 text-sm mt-3'>2. Khôi phục độ nhạy thụ thể</h4>
+          <p>Áp dụng phương pháp Pomodoro 25 phút kết hợp vận động thể chất và ngủ đủ giúp mức Dopamine nền ổn định trở lại.</p>
+        `
+      },
+      {
+        id: "art_7",
+        category: "eco",
+        title: "Sinh học Biển sâu: Bí ẩn sinh vật phát quang (Bioluminescence)",
+        tag: "Sinh thái học • Sinh hóa đại dương",
+        cost: 40,
+        summary: "Dưới độ sâu 1000m nơi ánh sáng mặt trời tắt hẳn, 76% sinh vật tự tạo ra ánh sáng lạnh bằng phản ứng enzyme Luciferase và Luciferin.",
+        content: `
+          <h4 class='font-bold text-slate-800 text-sm'>1. Phản ứng hóa học tạo ánh sáng lạnh</h4>
+          <p>Hợp chất Luciferin bị oxy hóa nhờ xúc tác của enzyme Luciferase cùng phân tử ATP, giải phóng photon ánh sáng xanh lam với hiệu suất chuyển hóa năng lượng gần 100%, không tỏa nhiệt.</p>
+          <h4 class='font-bold text-slate-800 text-sm mt-3'>2. Ứng dụng trong công nghệ Y sinh</h4>
+          <p>Gen phát quang từ sứa và vi khuẩn biển được các nhà khoa học gắn vào tế bào để theo dõi quá trình phát triển khối u hoặc biểu hiện gen dưới kính hiển vi.</p>
+        `
+      },
+      {
+        id: "art_8",
+        category: "eco",
+        title: "Sinh học Vũ trụ (Astrobiology): Sự sống cực đoan trên Trái Đất & Sao Hỏa",
+        tag: "Sinh học Vũ trụ • Tiến hóa",
+        cost: 55,
+        summary: "Từ Gấu nước (Tardigrade) sống sót ngoài chân không vũ trụ đến vi khuẩn ưa axit ở suối nước nóng: giới hạn thực sự của sự sống là ở đâu?",
+        content: `
+          <h4 class='font-bold text-slate-800 text-sm'>1. Sinh vật cực đoan (Extremophiles)</h4>
+          <p>Tardigrade có thể bước vào trạng thái ngủ đông khô hoàn toàn (Cryptobiosis), thay thế nước bằng đường Trehalose để bảo vệ màng tế bào trước bức xạ vũ trụ và nhiệt độ -200°C.</p>
+          <h4 class='font-bold text-slate-800 text-sm mt-3'>2. Dấu ấn sinh học ngoài Trái Đất</h4>
+          <p>Việc nghiên cứu các đại dương ngầm trên vệ tinh Europa (Sao Mộc) và Enceladus (Sao Thổ) dựa trên mô hình hệ sinh thái hóa tự dưỡng dưới đáy biển sâu Trái Đất.</p>
+        `
+      },
+      {
+        id: "art_9",
+        category: "genetics",
+        title: "Liệu pháp tế bào CAR-T & Tin sinh học AlphaFold trong Y học hiện đại",
+        tag: "Y học tương lai • AI & Miễn dịch",
+        cost: 65,
+        summary: "Cách AI dự đoán cấu trúc 3D của hàng trăm triệu loại Protein và cách lập trình tế bào T truy lùng tế bào ung thư.",
+        content: `
+          <h4 class='font-bold text-slate-800 text-sm'>1. Tế bào T được 'lắp radar' CAR-T</h4>
+          <p>Bác sĩ tách tế bào lympho T của chính bệnh nhân, gắn thêm thụ thể kháng nguyên khảm (CAR) bằng kỹ thuật gen rồi truyền lại vào máu để nhận diện và tiêu diệt chính xác tế bào ác tính.</p>
+          <h4 class='font-bold text-slate-800 text-sm mt-3'>2. Cuộc cách mạng AI trong Sinh học phân tử</h4>
+          <p>Các mô hình trí tuệ nhân tạo như AlphaFold đã giải bài toán gấp cuộn Protein suốt 50 năm qua, rút ngắn thời gian thiết kế thuốc mới từ nhiều năm xuống còn vài tuần.</p>
         `
       }
     ];
 
     let currentArticlesList = [];
+    let currentMarketFilter = 'all';
+
+    function inferArticleCategory(art) {
+      if (art.category) return art.category;
+      const text = ((art.tag || '') + ' ' + (art.title || '')).toLowerCase();
+      if (/gen|crispr|adn|tế bào|miễn dịch|y học|ung thư|vắc/.test(text)) return 'genetics';
+      if (/não|thần kinh|ngủ|tâm lý|dopamine|serotonin|stress/.test(text)) return 'neuro';
+      if (/dinh dưỡng|thức ăn|ăn|calo|chuyển hóa|cơ bắp|thể thao|autophagy/.test(text)) return 'nutrition';
+      if (/sinh thái|biển|vũ trụ|tiến hóa|khí hậu|thực vật/.test(text)) return 'eco';
+      return 'genetics';
+    }
 
     function loadDailyArticles() {
-      const todayDate = new Date().toISOString().split('T')[0];
+      const todayDate = getLocalDateStr(0);
       const savedDate = safeGetLocal("BIOHABIT_ARTICLES_DATE");
       const savedArticles = safeGetLocal("BIOHABIT_DAILY_ARTICLES");
 
       if (savedArticles && savedDate === todayDate) {
         try {
-          currentArticlesList = JSON.parse(savedArticles);
+          const parsed = JSON.parse(savedArticles);
+          currentArticlesList = Array.isArray(parsed) && parsed.length > 0 ? parsed : [...DEFAULT_ARTICLES];
         } catch (e) {
-          currentArticlesList = DEFAULT_ARTICLES;
+          currentArticlesList = [...DEFAULT_ARTICLES];
         }
       } else {
-        currentArticlesList = DEFAULT_ARTICLES;
+        currentArticlesList = [...DEFAULT_ARTICLES];
         safeSetLocal("BIOHABIT_ARTICLES_DATE", todayDate);
-        safeSetLocal("BIOHABIT_DAILY_ARTICLES", JSON.stringify(DEFAULT_ARTICLES));
+        safeSetLocal("BIOHABIT_DAILY_ARTICLES", JSON.stringify(currentArticlesList));
+      }
+      renderArticlesMarket();
+    }
+
+    function getMergedArticles() {
+      const map = new Map();
+      // Đưa các bài đã mở khóa lưu vĩnh viễn vào trước để không bao giờ bị mất
+      (AppState.savedArticles || []).forEach(art => {
+        if (art && art.id) map.set(art.id, art);
+      });
+      // Đưa các bài trong danh sách hiện tại vào (nếu trùng ID thì giữ nguyên)
+      (currentArticlesList || []).forEach(art => {
+        if (art && art.id && !map.has(art.id)) map.set(art.id, art);
+      });
+      return Array.from(map.values());
+    }
+
+    function setMarketFilter(cat) {
+      currentMarketFilter = cat;
+      document.querySelectorAll('.mfilter-btn').forEach(btn => {
+        btn.classList.remove('bg-bio-600', 'text-white');
+        btn.classList.add('bg-slate-100', 'text-slate-600');
+      });
+      const active = document.getElementById(`mfilter-${cat}`);
+      if (active) {
+        active.classList.add('bg-bio-600', 'text-white');
+        active.classList.remove('bg-slate-100', 'text-slate-600');
       }
       renderArticlesMarket();
     }
@@ -2198,21 +3073,97 @@
 
         const data = await res.json();
 
-        if (res.ok && Array.isArray(data.articles) && data.articles.length === 3) {
-          currentArticlesList = data.articles;
-          const todayDate = new Date().toISOString().split('T')[0];
+        if (res.ok && Array.isArray(data.articles) && data.articles.length >= 1) {
+          const stamp = Date.now();
+          const newArticles = data.articles.map((art, i) => ({
+            ...art,
+            id: `art_ai_${stamp}_${i}`,
+            cost: typeof art.cost === 'number' ? art.cost : 40
+          }));
+
+          // Thêm lên đầu danh sách thay vì xóa sạch bài cũ
+          currentArticlesList = [...newArticles, ...currentArticlesList];
+          const todayDate = getLocalDateStr(0);
           safeSetLocal("BIOHABIT_ARTICLES_DATE", todayDate);
-          safeSetLocal("BIOHABIT_DAILY_ARTICLES", JSON.stringify(data.articles));
-          showToast("Gemini đã xuất bản 3 bài nghiên cứu Y sinh mới toanh!", "success");
+          safeSetLocal("BIOHABIT_DAILY_ARTICLES", JSON.stringify(currentArticlesList));
+          showToast(`Gemini đã xuất bản thêm ${newArticles.length} bài nghiên cứu mới!`, "success");
         } else {
-          if (isManualClick) showToast("Máy chủ đang bận, đang giữ bộ bài nghiên cứu xuất sắc hiện tại!", "info");
+          if (isManualClick) showToast("Máy chủ đang bận, bạn hãy thử lại sau ít giây hoặc tự nhập chủ đề ở ô bên dưới!", "info");
         }
       } catch (err) {
-        if (isManualClick) showToast("Lỗi kết nối khi tải bài mới, giữ bộ bài hiện tại!", "info");
+        if (isManualClick) showToast("Lỗi kết nối khi tải bài mới, giữ nguyên thư viện hiện tại!", "info");
       } finally {
         if (reloadIcon) reloadIcon.classList.remove('animate-spin');
-        if (reloadText) reloadText.innerText = "Xuất bản 3 bài mới (AI)";
+        if (reloadText) reloadText.innerText = "Thêm 3 bài mới (AI)";
         renderArticlesMarket();
+      }
+    }
+
+    async function generateCustomTopicArticle(e) {
+      if (e) e.preventDefault();
+      const input = document.getElementById('market-custom-topic');
+      const btn = document.getElementById('btn-custom-article');
+      const icon = document.getElementById('custom-article-icon');
+      const btnText = document.getElementById('custom-article-text');
+
+      const topic = input?.value.trim();
+      if (!topic) {
+        showToast("Hãy nhập chủ đề bạn muốn AI viết bài nghiên cứu!", "warning");
+        return;
+      }
+
+      if (btn) btn.disabled = true;
+      if (icon) icon.className = "fa-solid fa-spinner animate-spin mr-1.5";
+      if (btnText) btnText.innerText = "Đang biên soạn...";
+
+      const prompt = `Hãy viết 1 bài báo khoa học chuyên sâu nhưng dễ hiểu bằng tiếng Việt về chủ đề: "${topic}".\nTrả về duy nhất 1 JSON hợp lệ (không thêm markdown thừa) theo cấu trúc:\n{\n  "title": "Tiêu đề hấp dẫn",\n  "tag": "Lĩnh vực • Chuyên đề",\n  "summary": "Tóm tắt 2 câu súc tích",\n  "content": "<h4 class='font-bold text-slate-800 text-sm'>1. Cơ chế / Khái niệm cốt lõi</h4><p>Nội dung...</p><h4 class='font-bold text-slate-800 text-sm mt-3'>2. Ứng dụng thực tế & Góc nhìn khoa học</h4><p>Nội dung...</p>"\n}`;
+
+      try {
+        const res = await fetch('/api/gemini', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ type: 'chat', message: prompt, history: [] })
+        });
+        const data = await res.json();
+
+        if (res.ok && data.reply) {
+          let parsed = null;
+          const jsonMatch = data.reply.match(/\{[\s\S]*\}/);
+          if (jsonMatch) {
+            try { parsed = JSON.parse(jsonMatch[0]); } catch (err) { parsed = null; }
+          }
+
+          const newId = 'art_custom_' + Date.now();
+          const customArt = parsed && parsed.title ? {
+            id: newId,
+            title: parsed.title,
+            tag: parsed.tag || `Chuyên đề • ${topic}`,
+            cost: 30,
+            summary: parsed.summary || `Bài nghiên cứu AI biên soạn theo yêu cầu về chủ đề: ${topic}.`,
+            content: sanitizeHTML(parsed.content || `<p>${escapeHTML(data.reply)}</p>`)
+          } : {
+            id: newId,
+            title: `Nghiên cứu chuyên sâu: ${topic}`,
+            tag: "AI Biên soạn • Chủ đề tự do",
+            cost: 30,
+            summary: `Bài phân tích khoa học được Gemini AI tổng hợp riêng theo yêu cầu về "${topic}".`,
+            content: `<div class="space-y-2">${escapeHTML(data.reply).replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}</div>`
+          };
+
+          currentArticlesList.unshift(customArt);
+          safeSetLocal("BIOHABIT_DAILY_ARTICLES", JSON.stringify(currentArticlesList));
+          if (input) input.value = "";
+          setMarketFilter('all');
+          showToast(`Đã xuất bản bài nghiên cứu về "${topic}"!`, "success");
+        } else {
+          showToast(data.error || "Gemini đang bận, thử lại sau vài giây nhé!", "warning");
+        }
+      } catch (err) {
+        showToast("Không kết nối được /api/gemini để viết bài theo chủ đề!", "warning");
+      } finally {
+        if (btn) btn.disabled = false;
+        if (icon) icon.className = "fa-solid fa-feather-pointed mr-1.5";
+        if (btnText) btnText.innerText = "AI Viết bài theo chủ đề";
       }
     }
 
@@ -2220,25 +3171,48 @@
       const container = document.getElementById('article-cards-container');
       if (!container) return;
 
-      container.innerHTML = currentArticlesList.map(art => {
-        const isUnlocked = AppState.unlockedArticles?.includes(art.id);
+      const allArticles = getMergedArticles();
+      const unlockedSet = new Set(AppState.unlockedArticles || []);
+
+      const countAll = document.getElementById('market-count-all');
+      const countUnlocked = document.getElementById('market-count-unlocked');
+      if (countAll) countAll.innerText = allArticles.length;
+      if (countUnlocked) countUnlocked.innerText = allArticles.filter(a => unlockedSet.has(a.id)).length;
+
+      const filtered = allArticles.filter(art => {
+        if (currentMarketFilter === 'all') return true;
+        if (currentMarketFilter === 'unlocked') return unlockedSet.has(art.id);
+        return inferArticleCategory(art) === currentMarketFilter;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="md:col-span-3 bg-white p-8 rounded-2xl border border-dashed border-slate-200 text-center text-xs text-slate-500">
+            Chưa có bài viết nào trong mục này. Hãy chuyển sang "Tất cả" hoặc nhập chủ đề ở trên để Gemini AI viết bài mới cho bạn!
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = filtered.map(art => {
+        const isUnlocked = unlockedSet.has(art.id);
         const actionBtn = isUnlocked
-          ? `<button type="button" onclick="openArticleModal('${art.id}')" class="w-full py-2.5 bg-bio-100 hover:bg-bio-200 text-bio-800 rounded-xl text-xs font-bold transition flex items-center justify-center">
+          ? `<button type="button" onclick="openArticleModal('${escapeHTML(art.id)}')" class="w-full py-2.5 bg-bio-100 hover:bg-bio-200 text-bio-800 rounded-xl text-xs font-bold transition flex items-center justify-center">
                <i class="fa-solid fa-book-open-reader mr-2"></i> Đọc bài nghiên cứu (Đã mở)
              </button>`
-          : `<button type="button" onclick="unlockArticle('${art.id}', ${art.cost})" class="w-full py-2.5 bg-bio-600 hover:bg-bio-700 text-white rounded-xl text-xs font-bold transition flex items-center justify-center">
-               <i class="fa-solid fa-lock mr-2"></i> Mở khóa đề tài (${art.cost} Coins)
+          : `<button type="button" onclick="unlockArticle('${escapeHTML(art.id)}', ${Number(art.cost) || 50})" class="w-full py-2.5 bg-bio-600 hover:bg-bio-700 text-white rounded-xl text-xs font-bold transition flex items-center justify-center">
+               <i class="fa-solid fa-lock mr-2"></i> Mở khóa đề tài (${Number(art.cost) || 50} Coins)
              </button>`;
 
         return `
           <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col justify-between p-5 hover:shadow-md transition">
             <div>
-              <div class="flex items-center justify-between text-xs mb-3">
-                <span class="px-2.5 py-1 rounded-full font-bold bg-blue-100 text-blue-700 truncate max-w-[200px]">${art.tag}</span>
-                <span class="font-bold text-amber-600 shrink-0"><i class="fa-solid fa-coins mr-1"></i>${art.cost} Coins</span>
+              <div class="flex items-center justify-between text-xs mb-3 gap-2">
+                <span class="px-2.5 py-1 rounded-full font-bold bg-blue-100 text-blue-700 truncate">${escapeHTML(art.tag)}</span>
+                <span class="font-bold text-amber-600 shrink-0"><i class="fa-solid fa-coins mr-1"></i>${Number(art.cost) || 50} Coins</span>
               </div>
-              <h3 class="font-extrabold text-slate-800 text-base mb-2 leading-snug">${art.title}</h3>
-              <p class="text-xs text-slate-500 leading-relaxed mb-4">${art.summary}</p>
+              <h3 class="font-extrabold text-slate-800 text-base mb-2 leading-snug">${escapeHTML(art.title)}</h3>
+              <p class="text-xs text-slate-500 leading-relaxed mb-4">${escapeHTML(art.summary)}</p>
             </div>
             <div>
               ${actionBtn}
@@ -2250,6 +3224,11 @@
 
     function unlockArticle(articleId, cost) {
       if (!AppState.unlockedArticles) AppState.unlockedArticles = [];
+      if (!Array.isArray(AppState.savedArticles)) AppState.savedArticles = [];
+
+      const allArticles = getMergedArticles();
+      const article = allArticles.find(a => a.id === articleId);
+
       if (AppState.unlockedArticles.includes(articleId)) {
         openArticleModal(articleId);
         return;
@@ -2262,25 +3241,31 @@
 
       AppState.user.coins -= cost;
       AppState.unlockedArticles.push(articleId);
+
+      // Lưu bản sao nội dung bài vào AppState.savedArticles để đọc lại vĩnh viễn
+      if (article && !AppState.savedArticles.some(s => s.id === articleId)) {
+        AppState.savedArticles.unshift(article);
+      }
+
       saveState();
-      showToast("Mở khóa đề tài nghiên cứu thành công!", "success");
+      showToast("Mở khóa đề tài nghiên cứu thành công & đã lưu vào thư viện!", "success");
       openArticleModal(articleId);
     }
 
     function openArticleModal(articleId) {
-      const article = currentArticlesList.find(a => a.id === articleId) || DEFAULT_ARTICLES.find(a => a.id === articleId);
+      const article = getMergedArticles().find(a => a.id === articleId) || DEFAULT_ARTICLES.find(a => a.id === articleId);
       if (!article) return;
 
       const titleEl = document.getElementById('modal-article-title');
       const contentEl = document.getElementById('modal-article-content');
       const modal = document.getElementById('article-modal');
 
-      if (titleEl) titleEl.innerHTML = `<i class="fa-solid fa-dna text-bio-600 mr-2"></i> ${article.title}`;
+      if (titleEl) titleEl.innerHTML = `<i class="fa-solid fa-dna text-bio-600 mr-2"></i> ${escapeHTML(article.title)}`;
       if (contentEl) contentEl.innerHTML = `
         <div class="mb-3">
-          <span class="text-[11px] font-bold text-bio-700 bg-bio-100 px-2.5 py-1 rounded-full">${article.tag}</span>
+          <span class="text-[11px] font-bold text-bio-700 bg-bio-100 px-2.5 py-1 rounded-full">${escapeHTML(article.tag)}</span>
         </div>
-        ${article.content}
+        ${sanitizeHTML(article.content)}
       `;
       if (modal) {
         modal.classList.remove('hidden');
@@ -2300,399 +3285,4 @@
     const firebaseConfig = { 
       apiKey : "AIzaSyBs8IE9u231Sbpr5jbghNAKFEHkM0v8sOs", 
       authDomain : "biohabit-f8a7f.firebaseapp.com", 
-      projectId : "biohabit-f8a7f", 
-      storageBucket : "biohabit-f8a7f.firebasestorage.app", 
-      messagingSenderId : "455369675252", 
-      appId : "1:455369675252:web:2d91ba6b4e13f08b46a9a1", 
-      measurementId : "G-P11VQXNKBS" 
-    };
-
-    let auth = null;
-    let db = null;
-    let currentUser = null;
-    let unsubscribeFirestore = null;
-
-    try {
-      if (typeof firebase !== 'undefined') {
-        firebase.initializeApp(firebaseConfig);
-        auth = firebase.auth();
-        db = firebase.firestore();
-      }
-    } catch (e) {
-      console.warn("Firebase fallback:", e);
-    }
-
-    function mergeWithDefaults(rawData) {
-      const def = JSON.parse(JSON.stringify(DEFAULT_STORAGE));
-      if (!rawData) return def;
-      return {
-        user: { ...def.user, ...(rawData.user || {}) },
-        schedule: { ...def.schedule, ...(rawData.schedule || {}) },
-        theme: { ...def.theme, ...(rawData.theme || {}) },
-        favoriteTracks: Array.isArray(rawData.favoriteTracks) ? rawData.favoriteTracks : [],
-        focusSessions: typeof rawData.focusSessions === 'number' ? rawData.focusSessions : 0,
-        unlockedArticles: Array.isArray(rawData.unlockedArticles) ? rawData.unlockedArticles : def.unlockedArticles,
-        badges: { ...def.badges, ...(rawData.badges || {}) }
-      };
-    }
-
-    function checkInAppBrowser() {
-      const ua = navigator.userAgent || navigator.vendor || window.opera;
-      const isInApp = (/FBAN|FBAV|Instagram|Zalo|Line|Twitter|MicroMessenger/i.test(ua));
-      const warningBanner = document.getElementById('inapp-browser-warning');
-      if (isInApp && warningBanner) {
-        warningBanner.classList.remove('hidden');
-      }
-      return isInApp;
-    }
-
-    function loginWithGoogle() {
-      if (!auth) {
-        showToast("Firebase chưa sẵn sàng, đang chạy offline!", "info");
-        return;
-      }
-
-      if (checkInAppBrowser()) {
-        alert("Google chặn đăng nhập bên trong Zalo/Facebook!\n\nBạn vui lòng bấm dấu 3 chấm (...) ở góc trên bên phải màn hình ➔ chọn 'Mở bằng trình duyệt' (Chrome hoặc Safari) để đăng nhập nhé!");
-        return;
-      }
-
-      const provider = new firebase.auth.GoogleAuthProvider();
-      auth.signInWithPopup(provider)
-        .then(() => showToast("Đăng nhập Google thành công!", "success"))
-        .catch(error => {
-          if (error.code === 'auth/popup-blocked' || error.code === 'auth/cancelled-popup-request') {
-            auth.signInWithRedirect(provider);
-          } else if (error.code === 'auth/unauthorized-domain') {
-            showToast("Tên miền này chưa được thêm vào Firebase Authorized Domains!", "warning");
-          } else {
-            showToast("Lỗi: " + error.message, "warning");
-          }
-        });
-    }
-
-    if (auth) {
-      auth.getRedirectResult().catch(err => {
-        if (err.code === 'auth/unauthorized-domain') {
-          showToast("Tên miền chưa được ủy quyền trên Firebase!", "warning");
-        }
-      });
-
-      auth.onAuthStateChanged(user => {
-        const btnLogin = document.getElementById('btn-login-google');
-        const userBox = document.getElementById('user-logged-pill');
-
-        if (user) {
-          currentUser = user;
-          if (btnLogin) btnLogin.classList.add('hidden');
-          if (userBox) userBox.classList.remove('hidden');
-
-          const nameEl = document.getElementById('user-display-name');
-          const imgEl = document.getElementById('user-avatar-img');
-          if (nameEl) nameEl.innerText = user.displayName || "Học sinh";
-          if (imgEl) imgEl.src = user.photoURL || 'https://api.dicebear.com/7.x/bottts/svg?seed=biohabit';
-
-          if (unsubscribeFirestore) unsubscribeFirestore();
-          
-          if (db) {
-            unsubscribeFirestore = db.collection("users").doc(user.uid).onSnapshot(doc => {
-              if (doc.exists) {
-                AppState = mergeWithDefaults(doc.data());
-              } else {
-                AppState = JSON.parse(JSON.stringify(DEFAULT_STORAGE));
-                AppState.user.name = user.displayName || "Học sinh";
-                db.collection("users").doc(user.uid).set(AppState);
-              }
-              applyTheme(AppState.theme);
-              updateGlobalUI();
-              renderArticlesMarket();
-              renderFavoriteTracks();
-            }, err => {
-              console.error("Lỗi Firestore:", err);
-              loadLocalFallback();
-            });
-          }
-
-        } else {
-          currentUser = null;
-          if (unsubscribeFirestore) unsubscribeFirestore();
-
-          if (btnLogin) btnLogin.classList.remove('hidden');
-          if (userBox) userBox.classList.add('hidden');
-          loadLocalFallback();
-        }
-      });
-    }
-
-    function logoutGoogle() {
-      if (auth) {
-        auth.signOut().then(() => showToast("Đã đăng xuất tài khoản", "info"));
-      }
-    }
-
-    function loadLocalFallback() {
-      const saved = safeGetLocal("BIOHABIT_STATE");
-      if (saved) {
-        try { AppState = mergeWithDefaults(JSON.parse(saved)); }
-        catch(e) { AppState = JSON.parse(JSON.stringify(DEFAULT_STORAGE)); }
-      } else {
-        AppState = JSON.parse(JSON.stringify(DEFAULT_STORAGE));
-      }
-      applyTheme(AppState.theme);
-      updateGlobalUI();
-      renderArticlesMarket();
-      renderFavoriteTracks();
-    }
-
-    function saveState() {
-      if (currentUser && db) {
-        db.collection("users").doc(currentUser.uid).set(AppState)
-          .catch(err => console.error("Lỗi Firestore:", err));
-      } else {
-        safeSetLocal("BIOHABIT_STATE", JSON.stringify(AppState));
-        updateGlobalUI();
-        renderArticlesMarket();
-      }
-    }
-
-    /* 9. CẬP NHẬT GIAO DIỆN CHUNG */
-    function updateGlobalUI() {
-      try {
-        const uCoins = document.getElementById('user-coins');
-        const dCoins = document.getElementById('dash-coins');
-        const mCoins = document.getElementById('market-coins-display');
-        const dStreak = document.getElementById('dash-streak');
-        const dCount = document.getElementById('dash-unlocked-count');
-        const fSessions = document.getElementById('focus-sessions-count');
-
-        if (uCoins) uCoins.innerText = AppState.user?.coins ?? 50;
-        if (dCoins) dCoins.innerText = AppState.user?.coins ?? 50;
-        if (mCoins) mCoins.innerText = AppState.user?.coins ?? 50;
-        if (dStreak) dStreak.innerText = `${AppState.user?.streak ?? 1} ngày`;
-        if (dCount) dCount.innerText = `${AppState.unlockedArticles?.length ?? 1} bài`;
-        if (fSessions) fSessions.innerText = AppState.focusSessions ?? 0;
-
-        const s = AppState.schedule || {};
-        const setVal = (id, val) => { const el = document.getElementById(id); if (el) el.value = val ?? ""; };
-        setVal('user-nickname', s.nickname);
-        setVal('user-role-select', s.role || 'student');
-        setVal('wake-time', s.wake);
-        setVal('school-time', s.school);
-        setVal('home-time', s.home);
-        setVal('sleep-time', s.sleep);
-        setVal('user-height', s.height);
-        setVal('user-weight', s.weight);
-        setVal('user-gender', s.gender || 'male');
-        setVal('user-goal', s.goal || 'maintain');
-
-        const nutCheck = document.getElementById('nutrition-toggle');
-        const nutInputs = document.getElementById('nutrition-inputs-area');
-        if (nutCheck) nutCheck.checked = !!s.nutritionEnabled;
-        if (nutInputs) nutInputs.classList.toggle('hidden', !s.nutritionEnabled);
-
-        const emptyStateEl = document.getElementById('planner-empty-state');
-        const resultsAreaEl = document.getElementById('planner-results-area');
-        const nutCardEl = document.getElementById('nutrition-result-card');
-        const resetBtnEl = document.getElementById('btn-reset-profile');
-        const statusBadgeEl = document.getElementById('planner-status-badge');
-
-        if (s.isConfigured) {
-          emptyStateEl?.classList.add('hidden');
-          resultsAreaEl?.classList.remove('hidden');
-          resetBtnEl?.classList.remove('hidden');
-
-          if (statusBadgeEl) {
-            statusBadgeEl.innerHTML = `<span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold bg-bio-100 text-bio-800 border border-bio-200"><i class="fa-solid fa-circle-check mr-1.5"></i> Đã tạo lộ trình cá nhân</span>`;
-          }
-
-          const setTxt = (id, txt) => { const el = document.getElementById(id); if (el) el.innerText = txt; };
-          const wakeStart = s.wake || "06:00";
-          const schoolStart = addMinutesToTimeStr(s.school || "07:15", 30);
-          const schoolPeakEnd = addMinutesToTimeStr(s.school || "07:15", 210);
-          const homeStart = s.home || "17:00";
-          const homeEnd = addMinutesToTimeStr(homeStart, 60);
-          const sleepStart = s.sleep || "22:30";
-          const blueLightOff = addMinutesToTimeStr(sleepStart, -45);
-
-          setTxt('time-wake-display', `${formatTimeToAMPM(wakeStart)} - Đánh thức cơ thể`);
-          setTxt('time-school-display', `${formatTimeToAMPM(schoolStart)} - ${formatTimeToAMPM(schoolPeakEnd)}`);
-          setTxt('time-home-display', `${formatTimeToAMPM(homeStart)} - ${formatTimeToAMPM(homeEnd)}`);
-          setTxt('time-sleep-display', `${formatTimeToAMPM(blueLightOff)} - ${formatTimeToAMPM(sleepStart)}`);
-
-          if (nutCardEl) nutCardEl.classList.toggle('hidden', !s.nutritionEnabled);
-          renderNutritionAdvice();
-        } else {
-          emptyStateEl?.classList.remove('hidden');
-          resultsAreaEl?.classList.add('hidden');
-          resetBtnEl?.classList.add('hidden');
-          if (statusBadgeEl) {
-            statusBadgeEl.innerHTML = `<span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-200"><i class="fa-solid fa-pen-to-square mr-1.5"></i> Chờ nhập thông tin</span>`;
-          }
-        }
-
-        checkBadges();
-        renderBadges();
-      } catch (err) {
-        console.error("Lỗi UI:", err);
-      }
-    }
-
-    function formatTimeToAMPM(timeStr) {
-      if (!timeStr || !timeStr.includes(":")) return "06:00 AM";
-      const [h, m] = timeStr.split(":");
-      let hour = parseInt(h);
-      const period = hour >= 12 ? "PM" : "AM";
-      hour = hour % 12 || 12;
-      return `${hour.toString().padStart(2, '0')}:${m} ${period}`;
-    }
-
-    function checkInHabits() {
-      const todayStr = new Date().toISOString().split('T')[0];
-      if (AppState.user?.lastCheckInDate === todayStr) {
-        showToast("Hôm nay bạn đã điểm danh rồi!", "info");
-        return;
-      }
-
-      const h1 = document.getElementById('habit-sleep')?.checked;
-      const h2 = document.getElementById('habit-water')?.checked;
-      const h3 = document.getElementById('habit-move')?.checked;
-
-      if (!h1 && !h2 && !h3) {
-        showToast("Vui lòng tích chọn ít nhất 1 thói quen bạn đã làm!", "warning");
-        return;
-      }
-
-      AppState.user.coins = (AppState.user.coins || 0) + 10;
-      AppState.user.streak = (AppState.user.streak || 0) + 1;
-      AppState.user.lastCheckInDate = todayStr;
-
-      saveState();
-      showToast("Tuyệt vời! +10 BioCoins và duy trì chuỗi Streak!", "success");
-    }
-
-    document.getElementById('nutrition-toggle')?.addEventListener('change', function(e) {
-      const area = document.getElementById('nutrition-inputs-area');
-      if (area) area.classList.toggle('hidden', !e.target.checked);
-    });
-
-    document.getElementById('bio-profile-form')?.addEventListener('submit', function(e) {
-      e.preventDefault();
-
-      const wake = document.getElementById('wake-time')?.value;
-      const school = document.getElementById('school-time')?.value;
-      const home = document.getElementById('home-time')?.value;
-      const sleep = document.getElementById('sleep-time')?.value;
-      const nutritionEnabled = document.getElementById('nutrition-toggle')?.checked ?? true;
-      const height = parseFloat(document.getElementById('user-height')?.value);
-      const weight = parseFloat(document.getElementById('user-weight')?.value);
-
-      if (!wake || !school || !home || !sleep) {
-        showToast("Vui lòng điền đầy đủ 4 mốc thời gian sinh hoạt!", "warning");
-        return;
-      }
-
-      if (nutritionEnabled && (!height || !weight || height < 100 || weight < 25)) {
-        showToast("Vui lòng nhập chiều cao (≥100cm) và cân nặng (≥25kg) hợp lệ!", "warning");
-        return;
-      }
-
-      AppState.schedule = {
-        isConfigured: true,
-        nickname: document.getElementById('user-nickname')?.value.trim() || "",
-        role: document.getElementById('user-role-select')?.value || 'student',
-        wake,
-        school,
-        home,
-        sleep,
-        nutritionEnabled,
-        height: height || 165,
-        weight: weight || 55,
-        gender: document.getElementById('user-gender')?.value || 'male',
-        goal: document.getElementById('user-goal')?.value || 'maintain'
-      };
-
-      saveState();
-      showToast("Đã phân tích xong! Mở khóa Thực đơn & Nhịp sinh học của bạn.", "success");
-    });
-
-    function checkBadges() {
-      if (!AppState.badges) AppState.badges = {};
-      if ((AppState.user?.streak || 0) >= 7) AppState.badges.streak7 = true;
-      if ((AppState.unlockedArticles?.length || 0) >= 3) AppState.badges.bioScholar = true;
-    }
-
-    function renderBadges() {
-      const container = document.getElementById('badges-container');
-      if (!container) return;
-
-      const badgeList = [
-        {
-          name: 'Chiến thần Nhịp sinh học',
-          desc: 'Duy trì chuỗi Streak kỷ luật 7 ngày liên tiếp',
-          icon: 'fa-fire text-orange-500',
-          active: AppState.badges?.streak7
-        },
-        {
-          name: 'Bác sĩ tế bào',
-          desc: 'Đạt điểm tuyệt đối trong bài Quiz ngẫu nhiên',
-          icon: 'fa-brain text-purple-500',
-          active: AppState.badges?.quizMaster
-        },
-        {
-          name: 'Tâm hồn Sinh học',
-          desc: 'Mở khóa thành công ít nhất 3 đề tài nghiên cứu chuyên sâu',
-          icon: 'fa-graduation-cap text-bio-600',
-          active: AppState.badges?.bioScholar
-        }
-      ];
-
-      let currentBadge = "Mầm Sinh Học 🌱";
-      if (AppState.badges?.bioScholar) currentBadge = "Tâm Hồn Sinh Học 🎓";
-      else if (AppState.badges?.quizMaster) currentBadge = "Bác Sĩ Tế Bào 🧠";
-      else if (AppState.badges?.streak7) currentBadge = "Chiến Thần Sinh Học 🔥";
-      
-      const badgeCurrentEl = document.getElementById('dash-badge-current');
-      if (badgeCurrentEl) badgeCurrentEl.innerText = currentBadge;
-
-      container.innerHTML = badgeList.map(b => `
-        <div class="p-4 rounded-xl border ${b.active ? 'bg-bio-50/70 border-bio-300' : 'bg-slate-50 border-slate-200 opacity-60'} flex items-start space-x-3 transition">
-          <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-lg shrink-0 ${b.active ? 'border border-bio-200' : ''}">
-            <i class="fa-solid ${b.icon}"></i>
-          </div>
-          <div class="text-xs">
-            <div class="flex items-center space-x-1.5">
-              <span class="font-bold text-slate-800">${b.name}</span>
-              ${b.active ? '<span class="text-[9px] bg-bio-600 text-white font-extrabold px-1.5 py-0.5 rounded-full">ĐÃ ĐẠT</span>' : '<span class="text-[9px] text-slate-400 font-bold">KHÓA</span>'}
-            </div>
-            <p class="text-slate-500 mt-1 leading-snug">${b.desc}</p>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function showToast(msg, type = "success") {
-      const toast = document.getElementById('toast');
-      const icon = document.getElementById('toast-icon');
-      const text = document.getElementById('toast-msg');
-      if (!toast || !icon || !text) return;
-
-      text.innerText = msg;
-      if (type === "warning") icon.className = "fa-solid fa-triangle-exclamation text-amber-400 text-base";
-      else if (type === "info") icon.className = "fa-solid fa-circle-info text-blue-400 text-base";
-      else icon.className = "fa-solid fa-circle-check text-bio-400 text-base";
-
-      toast.classList.remove('opacity-0', 'translate-y-20', 'pointer-events-none');
-      setTimeout(() => toast.classList.add('opacity-0', 'translate-y-20', 'pointer-events-none'), 3500);
-    }
-
-    /* 10. KHỞI CHẠY LẦN ĐẦU */
-    window.addEventListener('DOMContentLoaded', () => {
-      checkInAppBrowser();
-      loadLocalFallback();
-      refreshRandomQuiz();
-      loadDailyArticles();
-      updatePomodoroDisplay();
-    });
-  </script>
-</body>
-</html>
+      projectId : "biohabit
