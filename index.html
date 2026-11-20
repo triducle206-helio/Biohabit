@@ -3683,7 +3683,7 @@
       }
       return p;
     };
-    // Vá lỗi nội dung "Nhận xét sâu (AI)" còn tiếng Việt khi chuyển sang EN
+   // Vá lỗi nội dung "Nhận xét sâu (AI)" còn tiếng Việt khi chuyển sang EN
     const _safeBaseFetch = typeof _origFetch === 'function' ? _origFetch : window.fetch.bind(window);
     const _hasViAccent = (str) => /[àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ]/i.test(str || '');
 
