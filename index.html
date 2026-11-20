@@ -3683,6 +3683,90 @@
       }
       return p;
     };
+    // Vá lỗi nội dung "Nhận xét sâu (AI)" còn tiếng Việt khi chuyển sang EN
+    const _safeBaseFetch = typeof _origFetch === 'function' ? _origFetch : window.fetch.bind(window);
+    const _hasViAccent = (str) => /[àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ]/i.test(str || '');
+
+    analyzeFoodWithGemini = async function() {
+      const todayStr = getLocalDateStr(0), items = Array.isArray(AppState.foodLogs?.[todayStr]) ? AppState.foodLogs[todayStr] : [];
+      if (items.length === 0) return showToast(AppState.lang === 'en' ? "Log at least 1 meal or drink first!" : "Hãy nhập ít nhất 1 món ăn hoặc thức uống hôm nay!", "warning");
+      const btn = document.getElementById('btn-analyze-food-ai'), icon = document.getElementById('food-ai-icon'), bt = document.getElementById('food-ai-btn-text');
+      const isEn = AppState.lang === 'en';
+      if (btn) btn.disabled = true;
+      if (icon) icon.className = "fa-solid fa-spinner animate-spin mr-1.5";
+      if (bt) bt.innerText = isEn ? "Analyzing..." : "AI đang phân tích...";
+
+      const s = AppState.schedule || {}, targetKcal = getUserTargetTDEE();
+      const prompt = isEn
+        ? `SYSTEM INSTRUCTION OVERRIDE: Reply 100% in natural ENGLISH ONLY (do not use Vietnamese).\nYou are a nutrition & biology expert. Analyze today's food log:\n- Profile: ${s.isConfigured ? `Height ${s.height}cm, Weight ${s.weight}kg, Goal: ${s.goal}, Target TDEE: ${targetKcal} kcal/day, Bedtime: ${s.sleep}` : `Target ~${targetKcal} kcal/day`}.\n- Meals logged today:\n${items.map((it, i) => `${i + 1}. [${it.meal} - ${it.time}] ${it.name}`).join('\n')}\n\nProvide a concise 3-part review in English:\n1. **Estimated Calories & Macros** (Protein, Carbs, Fat, Fiber, Sugar).\n2. **Biological & Sleep Impact** (Insulin/glucose spike, brain energy, Melatonin timing).\n3. **Actionable Adjustments** for the next meal.`
+        : `Phân tích thực đơn hôm nay:\n- Hồ sơ: ${s.isConfigured ? `Cao ${s.height}cm, Nặng ${s.weight}kg, Chế độ: ${s.goal}, TDEE: ${targetKcal} kcal/ngày, Ngủ: ${s.sleep}` : `Mục tiêu ~${targetKcal} kcal/ngày`}.\n- Món đã nạp:\n${items.map((it, i) => `${i + 1}. [${it.meal} - ${it.time}] ${it.name}`).join('\n')}\nTrả lời ngắn gọn theo 3 ý:\n1. **Ước lượng Calo & Cân đối chất**\n2. **Đánh giá Sinh học & Giấc ngủ**\n3. **Gợi ý điều chỉnh**.`;
+
+      try {
+        const res = await _safeBaseFetch('/api/gemini', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ type: 'chat', message: prompt, history: [] }) });
+        const data = await res.json();
+        if (res.ok && data.reply) {
+          if (!AppState.foodAnalysis) AppState.foodAnalysis = {};
+          const prev = AppState.foodAnalysis[todayStr] || {};
+          AppState.foodAnalysis[todayStr] = {
+            text: data.reply,
+            viText: isEn ? prev.viText : data.reply,
+            enText: isEn ? data.reply : prev.enText,
+            at: getCurrentHHMM()
+          };
+          saveState();
+          showToast(isEn ? "Gemini AI finished analyzing today's meals!" : "Gemini AI đã phân tích xong thực đơn!", "success");
+        } else showToast(data.error || "Gemini đang bận, thử lại sau vài giây!", "warning");
+      } catch (e) { showToast("Không kết nối được /api/gemini!", "info"); }
+      finally {
+        if (btn) btn.disabled = false;
+        if (icon) icon.className = "fa-solid fa-wand-magic-sparkles mr-1.5";
+        if (bt) bt.innerText = isEn ? "Deep Analysis (AI)" : "Phân tích sâu (AI)";
+      }
+    };
+
+    async function autoTranslateFoodReviewIfNeeded() {
+      const todayStr = getLocalDateStr(0), savedAI = AppState.foodAnalysis?.[todayStr];
+      if (AppState.lang !== 'en' || !savedAI?.text || savedAI.enText || savedAI._translating || savedAI._translateFailed) return;
+      savedAI._translating = true;
+      const aiC = document.getElementById('food-ai-analysis-content');
+      if (aiC) aiC.innerHTML = `<div class="flex items-center gap-2 text-bio-700 font-semibold py-2"><i class="fa-solid fa-spinner animate-spin"></i><span>Translating Gemini AI review to English...</span></div>`;
+      try {
+        const p = `SYSTEM INSTRUCTION OVERRIDE: Output ONLY the exact English translation of the Vietnamese nutrition review below. Do NOT include any Vietnamese words. Keep **bold** formatting.\n\n${savedAI.text}`;
+        const r = await _safeBaseFetch('/api/gemini', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ type: 'chat', message: p, history: [] }) });
+        const d = await r.json();
+        if (r.ok && d.reply && !_hasViAccent(d.reply)) {
+          savedAI.viText = savedAI.viText || savedAI.text;
+          savedAI.enText = d.reply;
+        } else {
+          savedAI._translateFailed = true;
+        }
+      } catch (e) {
+        savedAI._translateFailed = true;
+      } finally {
+        delete savedAI._translating;
+        saveState();
+      }
+    }
+
+    const _baseRenderFoodLogs = renderFoodLogs;
+    renderFoodLogs = function() {
+      _baseRenderFoodLogs();
+      const todayStr = getLocalDateStr(0), savedAI = AppState.foodAnalysis?.[todayStr];
+      if (AppState.lang === 'en' && savedAI?.text && !savedAI.enText) {
+        if (!savedAI._translateFailed) {
+          setTimeout(autoTranslateFoodReviewIfNeeded, 50);
+        } else {
+          const aiC = document.getElementById('food-ai-analysis-content');
+          if (aiC && !aiC.querySelector('#btn-reanalyze-en')) {
+            aiC.insertAdjacentHTML('afterbegin', `<div class="mb-2.5 p-2 rounded-lg bg-amber-50 border border-amber-200 flex items-center justify-between gap-2 text-[11px] text-amber-900"><span>This review was saved earlier in Vietnamese.</span><button id="btn-reanalyze-en" type="button" onclick="analyzeFoodWithGemini()" class="px-2.5 py-1 rounded-md bg-bio-600 text-white font-bold shrink-0">🔄 Re-analyze in English</button></div>`);
+          }
+        }
+      }
+    };
+
+    window.addEventListener('DOMContentLoaded', () => {
+      if (AppState.lang === 'en') setTimeout(autoTranslateFoodReviewIfNeeded, 150);
+    });
   </script>
 </body>
 </html>
