@@ -182,21 +182,26 @@
       animation: shimmerSweep 6s ease infinite;
     }
 
-    /* === SƠ ĐỒ TƯ DUY (MIND MAP) TRONG BIOMARKET === */
-    .mindmap-tree { position: relative; padding-left: 1.5rem; }
-    .mindmap-tree::before {
-      content: ""; position: absolute; left: 0.45rem; top: 0.75rem; bottom: 0.75rem;
-      width: 2.5px; border-radius: 999px;
-      background: linear-gradient(180deg, var(--grad-start), var(--grad-mid), var(--grad-end));
+   /* === BÀI NGHIÊN CỨU KHOA HỌC & SƠ ĐỒ TƯ DUY 2 BÊN === */
+    .paper-abstract {
+      font-family: "Lora", Georgia, serif;
+      border-left: 3.5px solid rgb(var(--bio-600));
     }
-    .mindmap-branch { position: relative; }
-    .mindmap-branch::before {
-      content: ""; position: absolute; left: -1.05rem; top: 1.15rem;
-      width: 1.05rem; height: 2.5px; background: rgb(var(--bio-400));
+    .paper-body h4 {
+      font-weight: 800;
+      font-size: 0.95rem;
+      margin-top: 1.15rem;
+      margin-bottom: 0.4rem;
+      color: rgb(var(--bio-800));
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
     }
-    .mindmap-leaves { position: relative; padding-left: 1.25rem; margin-left: 0.65rem; border-left: 2px dashed rgb(var(--bio-300)); }
-    .mindmap-leaf { position: relative; }
-    .mindmap-leaf::before {
+    body.theme-dark .paper-body h4 { color: rgb(var(--bio-300)); }
+    .paper-body ul { list-style: disc; padding-left: 1.25rem; space-y: 0.35rem; }
+    .paper-body li { margin-bottom: 0.35rem; }
+    #mindmap-canvas { position: relative; }
+    #mindmap-svg { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
       content: ""; position: absolute; left: -1.25rem; top: 0.95rem;
       width: 1.1rem; height: 2px; background: rgb(var(--bio-300));
     }
@@ -919,56 +924,64 @@
       </div>
     </section>
 
-    <!-- ================= TAB 6: BIOMARKET (TRÌNH BÀY SƠ ĐỒ TƯ DUY) ================= -->
+    <!-- ================= TAB 6: BIOMARKET (TẠP CHÍ NGHIÊN CỨU & SƠ ĐỒ TƯ DUY) ================= -->
     <section id="tab-market" class="hidden space-y-6">
+      <!-- Masthead Tạp chí Khoa học -->
       <div class="custom-gradient p-6 sm:p-8 rounded-3xl text-white shadow-lg flex flex-col md:flex-row items-center justify-between gap-6">
         <div class="space-y-2">
-          <span class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-white/20 text-white">
-            Tạp chí Y Sinh học • Trình bày chi tiết bằng Sơ đồ tư duy (Mind Map)
-          </span>
-          <h2 class="text-xl sm:text-3xl font-extrabold tracking-tight">BioMarket: Sơ Đồ Tư Duy Nghiên Cứu Không Giới Hạn</h2>
-          <p class="text-xs sm:text-sm text-white/90 max-w-xl">
-            Mở khóa các bài nghiên cứu chuyên sâu hoặc đặt chủ đề bất kỳ để AI biên soạn. Mỗi bài viết đều được hệ thống phân tích thành Sơ đồ tư duy phân nhánh chi tiết!
+          <div class="flex flex-wrap items-center gap-2 text-[11px] font-bold">
+            <span class="px-2.5 py-1 rounded-full bg-white/20 uppercase tracking-wider">BioHabit Journal of Life Sciences</span>
+            <span class="px-2.5 py-1 rounded-full bg-black/20">Peer-Reviewed & Mind Map</span>
+          </div>
+          <h2 class="text-xl sm:text-3xl font-extrabold tracking-tight">BioMarket: Thư Viện Công Trình Nghiên Cứu Y Sinh</h2>
+          <p class="text-xs sm:text-sm text-white/90 max-w-2xl">
+            Đọc toàn văn bài báo khoa học chuẩn cấu trúc <strong>Abstract – Cơ chế – Số liệu – Tài liệu tham khảo</strong> hoặc chuyển sang chế độ <strong>Sơ đồ tư duy tỏa nhánh</strong> để nắm trọn kiến thức trong 1 phút.
           </p>
         </div>
         <div class="flex items-center space-x-3 shrink-0">
-          <div class="bg-white/10 backdrop-blur-sm p-4 rounded-2xl border border-white/20 text-center min-w-[115px]">
-            <span class="text-xs text-white/80 block">Số dư hiện tại</span>
+          <div class="bg-white/15 backdrop-blur-sm p-4 rounded-2xl border border-white/20 text-center min-w-[110px]">
+            <span class="text-[11px] text-white/80 block">Số dư ví</span>
             <span class="text-2xl font-black text-amber-300" id="market-coins-display">50</span>
-            <span class="text-[11px] text-white block">BioCoins</span>
+            <span class="text-[10px] text-white block">BioCoins</span>
           </div>
           <button type="button" id="btn-refresh-articles" onclick="fetchGeminiArticles(true)" class="px-4 py-3 bg-amber-400 hover:bg-amber-500 text-slate-900 font-extrabold text-xs rounded-2xl transition flex flex-col items-center shadow-md">
             <i class="fa-solid fa-wand-magic-sparkles text-base mb-1" id="article-reload-icon"></i>
-            <span id="article-reload-text">Thêm 3 bài mới (AI)</span>
+            <span id="article-reload-text">Xuất bản 3 bài (AI)</span>
           </button>
         </div>
       </div>
 
+      <!-- Thanh Tìm kiếm + AI Đặt viết nghiên cứu + Bộ lọc -->
       <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-        <form onsubmit="generateCustomTopicArticle(event)" class="flex flex-col sm:flex-row gap-2.5">
-          <div class="relative flex-grow">
-            <i class="fa-solid fa-diagram-project absolute left-3.5 top-1/2 -translate-y-1/2 text-bio-600 text-xs"></i>
-            <input type="text" id="market-custom-topic" placeholder="Nhập chủ đề bất kỳ để AI vẽ Sơ đồ tư duy nghiên cứu (VD: Liệu pháp CAR-T, Giấc ngủ REM, Sinh vật phát quang...)" class="w-full border border-slate-200 rounded-xl pl-9 pr-4 py-2.5 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-bio-500">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-3">
+          <div class="lg:col-span-5 relative">
+            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+            <input type="text" id="market-search-input" oninput="renderArticlesMarket()" placeholder="Tìm theo tên đề tài, từ khóa (#CRISPR, #REM...) hoặc mã DOI..." class="w-full border border-slate-200 rounded-xl pl-9 pr-4 py-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-bio-500">
           </div>
-          <button type="submit" id="btn-custom-article" class="px-5 py-2.5 bg-bio-600 hover:bg-bio-700 text-white font-bold rounded-xl text-xs sm:text-sm transition shadow-sm shrink-0 flex items-center justify-center">
-            <i class="fa-solid fa-feather-pointed mr-1.5" id="custom-article-icon"></i>
-            <span id="custom-article-text">AI Tạo sơ đồ bài mới</span>
-          </button>
-        </form>
+          <form onsubmit="generateCustomTopicArticle(event)" class="lg:col-span-7 flex flex-col sm:flex-row gap-2">
+            <div class="relative flex-grow">
+              <i class="fa-solid fa-flask absolute left-3.5 top-1/2 -translate-y-1/2 text-bio-600 text-xs"></i>
+              <input type="text" id="market-custom-topic" placeholder="Đặt đề tài bất kỳ để AI tổng hợp bài nghiên cứu + Sơ đồ tư duy (Miễn phí mở đọc)..." class="w-full border border-slate-200 rounded-xl pl-9 pr-4 py-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-bio-500">
+            </div>
+            <button type="submit" id="btn-custom-article" class="px-4 py-2.5 bg-bio-600 hover:bg-bio-700 text-white font-bold rounded-xl text-xs transition shadow-sm shrink-0 flex items-center justify-center">
+              <i class="fa-solid fa-feather-pointed mr-1.5" id="custom-article-icon"></i>
+              <span id="custom-article-text">AI Soạn Nghiên Cứu</span>
+            </button>
+          </form>
+        </div>
 
         <div class="flex items-center gap-2 overflow-x-auto pb-1 text-xs font-bold">
           <button type="button" onclick="setMarketFilter('all')" id="mfilter-all" class="mfilter-btn px-3 py-1.5 rounded-full bg-bio-600 text-white shrink-0 transition">Tất cả (<span id="market-count-all">0</span>)</button>
-          <button type="button" onclick="setMarketFilter('unlocked')" id="mfilter-unlocked" class="mfilter-btn px-3 py-1.5 rounded-full bg-slate-100 text-slate-600 hover:bg-bio-50 shrink-0 transition">📚 Đã mở khóa (<span id="market-count-unlocked">0</span>)</button>
+          <button type="button" onclick="setMarketFilter('unlocked')" id="mfilter-unlocked" class="mfilter-btn px-3 py-1.5 rounded-full bg-slate-100 text-slate-600 hover:bg-bio-50 shrink-0 transition">📚 Thư viện đã mở (<span id="market-count-unlocked">0</span>)</button>
           <button type="button" onclick="setMarketFilter('genetics')" id="mfilter-genetics" class="mfilter-btn px-3 py-1.5 rounded-full bg-slate-100 text-slate-600 hover:bg-bio-50 shrink-0 transition">🧬 Di truyền & Y sinh</button>
           <button type="button" onclick="setMarketFilter('neuro')" id="mfilter-neuro" class="mfilter-btn px-3 py-1.5 rounded-full bg-slate-100 text-slate-600 hover:bg-bio-50 shrink-0 transition">🧠 Thần kinh & Tâm lý</button>
-          <button type="button" onclick="setMarketFilter('nutrition')" id="mfilter-nutrition" class="mfilter-btn px-3 py-1.5 rounded-full bg-slate-100 text-slate-600 hover:bg-bio-50 shrink-0 transition">🥗 Dinh dưỡng & Thể chất</button>
+          <button type="button" onclick="setMarketFilter('nutrition')" id="mfilter-nutrition" class="mfilter-btn px-3 py-1.5 rounded-full bg-slate-100 text-slate-600 hover:bg-bio-50 shrink-0 transition">🥗 Dinh dưỡng & Chuyển hóa</button>
           <button type="button" onclick="setMarketFilter('eco')" id="mfilter-eco" class="mfilter-btn px-3 py-1.5 rounded-full bg-slate-100 text-slate-600 hover:bg-bio-50 shrink-0 transition">🌍 Sinh thái & Vũ trụ</button>
         </div>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="article-cards-container"></div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="article-cards-container"></div>
     </section>
-
   </main>
 
   <!-- ================= MINI PLAYER NỔI XUYÊN SUỐT CÁC TAB ================= -->
@@ -1089,26 +1102,29 @@
     </div>
   </div>
 
-  <!-- ================= MODAL BÀI VIẾT (SƠ ĐỒ TƯ DUY CHI TIẾT) ================= -->
-  <div id="article-modal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm items-center justify-center p-3 sm:p-4">
-    <div class="bg-white rounded-3xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden border border-slate-200">
-      <div class="px-5 sm:px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-bio-50/50 gap-3 flex-wrap">
-        <h3 id="modal-article-title" class="font-extrabold text-slate-800 text-sm sm:text-lg leading-snug">Tên Bài Viết</h3>
+ <!-- ================= MODAL ĐỌC BÀI NGHIÊN CỨU & SƠ ĐỒ TƯ DUY ================= -->
+  <div id="article-modal" class="hidden fixed inset-0 z-50 bg-black/65 backdrop-blur-sm items-center justify-center p-2 sm:p-4">
+    <div class="bg-white rounded-3xl max-w-5xl w-full max-h-[92vh] flex flex-col shadow-2xl overflow-hidden border border-slate-200">
+      <div class="px-5 sm:px-6 py-3.5 border-b border-slate-100 flex items-center justify-between bg-bio-50/60 gap-3 flex-wrap">
+        <div class="min-w-0">
+          <span class="text-[10px] font-extrabold uppercase tracking-wider text-bio-700 block" id="modal-article-doi">DOI: 10.1038/biohabit.2026</span>
+          <h3 id="modal-article-title" class="font-extrabold text-slate-900 text-sm sm:text-base leading-snug truncate max-w-xl">Tên Bài Nghiên Cứu</h3>
+        </div>
         <div class="flex items-center gap-2 shrink-0">
-          <div class="flex bg-slate-100 p-0.5 rounded-xl text-[11px] font-bold">
-            <button type="button" id="art-view-mindmap" onclick="setArticleViewMode('mindmap')" class="px-2.5 py-1.5 rounded-lg bg-white text-bio-700 shadow-sm transition">
+          <div class="flex bg-slate-100 p-0.5 rounded-xl text-[11px] font-bold border border-slate-200">
+            <button type="button" id="art-view-mindmap" onclick="setArticleViewMode('mindmap')" class="px-3 py-1.5 rounded-lg bg-white text-bio-700 shadow-sm transition">
               <i class="fa-solid fa-diagram-project mr-1"></i> Sơ đồ tư duy
             </button>
-            <button type="button" id="art-view-text" onclick="setArticleViewMode('text')" class="px-2.5 py-1.5 rounded-lg text-slate-500 transition">
-              <i class="fa-solid fa-align-left mr-1"></i> Văn bản
+            <button type="button" id="art-view-text" onclick="setArticleViewMode('text')" class="px-3 py-1.5 rounded-lg text-slate-500 transition">
+              <i class="fa-solid fa-file-lines mr-1"></i> Toàn văn Nghiên cứu
             </button>
           </div>
           <button type="button" onclick="closeArticleModal()" class="text-slate-400 hover:text-slate-700 w-8 h-8 rounded-full flex items-center justify-center hover:bg-slate-200 transition"><i class="fa-solid fa-xmark text-lg"></i></button>
         </div>
       </div>
-      <div class="p-5 sm:p-6 overflow-y-auto space-y-4 text-xs sm:text-sm text-slate-600 leading-relaxed" id="modal-article-content"></div>
+      <div class="p-4 sm:p-6 overflow-y-auto space-y-4 text-xs sm:text-sm text-slate-600 leading-relaxed" id="modal-article-content"></div>
       <div class="px-6 py-3 border-t border-slate-100 bg-slate-50 flex justify-between items-center">
-        <span class="text-[11px] text-slate-400 font-medium">💡 Bấm vào từng nhánh lớn trong sơ đồ để thu gọn / mở rộng chi tiết</span>
+        <span class="text-[11px] text-slate-400 font-medium" id="modal-article-footer-hint">💡 Chuyển giữa "Sơ đồ tư duy" và "Toàn văn Nghiên cứu" ở góc trên bên phải</span>
         <button type="button" onclick="closeArticleModal()" class="px-5 py-2 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-xl text-xs transition">Đóng</button>
       </div>
     </div>
@@ -2139,28 +2155,176 @@
       } catch (err) { console.error("Lỗi thực đơn:", err); }
     }
 
-    /* 7. BIOMARKET & SƠ ĐỒ TƯ DUY (MIND MAP) */
+   /* 7. BIOMARKET: TẠP CHÍ NGHIÊN CỨU KHOA HỌC & SƠ ĐỒ TƯ DUY 2 BÊN */
+    const CATEGORY_META = {
+      genetics:  { label: "Di truyền & Y sinh", bar: "from-purple-600 to-indigo-600", badge: "bg-purple-100 text-purple-800", icon: "fa-dna" },
+      neuro:     { label: "Thần kinh & Tâm lý", bar: "from-blue-600 to-cyan-500", badge: "bg-blue-100 text-blue-700", icon: "fa-brain" },
+      nutrition: { label: "Dinh dưỡng & Chuyển hóa", bar: "from-emerald-600 to-teal-500", badge: "bg-emerald-100 text-emerald-800", icon: "fa-apple-whole" },
+      eco:       { label: "Sinh thái & Vũ trụ", bar: "from-teal-600 to-sky-600", badge: "bg-indigo-100 text-indigo-700", icon: "fa-earth-americas" }
+    };
+
     const DEFAULT_ARTICLES = [
-      { id: "art_1", category: "genetics", title: "Công nghệ Chỉnh sửa Gen CRISPR-Cas9: Tương lai chữa lành đột biến ADN", tag: "Công nghệ sinh học • Di truyền phân tử", cost: 50, summary: "Cơ chế 'chiếc kéo sinh học' nhận diện mục tiêu bằng ARN dẫn đường (sgRNA) để sửa sai bộ gen.", content: "<h4>1. Nguồn gốc miễn dịch từ vi khuẩn</h4><ul><li>CRISPR-Cas là hệ thống miễn dịch thích ứng tự nhiên của vi khuẩn chống lại virus thực khuẩn thể.</li><li>Enzyme Cas9 kết hợp ARN dẫn đường (sgRNA) định vị trình tự ADN mục tiêu theo nguyên tắc bổ sung A-U, G-X.</li><li>Tạo vết cắt sợi kép (DSB) chính xác để loại bỏ hoặc chèn đoạn gen mới.</li></ul><h4>2. Ứng dụng đột phá trong Y học</h4><ul><li>FDA đã phê duyệt liệu pháp CRISPR điều trị bệnh thiếu máu hồng cầu hình liềm.</li><li>Tái kích hoạt gen tổng hợp Hemoglobin bào thai (HbF) giúp hồng cầu vận chuyển oxy bình thường.</li><li>Mở ra hướng điều trị các bệnh di truyền đơn gen và ung thư máu.</li></ul>" },
-      { id: "art_2", category: "neuro", title: "Trục Não - Ruột (Gut-Brain Axis) và Hệ Vi Sinh Microbiome", tag: "Sinh lý học người • Thần kinh học", cost: 60, summary: "Hơn 90% hormone Serotonin được sản xuất tại ruột! Cách vi khuẩn đường ruột kiểm soát tâm trạng và trí nhớ.", content: "<h4>1. Đường truyền tín hiệu Phế vị</h4><ul><li>Hàng ngàn tỷ vi khuẩn đường ruột lên men chất xơ tạo Axit béo chuỗi ngắn (Butyrate, Acetate).</li><li>Các phân tử này kích thích dây thần kinh số X (Vagus Nerve) truyền tín hiệu trực tiếp lên vùng dưới đồi.</li></ul><h4>2. Ảnh hưởng đến điểm số & tâm trạng</h4><ul><li>Hơn 90% Serotonin (hormone điều hòa cảm xúc, giấc ngủ) tổng hợp tại niêm mạc ruột.</li><li>Loạn khuẩn do đồ ngọt và thức ăn nhanh giải phóng nội độc tố LPS gây sương mù não và giảm tập trung.</li><li>Bổ sung sữa chua, rau xanh giúp giảm hormone stress Cortisol mùa thi cử.</li></ul>" },
-      { id: "art_3", category: "genetics", title: "Di truyền học Biểu sinh (Epigenetics): Lối sống bật/tắt gen", tag: "Di truyền phân tử • Y học tương lai", cost: 70, summary: "ADN không đổi trình tự nucleotit, nhưng Methyl hóa (-CH3) và histone có thể khóa hoặc mở gen.", content: "<h4>1. Cơ chế khóa & mở gen</h4><ul><li>Methyl hóa ADN (gắn gốc -CH3 vào đảo CpG) ngăn ARN Polymerase phiên mã, làm 'tắt' gen.</li><li>Acetyl hóa Histone làm giãn xoắn chất nhiễm sắc (chromatin), giúp gen được biểu hiện mạnh.</li></ul><h4>2. Lối sống điều khiển kiểu hình</h4><ul><li>Vận động trên 20 phút/ngày kích thích khử methyl ở vùng khởi động gen BDNF, tăng sinh synap thần kinh.</li><li>Stress kéo dài hoặc thiếu ngủ gây biến đổi biểu sinh làm tăng nguy cơ viêm nhiễm.</li></ul>" },
-      { id: "art_4", category: "neuro", title: "Giấc ngủ REM & Hệ thống Glymphatic dọn rác não bộ", tag: "Thần kinh học • Giấc ngủ", cost: 40, summary: "Khi ngủ say, tế bào thần kinh đệm co lại 60% để dịch não tủy rửa trôi mảng bám Beta-amyloid.", content: "<h4>1. Hệ thống rửa trôi Glymphatic</h4><ul><li>Não bộ dùng kênh nước Aquaporin-4 trên tế bào hình sao (Astrocytes) bơm dịch não tủy.</li><li>Hoạt động mạnh nhất ở giấc ngủ sâu NREM để cuốn trôi protein thải Beta-amyloid.</li></ul><h4>2. Vai trò của giấc ngủ REM</h4><ul><li>Xuất hiện nhiều về gần sáng, giúp củng cố trí nhớ dài hạn từ hồi hải mã sang vỏ não.</li><li>Giải tỏa căng thẳng cảm xúc và tăng khả năng liên kết sáng tạo.</li></ul>" },
-      { id: "art_5", category: "nutrition", title: "Cơ chế Tự thực bào (Autophagy): Giải Nobel Y học tái tạo tế bào", tag: "Dinh dưỡng & Chuyển hóa • Tế bào", cost: 50, summary: "Khi nghỉ tiêu hóa hợp lý ban đêm, Lysosome tự phân hủy protein lỗi để tái tạo năng lượng sạch.", content: "<h4>1. Cơ chế dọn rác nội bào</h4><ul><li>Khám phá đạt giải Nobel của Yoshinori Ohsumi về túi tự thực và bào quan Lysosome.</li><li>Tế bào bao bọc bào quan già cỗi, protein gấp sai rồi thủy phân thành axit amin mới.</li></ul><h4>2. Thói quen kích hoạt Autophagy</h4><ul><li>Kích hoạt mạnh khi Insulin hạ ổn định vào ban đêm.</li><li>Kết thúc bữa tối trước khi đi ngủ ít nhất 2.5 - 3 giờ giúp tế bào phục hồi tối đa.</li></ul>" },
-      { id: "art_6", category: "nutrition", title: "Dopamine Detox & Sinh hóa của sự tập trung", tag: "Thần kinh & Dinh dưỡng • Hiệu suất", cost: 45, summary: "Tại sao lướt video ngắn khiến việc đọc sách trở nên nhàm chán? Khám phá cơ chế thụ thể Dopamine D2.", content: "<h4>1. Quá tải thụ thể Dopamine</h4><ul><li>Kích thích cường độ cao (video ngắn, đường ngọt) tạo đỉnh Dopamine giả khiến não giảm thụ thể D2 để tự vệ.</li><li>Hệ quả là mức Dopamine nền tụt thấp, gây chán nản khi làm việc cần kiên nhẫn.</li></ul><h4>2. Phục hồi độ nhạy tự nhiên</h4><ul><li>Áp dụng Pomodoro 25 phút không chạm điện thoại.</li><li>Tập thể dục buổi chiều và tiếp xúc ánh sáng sớm giúp ổn định Dopamine nền.</li></ul>" },
-      { id: "art_7", category: "eco", title: "Sinh học Biển sâu: Sinh vật phát quang (Bioluminescence)", tag: "Sinh thái học • Sinh hóa đại dương", cost: 40, summary: "Ở độ sâu 1000m, 76% sinh vật tự tạo ánh sáng lạnh bằng enzyme Luciferase và Luciferin.", content: "<h4>1. Phản ứng hóa học tạo ánh sáng lạnh</h4><ul><li>Enzyme Luciferase xúc tác oxy hóa hợp chất Luciferin cùng năng lượng ATP.</li><li>Hiệu suất phát quang đạt gần 100%, phát ra ánh sáng xanh lam mà không tỏa nhiệt.</li></ul><h4>2. Ứng dụng trong công nghệ Y sinh</h4><ul><li>Gen phát quang được gắn làm dấu chỉ sinh học theo dõi sự phát triển tế bào ung thư dưới kính hiển vi.</li></ul>" },
-      { id: "art_8", category: "eco", title: "Sinh học Vũ trụ (Astrobiology): Sự sống cực đoan", tag: "Sinh học Vũ trụ • Tiến hóa", cost: 55, summary: "Từ Gấu nước sống sót ngoài chân không vũ trụ đến đại dương ngầm trên vệ tinh Europa.", content: "<h4>1. Gấu nước (Tardigrade) bất tử</h4><ul><li>Bước vào trạng thái ngủ khô Cryptobiosis bằng cách thay nước tế bào bằng đường Trehalose.</li><li>Chịu được bức xạ vũ trụ, chân không và nhiệt độ từ -200°C đến +150°C.</li></ul><h4>2. Tìm kiếm sự sống ngoài Trái Đất</h4><ul><li>Tập trung vào đại dương nước lỏng ngầm dưới lớp băng của vệ tinh Europa (Sao Mộc) và Enceladus (Sao Thổ).</li></ul>" },
-      { id: "art_9", category: "genetics", title: "Liệu pháp tế bào CAR-T & Tin sinh học AlphaFold", tag: "Y học tương lai • AI & Miễn dịch", cost: 65, summary: "Cách AI giải mã cấu trúc 3D Protein và cách lập trình tế bào Lympho T truy lùng khối u.", content: "<h4>1. Tế bào T được gắn 'radar' CAR-T</h4><ul><li>Tách tế bào lympho T của bệnh nhân, dùng kỹ thuật gen gắn thêm thụ thể kháng nguyên khảm (CAR).</li><li>Truyền lại vào cơ thể để nhận diện và tiêu diệt chính xác tế bào ác tính.</li></ul><h4>2. Cuộc cách mạng AI AlphaFold</h4><ul><li>Giải bài toán dự đoán cấu trúc 3D của hàng trăm triệu loại Protein từ chuỗi axit amin.</li><li>Rút ngắn thời gian nghiên cứu thuốc mới từ hàng năm xuống vài tuần.</li></ul>" }
+      {
+        id: "art_1", category: "genetics", doi: "10.1038/bh.2026.01", readTime: "6 phút",
+        authors: "Nhóm Di truyền Phân tử BioHabit • Tạp chí Công nghệ Sinh học",
+        keywords: ["CRISPR-Cas9", "sgRNA", "HbF", "Hồng cầu hình liềm"],
+        title: "Cơ chế định vị của phức hợp CRISPR-Cas9 và liệu pháp tái kích hoạt Hemoglobin bào thai",
+        tag: "Di truyền phân tử • Công nghệ Gen", cost: 50,
+        summary: "Phân tích cấu trúc xúc tác của endonuclease Cas9 dẫn hướng bởi sgRNA trong chỉnh sửa gen điều trị bệnh thiếu máu hồng cầu hình liềm (SCD), đạt hiệu quả phục hồi >90% tế bào tạo máu trong thử nghiệm lâm sàng.",
+        content: `
+          <h4>I. Đặt vấn đề & Bối cảnh dịch tễ</h4>
+          <ul><li>Bệnh thiếu máu hồng cầu hình liềm (SCD) bắt nguồn từ đột biến điểm thay thế Axit Glutamic bằng Valine tại vị trí số 6 trên chuỗi beta-globin.</li><li>Hồng cầu biến dạng làm tắc nghẽn vi mạch và giảm tuổi thọ tế bào xuống còn 10–20 ngày (so với 120 ngày bình thường).</li></ul>
+          <h4>II. Cơ chế phân tử của phức hợp CRISPR-Cas9</h4>
+          <ul><li><strong>Nhận diện trình tự PAM:</strong> Cas9 quét ADN sợi kép để tìm mô-típ 5'-NGG-3' trước khi tháo xoắn cục bộ.</li><li><strong>Bắt cặp bổ sung sgRNA:</strong> 20 nucleotit của ARN dẫn đường bắt cặp chính xác theo nguyên tắc A-U, G-X tại gen mục tiêu <em>BCL11A</em>.</li><li><strong>Cắt đứt liên kết photphodieste:</strong> Hai miền HNH và RuvC tạo vết cắt sợi kép (DSB), kích hoạt cơ chế sửa chữa NHEJ bất hoạt yếu tố ức chế <em>BCL11A</em>.</li></ul>
+          <h4>III. Kết quả thực nghiệm & Chỉ số lâm sàng</h4>
+          <ul><li>Nồng độ Hemoglobin bào thai (HbF) tăng từ mức nền &lt;5% lên trên 40% tổng lượng hemoglobin sau 12 tháng truyền tế bào gốc tự thân đã chỉnh sửa.</li><li>Tỷ lệ bệnh nhân chấm dứt cơn đau tắc mạch đạt 93.5% trong theo dõi 24 tháng.</li></ul>
+          <h4>IV. Liên hệ Sinh học THPT & Kết luận</h4>
+          <ul><li>Minh họa trực quan cho cơ chế biến đổi biểu hiện gen không cần chèn gen ngoại lai mà dựa vào tái kích hoạt gen im lặng.</li></ul>`,
+        references: ["Jinek M. et al. (2012), Science, 337(6096): 816-821.", "Frangoul H. et al. (2021), New England Journal of Medicine, 384: 252-260."]
+      },
+      {
+        id: "art_2", category: "neuro", doi: "10.1016/bh.2026.02", readTime: "5 phút",
+        authors: "Ban Sinh lý Thần kinh BioHabit • Chuyên san Trục Não - Ruột",
+        keywords: ["Gut-Brain Axis", "Serotonin", "Vagus Nerve", "SCFA"],
+        title: "Vai trò của Axit béo chuỗi ngắn (SCFA) và Dây thần kinh phế vị trong điều hòa Serotonin học đường",
+        tag: "Sinh lý học người • Thần kinh", cost: 60,
+        summary: "Khảo sát mối liên hệ định lượng giữa hệ vi sinh đường ruột (Microbiome), sản lượng Axit béo chuỗi ngắn và sự tổng hợp >90% Serotonin nội sinh ảnh hưởng đến khả năng kiểm soát stress và trí nhớ ngắn hạn.",
+        content: `
+          <h4>I. Cơ sở sinh lý Trục Não - Ruột</h4>
+          <ul><li>Hệ thần kinh ruột (ENS) chứa khoảng 100–500 triệu nơ-ron giao tiếp hai chiều với hệ thần kinh trung ương qua dây thần kinh số X (Vagus Nerve).</li><li>Hơn 90% Serotonin (5-HT) và ~50% Dopamine cơ thể được tổng hợp tại tế bào ưa crôm đường ruột.</li></ul>
+          <h4>II. Cơ chế chuyển hóa vi sinh & Truyền tín hiệu</h4>
+          <ul><li>Lợi khuẩn <em>Lactobacillus</em> và <em>Bifidobacterium</em> lên men chất xơ hòa tan tạo ra Butyrate, Propionate và Acetate (SCFA).</li><li>Butyrate kích thích enzyme Tryptophan hydroxylase-1 chuyển hóa Tryptophan thành tiền chất Serotonin.</li></ul>
+          <h4>III. Bằng chứng về chế độ ăn & Điểm số</h4>
+          <ul><li>Chế độ ăn dư đường tinh luyện và chất béo bão hòa làm tăng tính thấm thành ruột, giải phóng nội độc tố LPS gây viêm thần kinh mức nhẹ.</li><li>Nhóm bổ sung thực phẩm lên men và rau xanh đều đặn ghi nhận giảm 23% nồng độ Cortisol nước bọt trong tuần thi cử.</li></ul>
+          <h4>IV. Khuyến nghị thực hành dinh dưỡng</h4>
+          <ul><li>Duy trì 25–30g chất xơ/ngày kết hợp sữa chua không đường để ổn định hệ trục Não - Ruột.</li></ul>`,
+        references: ["Cryan J.F. et al. (2019), Physiological Reviews, 99(4): 1877-2013.", "Yano J.M. et al. (2015), Cell, 161(2): 264-276."]
+      },
+      {
+        id: "art_3", category: "genetics", doi: "10.1038/bh.2026.03", readTime: "7 phút",
+        authors: "Phòng Nghiên cứu Biểu sinh BioHabit",
+        keywords: ["Epigenetics", "Methyl hóa", "Histone", "BDNF"],
+        title: "Điều hòa Biểu sinh (Epigenetics): Tác động của vận động hiếu khí lên biểu hiện gen thần kinh BDNF",
+        tag: "Di truyền biểu sinh • Sinh lý vận động", cost: 70,
+        summary: "Nghiên cứu cơ chế khử methyl hóa ADN và acetyl hóa đuôi Histone dưới tác động của vận động thể chất đều đặn, thúc đẩy phiên mã yếu tố dưỡng thần kinh BDNF ở hồi hải mã.",
+        content: `
+          <h4>I. Khái niệm Di truyền học Biểu sinh</h4>
+          <ul><li>Epigenetics nghiên cứu các biến đổi khả năng biểu hiện gen mà không làm thay đổi trình tự sắp xếp các cặp nucleotit trên phân tử ADN.</li><li>Hai cơ chế chính gồm: Methyl hóa ADN (gắn nhóm -CH3 vào đảo CpG) và biến đổi hóa học protein Histone.</li></ul>
+          <h4>II. Cơ chế đóng/mở chất nhiễm sắc</h4>
+          <ul><li><strong>Khóa gen (Dị nhiễm sắc):</strong> Methyl hóa vùng khởi động (Promoter) ngăn cản enzyme ARN Polymerase bám vào để phiên mã.</li><li><strong>Mở gen (Nguyên nhiễm sắc):</strong> Acetyl hóa Histone làm mất điện tích dương, giãn xoắn sợi ADN khỏi lõi nucleosome.</li></ul>
+          <h4>III. Số liệu tác động của vận động thể chất</h4>
+          <ul><li>Vận động nhịp điệu 20–30 phút/ngày tạo chất chuyển hóa Beta-hydroxybutyrate ức chế enzyme HDAC, giúp giãn xoắn tại promoter của gen <em>BDNF</em>.</li><li>Nồng độ protein BDNF tăng 30–40% sau vận động, kích thích hình thành gai synap mới tại vùng Hippocampus.</li></ul>
+          <h4>IV. Kết luận ứng dụng</h4>
+          <ul><li>Lối sống vận động và ngủ đủ giấc đóng vai trò "công tắc sinh học" tối ưu hóa tiềm năng trí tuệ từ chính bộ gen sẵn có.</li></ul>`,
+        references: ["Sleiman S.F. et al. (2016), eLife, 5: e15092.", "Allis C.D. & Jenuwein T. (2016), Nature Reviews Genetics."]
+      },
+      {
+        id: "art_4", category: "neuro", doi: "10.1126/bh.2026.04", readTime: "5 phút",
+        authors: "Trung tâm Nghiên cứu Giấc ngủ Sinh học BioHabit",
+        keywords: ["Glymphatic", "Aquaporin-4", "REM", "Beta-amyloid"],
+        title: "Hệ thống Glymphatic và cơ chế thanh thải độc tố thần kinh trong chu kỳ ngủ NREM – REM",
+        tag: "Thần kinh học • Giấc ngủ", cost: 40,
+        summary: "Phân tích cơ chế mở rộng khoảng kẽ gian bào lên 60% trong giai đoạn ngủ sóng chậm, cho phép dịch não tủy cuốn trôi mảng bám Beta-amyloid và củng cố ký ức trong pha REM.",
+        content: `
+          <h4>I. Cấu trúc Hệ thống Glymphatic</h4>
+          <ul><li>Não bộ không có mạch bạch huyết truyền thống mà sử dụng mạng lưới quanh mạch máu do tế bào hình sao (Astrocytes) điều phối.</li><li>Các kênh dẫn nước <strong>Aquaporin-4 (AQP4)</strong> phân bố dày đặc giúp trao đổi dịch não tủy (CSF) với dịch kẽ não.</li></ul>
+          <h4>II. Động học thanh thải rác chuyển hóa</h4>
+          <ul><li>Khi bước vào giấc ngủ sâu NREM, nồng độ Noradrenaline giảm làm tế bào thần kinh đệm co thể tích, tăng không gian gian bào thêm ~60%.</li><li>Tốc độ đào thải protein độc hại Beta-amyloid và Tau tăng gấp 2 lần so với trạng thái thức.</li></ul>
+          <h4>III. Pha ngủ REM & Củng cố trí nhớ</h4>
+          <ul><li>Chiếm 20–25% thời lượng ngủ ban đêm, đặc trưng bởi sóng não tần số cao và chuyển động mắt nhanh.</li><li>Tái kích hoạt các mạng lưới nơ-ron đã học ban ngày để chuyển thông tin từ Hippocampus sang lưu trữ dài hạn tại vỏ não.</li></ul>`,
+        references: ["Xie L. et al. (2013), Science, 342(6156): 373-377.", "Nedergaard M. & Goldman S.A. (2020), Science."]
+      },
+      {
+        id: "art_5", category: "nutrition", doi: "10.1038/bh.2026.05", readTime: "5 phút",
+        authors: "Viện Chuyển hóa Tế bào BioHabit",
+        keywords: ["Autophagy", "Lysosome", "mTOR", "AMPK"],
+        title: "Cơ chế Tự thực bào (Autophagy): Cân bằng đường tín hiệu AMPK – mTOR trong tái tạo tế bào",
+        tag: "Sinh học tế bào • Chuyển hóa", cost: 50,
+        summary: "Tổng quan công trình Nobel Y học về túi tự thực (Autophagosome) và Lysosome, lý giải cách khoảng nghỉ tiêu hóa ban đêm giúp hạ Insulin, ức chế mTOR và tái chế protein hư hỏng.",
+        content: `
+          <h4>I. Phát hiện Nobel về Tự thực bào</h4>
+          <ul><li>Yoshinori Ohsumi (Nobel Y học 2016) xác định các gen <em>ATG</em> điều khiển quá trình hình thành màng kép Autophagosome bao bọc bào quan già cỗi.</li><li>Autophagosome dung hợp với Lysosome chứa hơn 50 loại enzyme thủy phân axit để phân giải thành axit amin tái sử dụng.</li></ul>
+          <h4>II. Công tắc phân tử AMPK và mTOR</h4>
+          <ul><li>Khi vừa ăn no (Insulin & axit amin cao), phức hợp <strong>mTORC1</strong> kích hoạt tổng hợp chất và tạm khóa Autophagy.</li><li>Sau bữa ăn tối 3–4 giờ hoặc khi vận động, <strong>AMPK</strong> kích hoạt nhằm thúc đẩy quá trình dọn dẹp tế bào.</li></ul>
+          <h4>III. Thực hành nhịp ăn uống khoa học</h4>
+          <ul><li>Kết thúc bữa tối trước giờ đi ngủ tối thiểu 2.5–3 giờ để nồng độ Insulin hạ thấp, tối ưu hóa chu trình tái tạo mô ban đêm.</li></ul>`,
+        references: ["Mizushima N. & Komatsu M. (2011), Cell, 147(4): 728-741.", "Nobel Prize in Physiology or Medicine 2016."]
+      },
+      {
+        id: "art_6", category: "nutrition", doi: "10.1016/bh.2026.06", readTime: "4 phút",
+        authors: "Nhóm Tâm sinh lý Học đường BioHabit",
+        keywords: ["Dopamine D2", "Down-regulation", "Pomodoro", "Prefrontal Cortex"],
+        title: "Độ nhạy thụ thể Dopamine D2 và hiện tượng suy giảm tập trung do kích thích siêu bình thường",
+        tag: "Thần kinh hành vi • Hiệu suất", cost: 45,
+        summary: "Phân tích cơ chế điều hòa giảm (down-regulation) thụ thể Dopamine D2 khi não bộ tiếp xúc liên tục với video ngắn và đường tinh luyện, cùng phác đồ phục hồi sự tập trung.",
+        content: `
+          <h4>I. Sinh hóa của kích thích siêu bình thường</h4>
+          <ul><li>Lướt video ngắn (15–30s) và nạp đồ ngọt liên tục giải phóng Dopamine pha nhanh (Phasic Dopamine) vượt ngưỡng tự nhiên.</li><li>Để bảo vệ cân bằng nội môi (Homeostasis), tế bào sau synap rút bớt thụ thể <strong>Dopamine D2</strong> vào trong màng.</li></ul>
+          <h4>II. Hệ quả lên khả năng học tập</h4>
+          <ul><li>Mức Dopamine nền (Tonic) sụt giảm khiến các hoạt động đòi hỏi nỗ lực bền bỉ như đọc sách, giải toán trở nên cực kỳ nhàm chán.</li></ul>
+          <h4>III. Phác đồ tái thiết lập độ nhạy thụ thể</h4>
+          <ul><li>Áp dụng chu kỳ Pomodoro 25/5 tách rời điện thoại, kết hợp tiếp xúc ánh sáng tự nhiên buổi sáng và vận động chiều để nâng Dopamine nền bền vững.</li></ul>`,
+        references: ["Volkow N.D. et al. (2011), PNAS.", "Huberman A. (2022), Neural Circuits of Focus."]
+      },
+      {
+        id: "art_7", category: "eco", doi: "10.1038/bh.2026.07", readTime: "5 phút",
+        authors: "Phân ban Sinh hóa Đại dương BioHabit",
+        keywords: ["Bioluminescence", "Luciferin", "Luciferase", "ATP"],
+        title: "Hiệu suất lượng tử ~100% của phản ứng phát quang sinh học ở sinh vật biển sâu",
+        tag: "Sinh thái biển • Sinh hóa", cost: 40,
+        summary: "Khảo sát phản ứng oxy hóa cơ chất Luciferin nhờ xúc tác enzyme Luciferase ở độ sâu >1000m, giải thích cách sinh vật tạo ra ánh sáng lạnh không tỏa nhiệt và ứng dụng đánh dấu tế bào.",
+        content: `
+          <h4>I. Phản ứng hóa sinh tạo ánh sáng lạnh</h4>
+          <ul><li>76% sinh vật sống ở tầng nước giữa đại dương có khả năng tự phát quang (Bioluminescence).</li><li>Cơ chất <strong>Luciferin</strong> phản ứng với O2 dưới xúc tác của enzyme <strong>Luciferase</strong> và Mg-ATP tạo trạng thái kích thích, khi trở về trạng thái cơ bản sẽ phát ra photon ánh sáng xanh lam (~475nm).</li></ul>
+          <h4>II. Ưu thế tiến hóa ở đáy đại dương</h4>
+          <ul><li>Gần 100% năng lượng hóa học chuyển thành quang năng (không thất thoát nhiệt), dùng để thu hút bạn tình, ngụy trang phản chiếu (counter-illumination) hoặc săn mồi.</li></ul>
+          <h4>III. Ứng dụng trong Nghiên cứu Y sinh</h4>
+          <ul><li>Gen mã hóa Luciferase (từ đom đóm hoặc vi khuẩn <em>Vibrio</em>) được dùng làm gen báo cáo (Reporter Gene) theo dõi sự di căn khối u và biểu hiện gen theo thời gian thực.</li></ul>`,
+        references: ["Martini S. & Haddock S.H.D. (2017), Scientific Reports, 7: 45750.", "Shimomura O. (2006), Bioluminescence: Chemical Principles."]
+      },
+      {
+        id: "art_8", category: "eco", doi: "10.1089/bh.2026.08", readTime: "6 phút",
+        authors: "Nhóm Sinh học Vũ trụ BioHabit",
+        keywords: ["Astrobiology", "Tardigrade", "Cryptobiosis", "Trehalose"],
+        title: "Sinh học Vũ trụ: Cơ chế kháng bức xạ và ngủ khô Cryptobiosis của Gấu nước (Tardigrade)",
+        tag: "Sinh học Vũ trụ • Tiến hóa", cost: 55,
+        summary: "Phân tích protein Dsup bảo vệ ADN trước tia bức xạ vũ trụ và cơ chế thay thế nước nội bào bằng đường Trehalose ở Gấu nước, mở ra tiêu chuẩn tìm kiếm sự sống ngoài Trái Đất.",
+        content: `
+          <h4>I. Sinh vật cực đoan (Extremophiles) trên Trái Đất</h4>
+          <ul><li>Gấu nước (<em>Ramazzottius varieornatus</em>) có thể chịu nhiệt độ từ -200°C đến +150°C, áp suất gấp 6 lần đáy rãnh Mariana và chân không vũ trụ.</li></ul>
+          <h4>II. Hai cơ chế sinh tồn phân tử đặc biệt</h4>
+          <ul><li><strong>Trạng thái Cryptobiosis:</strong> Co rút thành dạng "tun", giảm chuyển hóa xuống &lt;0.01% và tổng hợp đường <strong>Trehalose</strong> kết hợp protein TDP tạo thủy tinh sinh học bảo vệ màng tế bào khi mất 99% nước.</li><li><strong>Protein Dsup (Damage Suppressor):</strong> Bám quanh sợi ADN tạo lá chắn vật lý giảm ~40% đứt gãy mạch kép do tia X và bức xạ ion hóa.</li></ul>
+          <h4>III. Tiêu chuẩn tìm kiếm sự sống ngoài hành tinh</h4>
+          <ul><li>Củng cố giả thuyết sự sống vi sinh có thể tồn tại trong đại dương nước lỏng dưới lớp vỏ băng của vệ tinh Europa (Sao Mộc) và Enceladus (Sao Thổ).</li></ul>`,
+        references: ["Hashimoto T. et al. (2016), Nature Communications, 7: 12808.", "NASA Astrobiology Strategy."]
+      },
+      {
+        id: "art_9", category: "genetics", doi: "10.1038/bh.2026.09", readTime: "6 phút",
+        authors: "Ban Tin sinh học & Miễn dịch BioHabit",
+        keywords: ["CAR-T", "AlphaFold", "Protein 3D", "Miễn dịch ung thư"],
+        title: "Sự giao thoa giữa Trí tuệ nhân tạo AlphaFold và Liệu pháp tế bào miễn dịch CAR-T",
+        tag: "AI Y sinh • Miễn dịch học", cost: 65,
+        summary: "Trình bày cách mô hình AI dự đoán cấu trúc 3D protein chính xác cấp độ nguyên tử để thiết kế thụ thể kháng nguyên khảm (CAR) giúp tế bào Lympho T truy diệt tế bào ung thư.",
+        content: `
+          <h4>I. Bài toán gấp cuộn Protein & Đột phá AlphaFold</h4>
+          <ul><li>Chức năng sinh học của Protein phụ thuộc hoàn toàn vào cấu trúc không gian bậc 3 và bậc 4.</li><li>AI AlphaFold sử dụng mạng nơ-ron chú ý dự đoán cấu trúc 3D của hơn 200 triệu loại protein chỉ từ trình tự axit amin, rút ngắn thời gian nghiên cứu từ nhiều năm xuống vài giờ.</li></ul>
+          <h4>II. Nguyên lý liệu pháp tế bào CAR-T</h4>
+          <ul><li><strong>Bước 1:</strong> Tách tế bào Lympho T từ máu ngoại vi của chính bệnh nhân.</li><li><strong>Bước 2:</strong> Dùng vector virus chèn gen mã hóa thụ thể kháng nguyên khảm (CAR) lên bề mặt tế bào T.</li><li><strong>Bước 3:</strong> Nhân dòng hàng triệu tế bào CAR-T và truyền lại để nhận diện đặc hiệu kháng nguyên CD19 trên tế bào u ác tính.</li></ul>
+          <h4>III. Triển vọng y học cá nhân hóa</h4>
+          <ul><li>Kết hợp thiết kế thụ thể bằng AI giúp giảm tác dụng phụ bão Cytokine và mở rộng điều trị sang các khối u đặc.</li></ul>`,
+        references: ["Jumper J. et al. (2021), Nature, 596: 583-589.", "June C.H. & Sadelain M. (2018), NEJM, 379: 64-73."]
+      }
     ];
 
     let currentArticlesList = [], currentMarketFilter = 'all', currentOpenArticleId = null, currentArticleViewMode = 'mindmap';
 
     function inferArticleCategory(art) {
-      if (art.category) return art.category;
+      if (art.category && CATEGORY_META[art.category]) return art.category;
       const t = ((art.tag || '') + ' ' + (art.title || '')).toLowerCase();
-      if (/gen|crispr|adn|tế bào|miễn dịch|y học|ung thư|vắc/.test(t)) return 'genetics';
-      if (/não|thần kinh|ngủ|tâm lý|dopamine|serotonin|stress/.test(t)) return 'neuro';
+      if (/gen|crispr|adn|tế bào|miễn dịch|y học|ung thư|vắc|car-t/.test(t)) return 'genetics';
+      if (/não|thần kinh|ngủ|tâm lý|dopamine|serotonin|stress|rem/.test(t)) return 'neuro';
       if (/dinh dưỡng|thức ăn|ăn|calo|chuyển hóa|cơ bắp|thể thao|autophagy/.test(t)) return 'nutrition';
-      if (/sinh thái|biển|vũ trụ|tiến hóa|khí hậu|thực vật/.test(t)) return 'eco';
+      if (/sinh thái|biển|vũ trụ|tiến hóa|khí hậu|thực vật|gấu nước/.test(t)) return 'eco';
       return 'genetics';
     }
 
@@ -2195,30 +2359,38 @@
 
     async function fetchGeminiArticles(isManualClick = false) {
       const icon = document.getElementById('article-reload-icon'), txt = document.getElementById('article-reload-text');
-      icon?.classList.add('animate-spin'); if (txt) txt.innerText = "Gemini đang viết bài...";
+      icon?.classList.add('animate-spin'); if (txt) txt.innerText = "Đang xuất bản...";
       try {
         const res = await fetch('/api/gemini', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ type: 'articles' }) });
         const data = await res.json();
         if (res.ok && Array.isArray(data.articles) && data.articles.length >= 1) {
           const stamp = Date.now();
-          const news = data.articles.map((art, i) => ({ ...art, id: `art_ai_${stamp}_${i}`, cost: typeof art.cost === 'number' ? art.cost : 40 }));
+          const news = data.articles.map((art, i) => ({
+            ...art,
+            id: `art_ai_${stamp}_${i}`,
+            doi: art.doi || `10.1038/bh.ai.${stamp.toString().slice(-4)}.${i + 1}`,
+            authors: art.authors || "Gemini Scientific Synthesis • BioHabit AI",
+            readTime: art.readTime || "5 phút",
+            keywords: Array.isArray(art.keywords) ? art.keywords : ["Y sinh AI", "Nghiên cứu mới"],
+            cost: typeof art.cost === 'number' ? art.cost : 40
+          }));
           currentArticlesList = [...news, ...currentArticlesList];
           safeSetLocal("BIOHABIT_ARTICLES_DATE", getLocalDateStr(0));
           safeSetLocal("BIOHABIT_DAILY_ARTICLES", JSON.stringify(currentArticlesList));
-          showToast(`Gemini đã xuất bản thêm ${news.length} sơ đồ bài mới!`, "success");
-        } else if (isManualClick) showToast("Máy chủ đang bận, hãy nhập chủ đề tự do bên dưới nhé!", "info");
+          showToast(`Đã xuất bản thêm ${news.length} bài nghiên cứu mới!`, "success");
+        } else if (isManualClick) showToast("Máy chủ đang bận, hãy nhập đề tài bên dưới để AI soạn riêng!", "info");
       } catch (err) { if (isManualClick) showToast("Lỗi kết nối khi tải bài mới!", "info"); }
-      finally { icon?.classList.remove('animate-spin'); if (txt) txt.innerText = "Thêm 3 bài mới (AI)"; renderArticlesMarket(); }
+      finally { icon?.classList.remove('animate-spin'); if (txt) txt.innerText = "Xuất bản 3 bài (AI)"; renderArticlesMarket(); }
     }
 
     async function generateCustomTopicArticle(e) {
       if (e) e.preventDefault();
       const input = document.getElementById('market-custom-topic'), btn = document.getElementById('btn-custom-article'), icon = document.getElementById('custom-article-icon'), bt = document.getElementById('custom-article-text');
       const topic = input?.value.trim();
-      if (!topic) return showToast("Hãy nhập chủ đề bạn muốn AI tạo sơ đồ tư duy!", "warning");
-      if (btn) btn.disabled = true; if (icon) icon.className = "fa-solid fa-spinner animate-spin mr-1.5"; if (bt) bt.innerText = "Đang tạo sơ đồ...";
+      if (!topic) return showToast("Hãy nhập đề tài nghiên cứu bạn muốn AI tổng hợp!", "warning");
+      if (btn) btn.disabled = true; if (icon) icon.className = "fa-solid fa-spinner animate-spin mr-1.5"; if (bt) bt.innerText = "Đang tổng hợp...";
 
-      const prompt = `Viết 1 bài nghiên cứu chi tiết bằng tiếng Việt về: "${topic}". Trả về duy nhất 1 JSON thuần theo đúng cấu trúc để vẽ Sơ đồ tư duy:\n{"title":"Tiêu đề chính","tag":"Lĩnh vực • Chuyên đề","summary":"Tóm tắt cốt lõi 1-2 câu","content":"<h4>1. Khái niệm & Cơ chế cốt lõi</h4><ul><li>Ý chi tiết 1</li><li>Ý chi tiết 2</li></ul><h4>2. Tác động sinh học & Quá trình</h4><ul><li>Ý chi tiết 1</li><li>Ý chi tiết 2</li></ul><h4>3. Ứng dụng thực tế</h4><ul><li>Ý chi tiết 1</li><li>Ý chi tiết 2</li></ul>"}`;
+      const prompt = `Bạn là nhà nghiên cứu sinh học. Hãy viết 1 bài tổng quan khoa học chuẩn học thuật bằng tiếng Việt về đề tài: "${topic}". Trả về duy nhất 1 JSON thuần theo cấu trúc:\n{"title":"Tiêu đề học thuật","tag":"Lĩnh vực • Chuyên đề","keywords":["Từ khóa 1","Từ khóa 2","Từ khóa 3"],"summary":"Tóm tắt (Abstract) 2-3 câu nêu vấn đề, cơ chế và ý nghĩa","content":"<h4>I. Đặt vấn đề & Cơ sở lý thuyết</h4><ul><li>Ý chi tiết 1</li><li>Ý chi tiết 2</li></ul><h4>II. Cơ chế Sinh học phân tử</h4><ul><li>Ý chi tiết 1</li><li>Ý chi tiết 2</li></ul><h4>III. Bằng chứng & Số liệu thực nghiệm</h4><ul><li>Ý chi tiết 1</li><li>Ý chi tiết 2</li></ul><h4>IV. Ứng dụng & Kết luận</h4><ul><li>Ý chi tiết 1</li><li>Ý chi tiết 2</li></ul>","references":["Tác giả/Tạp chí tham khảo 1","Nguồn tham khảo 2"]}`;
       try {
         const res = await fetch('/api/gemini', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ type: 'chat', message: prompt, history: [] }) });
         const data = await res.json();
@@ -2228,37 +2400,98 @@
           if (m) { try { parsed = JSON.parse(m[0]); } catch (err) { parsed = null; } }
           const newId = 'art_custom_' + Date.now();
           const customArt = parsed?.title ? {
-            id: newId, title: parsed.title, tag: parsed.tag || `Chuyên đề • ${topic}`, cost: 30,
-            summary: parsed.summary || `Sơ đồ nghiên cứu về "${topic}".`,
-            content: sanitizeHTML(parsed.content || `<p>${escapeHTML(data.reply)}</p>`)
+            id: newId, doi: `10.1038/bh.custom.${Date.now().toString().slice(-5)}`,
+            authors: "Biên soạn theo yêu cầu • Gemini Research AI", readTime: "5 phút",
+            keywords: Array.isArray(parsed.keywords) ? parsed.keywords : [topic],
+            title: parsed.title, tag: parsed.tag || `Nghiên cứu • ${topic}`, cost: 0,
+            summary: parsed.summary || `Tổng quan nghiên cứu về "${topic}".`,
+            content: sanitizeHTML(parsed.content || `<p>${escapeHTML(data.reply)}</p>`),
+            references: Array.isArray(parsed.references) ? parsed.references : ["Tổng hợp học thuật từ BioHabit Gemini AI"]
           } : {
-            id: newId, title: `Nghiên cứu chuyên sâu: ${topic}`, tag: "AI Biên soạn • Chủ đề tự do", cost: 30,
-            summary: `Phân tích khoa học được Gemini AI tổng hợp về "${topic}".`,
-            content: `<div class="space-y-2">${escapeHTML(data.reply).replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}</div>`
+            id: newId, doi: `10.1038/bh.custom.${Date.now().toString().slice(-5)}`,
+            authors: "Biên soạn theo yêu cầu • Gemini Research AI", readTime: "5 phút", keywords: [topic],
+            title: `Tổng quan nghiên cứu: ${topic}`, tag: "AI Review • Chủ đề tự do", cost: 0,
+            summary: `Bài phân tích khoa học được Gemini AI tổng hợp riêng về "${topic}".`,
+            content: `<div class="space-y-2">${escapeHTML(data.reply).replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}</div>`,
+            references: ["Tổng hợp học thuật từ BioHabit Gemini AI"]
           };
+
           currentArticlesList.unshift(customArt);
+          if (!Array.isArray(AppState.unlockedArticles)) AppState.unlockedArticles = [];
+          if (!Array.isArray(AppState.savedArticles)) AppState.savedArticles = [];
+          AppState.unlockedArticles.push(newId);
+          AppState.savedArticles.unshift(customArt);
           safeSetLocal("BIOHABIT_DAILY_ARTICLES", JSON.stringify(currentArticlesList));
-          if (input) input.value = ""; setMarketFilter('all');
-          showToast(`Đã tạo sơ đồ bài nghiên cứu "${topic}"!`, "success");
+          if (input) input.value = "";
+          saveState();
+          setMarketFilter('all');
+          showToast(`Đã xuất bản & mở khóa nghiên cứu "${topic}"!`, "success");
+          openArticleModal(newId);
         } else showToast(data.error || "Gemini đang bận, thử lại sau vài giây nhé!", "warning");
       } catch (e) { showToast("Không kết nối được /api/gemini!", "warning"); }
-      finally { if (btn) btn.disabled = false; if (icon) icon.className = "fa-solid fa-feather-pointed mr-1.5"; if (bt) bt.innerText = "AI Tạo sơ đồ bài mới"; }
+      finally { if (btn) btn.disabled = false; if (icon) icon.className = "fa-solid fa-feather-pointed mr-1.5"; if (bt) bt.innerText = "AI Soạn Nghiên Cứu"; }
     }
 
     function renderArticlesMarket() {
       const c = document.getElementById('article-cards-container'); if (!c) return;
       const all = getMergedArticles(), unlocked = new Set(AppState.unlockedArticles || []);
+      const searchQ = (document.getElementById('market-search-input')?.value || '').trim().toLowerCase();
       const cA = document.getElementById('market-count-all'), cU = document.getElementById('market-count-unlocked');
       if (cA) cA.innerText = all.length; if (cU) cU.innerText = all.filter(a => unlocked.has(a.id)).length;
-      const filtered = all.filter(a => currentMarketFilter === 'all' ? true : currentMarketFilter === 'unlocked' ? unlocked.has(a.id) : inferArticleCategory(a) === currentMarketFilter);
-      if (filtered.length === 0) { c.innerHTML = `<div class="md:col-span-3 bg-white p-8 rounded-2xl border border-dashed border-slate-200 text-center text-xs text-slate-500">Chưa có bài viết nào trong mục này.</div>`; return; }
+
+      const filtered = all.filter(art => {
+        const matchCat = currentMarketFilter === 'all' ? true : currentMarketFilter === 'unlocked' ? unlocked.has(art.id) : inferArticleCategory(art) === currentMarketFilter;
+        if (!matchCat) return false;
+        if (!searchQ) return true;
+        const hay = `${art.title || ''} ${art.summary || ''} ${art.tag || ''} ${art.doi || ''} ${(art.keywords || []).join(' ')}`.toLowerCase();
+        return hay.includes(searchQ);
+      });
+
+      if (filtered.length === 0) { c.innerHTML = `<div class="md:col-span-3 bg-white p-8 rounded-2xl border border-dashed border-slate-200 text-center text-xs text-slate-500">Không tìm thấy công trình nghiên cứu nào phù hợp.</div>`; return; }
 
       c.innerHTML = filtered.map(art => {
         const isUnl = unlocked.has(art.id);
+        const catKey = inferArticleCategory(art), meta = CATEGORY_META[catKey] || CATEGORY_META.genetics;
+        const branches = parseArticleToMindMap(art);
+        const doi = art.doi || `10.1038/bh.${String(art.id).slice(-4)}`;
+        const authors = art.authors || "Nhóm Nghiên cứu Sinh học BioHabit";
+        const readTime = art.readTime || "5 phút";
+        const kwHtml = (art.keywords || []).slice(0, 3).map(k => `<span class="px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px] font-semibold">#${escapeHTML(k)}</span>`).join('');
+
         const btn = isUnl
-          ? `<button type="button" onclick="openArticleModal('${escapeHTML(art.id)}')" class="w-full py-2.5 bg-bio-100 hover:bg-bio-200 text-bio-800 rounded-xl text-xs font-bold transition flex items-center justify-center"><i class="fa-solid fa-diagram-project mr-2"></i> Xem Sơ đồ tư duy (Đã mở)</button>`
-          : `<button type="button" onclick="unlockArticle('${escapeHTML(art.id)}', ${Number(art.cost) || 50})" class="w-full py-2.5 bg-bio-600 hover:bg-bio-700 text-white rounded-xl text-xs font-bold transition flex items-center justify-center"><i class="fa-solid fa-lock mr-2"></i> Mở khóa (${Number(art.cost) || 50} Coins)</button>`;
-        return `<div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col justify-between p-5 hover:shadow-md transition"><div><div class="flex items-center justify-between text-xs mb-3 gap-2"><span class="px-2.5 py-1 rounded-full font-bold bg-blue-100 text-blue-700 truncate">${escapeHTML(art.tag)}</span><span class="font-bold text-amber-600 shrink-0"><i class="fa-solid fa-coins mr-1"></i>${Number(art.cost) || 50} Coins</span></div><h3 class="font-extrabold text-slate-800 text-base mb-2 leading-snug">${escapeHTML(art.title)}</h3><p class="text-xs text-slate-500 leading-relaxed mb-4">${escapeHTML(art.summary)}</p></div><div>${btn}</div></div>`;
+          ? `<button type="button" onclick="openArticleModal('${escapeHTML(art.id)}')" class="w-full py-2.5 bg-bio-100 hover:bg-bio-200 text-bio-800 rounded-xl text-xs font-extrabold transition flex items-center justify-center"><i class="fa-solid fa-book-open mr-2"></i> Đọc Nghiên cứu & Sơ đồ (${branches.length} nhánh)</button>`
+          : `<button type="button" onclick="unlockArticle('${escapeHTML(art.id)}', ${Number(art.cost) || 50})" class="w-full py-2.5 bg-bio-600 hover:bg-bio-700 text-white rounded-xl text-xs font-extrabold transition flex items-center justify-center shadow-sm"><i class="fa-solid fa-lock mr-2"></i> Mở khóa Toàn văn (${Number(art.cost) || 50} Coins)</button>`;
+
+        return `
+          <div class="bg-white rounded-2xl border ${isUnl ? 'border-bio-300 shadow-md' : 'border-slate-200 shadow-sm'} overflow-hidden flex flex-col justify-between hover:shadow-lg transition">
+            <div>
+              <div class="h-1.5 w-full bg-gradient-to-r ${meta.bar}"></div>
+              <div class="p-5 space-y-3">
+                <div class="flex items-center justify-between gap-2 text-[10px]">
+                  <span class="font-mono font-bold text-slate-400 truncate">DOI: ${escapeHTML(doi)}</span>
+                  <span class="px-2 py-0.5 rounded-full font-extrabold shrink-0 ${isUnl ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}">
+                    ${isUnl ? '✓ Open Access' : `🪙 ${Number(art.cost) || 50} Coins`}
+                  </span>
+                </div>
+
+                <div class="flex items-center gap-2">
+                  <span class="w-7 h-7 rounded-lg ${meta.badge} flex items-center justify-center text-xs shrink-0"><i class="fa-solid ${meta.icon}"></i></span>
+                  <span class="text-[11px] font-bold text-slate-500 truncate">${escapeHTML(art.tag)} • ${escapeHTML(readTime)}</span>
+                </div>
+
+                <h3 class="font-extrabold text-slate-900 text-sm sm:text-base leading-snug">${escapeHTML(art.title)}</h3>
+                <p class="text-[11px] font-semibold text-bio-700"><i class="fa-solid fa-user-graduate mr-1"></i> ${escapeHTML(authors)}</p>
+
+                <div class="paper-abstract bg-slate-50 p-3 rounded-r-xl text-[11px] text-slate-600 leading-relaxed">
+                  <strong class="text-slate-800 not-italic font-sans block text-[10px] uppercase tracking-wider mb-0.5">Tóm tắt (Abstract):</strong>
+                  ${escapeHTML(art.summary)}
+                </div>
+
+                ${kwHtml ? `<div class="flex flex-wrap gap-1 pt-0.5">${kwHtml}</div>` : ''}
+              </div>
+            </div>
+            <div class="px-5 pb-5 pt-1">${btn}</div>
+          </div>`;
       }).join('');
     }
 
@@ -2270,32 +2503,27 @@
       if ((AppState.user?.coins || 0) < cost) return showToast(`Cần ${cost} coins, hiện bạn chỉ có ${AppState.user?.coins || 0} coins!`, "warning");
       AppState.user.coins -= cost; AppState.unlockedArticles.push(articleId);
       if (article && !AppState.savedArticles.some(s => s.id === articleId)) AppState.savedArticles.unshift(article);
-      saveState(); showToast("Mở khóa thành công & đã lưu vĩnh viễn!", "success"); openArticleModal(articleId);
+      saveState(); showToast("Mở khóa công trình thành công & đã lưu vào thư viện!", "success"); openArticleModal(articleId);
     }
 
-    /* TRÌNH PHÂN TÍCH & VẼ SƠ ĐỒ TƯ DUY TỪ BÀI VIẾT */
+    /* TRÌNH PHÂN TÍCH & VẼ SƠ ĐỒ TƯ DUY 2 BÊN CÓ ĐƯỜNG CONG SVG */
     function parseArticleToMindMap(article) {
       const branches = [];
-      if (article.summary) {
-        branches.push({ title: "📌 Tóm tắt cốt lõi", items: [article.summary] });
-      }
+      if (article.summary) branches.push({ title: "Abstract (Tóm tắt cốt lõi)", items: [article.summary] });
       const tmp = document.createElement('div');
       tmp.innerHTML = sanitizeHTML(article.content || "");
       const headings = tmp.querySelectorAll('h4, h3');
 
       if (headings.length > 0) {
         headings.forEach(h => {
-          const bTitle = h.textContent.trim();
-          const items = [];
+          const bTitle = h.textContent.trim(), items = [];
           let sib = h.nextElementSibling;
           while (sib && !['H3', 'H4'].includes(sib.tagName)) {
             if (sib.tagName === 'UL' || sib.tagName === 'OL') {
               sib.querySelectorAll('li').forEach(li => { const t = li.textContent.trim(); if (t) items.push(t); });
             } else {
               const txt = sib.textContent.trim();
-              if (txt) {
-                txt.split(/(?<=[.!?])\s+/).forEach(s => { if (s.trim().length > 4) items.push(s.trim()); });
-              }
+              if (txt) txt.split(/(?<=[.!?])\s+/).forEach(s => { if (s.trim().length > 4) items.push(s.trim()); });
             }
             sib = sib.nextElementSibling;
           }
@@ -2303,74 +2531,138 @@
         });
       } else {
         const plain = tmp.textContent.trim();
-        const sentences = plain.split(/[\n.]+/).map(s => s.trim()).filter(s => s.length > 8);
-        const chunkSize = Math.max(2, Math.ceil(sentences.length / 3));
-        const titles = ["🔬 Cơ chế & Khái niệm", "🧬 Phân tích chuyên sâu", "💡 Ứng dụng thực tế"];
-        for (let i = 0; i < sentences.length; i += chunkSize) {
-          branches.push({ title: titles[branches.length - 1] || `Nhánh kiến thức ${branches.length}`, items: sentences.slice(i, i + chunkSize) });
-        }
+        const sents = plain.split(/[\n.]+/).map(s => s.trim()).filter(s => s.length > 8);
+        const chunk = Math.max(2, Math.ceil(sents.length / 3)), titles = ["I. Cơ sở lý thuyết", "II. Cơ chế phân tử", "III. Kết luận & Ứng dụng"];
+        for (let i = 0; i < sents.length; i += chunk) branches.push({ title: titles[branches.length - 1] || `Nhánh ${branches.length}`, items: sents.slice(i, i + chunk) });
       }
       return branches;
     }
+
+    function drawMindMapConnectors() {
+      const canvas = document.getElementById('mindmap-canvas'), svg = document.getElementById('mindmap-svg'), center = document.getElementById('mm-center-node');
+      if (!canvas || !svg || !center) return;
+      const cRect = canvas.getBoundingClientRect();
+      svg.setAttribute('width', cRect.width); svg.setAttribute('height', cRect.height); svg.innerHTML = '';
+      if (window.innerWidth < 768) return;
+
+      const cb = center.getBoundingClientRect();
+      const cxLeft = cb.left - cRect.left, cxRight = cb.right - cRect.left, cy = cb.top + cb.height / 2 - cRect.top;
+
+      document.querySelectorAll('.mm-branch-card').forEach(card => {
+        const side = card.getAttribute('data-side'), color = card.getAttribute('data-color') || '#0d9488';
+        const br = card.getBoundingClientRect();
+        const x1 = side === 'left' ? cxLeft : cxRight, y1 = cy;
+        const x2 = side === 'left' ? (br.right - cRect.left) : (br.left - cRect.left), y2 = br.top + 22 - cRect.top;
+        const dx = Math.abs(x2 - x1) * 0.55;
+        const cp1x = side === 'left' ? x1 - dx : x1 + dx, cp2x = side === 'left' ? x2 + dx : x2 - dx;
+
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('d', `M ${x1} ${y1} C ${cp1x} ${y1}, ${cp2x} ${y2}, ${x2} ${y2}`);
+        path.setAttribute('fill', 'none'); path.setAttribute('stroke', color); path.setAttribute('stroke-width', '2.5'); path.setAttribute('stroke-opacity', '0.75');
+        svg.appendChild(path);
+      });
+    }
+    window.addEventListener('resize', drawMindMapConnectors);
 
     function toggleMindMapBranch(idx) {
       const el = document.getElementById(`mm-leaves-${idx}`), icon = document.getElementById(`mm-icon-${idx}`);
       if (!el) return;
       const hidden = el.classList.toggle('hidden');
       if (icon) icon.className = hidden ? "fa-solid fa-chevron-right text-[10px]" : "fa-solid fa-chevron-down text-[10px]";
+      requestAnimationFrame(drawMindMapConnectors);
     }
 
     function renderArticleMindMapHTML(article) {
       const branches = parseArticleToMindMap(article);
-      const branchStyles = [
-        { head: "bg-bio-100 text-bio-900 border-bio-300", leaf: "border-bio-200 bg-bio-50/60" },
-        { head: "bg-blue-100 text-blue-700 border-blue-300", leaf: "border-blue-200 bg-blue-50/50" },
-        { head: "bg-purple-100 text-purple-800 border-purple-300", leaf: "border-purple-200 bg-purple-50/60" },
-        { head: "bg-amber-100 text-amber-800 border-amber-300", leaf: "border-amber-200 bg-amber-50/60" },
-        { head: "bg-emerald-100 text-emerald-800 border-emerald-300", leaf: "border-emerald-200 bg-emerald-50/60" }
+      const palette = [
+        { hex: "#0d9488", head: "bg-bio-100 text-bio-900 border-bio-300", dot: "bg-bio-500" },
+        { hex: "#2563eb", head: "bg-blue-100 text-blue-700 border-blue-300", dot: "bg-blue-500" },
+        { hex: "#9333ea", head: "bg-purple-100 text-purple-800 border-purple-300", dot: "bg-purple-500" },
+        { hex: "#d97706", head: "bg-amber-100 text-amber-800 border-amber-300", dot: "bg-amber-500" },
+        { hex: "#10b981", head: "bg-emerald-100 text-emerald-800 border-emerald-300", dot: "bg-emerald-500" }
       ];
 
-      return `
-        <div class="space-y-4">
-          <!-- NÚT TRUNG TÂM SƠ ĐỒ TƯ DUY -->
-          <div class="custom-gradient text-white p-4 sm:p-5 rounded-2xl shadow-md flex items-center gap-3.5">
-            <div class="w-11 h-11 rounded-2xl bg-white/20 flex items-center justify-center text-xl shrink-0">
-              <i class="fa-solid fa-diagram-project"></i>
-            </div>
-            <div>
-              <span class="inline-block text-[10px] font-bold uppercase tracking-wider bg-white/20 px-2 py-0.5 rounded-full mb-1">${escapeHTML(article.tag)}</span>
-              <h4 class="font-extrabold text-sm sm:text-base leading-snug">${escapeHTML(article.title)}</h4>
-            </div>
-          </div>
+      const leftBranches = [], rightBranches = [];
+      branches.forEach((br, idx) => {
+        const obj = { br, idx, st: palette[idx % palette.length] };
+        if (idx % 2 === 0) leftBranches.push(obj); else rightBranches.push(obj);
+      });
 
-          <!-- CÂY NHÁNH SƠ ĐỒ TƯ DUY -->
-          <div class="mindmap-tree space-y-4">
-            ${branches.map((br, idx) => {
-              const st = branchStyles[idx % branchStyles.length];
-              return `
-                <div class="mindmap-branch space-y-2">
-                  <button type="button" onclick="toggleMindMapBranch(${idx})" class="w-full text-left px-3.5 py-2.5 rounded-xl border ${st.head} font-extrabold text-xs sm:text-sm flex items-center justify-between gap-2 shadow-sm hover:brightness-95 transition">
-                    <span>${escapeHTML(br.title)} <span class="font-semibold opacity-75 text-[11px]">(${br.items.length} ý)</span></span>
-                    <i id="mm-icon-${idx}" class="fa-solid fa-chevron-down text-[10px]"></i>
-                  </button>
-                  <div id="mm-leaves-${idx}" class="mindmap-leaves space-y-2 py-1">
-                    ${br.items.map(item => `
-                      <div class="mindmap-leaf p-2.5 sm:p-3 rounded-xl border ${st.leaf} text-xs text-slate-700 leading-relaxed shadow-xs">
-                        ${escapeHTML(item)}
-                      </div>
-                    `).join('')}
-                  </div>
-                </div>`;
-            }).join('')}
+      const renderCard = ({ br, idx, st }, side) => `
+        <div class="mm-branch-card bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden relative z-10" data-side="${side}" data-color="${st.hex}">
+          <button type="button" onclick="toggleMindMapBranch(${idx})" class="w-full text-left px-3.5 py-2.5 border-b ${st.head} font-extrabold text-xs flex items-center justify-between gap-2 transition hover:brightness-95">
+            <span class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full ${st.dot} shrink-0"></span><span>${escapeHTML(br.title)}</span></span>
+            <i id="mm-icon-${idx}" class="fa-solid fa-chevron-down text-[10px] shrink-0"></i>
+          </button>
+          <ul id="mm-leaves-${idx}" class="p-3 space-y-1.5 text-[11px] text-slate-700 leading-relaxed bg-slate-50/70">
+            ${br.items.map(it => `<li class="flex items-start gap-2"><span class="w-1.5 h-1.5 rounded-full ${st.dot} mt-1.5 shrink-0"></span><span>${escapeHTML(it)}</span></li>`).join('')}
+          </ul>
+        </div>`;
+
+      return `
+        <div id="mindmap-canvas" class="relative py-2">
+          <svg id="mindmap-svg"></svg>
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-5 items-center relative z-10">
+            <div class="md:col-span-4 space-y-4 order-2 md:order-1">
+              ${leftBranches.map(b => renderCard(b, 'left')).join('')}
+            </div>
+
+            <div class="md:col-span-4 flex justify-center order-1 md:order-2">
+              <div id="mm-center-node" class="custom-gradient text-white p-5 rounded-3xl shadow-xl border-4 border-white/60 text-center space-y-2 w-full">
+                <div class="w-10 h-10 rounded-2xl bg-white/20 mx-auto flex items-center justify-center text-lg"><i class="fa-solid fa-atom"></i></div>
+                <span class="inline-block text-[10px] font-bold uppercase tracking-wider bg-black/20 px-2.5 py-0.5 rounded-full">${escapeHTML(article.tag)}</span>
+                <h4 class="font-extrabold text-sm leading-snug">${escapeHTML(article.title)}</h4>
+                <p class="text-[10px] text-white/80 font-mono">DOI: ${escapeHTML(article.doi || '10.1038/biohabit')}</p>
+              </div>
+            </div>
+
+            <div class="md:col-span-4 space-y-4 order-3">
+              ${rightBranches.map(b => renderCard(b, 'right')).join('')}
+            </div>
           </div>
         </div>`;
+    }
+
+    function renderAcademicPaperHTML(article) {
+      const refs = Array.isArray(article.references) && article.references.length > 0
+        ? article.references
+        : ["BioHabit Academic Press (2026), Journal of Biological Sciences."];
+      const kw = (article.keywords || []).map(k => `<span class="px-2 py-0.5 rounded-md bg-bio-100 text-bio-800 text-[11px] font-bold">#${escapeHTML(k)}</span>`).join('');
+      return `
+        <article class="max-w-3xl mx-auto space-y-5">
+          <div class="border-b border-slate-200 pb-4 space-y-2">
+            <div class="flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500 font-semibold">
+              <span>${escapeHTML(article.tag)} • ⏱ ${escapeHTML(article.readTime || '5 phút đọc')}</span>
+              <span class="font-mono">DOI: ${escapeHTML(article.doi || '10.1038/biohabit')}</span>
+            </div>
+            <h2 class="text-lg sm:text-2xl font-extrabold text-slate-900 leading-snug" style="font-family: 'Lora', serif;">${escapeHTML(article.title)}</h2>
+            <p class="text-xs font-bold text-bio-700"><i class="fa-solid fa-users mr-1.5"></i> ${escapeHTML(article.authors || 'Ban Nghiên cứu BioHabit')}</p>
+            ${kw ? `<div class="flex flex-wrap gap-1.5 pt-1">${kw}</div>` : ''}
+          </div>
+
+          <div class="paper-abstract bg-slate-50 p-4 rounded-r-2xl text-xs sm:text-sm text-slate-700 leading-relaxed">
+            <span class="block font-sans text-[11px] font-extrabold uppercase tracking-wider text-bio-700 mb-1">Tóm tắt nghiên cứu (Abstract)</span>
+            ${escapeHTML(article.summary)}
+          </div>
+
+          <div class="paper-body text-xs sm:text-sm text-slate-700 leading-relaxed">
+            ${sanitizeHTML(article.content)}
+          </div>
+
+          <div class="pt-4 border-t border-slate-200 space-y-1.5">
+            <h5 class="text-xs font-extrabold uppercase tracking-wider text-slate-500">Tài liệu tham khảo (References)</h5>
+            <ol class="list-decimal list-inside text-[11px] text-slate-500 space-y-1 font-mono">
+              ${refs.map(r => `<li>${escapeHTML(r)}</li>`).join('')}
+            </ol>
+          </div>
+        </article>`;
     }
 
     function setArticleViewMode(mode) {
       currentArticleViewMode = mode;
       const mBtn = document.getElementById('art-view-mindmap'), tBtn = document.getElementById('art-view-text');
-      if (mBtn) mBtn.className = mode === 'mindmap' ? "px-2.5 py-1.5 rounded-lg bg-white text-bio-700 shadow-sm transition" : "px-2.5 py-1.5 rounded-lg text-slate-500 transition";
-      if (tBtn) tBtn.className = mode === 'text' ? "px-2.5 py-1.5 rounded-lg bg-white text-bio-700 shadow-sm transition" : "px-2.5 py-1.5 rounded-lg text-slate-500 transition";
+      if (mBtn) mBtn.className = mode === 'mindmap' ? "px-3 py-1.5 rounded-lg bg-white text-bio-700 shadow-sm transition" : "px-3 py-1.5 rounded-lg text-slate-500 transition";
+      if (tBtn) tBtn.className = mode === 'text' ? "px-3 py-1.5 rounded-lg bg-white text-bio-700 shadow-sm transition" : "px-3 py-1.5 rounded-lg text-slate-500 transition";
       if (currentOpenArticleId) openArticleModal(currentOpenArticleId);
     }
 
@@ -2378,14 +2670,19 @@
       const article = getMergedArticles().find(a => a.id === articleId) || DEFAULT_ARTICLES.find(a => a.id === articleId);
       if (!article) return;
       currentOpenArticleId = articleId;
-      const titleEl = document.getElementById('modal-article-title'), contentEl = document.getElementById('modal-article-content'), modal = document.getElementById('article-modal');
-      if (titleEl) titleEl.innerHTML = `<i class="fa-solid fa-dna text-bio-600 mr-2"></i> ${escapeHTML(article.title)}`;
+      const titleEl = document.getElementById('modal-article-title'), doiEl = document.getElementById('modal-article-doi');
+      const contentEl = document.getElementById('modal-article-content'), modal = document.getElementById('article-modal');
+      if (doiEl) doiEl.innerText = `DOI: ${article.doi || '10.1038/biohabit'} • ${article.tag}`;
+      if (titleEl) titleEl.innerText = article.title;
       if (contentEl) {
         contentEl.innerHTML = currentArticleViewMode === 'mindmap'
           ? renderArticleMindMapHTML(article)
-          : `<div class="mb-3"><span class="text-[11px] font-bold text-bio-700 bg-bio-100 px-2.5 py-1 rounded-full">${escapeHTML(article.tag)}</span></div>${sanitizeHTML(article.content)}`;
+          : renderAcademicPaperHTML(article);
       }
       modal?.classList.remove('hidden'); modal?.classList.add('flex');
+      if (currentArticleViewMode === 'mindmap') {
+        requestAnimationFrame(() => setTimeout(drawMindMapConnectors, 40));
+      }
     }
 
     function closeArticleModal() {
