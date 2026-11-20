@@ -2711,11 +2711,11 @@
     catch (e) { console.warn("Firebase fallback:", e); }
 
     function mergeWithDefaults(rawData) {
-      lang: rawData.lang === 'en' ? 'en' : 'vi',
       const def = JSON.parse(JSON.stringify(DEFAULT_STORAGE));
       if (!rawData) return def;
       return {
         user: { ...def.user, ...(rawData.user || {}) },
+        lang: rawData.lang === 'en' ? 'en' : 'vi',
         schedule: { ...def.schedule, ...(rawData.schedule || {}) },
         theme: (rawData.theme && rawData.theme.v === 2)
           ? { ...def.theme, ...rawData.theme }
