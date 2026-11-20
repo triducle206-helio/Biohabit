@@ -3436,6 +3436,29 @@
         "🥗 Nhật ký 3 buổi & Calo": "🥗 3-Meal Log & Cal"
       });
     }
+    // Bổ sung từ điển VI <-> EN cho Lịch sử Chat & Nhịp sinh học cá nhân hóa
+    if (typeof VI_TO_EN !== 'undefined') {
+      Object.assign(VI_TO_EN, {
+        "Trợ Lý Sinh Học Gemini AI": "Gemini AI Biology Tutor",
+        "Tự động lưu lịch sử các cuộc trò chuyện như Gemini để bạn mở lại ôn tập bất cứ lúc nào.": "Automatically saves chat history like Gemini so you can revisit any session anytime.",
+        "Cuộc trò chuyện mới": "New chat",
+        "Lịch sử trò chuyện": "Chat history",
+        "+ Đoạn mới": "+ New",
+        "💬 Cuộc trò chuyện mới": "💬 New conversation",
+        "Lược Đồ Nhịp Sinh Học Cá Nhân Hóa": "Personalized Circadian Rhythm",
+        "Theo thể trạng của bạn": "Tailored to your body",
+        "Gemini AI đang suy nghĩ...": "Gemini AI is thinking..."
+      });
+    }
+
+    const _prevToggleLangForNewUI = toggleAppLanguage;
+    toggleAppLanguage = function() {
+      const res = _prevToggleLangForNewUI();
+      if (typeof renderChatSidebar === 'function') renderChatSidebar();
+      if (typeof renderActiveChatMessages === 'function') renderActiveChatMessages();
+      if (typeof renderPersonalizedCircadian === 'function' && AppState.schedule?.isConfigured) renderPersonalizedCircadian();
+      return res;
+    };
   </script>
 </body>
 </html>
