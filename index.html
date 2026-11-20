@@ -471,16 +471,15 @@
               <div id="nutrition-details" class="space-y-4"></div>
             </div>
 
-            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-              <div class="flex items-center justify-between pb-4 border-b border-slate-100">
-                <h3 class="text-base font-bold text-slate-900 flex items-center"><i class="fa-solid fa-wave-square text-bio-600 mr-2"></i> Lược Đồ Nhịp Sinh Học (Circadian Rhythm)</h3>
-                <span class="text-[11px] font-semibold text-slate-400">Tính theo giờ của bạn</span>
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+              <div class="flex items-center justify-between pb-3 border-b border-slate-100 flex-wrap gap-2">
+                <h3 class="text-base font-bold text-slate-900 flex items-center">
+                  <i class="fa-solid fa-wave-square text-bio-600 mr-2"></i> Lược Đồ Nhịp Sinh Học Cá Nhân Hóa
+                </h3>
+                <span class="text-[11px] font-bold px-2.5 py-1 rounded-full bg-bio-100 text-bio-800" id="circadian-profile-tag">Theo thể trạng của bạn</span>
               </div>
-              <div class="relative mt-6 space-y-5 before:absolute before:inset-0 before:left-3.5 before:w-0.5 before:bg-gradient-to-b before:from-amber-400 before:via-bio-400 before:to-indigo-500">
-                <div class="relative flex items-start space-x-4 pl-1"><div class="w-6 h-6 rounded-full bg-amber-400 border-4 border-white shadow-sm flex items-center justify-center shrink-0 z-10 text-[10px] text-white"><i class="fa-solid fa-sun"></i></div><div class="bg-slate-50 p-4 rounded-xl border border-slate-200/80 flex-grow"><div class="flex items-center justify-between flex-wrap gap-1"><span class="text-xs font-extrabold text-amber-700 bg-amber-100 px-2 py-0.5 rounded-md" id="time-wake-display">06:00 AM</span><span class="text-[11px] font-bold text-slate-400">Cortisol Đỉnh Cao</span></div><h4 class="text-sm font-bold text-slate-800 mt-2">Bình minh: Đánh thức hệ nội tiết & Bù nước</h4><p class="text-xs text-slate-600 mt-1">Uống ngay 300ml nước ấm và tiếp xúc ánh sáng mặt trời để tế bào hạch võng mạc (ipRGCs) đồng bộ đồng hồ SCN.</p></div></div>
-                <div class="relative flex items-start space-x-4 pl-1"><div class="w-6 h-6 rounded-full bg-bio-500 border-4 border-white shadow-sm flex items-center justify-center shrink-0 z-10 text-[10px] text-white"><i class="fa-solid fa-brain"></i></div><div class="bg-slate-50 p-4 rounded-xl border border-slate-200/80 flex-grow"><div class="flex items-center justify-between flex-wrap gap-1"><span class="text-xs font-extrabold text-bio-800 bg-bio-100 px-2 py-0.5 rounded-md" id="time-school-display">07:45 - 10:45 AM</span><span class="text-[11px] font-bold text-bio-600">Đỉnh cao tư duy</span></div><h4 class="text-sm font-bold text-slate-800 mt-2">Giờ vàng học thuật: Vỏ não trước trán (Prefrontal Cortex)</h4><p class="text-xs text-slate-600 mt-1">Acetylcholine và Dopamine đạt mức tối ưu nhất, thích hợp giải bài tập tư duy logic cao.</p></div></div>
-                <div class="relative flex items-start space-x-4 pl-1"><div class="w-6 h-6 rounded-full bg-blue-500 border-4 border-white shadow-sm flex items-center justify-center shrink-0 z-10 text-[10px] text-white"><i class="fa-solid fa-dumbbell"></i></div><div class="bg-slate-50 p-4 rounded-xl border border-slate-200/80 flex-grow"><div class="flex items-center justify-between flex-wrap gap-1"><span class="text-xs font-extrabold text-blue-700 bg-blue-100 px-2 py-0.5 rounded-md" id="time-home-display">05:00 - 06:00 PM</span><span class="text-[11px] font-bold text-blue-500">Thể lực cực đại</span></div><h4 class="text-sm font-bold text-slate-800 mt-2">Nhiệt độ cơ thể cao nhất: Vận động thể thao</h4><p class="text-xs text-slate-600 mt-1">Vận động 20–40 phút giúp tiết hormone BDNF hỗ trợ tạo nơ-ron thần kinh mới.</p></div></div>
-                <div class="relative flex items-start space-x-4 pl-1"><div class="w-6 h-6 rounded-full bg-indigo-600 border-4 border-white shadow-sm flex items-center justify-center shrink-0 z-10 text-[10px] text-white"><i class="fa-solid fa-moon"></i></div><div class="bg-slate-50 p-4 rounded-xl border border-slate-200/80 flex-grow"><div class="flex items-center justify-between flex-wrap gap-1"><span class="text-xs font-extrabold text-indigo-700 bg-indigo-100 px-2 py-0.5 rounded-md" id="time-sleep-display">09:45 - 10:30 PM</span><span class="text-[11px] font-bold text-indigo-500">Tuyến tùng & Melatonin</span></div><h4 class="text-sm font-bold text-slate-800 mt-2">Tắt ánh sáng xanh – Kích hoạt Melatonin</h4><p class="text-xs text-slate-600 mt-1">Ngưng dùng điện thoại trước khi ngủ 45 phút để chuẩn bị cho chu trình tự thực bào Autophagy ban đêm.</p></div></div>
+              <div id="circadian-timeline-container" class="space-y-4"></div>
+            </div>
               </div>
             </div>
           </div>
@@ -729,34 +728,60 @@
       </div>
     </section>
 
-    <!-- ================= TAB 5: TRỢ LÝ GEMINI AI ================= -->
-    <section id="tab-ai-tutor" class="hidden space-y-5">
-      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+   <!-- ================= TAB 5: TRỢ LÝ GEMINI AI + LỊCH SỬ TRÒ CHUYỆN ================= -->
+    <section id="tab-ai-tutor" class="hidden space-y-4">
+      <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h2 class="text-xl font-black text-slate-900 tracking-tight flex items-center"><i class="fa-solid fa-robot text-bio-600 mr-2.5"></i> Trợ Lý Sinh Học Gemini AI (Có Bộ Nhớ)</h2>
-          <p class="text-xs sm:text-sm text-slate-600 mt-1">Ghi nhớ ngữ cảnh trò chuyện. Nếu bạn <span class="font-bold text-bio-700">"không hiểu"</span>, AI sẽ lấy ví dụ đời sống giải thích lại!</p>
+          <h2 class="text-lg sm:text-xl font-black text-slate-900 tracking-tight flex items-center">
+            <i class="fa-solid fa-robot text-bio-600 mr-2.5"></i> Trợ Lý Sinh Học Gemini AI
+          </h2>
+          <p class="text-xs text-slate-600 mt-0.5">Tự động lưu lịch sử các cuộc trò chuyện như Gemini để bạn mở lại ôn tập bất cứ lúc nào.</p>
         </div>
-        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-bio-100 text-bio-800"><span class="w-2 h-2 rounded-full bg-bio-500 mr-2 animate-ping"></span> Gemini AI Online</span>
+        <div class="flex items-center gap-2 shrink-0">
+          <button type="button" onclick="createNewChatSession()" class="px-3.5 py-2 bg-bio-600 hover:bg-bio-700 text-white font-bold text-xs rounded-xl transition shadow-sm flex items-center">
+            <i class="fa-solid fa-plus mr-1.5"></i> Cuộc trò chuyện mới
+          </button>
+          <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold bg-bio-100 text-bio-800">
+            <span class="w-2 h-2 rounded-full bg-bio-500 mr-2 animate-ping"></span> Online
+          </span>
+        </div>
       </div>
-      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col h-[540px] overflow-hidden">
-        <div id="chat-messages" class="flex-grow p-4 sm:p-6 overflow-y-auto space-y-4 text-xs sm:text-sm">
-          <div class="flex items-start space-x-3">
-            <div class="w-8 h-8 rounded-full bg-bio-600 text-white flex items-center justify-center shrink-0 text-sm font-bold shadow-sm"><i class="fa-solid fa-robot"></i></div>
-            <div class="bg-bio-50 border border-bio-100 text-slate-800 p-3.5 rounded-2xl rounded-tl-none max-w-lg leading-relaxed">
-              Chào bạn! Mình là <strong>BioHabit Gemini AI</strong>. Bạn có thể hỏi mình mọi câu hỏi về Sinh học, Y học, Dinh dưỡng hay Khoa học đời sống. 🧬
-            </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+        <!-- CỘT TRÁI: DANH SÁCH LỊCH SỬ CHAT GIỐNG GEMINI -->
+        <aside class="md:col-span-4 lg:col-span-3 bg-white rounded-2xl border border-slate-200 shadow-sm p-3.5 flex flex-col max-h-[220px] md:h-[560px] md:max-h-[560px]">
+          <div class="flex items-center justify-between pb-2.5 mb-2.5 border-b border-slate-100">
+            <span class="text-xs font-extrabold text-slate-700 flex items-center">
+              <i class="fa-solid fa-clock-rotate-left text-bio-600 mr-1.5"></i> Lịch sử trò chuyện
+            </span>
+            <span class="text-[10px] font-bold text-slate-400" id="chat-sessions-count">0 đoạn</span>
           </div>
-        </div>
-        <div class="px-4 py-2 border-t border-slate-100 bg-slate-50 flex items-center space-x-2 overflow-x-auto text-[11px] text-slate-600">
-          <span class="font-bold text-bio-700 shrink-0"><i class="fa-regular fa-lightbulb"></i> Gợi ý:</span>
-          <button type="button" onclick="askPreset('Gan và Tuyến tụy phối hợp điều hòa đường huyết ra sao?')" class="px-2.5 py-1 bg-white border border-slate-200 hover:border-bio-400 rounded-full shrink-0 transition">Điều hòa đường huyết</button>
-          <button type="button" onclick="askPreset('Giải thích cấu trúc và chức năng của nơ-ron thần kinh?')" class="px-2.5 py-1 bg-white border border-slate-200 hover:border-bio-400 rounded-full shrink-0 transition">Nơ-ron & Xung thần kinh</button>
-          <button type="button" onclick="askPreset('Chu trình Creb và Hô hấp tế bào ở ty thể tạo ra bao nhiêu ATP?')" class="px-2.5 py-1 bg-white border border-slate-200 hover:border-bio-400 rounded-full shrink-0 transition">Ty thể & Tạo ATP</button>
-          <button type="button" onclick="askPreset('Hệ miễn dịch tiêu diệt virus qua tế bào T và B như thế nào?')" class="px-2.5 py-1 bg-white border border-slate-200 hover:border-bio-400 rounded-full shrink-0 transition">Miễn dịch cơ thể</button>
-        </div>
-        <div class="p-3 border-t border-slate-100 flex items-center space-x-2 bg-white">
-          <input type="text" id="chat-input" onkeypress="handleChatEnter(event)" placeholder="Hỏi Gemini AI về cơ thể người, dinh dưỡng và Sinh học..." class="flex-grow border border-slate-200 rounded-xl px-4 py-2.5 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-bio-500">
-          <button type="button" onclick="sendChatMessage()" id="btn-send-chat" class="px-5 py-2.5 bg-bio-600 hover:bg-bio-700 text-white font-bold rounded-xl text-xs sm:text-sm transition flex items-center shadow-md"><span>Gửi</span><i class="fa-solid fa-paper-plane ml-1.5 text-xs"></i></button>
+          <div id="chat-history-list" class="flex-grow overflow-y-auto space-y-1.5 pr-1"></div>
+        </aside>
+
+        <!-- CỘT PHẢI: KHUNG CHAT CHÍNH -->
+        <div class="md:col-span-8 lg:col-span-9 bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col h-[520px] md:h-[560px] overflow-hidden">
+          <div class="px-4 py-2.5 border-b border-slate-100 bg-slate-50/70 flex items-center justify-between">
+            <span class="text-xs font-extrabold text-slate-700 truncate" id="active-chat-title">💬 Cuộc trò chuyện mới</span>
+            <button type="button" onclick="createNewChatSession()" title="Tạo đoạn chat mới" class="text-[11px] font-bold text-bio-700 hover:underline shrink-0">+ Đoạn mới</button>
+          </div>
+
+          <div id="chat-messages" class="flex-grow p-4 sm:p-5 overflow-y-auto space-y-4 text-xs sm:text-sm"></div>
+
+          <div class="px-4 py-2 border-t border-slate-100 bg-slate-50 flex items-center space-x-2 overflow-x-auto text-[11px] text-slate-600">
+            <span class="font-bold text-bio-700 shrink-0"><i class="fa-regular fa-lightbulb"></i> Gợi ý:</span>
+            <button type="button" onclick="askPreset('Gan và Tuyến tụy phối hợp điều hòa đường huyết ra sao?')" class="px-2.5 py-1 bg-white border border-slate-200 hover:border-bio-400 rounded-full shrink-0 transition">Điều hòa đường huyết</button>
+            <button type="button" onclick="askPreset('Giải thích cấu trúc và chức năng của nơ-ron thần kinh?')" class="px-2.5 py-1 bg-white border border-slate-200 hover:border-bio-400 rounded-full shrink-0 transition">Nơ-ron & Xung thần kinh</button>
+            <button type="button" onclick="askPreset('Chu trình Creb và Hô hấp tế bào ở ty thể tạo ra bao nhiêu ATP?')" class="px-2.5 py-1 bg-white border border-slate-200 hover:border-bio-400 rounded-full shrink-0 transition">Ty thể & Tạo ATP</button>
+            <button type="button" onclick="askPreset('Hệ miễn dịch tiêu diệt virus qua tế bào T và B như thế nào?')" class="px-2.5 py-1 bg-white border border-slate-200 hover:border-bio-400 rounded-full shrink-0 transition">Miễn dịch cơ thể</button>
+          </div>
+
+          <div class="p-3 border-t border-slate-100 flex items-center space-x-2 bg-white">
+            <input type="text" id="chat-input" onkeypress="handleChatEnter(event)" placeholder="Hỏi Gemini AI về cơ thể người, dinh dưỡng và Sinh học..." class="flex-grow border border-slate-200 rounded-xl px-4 py-2.5 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-bio-500">
+            <button type="button" onclick="sendChatMessage()" id="btn-send-chat" class="px-5 py-2.5 bg-bio-600 hover:bg-bio-700 text-white font-bold rounded-xl text-xs sm:text-sm transition flex items-center shadow-md">
+              <span>Gửi</span><i class="fa-solid fa-paper-plane ml-1.5 text-xs"></i>
+            </button>
+          </div>
         </div>
       </div>
     </section>
@@ -1005,6 +1030,8 @@
       savedArticles: [],
       foodLogs: {},
       foodAnalysis: {},
+      chatSessions: [],
+      activeChatId: null,
       badges: { streak7: false, quizMaster: false, bioScholar: false }
     };
 
@@ -1562,28 +1589,170 @@
       if (be) be.innerHTML = coins > 0 ? `<span class="text-amber-600 font-extrabold text-sm">+${coins} BioCoins</span> đã cộng vào ví! 🪙` : "Thử đề khác để kiếm thêm BioCoins nhé!";
     }
 
-    /* 5. CHAT GEMINI AI */
+/* 5. CHAT GEMINI AI + LƯU LỊCH SỬ TRÒ CHUYỆN GIỐNG GEMINI */
     let conversationHistory = [];
+
+    function getActiveChatSession() {
+      if (!Array.isArray(AppState.chatSessions)) AppState.chatSessions = [];
+      let sess = AppState.chatSessions.find(s => s.id === AppState.activeChatId);
+      if (!sess && AppState.chatSessions.length > 0) {
+        sess = AppState.chatSessions[0];
+        AppState.activeChatId = sess.id;
+      }
+      return sess || null;
+    }
+
+    function createNewChatSession(skipSave = false) {
+      if (!Array.isArray(AppState.chatSessions)) AppState.chatSessions = [];
+      // Nếu đang ở một cuộc trò chuyện rỗng thì giữ nguyên không tạo trùng
+      const current = getActiveChatSession();
+      if (current && (!current.messages || current.messages.length === 0)) {
+        renderChatSidebar();
+        renderActiveChatMessages();
+        return current;
+      }
+      const id = 'chat_' + Date.now();
+      const newSess = {
+        id,
+        title: AppState.lang === 'en' ? 'New conversation' : 'Cuộc trò chuyện mới',
+        updatedAt: getCurrentHHMM() + ' ' + getLocalDateStr(0).slice(5).split('-').reverse().join('/'),
+        messages: []
+      };
+      AppState.chatSessions.unshift(newSess);
+      if (AppState.chatSessions.length > 20) AppState.chatSessions = AppState.chatSessions.slice(0, 20);
+      AppState.activeChatId = id;
+      conversationHistory = [];
+      if (!skipSave) saveState();
+      else { renderChatSidebar(); renderActiveChatMessages(); }
+      return newSess;
+    }
+
+    function selectChatSession(chatId) {
+      AppState.activeChatId = chatId;
+      const sess = getActiveChatSession();
+      conversationHistory = sess ? (sess.messages || []).slice(-6) : [];
+      renderChatSidebar();
+      renderActiveChatMessages();
+    }
+
+    function deleteChatSession(e, chatId) {
+      e.stopPropagation();
+      if (!Array.isArray(AppState.chatSessions)) return;
+      AppState.chatSessions = AppState.chatSessions.filter(s => s.id !== chatId);
+      if (AppState.activeChatId === chatId) {
+        AppState.activeChatId = AppState.chatSessions[0]?.id || null;
+      }
+      if (AppState.chatSessions.length === 0) createNewChatSession(true);
+      saveState();
+      showToast(AppState.lang === 'en' ? "Deleted conversation" : "Đã xóa cuộc trò chuyện", "info");
+    }
+
+    function renderChatSidebar() {
+      const listEl = document.getElementById('chat-history-list');
+      const countEl = document.getElementById('chat-sessions-count');
+      const sessions = AppState.chatSessions || [];
+      const isEn = AppState.lang === 'en';
+      if (countEl) countEl.innerText = isEn ? `${sessions.length} chats` : `${sessions.length} đoạn`;
+      if (!listEl) return;
+
+      if (sessions.length === 0) {
+        listEl.innerHTML = `<div class="text-center py-6 text-[11px] text-slate-400">${isEn ? 'No saved chats yet.' : 'Chưa có lịch sử trò chuyện.'}</div>`;
+        return;
+      }
+
+      listEl.innerHTML = sessions.map(s => {
+        const isActive = s.id === AppState.activeChatId;
+        const msgCount = (s.messages || []).length;
+        return `
+          <div onclick="selectChatSession('${escapeHTML(s.id)}')"
+            class="group flex items-center justify-between gap-2 p-2.5 rounded-xl border cursor-pointer transition ${isActive ? 'bg-bio-50 border-bio-300 text-bio-900 shadow-xs' : 'bg-slate-50/70 border-slate-100 hover:border-bio-200 text-slate-700'}">
+            <div class="min-w-0 flex-grow">
+              <p class="text-xs font-bold truncate">${escapeHTML(s.title)}</p>
+              <p class="text-[10px] text-slate-400 mt-0.5">${escapeHTML(s.updatedAt || '')} • ${msgCount} ${isEn ? 'msgs' : 'tin'}</p>
+            </div>
+            <button type="button" onclick="deleteChatSession(event, '${escapeHTML(s.id)}')" title="${isEn ? 'Delete' : 'Xóa'}"
+              class="opacity-70 group-hover:opacity-100 w-6 h-6 rounded-lg hover:bg-rose-100 text-slate-400 hover:text-rose-600 flex items-center justify-center text-[11px] shrink-0 transition">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </div>`;
+      }).join('');
+    }
+
+    function renderActiveChatMessages() {
+      const box = document.getElementById('chat-messages');
+      const titleEl = document.getElementById('active-chat-title');
+      if (!box) return;
+      // Không vẽ đè nếu đang chờ AI trả lời
+      if (box.querySelector('[id^="loading-"]')) return;
+
+      const sess = getActiveChatSession();
+      const isEn = AppState.lang === 'en';
+      if (titleEl) titleEl.innerText = `💬 ${sess?.title || (isEn ? 'New conversation' : 'Cuộc trò chuyện mới')}`;
+
+      const welcomeHTML = `
+        <div class="flex items-start space-x-3">
+          <div class="w-8 h-8 rounded-full bg-bio-600 text-white flex items-center justify-center shrink-0 text-sm font-bold shadow-sm"><i class="fa-solid fa-robot"></i></div>
+          <div class="bg-bio-50 border border-bio-100 text-slate-800 p-3.5 rounded-2xl rounded-tl-none max-w-lg leading-relaxed">
+            ${isEn ? "Hi there! I'm <strong>BioHabit Gemini AI</strong>. Ask me anything about Biology, Health, or Nutrition—all chats are saved automatically! 🧬" : "Chào bạn! Mình là <strong>BioHabit Gemini AI</strong>. Mọi câu hỏi đều được tự động lưu vào lịch sử bên trái giống Gemini để bạn xem lại bất cứ lúc nào! 🧬"}
+          </div>
+        </div>`;
+
+      const msgs = sess?.messages || [];
+      conversationHistory = msgs.slice(-6);
+      box.innerHTML = welcomeHTML;
+      msgs.forEach(m => appendMessage(m.role === 'user' ? 'user' : 'bot', m.text));
+    }
+
     function handleChatEnter(e) { if (e.key === 'Enter') sendChatMessage(); }
     function askPreset(t) { const i = document.getElementById('chat-input'); if (i) { i.value = t; sendChatMessage(); } }
+
     async function sendChatMessage() {
       const i = document.getElementById('chat-input'), q = i?.value.trim(); if (!q) return;
-      i.value = ""; appendMessage("user", q); const lid = appendLoadingBubble();
+      let sess = getActiveChatSession();
+      if (!sess) sess = createNewChatSession(true);
+
+      i.value = "";
+      if (sess.messages.length === 0) {
+        sess.title = q.length > 34 ? q.slice(0, 34) + '...' : q;
+      }
+      sess.updatedAt = getCurrentHHMM() + ' ' + getLocalDateStr(0).slice(5).split('-').reverse().join('/');
+      sess.messages.push({ role: 'user', text: q });
+      if (sess.messages.length > 40) sess.messages = sess.messages.slice(-40);
+
+      appendMessage("user", q);
+      renderChatSidebar();
+      const titleEl = document.getElementById('active-chat-title');
+      if (titleEl) titleEl.innerText = `💬 ${sess.title}`;
+
+      const historyToSend = sess.messages.slice(-7, -1);
+      const lid = appendLoadingBubble();
+
       try {
-        const r = await fetch('/api/gemini', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ type: 'chat', message: q, history: conversationHistory }) });
+        const r = await fetch('/api/gemini', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ type: 'chat', message: q, history: historyToSend }) });
         const d = await r.json(); removeLoadingBubble(lid);
-        if (r.ok && d.reply) { appendMessage("bot", d.reply); conversationHistory.push({ role: 'user', text: q }, { role: 'model', text: d.reply }); if (conversationHistory.length > 6) conversationHistory = conversationHistory.slice(-6); }
-        else appendMessage("bot", `⚠️ ${d.error || 'Đang bận, thử lại sau 5 giây nhé!'}`);
-      } catch (e) { removeLoadingBubble(lid); appendMessage("bot", "⚠️ Lỗi kết nối /api/gemini."); }
+        const replyText = (r.ok && d.reply) ? d.reply : `⚠️ ${d.error || 'Đang bận, thử lại sau 5 giây nhé!'}`;
+        if (r.ok && d.reply) {
+          sess.messages.push({ role: 'model', text: replyText });
+          conversationHistory = sess.messages.slice(-6);
+          saveState();
+        }
+        appendMessage("bot", replyText);
+      } catch (e) {
+        removeLoadingBubble(lid);
+        appendMessage("bot", "⚠️ Lỗi kết nối /api/gemini.");
+      }
     }
+
     function appendMessage(s, text) {
       const b = document.getElementById('chat-messages'); if (!b) return;
       const d = document.createElement('div'); d.className = `flex items-start space-x-3 ${s === 'user' ? 'flex-row-reverse space-x-reverse' : ''}`;
-      const av = s === 'user' ? `<div class="w-8 h-8 rounded-full bg-slate-800 text-white flex items-center justify-center shrink-0 text-xs font-bold">Bạn</div>` : `<div class="w-8 h-8 rounded-full bg-bio-600 text-white flex items-center justify-center shrink-0 text-sm font-bold"><i class="fa-solid fa-robot"></i></div>`;
+      const isEn = AppState.lang === 'en';
+      const av = s === 'user' ? `<div class="w-8 h-8 rounded-full bg-slate-800 text-white flex items-center justify-center shrink-0 text-xs font-bold">${isEn ? 'You' : 'Bạn'}</div>` : `<div class="w-8 h-8 rounded-full bg-bio-600 text-white flex items-center justify-center shrink-0 text-sm font-bold"><i class="fa-solid fa-robot"></i></div>`;
       const fmt = escapeHTML(text).replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
       d.innerHTML = av + (s === 'user' ? `<div class="bg-bio-600 text-white p-3.5 rounded-2xl rounded-tr-none max-w-lg leading-relaxed shadow-sm">${fmt}</div>` : `<div class="bg-slate-100 text-slate-800 p-3.5 rounded-2xl rounded-tl-none max-w-lg leading-relaxed border border-slate-200/80">${fmt}</div>`);
       b.appendChild(d); b.scrollTop = b.scrollHeight;
     }
+
     function appendLoadingBubble() {
       const b = document.getElementById('chat-messages'); if (!b) return "";
       const id = "loading-" + Date.now(), d = document.createElement('div'); d.id = id; d.className = "flex items-start space-x-3";
@@ -1991,6 +2160,119 @@
           c.innerHTML = `<div class="p-3.5 bg-bio-50/70 border border-bio-200 rounded-xl"><h5 class="font-extrabold text-bio-900 text-sm mb-1">${m.title}</h5><p class="text-xs text-bio-700">Tính theo thể trạng (${hCm}cm - ${w}kg - ${age} tuổi) và ${bmiInfo.label}.</p></div><div class="grid grid-cols-1 md:grid-cols-2 gap-3.5"><div class="bg-emerald-50/40 p-4 rounded-xl border border-emerald-200"><h6 class="font-bold text-emerald-800 text-xs flex items-center mb-2.5"><i class="fa-solid fa-circle-check text-emerald-600 mr-1.5"></i> CÁC MÓN NÊN ĂN</h6><ul class="text-xs space-y-2 text-slate-700 list-disc list-inside">${m.allowed.map(x => `<li>${x}</li>`).join('')}</ul></div><div class="bg-rose-50/50 p-4 rounded-xl border border-rose-200"><h6 class="font-bold text-rose-800 text-xs flex items-center mb-2.5"><i class="fa-solid fa-ban text-rose-600 mr-1.5"></i> MÓN NÊN TRÁNH</h6><ul class="text-xs space-y-2 text-slate-700 list-disc list-inside">${m.forbidden.map(x => `<li>${x}</li>`).join('')}</ul></div></div><div class="p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-900"><i class="fa-solid fa-triangle-exclamation text-amber-600 mr-1"></i> ${m.restrictions}</div>`;
         }
       } catch (err) { console.error("Lỗi thực đơn:", err); }
+    }
+    function renderPersonalizedCircadian() {
+      const box = document.getElementById('circadian-timeline-container');
+      const tag = document.getElementById('circadian-profile-tag');
+      if (!box) return;
+
+      const s = AppState.schedule || {};
+      const isEn = AppState.lang === 'en';
+      const wake = s.wake || "06:00", school = s.school || "07:15", home = s.home || "17:00", sleep = s.sleep || "22:30";
+      const sleepHrs = parseFloat(calculateSleepDuration(wake, sleep));
+      const w = parseFloat(s.weight) || 55, h = parseFloat(s.height) || 165;
+      const bmi = parseFloat((w / ((h / 100) ** 2)).toFixed(1));
+      const goal = s.goal || 'maintain';
+      const isStudent = (s.role || 'student') === 'student';
+      const waterPerGlass = Math.round((w * 35) / 8);
+
+      const sleepMins = timeToMinutes(sleep);
+      const isNightOwl = sleepMins >= 23 * 60 + 30 || sleepMins < 5 * 60;
+      const isSleepDeprived = sleepHrs < 6.8;
+
+      if (tag) {
+        const goalTxt = isEn
+          ? ({ muscle: "Muscle Gain", maintain: "Maintain", fatloss: "Mild Fat Loss", fatloss_intensive: "Intensive Fat Loss" }[goal] || "Balanced")
+          : ({ muscle: "Tăng cơ", maintain: "Duy trì", fatloss: "Giảm mỡ nhẹ", fatloss_intensive: "Giảm mỡ sâu" }[goal] || "Cân đối");
+        tag.innerText = isEn ? `BMI ${bmi} • ${goalTxt} • ${sleepHrs}h sleep` : `BMI ${bmi} • ${goalTxt} • Ngủ ${sleepHrs}h`;
+      }
+
+      // Xây dựng 6 mốc cá nhân hóa theo đúng thể trạng & lịch của từng người
+      const cards = [];
+
+      // 1. THỨC DẬY
+      let wakeDesc = "";
+      if (isSleepDeprived) {
+        wakeDesc = isEn
+          ? `You only slept ${sleepHrs}h (sleep debt). Get 10 mins of bright sunlight immediately to clear residual Melatonin and delay coffee for 60–90 mins to avoid an afternoon crash.`
+          : `Bạn đang ngủ thiếu (${sleepHrs}h/đêm) khiến Cortisol buổi sáng tăng cao. Hãy ra ánh nắng tự nhiên 10 phút ngay để tắt Melatonin tồn dư và đợi 60–90 phút sau mới uống trà/cà phê để không bị sập năng lượng buổi chiều.`;
+      } else if (goal === 'muscle') {
+        wakeDesc = isEn
+          ? `Drink ${waterPerGlass}ml warm water, then eat a protein-rich breakfast within 45 mins to stop morning Cortisol from breaking down muscle tissue.`
+          : `Uống ${waterPerGlass}ml nước ấm đánh thức tế bào, sau đó ăn sáng đủ đạm + tinh bột trong 45 phút đầu để ngăn Cortisol buổi sáng dị hóa cơ bắp.`;
+      } else if (goal === 'fatloss' || goal === 'fatloss_intensive') {
+        wakeDesc = isEn
+          ? `Drink ${waterPerGlass + 100}ml warm water and do 10 mins of light stretching/sunlight walk before breakfast to boost morning Insulin sensitivity and fat oxidation.`
+          : `Uống ${waterPerGlass + 100}ml nước ấm + đi bộ nhẹ/phơi nắng 10 phút trước bữa sáng để tăng độ nhạy Insulin và kích hoạt oxy hóa mỡ nền.`;
+      } else {
+        wakeDesc = isEn
+          ? `Drink ${waterPerGlass}ml water and get morning light so retinal ipRGCs synchronize your SCN biological clock for stable daytime focus.`
+          : `Uống ${waterPerGlass}ml nước ấm và tiếp xúc ánh sáng mặt trời để tế bào hạch võng mạc (ipRGCs) đồng bộ đồng hồ SCN cho cả ngày tỉnh táo.`;
+      }
+      cards.push({ icon: "fa-sun", dotCls: "bg-amber-400", badgeCls: "text-amber-700 bg-amber-100", time: formatTimeToAMPM(wake), sub: isEn ? "Cortisol & Hydration" : "Cortisol & Bù nước", title: isEn ? "Morning Activation" : "Bình minh: Kích hoạt nội tiết theo thể trạng", desc: wakeDesc });
+
+      // 2. GIỜ VÀNG TƯ DUY
+      const peakStart = addMinutesToTimeStr(school, 30), peakEnd = addMinutesToTimeStr(school, 210);
+      const peakDesc = isStudent
+        ? (isEn ? `Prefrontal cortex Acetylcholine & Dopamine peak. Best window for Math, Physics, Biology, and memorization. Sip ~${waterPerGlass}ml water every 90 mins.` : `Vỏ não trước trán đạt đỉnh Acetylcholine & Dopamine—thích hợp học các môn tư duy logic (Toán, Lý, Hóa, Sinh). Nhớ uống ~${waterPerGlass}ml nước mỗi 90 phút.`)
+        : (isEn ? `Peak analytical focus window. Work in 90-minute Ultradian Deep Work blocks with 10-minute eye breaks.` : `Khung giờ tập trung sâu nhất. Chia làm các phiên Deep Work 90 phút theo chu kỳ sinh học Ultradian để đạt hiệu suất cao nhất mà không kiệt sức.`);
+      cards.push({ icon: "fa-brain", dotCls: "bg-bio-500", badgeCls: "text-bio-800 bg-bio-100", time: `${formatTimeToAMPM(peakStart)} – ${formatTimeToAMPM(peakEnd)}`, sub: isEn ? "Cognitive Peak" : "Đỉnh cao tư duy", title: isStudent ? (isEn ? "Academic Focus Window" : "Giờ vàng học thuật") : (isEn ? "Deep Work Window" : "Khung giờ Deep Work"), desc: peakDesc });
+
+      // 3. PHỤC HỒI ĐẦU CHIỀU
+      const postLunchDesc = (isSleepDeprived || bmi < 18.5)
+        ? (isEn ? `Take a 15–20 min Power Nap (no longer than 30 mins to avoid Sleep Inertia) to restore alertness and protect growth recovery.` : `Do ${isSleepDeprived ? 'đang thiếu ngủ' : 'BMI gầy cần giữ năng lượng'}, hãy chợp mắt trưa ngắn 15–20 phút (không quá 30 phút để tránh mệt mỏi Sleep Inertia).`)
+        : (isEn ? `Walk lightly for 10–15 mins after lunch to blunt the post-meal blood glucose spike and prevent afternoon drowsiness.` : `Đi bộ nhẹ 10–15 phút sau bữa trưa giúp cơ bắp hấp thụ bớt đường huyết sau ăn, ngăn chặn cảm giác buồn ngủ đầu giờ chiều.`);
+      cards.push({ icon: "fa-battery-half", dotCls: "bg-emerald-500", badgeCls: "text-emerald-700 bg-emerald-100", time: "12:30 PM – 01:30 PM", sub: isEn ? "Glucose & Recovery" : "Đường huyết & Phục hồi", title: isEn ? "Post-Lunch Biological Reset" : "Nhịp phục hồi sau bữa trưa", desc: postLunchDesc });
+
+      // 4. VẬN ĐỘNG CHIỀU
+      const homeEnd = addMinutesToTimeStr(home, 60);
+      let moveTitle = "", moveDesc = "";
+      if (goal === 'muscle') {
+        moveTitle = isEn ? "Resistance Training & Protein Window" : "Tập kháng lực & Bồi đắp cơ bắp";
+        moveDesc = isEn ? `Core temperature peaks—ideal for 30–40 mins of strength/calisthenics to trigger GH & Testosterone. Follow up with eggs/milk/banana.` : `Thân nhiệt đạt đỉnh—tập tạ nhẹ, hít đất hoặc xà đơn 30–40 phút để kích thích Testosterone & GH. Sau tập ăn thêm trứng/sữa/chuối.`;
+      } else if (goal === 'fatloss_intensive') {
+        moveTitle = isEn ? "Low-Impact Zone 2 Fat Burn" : "Đốt mỡ an toàn & Bảo vệ khớp";
+        moveDesc = isEn ? `At BMI ${bmi}, choose joint-friendly cardio (brisk walking, cycling, swimming) for 35–45 mins at 60–70% max heart rate.` : `Với BMI ${bmi}, ưu tiên vận động ít áp lực khớp gối (đi bộ nhanh, đạp xe, bơi lội) 35–45 phút ở nhịp tim Zone 2 để đốt mỡ hiệu quả.`;
+      } else if (goal === 'fatloss') {
+        moveTitle = isEn ? "Aerobic Cardio & BDNF Boost" : "Cardio đốt mỡ & Tăng BDNF";
+        moveDesc = isEn ? `30–40 mins of jogging, skipping, or badminton to oxidize fatty acids and release BDNF for evening focus.` : `Chạy bộ, nhảy dây hoặc đánh cầu lông 30–40 phút để oxy hóa axit béo thừa và giải phóng BDNF giúp đầu óc minh mẫn vào buổi tối.`;
+      } else {
+        moveTitle = isEn ? "Optimal Physical Performance" : "Thể lực cực đại: Vận động thể thao";
+        moveDesc = isEn ? `25–35 mins of your favorite sport clears lactic acid from sitting and boosts mood-regulating endorphins.` : `Vận động 25–35 phút giúp đào thải Axit Lactic tích tụ do ngồi học/làm lâu và tăng tiết Endorphin giảm stress.`;
+      }
+      cards.push({ icon: "fa-dumbbell", dotCls: "bg-blue-500", badgeCls: "text-blue-700 bg-blue-100", time: `${formatTimeToAMPM(home)} – ${formatTimeToAMPM(homeEnd)}`, sub: isEn ? "Body Temp Peak" : "Thân nhiệt cực đại", title: moveTitle, desc: moveDesc });
+
+      // 5. BỮA TỐI & CẮT ĐƯỜNG/CAFFEINE
+      const dinnerCutoff = addMinutesToTimeStr(sleep, (goal === 'fatloss' || goal === 'fatloss_intensive') ? -180 : -120);
+      const dinnerDesc = (goal === 'fatloss' || goal === 'fatloss_intensive')
+        ? (isEn ? `Finish dinner at least 3 hours before bed so Insulin drops overnight, unlocking fat burning and cellular Autophagy.` : `Hoàn tất bữa tối trước giờ ngủ ít nhất 3 tiếng để Insulin hạ thấp ban đêm, mở khóa cơ chế đốt mỡ và tự thực bào Autophagy.`)
+        : (isEn ? `Finish dinner ~2 hours before bed with slow carbs & lean protein to fuel overnight muscle and brain repair.` : `Hoàn tất bữa tối trước khi ngủ ~2 tiếng với đạm dễ tiêu và rau xanh để cơ thể tổng hợp protein sửa chữa tế bào ban đêm.`);
+      cards.push({ icon: "fa-utensils", dotCls: "bg-orange-500", badgeCls: "text-amber-800 bg-amber-100", time: `${isEn ? 'Before' : 'Trước'} ${formatTimeToAMPM(dinnerCutoff)}`, sub: isEn ? "Metabolic Switch" : "Công tắc chuyển hóa", title: isEn ? "Last Meal Cutoff" : "Chốt bữa tối chuẩn sinh học", desc: dinnerDesc });
+
+      // 6. ĐI NGỦ
+      const blueOff = addMinutesToTimeStr(sleep, -45);
+      const sleepDesc = isNightOwl
+        ? (isEn ? `Sleeping past 23:30 misses the peak Growth Hormone (GH) window (23:00–01:00). Dim screens 45 mins prior and shift bedtime 15 mins earlier every 3 days.` : `Đi ngủ sau 23:30 dễ bỏ lỡ đỉnh tiết Hormone tăng trưởng (GH) lúc 23h–1h sáng. Hãy tắt màn hình trước 45 phút và tập ngủ sớm dần hơn 15 phút mỗi 3 ngày.`)
+        : (isEn ? `Turn off blue light 45 mins before bed so your pineal gland secretes Melatonin, activating the Glymphatic system to clean brain waste overnight.` : `Ngưng ánh sáng xanh trước khi ngủ 45 phút để tuyến tùng tiết Melatonin tối đa, kích hoạt hệ Glymphatic dọn rác não bộ suốt đêm.`);
+      cards.push({ icon: "fa-moon", dotCls: "bg-indigo-600", badgeCls: "text-indigo-700 bg-indigo-100", time: `${formatTimeToAMPM(blueOff)} – ${formatTimeToAMPM(sleep)}`, sub: isNightOwl ? (isEn ? "Late Rhythm Alert" : "Cảnh báo ngủ muộn") : (isEn ? "Pineal & Melatonin" : "Tuyến tùng & Melatonin"), title: isEn ? "Melatonin & Deep Sleep Prep" : "Kích hoạt Melatonin & Giấc ngủ sâu", desc: sleepDesc });
+
+      box.innerHTML = `
+        <div class="relative space-y-4 before:absolute before:inset-0 before:left-3.5 before:w-0.5 before:bg-gradient-to-b before:from-amber-400 before:via-bio-400 before:to-indigo-500">
+          ${cards.map(c => `
+            <div class="relative flex items-start space-x-3.5 pl-1">
+              <div class="w-6 h-6 rounded-full ${c.dotCls} border-4 border-white shadow-sm flex items-center justify-center shrink-0 z-10 text-[10px] text-white">
+                <i class="fa-solid ${c.icon}"></i>
+              </div>
+              <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200/80 flex-grow">
+                <div class="flex items-center justify-between flex-wrap gap-1">
+                  <span class="text-[11px] font-extrabold ${c.badgeCls} px-2 py-0.5 rounded-md">${c.time}</span>
+                  <span class="text-[10px] font-bold text-slate-400">${c.sub}</span>
+                </div>
+                <h4 class="text-xs sm:text-sm font-bold text-slate-800 mt-1.5">${c.title}</h4>
+                <p class="text-[11px] sm:text-xs text-slate-600 mt-1 leading-relaxed">${c.desc}</p>
+              </div>
+            </div>`).join('')}
+        </div>`;
     }
 
    /* 7. BIOMARKET: TẠP CHÍ NGHIÊN CỨU KHOA HỌC & SƠ ĐỒ TƯ DUY 2 BÊN */
@@ -2560,6 +2842,8 @@
         savedArticles: Array.isArray(rawData.savedArticles) ? rawData.savedArticles : [],
         foodLogs: (rawData.foodLogs && typeof rawData.foodLogs === 'object') ? rawData.foodLogs : {},
         foodAnalysis: (rawData.foodAnalysis && typeof rawData.foodAnalysis === 'object') ? rawData.foodAnalysis : {},
+        chatSessions: Array.isArray(rawData.chatSessions) ? rawData.chatSessions : [],
+        activeChatId: rawData.activeChatId || null,
         badges: { ...def.badges, ...(rawData.badges || {}) }
       };
     }
@@ -2654,10 +2938,7 @@
           if (sb) sb.innerHTML = `<span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold bg-bio-100 text-bio-800 border border-bio-200"><i class="fa-solid fa-circle-check mr-1.5"></i> Đã tạo lộ trình cá nhân</span>`;
           const ws = s.wake || "06:00", ss = addMinutesToTimeStr(s.school || "07:15", 30), spe = addMinutesToTimeStr(s.school || "07:15", 210);
           const hs = s.home || "17:00", he = addMinutesToTimeStr(hs, 60), sl = s.sleep || "22:30", bo = addMinutesToTimeStr(sl, -45);
-          setT('time-wake-display', `${formatTimeToAMPM(ws)} - Đánh thức cơ thể`);
-          setT('time-school-display', `${formatTimeToAMPM(ss)} - ${formatTimeToAMPM(spe)}`);
-          setT('time-home-display', `${formatTimeToAMPM(hs)} - ${formatTimeToAMPM(he)}`);
-          setT('time-sleep-display', `${formatTimeToAMPM(bo)} - ${formatTimeToAMPM(sl)}`);
+          renderPersonalizedCircadian();
           if (nutCard) nutCard.classList.toggle('hidden', !s.nutritionEnabled);
           renderNutritionAdvice();
         } else {
@@ -2665,6 +2946,9 @@
           if (sb) sb.innerHTML = `<span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-200"><i class="fa-solid fa-pen-to-square mr-1.5"></i> Chờ nhập thông tin</span>`;
         }
         checkBadges(); renderBadges();
+        if (!getActiveChatSession()) createNewChatSession(true);
+        renderChatSidebar();
+        renderActiveChatMessages();
       } catch (err) { console.error("Lỗi UI:", err); }
     }
 
@@ -3058,6 +3342,9 @@
       AppState.lang = AppState.lang === 'en' ? 'vi' : 'en';
       saveState();
       applyLanguageToDOM(AppState.lang);
+      renderChatSidebar(); 
+      renderActiveChatMessages(); 
+      renderPersonalizedCircadian(); 
       if (currentOpenArticleId && !document.getElementById('article-modal')?.classList.contains('hidden')) {
         openArticleModal(currentOpenArticleId);
       }
