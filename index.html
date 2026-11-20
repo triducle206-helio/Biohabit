@@ -2931,220 +2931,246 @@
       renderFoodLogs();
       showBmiAndPriorityModes
     });
-    /* 11. HỆ THỐNG ĐỔI NGÔN NGỮ TỰ ĐỘNG (TIẾNG VIỆT <-> ENGLISH) + AI */
+   /* 11. HỆ THỐNG ĐA NGÔN NGỮ TOÀN DIỆN (TIẾNG VIỆT <-> ENGLISH) */
+    const QUIZ_BANK_EN = [
+      { q: "Which hormone is secreted by the pineal gland to regulate the natural sleep-wake cycle?", o: ["Melatonin", "Adrenaline", "Insulin", "Testosterone"], e: "Melatonin peaks in darkness to help the body fall asleep." },
+      { q: "During intense exercise with low oxygen, human skeletal muscle ferments glucose into what fatigue-causing acid?", o: ["Lactic Acid", "Acetic Acid", "Carbonic Gas", "Ethanol"], e: "Lactic acid fermentation occurs during temporary oxygen deficit, accumulating H+ ions." },
+      { q: "Which organelle acts as the cell's 'digestive and recycling plant' during Autophagy?", o: ["Lysosome", "Ribosome", "Rough ER", "Golgi Apparatus"], e: "Lysosomes contain hydrolytic enzymes to break down old organelles into reusable amino acids." },
+      { q: "Which neurotransmitter is closely linked to motivation, reward, and focus?", o: ["Dopamine", "Melatonin", "Glucagon", "Hemoglobin"], e: "Dopamine signals across synapses in the limbic system and prefrontal cortex to sustain study drive." },
+      { q: "Caffeine promotes alertness by competing with and blocking receptors of which sleep-inducing molecule?", o: ["Adenosine", "Acetylcholine", "Oxytocin", "Serotonin"], e: "Caffeine mimics Adenosine's shape and binds its receptors to temporarily block fatigue signals." },
+      { q: "In CRISPR-Cas9, which component guides the Cas9 enzyme to the exact target DNA sequence?", o: ["Guide RNA (sgRNA)", "DNA Ligase", "80S Ribosome", "ATP molecule"], e: "sgRNA base-pairs specifically with the target DNA sequence so Cas9 cuts accurately." },
+      { q: "Over 90% of the human body's Serotonin is synthesized in which organ?", o: ["The gut / intestines", "Thyroid gland", "Lungs", "Kidneys"], e: "Intestinal enterochromaffin cells and the gut microbiome drive most Serotonin production." },
+      { q: "Which immune cells remember an antigen long-term after vaccination?", o: ["Memory B and T Lymphocytes", "Mature Red Blood Cells", "Platelets", "Skeletal Muscle Cells"], e: "Memory lymphocytes enable a faster, stronger immune response upon re-exposure." },
+      { q: "Aerobic cellular respiration of 1 Glucose molecule in mitochondria yields roughly how many ATP?", o: ["30 - 32 ATP", "2 ATP", "100 ATP", "4 ATP"], e: "Aerobic respiration is ~15 times more energy-efficient than anaerobic fermentation." },
+      { q: "Neurotrophic factor BDNF increases most strongly through which activity?", o: ["Aerobic physical exercise", "Staying up late on screens", "Eating refined sugar", "Dehydration"], e: "Exercise stimulates BDNF gene expression, helping neurons grow new synapses." },
+      { q: "Arid-climate plants like cacti and pineapples typically photosynthesize via which pathway?", o: ["CAM pathway", "C3 pathway", "Alcohol fermentation", "Chemosynthesis"], e: "CAM plants open stomata at night to fix CO2 and close them by day to conserve water." },
+      { q: "Epigenetics alters gene expression through which mechanism?", o: ["DNA methylation & histone modification", "Changing nucleotide sequence", "Deleting chromosomes", "Converting DNA to lipids"], e: "Epigenetics turns genes on/off using chemical tags outside the DNA sequence itself." },
+      { q: "Deep-sea organisms around hydrothermal vents rely on which primary producers?", o: ["Sulfur-chemosynthetic bacteria", "Angiosperms", "Photosynthetic green algae", "Baker's yeast"], e: "Chemoautotrophic bacteria oxidize H2S to synthesize organic matter in total darkness." },
+      { q: "Astrobiologists prioritize searching for which solvent as a key sign of potential life?", o: ["Liquid water (H2O)", "Liquid mercury", "Helium gas", "Molten iron"], e: "Liquid water's polarity and high heat capacity make it ideal for biochemical reactions." },
+      { q: "Which sleep stage plays the biggest role in consolidating creative memory and processing emotions?", o: ["REM sleep", "Wakefulness", "Hyperventilation", "Muscle cramping"], e: "During REM sleep, the brain integrates memories and regulates emotional stress." },
+      { q: "What is the functional blood-filtering unit inside each human kidney called?", o: ["Nephron", "Alveolus", "Cone cell", "Motor neuron"], e: "Each kidney contains ~1 million nephrons consisting of glomeruli and renal tubules." },
+      { q: "Passive diffusion of water across a cell membrane (via Aquaporins) is called what?", o: ["Osmosis", "Phagocytosis", "Exocytosis", "Active transport"], e: "Water moves from high water potential to low water potential across a semipermeable membrane." },
+      { q: "How does blue light from phone screens right before bed affect human biology?", o: ["Inhibits retinal ganglion cells & lowers Melatonin", "Triggers pancreatic Insulin", "Breaks down muscle Glycogen", "Increases Calcium uptake"], e: "Blue light (~480nm) tricks the SCN clock into thinking it is daytime, delaying sleep." },
+      { q: "Which fat-soluble vitamin is synthesized directly in skin exposed to UVB sunlight?", o: ["Vitamin D", "Vitamin C", "Vitamin B12", "Folic Acid (B9)"], e: "UVB converts cholesterol precursors in skin into Vitamin D3 for bone and immune health." },
+      { q: "Which hormone from pancreatic Beta cells lowers blood Glucose after a meal?", o: ["Insulin", "Glucagon", "Cortisol", "Thyroxine"], e: "Insulin prompts muscle and liver cells to absorb glucose for energy or glycogen storage." },
+      { q: "Which brain system uses cerebrospinal fluid to wash out Beta-amyloid waste during deep sleep?", o: ["Glymphatic System", "Peripheral lymphatics", "Cerebellum", "Optic nerve"], e: "During deep NREM sleep, glial cells shrink, allowing CSF to flush out metabolic waste." },
+      { q: "Which tiny organism survives the vacuum of space via dry cryptobiosis?", o: ["Tardigrade (Water Bear)", "Starfish", "Immortal jellyfish", "Blue whale"], e: "Tardigrades replace cellular water with Trehalose sugar to endure radiation and -200°C." },
+      { q: "Bioluminescence in fireflies and deep-sea creatures relies on which pair of substances?", o: ["Luciferin & Luciferase", "Chlorophyll & ATP", "Hemoglobin & Iron", "Collagen & Keratin"], e: "Luciferase catalyzes Luciferin oxidation with ATP to emit cold light with ~100% efficiency." },
+      { q: "During chronic stress, the adrenal glands release which hormones raising heart rate and blood sugar?", o: ["Cortisol & Adrenaline", "Melatonin", "Oxytocin", "Prolactin"], e: "The HPA axis triggers Cortisol and Adrenaline for the fight-or-flight response." },
+      { q: "Which protective cap at chromosome ends prevents DNA erosion during cell division?", o: ["Telomere", "Centromere", "Ribosome", "Plasmid"], e: "Telomeres shorten with age; healthy habits help slow down telomere attrition." },
+      { q: "In the human heart, which valve prevents blood backflow from the left ventricle to the left atrium?", o: ["Mitral (Bicuspid) valve", "Pulmonary valve", "Aortic valve", "Tricuspid valve"], e: "The mitral valve ensures one-way oxygenated blood flow into the aorta." },
+      { q: "Essential Omega-3 fatty acids (EPA, DHA) play their biggest structural role in which tissue?", o: ["Brain neuron membranes & retina", "Tooth enamel", "Fingernail keratin", "Plant cell walls"], e: "DHA makes up a large fraction of brain gray matter, keeping synaptic membranes fluid." },
+      { q: "How does CAR-T cell therapy treat cancer?", o: ["Engineered T-cells recognize & destroy tumor cells", "Replacing all red blood cells", "Direct X-ray ablation", "High-dose antibiotics"], e: "Patient T-cells are equipped with Chimeric Antigen Receptors (CAR) to hunt cancer antigens." },
+      { q: "Transcription of mRNA follows which base-pairing rule from the DNA template strand?", o: ["A-U, T-A, G-C, C-G", "A-T, G-C", "A-G, T-C", "U-T, G-A"], e: "RNA uses Uracil (U) instead of Thymine (T), so template A pairs with U." },
+      { q: "DeepMind's AlphaFold achieved a major breakthrough in which biological field?", o: ["Predicting 3D spatial structures of proteins", "Animal cloning", "Remote blood pressure sensing", "Air-to-water synthesis"], e: "AlphaFold accurately predicts 3D folded structures of 200M+ proteins from amino acid sequences." }
+    ];
+
+    const ARTICLES_EN_MAP = {
+      art_1: { tag: "Molecular Genetics • Biotech", readTime: "6 min", authors: "BioHabit Molecular Genetics Group • Biotech Journal", title: "CRISPR-Cas9 Targeting Mechanism & Fetal Hemoglobin Reactivation Therapy", summary: "Analysis of Cas9 endonuclease guided by sgRNA in editing BCL11A to treat sickle cell disease (SCD), restoring >90% healthy blood cells in clinical trials.", content: "<h4>I. Background & Epidemiology</h4><ul><li>Sickle cell disease stems from a point mutation replacing Glutamic Acid with Valine at position 6 of beta-globin.</li><li>Deformed red blood cells block microvessels and shorten cell lifespan to 10–20 days.</li></ul><h4>II. Molecular Mechanism of CRISPR-Cas9</h4><ul><li><strong>PAM Recognition:</strong> Cas9 scans dsDNA for 5'-NGG-3' motifs before local unwinding.</li><li><strong>sgRNA Pairing:</strong> 20 nucleotides of guide RNA base-pair specifically at the <em>BCL11A</em> enhancer.</li><li><strong>Double-Strand Break:</strong> HNH and RuvC domains cleave DNA, disabling the <em>BCL11A</em> repressor.</li></ul><h4>III. Clinical Findings</h4><ul><li>Fetal hemoglobin (HbF) rose from &lt;5% to &gt;40% within 12 months post-infusion.</li><li>93.5% of patients remained free of vaso-occlusive crises over 24 months.</li></ul>" },
+      art_2: { tag: "Human Physiology • Neuroscience", readTime: "5 min", authors: "BioHabit Neurophysiology Board • Gut-Brain Review", title: "Role of Short-Chain Fatty Acids (SCFAs) & the Vagus Nerve in Serotonin Regulation", summary: "Quantitative look at how gut microbiota ferment fiber into SCFAs to drive >90% of endogenous Serotonin synthesis, lowering exam stress and supporting working memory.", content: "<h4>I. Gut-Brain Axis Physiology</h4><ul><li>The enteric nervous system holds 100–500M neurons communicating via the Vagus Nerve.</li><li>Over 90% of Serotonin (5-HT) is synthesized by intestinal enterochromaffin cells.</li></ul><h4>II. Microbial Metabolism</h4><ul><li><em>Lactobacillus</em> and <em>Bifidobacterium</em> ferment soluble fiber into Butyrate, Propionate, and Acetate.</li><li>Butyrate upregulates Tryptophan hydroxylase-1 to convert Tryptophan into Serotonin precursors.</li></ul><h4>III. Diet & Academic Evidence</h4><ul><li>Excess refined sugar increases gut permeability and LPS neuroinflammation.</li><li>Students consuming fermented foods & greens showed 23% lower salivary Cortisol during exams.</li></ul>" },
+      art_3: { tag: "Epigenetics • Exercise Physiology", readTime: "7 min", authors: "BioHabit Epigenetics Lab", title: "Epigenetic Regulation: How Aerobic Exercise Activates Neural BDNF Expression", summary: "Exploring DNA demethylation and histone tail acetylation triggered by regular physical activity, boosting Brain-Derived Neurotrophic Factor (BDNF) in the hippocampus.", content: "<h4>I. Epigenetics Fundamentals</h4><ul><li>Epigenetics studies heritable changes in gene activity without altering the DNA nucleotide sequence.</li><li>Two core mechanisms: DNA methylation (-CH3 on CpG islands) and Histone modification.</li></ul><h4>II. Chromatin On/Off Switches</h4><ul><li><strong>Silencing:</strong> Promoter methylation blocks RNA Polymerase binding.</li><li><strong>Activation:</strong> Histone acetylation loosens chromatin around nucleosomes for active transcription.</li></ul><h4>III. Exercise Data</h4><ul><li>20–30 min of daily aerobic exercise produces Beta-hydroxybutyrate, inhibiting HDAC at the <em>BDNF</em> promoter.</li><li>BDNF levels rise 30–40%, stimulating new dendritic spines in the hippocampus.</li></ul>" },
+      art_4: { tag: "Neuroscience • Sleep Biology", readTime: "5 min", authors: "BioHabit Circadian & Sleep Center", title: "The Glymphatic System & Neurotoxin Clearance Across NREM–REM Sleep Cycles", summary: "How glial cells shrink by 60% during slow-wave sleep, allowing cerebrospinal fluid to flush Beta-amyloid plaques while REM consolidates long-term memory.", content: "<h4>I. Glymphatic Architecture</h4><ul><li>Astrocytes use dense <strong>Aquaporin-4 (AQP4)</strong> water channels to exchange CSF with interstitial brain fluid.</li></ul><h4>II. Metabolic Waste Clearance</h4><ul><li>During deep NREM sleep, lower Noradrenaline expands interstitial space by ~60%, doubling Beta-amyloid clearance.</li></ul><h4>III. REM Memory Consolidation</h4><ul><li>Accounts for 20–25% of sleep, transferring newly learned neural patterns from the hippocampus to the neocortex.</li></ul>" },
+      art_5: { tag: "Cell Biology • Metabolism", readTime: "5 min", authors: "BioHabit Cellular Metabolism Institute", title: "Autophagy: Balancing the AMPK–mTOR Signaling Switch in Cellular Renewal", summary: "Overview of the Nobel-winning discovery of autophagosomes and lysosomes, explaining how evening fasting lowers Insulin and activates cellular recycling.", content: "<h4>I. Nobel Discovery</h4><ul><li>Yoshinori Ohsumi identified <em>ATG</em> genes driving double-membrane autophagosomes that fuse with lysosomes to recycle damaged proteins.</li></ul><h4>II. The AMPK & mTOR Switch</h4><ul><li>After meals (high Insulin), <strong>mTORC1</strong> promotes growth and pauses autophagy.</li><li>3–4 hours post-dinner, <strong>AMPK</strong> activates cellular cleanup.</li></ul><h4>III. Practical Timing</h4><ul><li>Finishing dinner 2.5–3 hours before bed optimizes overnight tissue repair.</li></ul>" },
+      art_6: { tag: "Behavioral Neuro • Performance", readTime: "4 min", authors: "BioHabit Academic Psychophysiology", title: "Dopamine D2 Receptor Sensitivity & Attention Decline from Supernormal Stimuli", summary: "Examining D2 receptor down-regulation caused by endless short-form videos and refined sugar, plus an evidence-based protocol to restore baseline focus.", content: "<h4>I. Supernormal Stimuli</h4><ul><li>Rapid scrolling and sugar spikes flood synapses with phasic Dopamine, prompting neurons to internalize <strong>D2 receptors</strong>.</li></ul><h4>II. Impact on Studying</h4><ul><li>Lower tonic dopamine makes patient tasks like reading and problem-solving feel unrewarding.</li></ul><h4>III. Focus Recovery Protocol</h4><ul><li>Use phone-free 25/5 Pomodoro blocks, morning sunlight, and afternoon exercise to stabilize tonic dopamine.</li></ul>" },
+      art_7: { tag: "Marine Ecology • Biochemistry", readTime: "5 min", authors: "BioHabit Marine Biochemistry Unit", title: "~100% Quantum Efficiency of Bioluminescence in Deep-Sea Organisms", summary: "Investigating Luciferin oxidation catalyzed by Luciferase below 1000m depth—producing cold blue light (~475nm) used in biomedical cell tracking.", content: "<h4>I. Cold Light Reaction</h4><ul><li>76% of midwater marine life is bioluminescent; <strong>Luciferase</strong> oxidizes <strong>Luciferin</strong> with Mg-ATP to emit ~475nm light with virtually zero heat loss.</li></ul><h4>II. Biomedical Applications</h4><ul><li>Luciferase genes serve as reporter tags to track tumor metastasis and gene expression in real time.</li></ul>" },
+      art_8: { tag: "Astrobiology • Evolution", readTime: "6 min", authors: "BioHabit Astrobiology Team", title: "Astrobiology: Radiation Resistance & Cryptobiosis in Tardigrades", summary: "Analyzing DNA-shielding Dsup protein and Trehalose vitrification in Water Bears, shaping the criteria for life on icy moons like Europa and Enceladus.", content: "<h4>I. Extreme Survival</h4><ul><li>Tardigrades survive -200°C to +150°C, Mariana-trench pressures, and the vacuum of space.</li></ul><h4>II. Molecular Shields</h4><ul><li><strong>Cryptobiosis:</strong> Metabolic rate drops &lt;0.01% using <strong>Trehalose</strong> sugar glass.</li><li><strong>Dsup Protein:</strong> Coats DNA to cut radiation-induced double-strand breaks by ~40%.</li></ul>" },
+      art_9: { tag: "Medical AI • Immunology", readTime: "6 min", authors: "BioHabit Bioinformatics & Immunology", title: "Convergence of AlphaFold AI & CAR-T Cell Immunotherapy", summary: "How atomic-level 3D protein prediction accelerates engineering Chimeric Antigen Receptors (CAR) on patient T-cells to eliminate tumors.", content: "<h4>I. AlphaFold Protein Folding</h4><ul><li>AI attention networks predict 3D shapes of 200M+ proteins from amino acid sequences in hours instead of years.</li></ul><h4>II. CAR-T Mechanism</h4><ul><li>Patient T-cells are extracted, engineered with CAR receptors targeting tumor antigens (e.g., CD19), expanded, and re-infused to eliminate cancer cells.</li></ul>" }
+    };
+
     const VI_TO_EN = {
-      // Navbar & Tabs
-      "Nhịp Sống Sinh Học": "Biological Rhythm",
-      "Tổng quan": "Dashboard",
-      "Nhịp sinh & Thực đơn": "Rhythm & Menu",
-      "Thói quen & Quiz": "Habits & Quiz",
-      "Học & Nhạc": "Study & Music",
-      "Giao diện": "Theme",
-      "Đăng nhập": "Sign in",
-      "Học sinh": "Student",
-      "Trang chủ": "Home",
-      "Thực đơn": "Menu",
-      "Tạp chí": "Journal",
-      "Sơ đồ": "Mind Map",
-      // Dashboard
+      "Nhịp Sống Sinh Học": "Biological Rhythm", "Tổng quan": "Dashboard", "Nhịp sinh & Thực đơn": "Rhythm & Menu",
+      "Thói quen & Quiz": "Habits & Quiz", "Học & Nhạc": "Study & Music", "Giao diện": "Theme",
+      "Đăng nhập": "Sign in", "Học sinh": "Student", "Trang chủ": "Home", "Thực đơn": "Menu", "Tạp chí": "Journal", "Sơ đồ": "Mind Map",
       "🔬 Khoa học Sinh học & Lối sống • BioHabit Platform": "🔬 Biological Science & Lifestyle • BioHabit Platform",
       "Xây dựng lối sống khoa học cùng": "Build a scientific lifestyle with",
       "Gợi ý thể chất theo 4 mức BMI, nhật ký ăn uống 3 buổi/lần, sơ đồ tư duy BioMarket, học cùng YouTube và đổi BioCoins lấy Giao diện VIP!": "4-level BMI fitness advice, 3-meal daily log, BioMarket mind maps, YouTube study mode & VIP themes with BioCoins!",
-      "Phân tích BMI & 3 Bữa ăn": "BMI & 3-Meal Log",
-      "Sơ đồ tư duy BioMarket": "BioMarket Mind Maps",
-      "Shop Giao diện VIP": "VIP Theme Shop",
-      "Chuỗi kỷ luật": "Streak",
-      "Đề tài đã mở": "Unlocked Papers",
-      "Danh hiệu": "Rank",
-      "Bộ sưu tập Huy hiệu Sinh học": "Biology Badges Collection",
-      "Tự động đạt khi hoàn thành chỉ số": "Auto-unlocked on milestones",
-      "Chiến thần Nhịp sinh học": "Circadian Champion",
-      "Duy trì chuỗi Streak 7 ngày liên tiếp": "Maintain a 7-day habit streak",
-      "Bác sĩ tế bào": "Cell Specialist",
-      "Đạt điểm tuyệt đối trong Quiz ngẫu nhiên": "Score 100% in any Biology Quiz",
-      "Tâm hồn Sinh học": "Bio Scholar",
-      "Mở khóa ít nhất 3 sơ đồ nghiên cứu": "Unlock at least 3 research papers",
-      "Mầm Sinh Học 🌱": "Bio Sprout 🌱",
-      "Mầm sinh học 🌱": "Bio Sprout 🌱",
-      "Chiến Thần Sinh Học 🔥": "Circadian Champion 🔥",
-      "Bác Sĩ Tế Bào 🧠": "Cell Specialist 🧠",
-      "Tâm Hồn Sinh Học 🎓": "Bio Scholar 🎓",
-      "ĐÃ ĐẠT": "UNLOCKED",
-      "KHÓA": "LOCKED",
-      // Planner & BMI & Food Log
+      "Phân tích BMI & 3 Bữa ăn": "BMI & 3-Meal Log", "Sơ đồ tư duy BioMarket": "BioMarket Mind Maps", "Shop Giao diện VIP": "VIP Theme Shop",
+      "Chuỗi kỷ luật": "Streak", "Đề tài đã mở": "Unlocked Papers", "Danh hiệu": "Rank",
+      "Bộ sưu tập Huy hiệu Sinh học": "Biology Badges Collection", "Tự động đạt khi hoàn thành chỉ số": "Auto-unlocked on milestones",
+      "Chiến thần Nhịp sinh học": "Circadian Champion", "Duy trì chuỗi Streak 7 ngày liên tiếp": "Maintain a 7-day habit streak",
+      "Bác sĩ tế bào": "Cell Specialist", "Đạt điểm tuyệt đối trong Quiz ngẫu nhiên": "Score 100% on any Biology Quiz",
+      "Tâm hồn Sinh học": "Bio Scholar", "Mở khóa ít nhất 3 sơ đồ nghiên cứu": "Unlock at least 3 research papers",
+      "Mầm Sinh Học 🌱": "Bio Sprout 🌱", "Mầm sinh học 🌱": "Bio Sprout 🌱",
+      "Chiến Thần Sinh Học 🔥": "Circadian Champion 🔥", "Bác Sĩ Tế Bào 🧠": "Cell Specialist 🧠", "Tâm Hồn Sinh Học 🎓": "Bio Scholar 🎓",
+      "ĐÃ ĐẠT": "UNLOCKED", "KHÓA": "LOCKED",
       "Hồ Sơ BMI 4 Mức, Nhịp Sinh Học & Nhật Ký 3 Buổi": "4-Level BMI Profile, Circadian Rhythm & 3-Meal Log",
-      "Nhập chiều cao/cân nặng để xem phân loại 4 mức BMI, bấm chọn chế độ phù hợp và nhập bữa ăn hằng ngày (từng món hoặc đủ 3 buổi).": "Enter height/weight for 4-level BMI analysis, choose a fitness mode, and log your daily meals.",
-      "Chờ nhập thông tin": "Awaiting info",
-      "Đã tạo lộ trình cá nhân": "Plan ready",
-      "Bước 1": "Step 1",
-      "Thông tin & Thời gian biểu": "Profile & Schedule",
-      "Điền mẫu": "Sample",
-      "Tên / Biệt danh": "Name / Nickname",
-      "Tuổi": "Age",
-      "Đối tượng": "Role",
-      "Học sinh / SV": "Student",
-      "Đi làm / NC": "Worker / Researcher",
-      "Khung giờ sinh hoạt hằng ngày *": "Daily Schedule *",
-      "Thức dậy": "Wake up",
-      "Bắt đầu học/làm": "Start study/work",
-      "Về nhà / Chiều": "Home / Afternoon",
-      "Đi ngủ": "Bedtime",
-      "Bước 2": "Step 2",
-      "Chỉ số cơ thể & 4 Mức BMI": "Body Stats & 4-Level BMI",
-      "Chiều cao (cm)*": "Height (cm)*",
-      "Cân nặng (kg)*": "Weight (kg)*",
-      "Giới tính": "Gender",
-      "Nam": "Male",
-      "Nữ": "Female",
-      "Phân Tích Thông Số & Tính BMI": "Analyze Stats & Calculate BMI",
-      "Chỉ số BMI của bạn:": "Your BMI Score:",
-      "Chọn 1 trong 4 chế độ ưu tiên cho thể trạng của bạn:": "Pick 1 of the 4 prioritized modes for your body:",
-      "Chọn": "Select",
-      "Đã chọn": "Selected",
-      "✓ Đang chọn": "✓ Active",
-      "🥇 Ưu tiên #1 • Khuyên dùng": "🥇 Priority #1 • Recommended",
-      "🥈 Ưu tiên #2 • Phù hợp": "🥈 Priority #2 • Suitable",
-      "🥉 Ưu tiên #3 • Cân nhắc": "🥉 Priority #3 • Optional",
-      "Ưu tiên #4 • Ít phù hợp": "Priority #4 • Low fit",
-      "Mức 1: Thiếu cân": "Level 1: Underweight",
-      "Mức 2: Bình thường": "Level 2: Normal",
-      "Mức 3: Thừa cân nhẹ": "Level 3: Overweight",
-      "Mức 4: Béo phì": "Level 4: Obesity",
-      "Nhật ký hôm nay": "Today's Log",
-      "Nhập Đồ Ăn & Thức Uống": "Log Food & Drinks",
-      "Nhập từng món": "Single item",
-      "Nhập đủ 3 buổi 1 lần": "Log all 3 meals",
-      "Bữa / Loại": "Meal / Type",
-      "🌅 Bữa sáng": "🌅 Breakfast",
-      "☀️ Bữa trưa": "☀️ Lunch",
-      "🌙 Bữa tối": "🌙 Dinner",
-      "🥤 Ăn vặt / Thức uống": "🥤 Snack / Drink",
-      "🌅 Bữa Sáng *": "🌅 Breakfast *",
-      "☀️ Bữa Trưa *": "☀️ Lunch *",
-      "🌙 Bữa Tối *": "🌙 Dinner *",
-      "🥤 Ăn vặt / Nước uống (tùy chọn)": "🥤 Snack / Drink (optional)",
-      "Thời điểm ăn/uống": "Time",
-      "Tên món ăn / thức uống & khẩu phần": "Food / drink & portion",
-      "Thêm": "Add",
-      "Thêm nhanh món phổ biến:": "Quick add:",
+      "Nhập chiều cao/cân nặng để xem phân loại 4 mức BMI, bấm chọn chế độ phù hợp và nhập bữa ăn hằng ngày (từng món hoặc đủ 3 buổi).": "Enter height/weight for 4-level BMI classification, pick a fitness mode, and log your daily meals.",
+      "Chờ nhập thông tin": "Awaiting info", "Đã tạo lộ trình cá nhân": "Plan ready",
+      "Bước 1": "Step 1", "Thông tin & Thời gian biểu": "Profile & Schedule", "Điền mẫu": "Sample",
+      "Tên / Biệt danh": "Name / Nickname", "Tuổi": "Age", "Đối tượng": "Role", "Học sinh / SV": "Student", "Đi làm / NC": "Worker / Researcher",
+      "Khung giờ sinh hoạt hằng ngày *": "Daily Schedule *", "Thức dậy": "Wake up", "Bắt đầu học/làm": "Start study/work",
+      "Về nhà / Chiều": "Home / Afternoon", "Đi ngủ": "Bedtime", "Bước 2": "Step 2", "Chỉ số cơ thể & 4 Mức BMI": "Body Stats & 4-Level BMI",
+      "Chiều cao (cm)*": "Height (cm)*", "Cân nặng (kg)*": "Weight (kg)*", "Giới tính": "Gender", "Nam": "Male", "Nữ": "Female",
+      "Phân Tích Thông Số & Tính BMI": "Analyze Stats & Calculate BMI", "Chỉ số BMI của bạn:": "Your BMI Score:",
+      "Mức 1": "Level 1", "Mức 2": "Level 2", "Mức 3": "Level 3", "Mức 4": "Level 4",
+      "Thiếu cân": "Underweight", "Cân đối": "Normal", "Thừa cân": "Overweight", "Béo phì": "Obesity",
+      "Chọn 1 trong 4 chế độ ưu tiên cho thể trạng của bạn:": "Pick 1 of 4 prioritized modes for your body:",
+      "Chọn": "Select", "Đã chọn": "Selected", "✓ Đang chọn": "✓ Active",
+      "🥇 Ưu tiên #1 • Khuyên dùng": "🥇 Priority #1 • Recommended", "🥈 Ưu tiên #2 • Phù hợp": "🥈 Priority #2 • Suitable",
+      "🥉 Ưu tiên #3 • Cân nhắc": "🥉 Priority #3 • Optional", "Ưu tiên #4 • Ít phù hợp": "Priority #4 • Low fit",
+      "💪 Tăng cân & Cơ bắp": "💪 Gain Weight & Muscle", "⚖️ Duy trì & Tập trung": "⚖️ Maintain & Focus",
+      "🔥 Giảm mỡ nhẹ nhàng": "🔥 Mild Fat Loss", "🚀 Giảm mỡ chuyên sâu": "🚀 Intensive Fat Loss",
+      "+300 kcal • Giàu đạm & hỗ trợ phát triển chiều cao": "+300 kcal • High protein & growth support",
+      "Chuẩn TDEE • Tối ưu trí nhớ học đường & thể lực": "Standard TDEE • Optimize focus & energy",
+      "-300 kcal • Cắt đường tinh luyện, tăng chất xơ": "-300 kcal • Cut refined sugar, boost fiber",
+      "-500 kcal • Kiểm soát Calo & Insulin chặt chẽ": "-500 kcal • Strict calorie & insulin control",
+      "Mức 1: Thiếu cân": "Level 1: Underweight", "Mức 2: Bình thường": "Level 2: Normal", "Mức 3: Thừa cân nhẹ": "Level 3: Overweight", "Mức 4: Béo phì": "Level 4: Obesity",
+      "Bạn đang ở mức Thiếu cân (<18.5). Chế độ 'Tăng cân & Cơ bắp' được xếp Ưu tiên #1 để bù năng lượng và phát triển cơ thể.": "You are Underweight (<18.5). 'Gain Weight & Muscle' is ranked Priority #1 to boost energy & growth.",
+      "Chỉ số BMI của bạn rất Cân đối (18.5–22.9)! Chế độ 'Duy trì & Tập trung' được xếp Ưu tiên #1 (hoặc chọn Tăng cơ nếu muốn săn chắc hơn).": "Your BMI is Healthy (18.5–22.9)! 'Maintain & Focus' is Priority #1 (or pick Muscle Gain to tone up).",
+      "BMI đang ở mức Thừa cân nhẹ (23–24.9). Chế độ 'Giảm mỡ nhẹ nhàng' được xếp Ưu tiên #1 để điều chỉnh cân nặng an toàn.": "Slightly Overweight (23–24.9). 'Mild Fat Loss' is Priority #1 for safe weight management.",
+      "BMI ≥ 25 (Cần kiểm soát cân nặng). Chế độ 'Giảm mỡ chuyên sâu' được xếp Ưu tiên #1 để kiểm soát Calo và ổn định đường huyết.": "BMI ≥ 25. 'Intensive Fat Loss' is Priority #1 for strict calorie & blood sugar control.",
+      "Nhật ký hôm nay": "Today's Log", "Nhập Đồ Ăn & Thức Uống": "Log Food & Drinks", "Nhập từng món": "Single item", "Nhập đủ 3 buổi 1 lần": "Log all 3 meals",
+      "Bữa / Loại": "Meal / Type", "Sáng": "Breakfast", "Trưa": "Lunch", "Tối": "Dinner", "Ăn vặt / Nước": "Snack / Drink",
+      "🌅 Bữa sáng": "🌅 Breakfast", "☀️ Bữa trưa": "☀️ Lunch", "🌙 Bữa tối": "🌙 Dinner", "🥤 Ăn vặt / Thức uống": "🥤 Snack / Drink",
+      "🌅 Bữa Sáng *": "🌅 Breakfast *", "☀️ Bữa Trưa *": "☀️ Lunch *", "🌙 Bữa Tối *": "🌙 Dinner *", "🥤 Ăn vặt / Nước uống (tùy chọn)": "🥤 Snack / Drink (optional)",
+      "Thời điểm ăn/uống": "Time", "Tên món ăn / thức uống & khẩu phần": "Food / drink & portion", "Thêm": "Add", "Thêm nhanh món phổ biến:": "Quick add:",
+      "🍜 Phở bò": "🍜 Beef Pho", "🍚 Cơm sườn": "🍚 Pork Rice", "🥖 Bánh mì": "🥖 Banh Mi", "🥚 2 Trứng luộc": "🥚 2 Boiled Eggs",
+      "🍗 Ức gà & Rau": "🍗 Chicken & Greens", "🧋 Trà sữa": "🧋 Milk Tea", "☕ Cà phê sữa": "☕ Iced Milk Coffee", "💧 500ml Nước": "💧 500ml Water",
       "Lưu đủ 3 buổi hôm nay & Phân tích": "Save all 3 meals & Analyze",
-      "Phân Tích Đồ Ăn & Thức Uống Hôm Nay": "Today's Food & Drink Analysis",
-      "Ước lượng năng lượng tự động & đánh giá sinh học bằng Gemini AI": "Instant calorie estimate & biological review via Gemini AI",
-      "Xóa ngày": "Clear day",
-      "Phân tích sâu (AI)": "Deep Analysis (AI)",
-      "Tổng năng lượng đã nạp:": "Total intake:",
-      "Chưa có món": "No items",
-      "Đạm (Protein)": "Protein",
-      "Tinh bột (Carb)": "Carbs",
-      "Chất béo (Fat)": "Fat",
+      "Phân Tích Đồ Ăn & Thức Uống Hôm Nay": "Today's Food & Drink Analysis", "Ước lượng năng lượng tự động & đánh giá sinh học bằng Gemini AI": "Instant calorie estimate & biological review via Gemini AI",
+      "Xóa ngày": "Clear day", "Phân tích sâu (AI)": "Deep Analysis (AI)", "Tổng năng lượng đã nạp:": "Total intake:", "Chưa có món": "No items",
+      "Đạm (Protein)": "Protein", "Tinh bột (Carb)": "Carbs", "Chất béo (Fat)": "Fat",
       "Chưa ghi nhận món ăn / thức uống nào hôm nay.": "No food or drinks logged today.",
-      "Đang chờ hồ sơ cá nhân": "Awaiting personal profile",
-      "Gợi ý Thực đơn & Nhịp sinh học đang được khóa": "Menu & Circadian Plan Locked",
-      "Thời lượng ngủ": "Sleep Duration",
-      "Nước cần nạp/ngày": "Daily Water",
-      "Năng lượng mục tiêu": "Target Energy",
-      "Bảng Gợi Ý Thực Đơn Cá Nhân Hóa": "Personalized Menu Plan",
-      "Lược Đồ Nhịp Sinh Học (Circadian Rhythm)": "Circadian Rhythm Timeline",
-      "Tính theo giờ của bạn": "Based on your schedule",
+      "Cảnh báo Caffeine muộn:": "Late Caffeine Alert:", "Uống sau 15:00 sẽ cạnh tranh thụ thể": "Drinking after 15:00 blocks", "và làm chậm tiết": "receptors and delays",
+      "Đường tinh luyện:": "Refined Sugar:", "Dễ gây vọt và tụt đường huyết làm giảm tập trung.": "Spikes & crashes blood sugar, reducing study focus.",
+      "Đồ chiên / Chế biến sẵn:": "Fried / Processed Food:", "Chất béo trans-fat và muối cao dễ gây mệt mỏi.": "High trans-fat & sodium can cause sluggishness.",
+      "Gợi ý Chất xơ:": "Fiber Tip:", "Bổ sung thêm rau xanh/trái cây cho Trục Não - Ruột nhé!": "Add greens or fruit to support your Gut-Brain Axis!",
+      "Nhắc bù nước:": "Hydration Tip:", "Ghi nhận thêm nước lọc để theo dõi áp suất thẩm thấu tế bào.": "Log plain water intake to track cellular hydration.",
+      "Tuyệt vời!": "Great job!", "Thực đơn hôm nay cân bằng theo nhịp sinh học.": "Today's intake is well balanced with your circadian rhythm.",
+      "Đang chờ hồ sơ cá nhân": "Awaiting profile", "Gợi ý Thực đơn & Nhịp sinh học đang được khóa": "Menu & Circadian Plan Locked",
+      "Hãy điền thông tin, bấm chọn chế độ BMI ở bảng bên trái rồi nhấn": "Fill in your stats, pick a BMI mode on the left, and click",
+      "\"Lưu & Tạo Lộ Trình Sinh Học\"": "\"Analyze Stats & Calculate BMI\"",
+      "Lộ trình sinh học của": "Biological Plan for", "bạn": "you", "Thời lượng ngủ": "Sleep Duration", "Nước cần nạp/ngày": "Daily Water", "Năng lượng mục tiêu": "Target Energy",
+      "Bảng Gợi Ý Thực Đơn Cá Nhân Hóa": "Personalized Menu Plan", "CÁC MÓN NÊN ĂN": "RECOMMENDED FOODS", "MÓN NÊN TRÁNH": "FOODS TO AVOID",
+      "Chế Độ Tăng Cân & Phát Triển Cơ Bắp (+300 kcal)": "Weight & Muscle Gain Mode (+300 kcal)",
+      "Chế Độ Giảm Mỡ Nhẹ Nhàng & Săn Chắc (-300 kcal)": "Mild Fat Loss & Toning Mode (-300 kcal)",
+      "Chế Độ Giảm Mỡ Chuyên Sâu & Kiểm Soát Đường Huyết (-500 kcal)": "Intensive Fat Loss & Glucose Control (-500 kcal)",
+      "Chế Độ Duy Trì Thể Lực & Tối Ưu Trí Nhớ (Chuẩn TDEE)": "Maintain Fitness & Focus Mode (Standard TDEE)",
+      "Lược Đồ Nhịp Sinh Học (Circadian Rhythm)": "Circadian Rhythm Timeline", "Tính theo giờ của bạn": "Based on your schedule",
+      "Cortisol Đỉnh Cao": "Cortisol Peak", "Bình minh: Đánh thức hệ nội tiết & Bù nước": "Dawn: Awaken Endocrine System & Hydrate",
+      "Uống ngay 300ml nước ấm và tiếp xúc ánh sáng mặt trời để tế bào hạch võng mạc (ipRGCs) đồng bộ đồng hồ SCN.": "Drink 300ml warm water and get sunlight so retinal ipRGCs synchronize your SCN master clock.",
+      "Đỉnh cao tư duy": "Cognitive Peak", "Giờ vàng học thuật: Vỏ não trước trán (Prefrontal Cortex)": "Golden Study Hours: Prefrontal Cortex Peak",
+      "Acetylcholine và Dopamine đạt mức tối ưu nhất, thích hợp giải bài tập tư duy logic cao.": "Acetylcholine and Dopamine peak—ideal for analytical subjects like Math, Physics, Chemistry, and Biology.",
+      "Thể lực cực đại": "Physical Peak", "Nhiệt độ cơ thể cao nhất: Vận động thể thao": "Core Temperature Peak: Exercise Window",
+      "Vận động 20–40 phút giúp tiết hormone BDNF hỗ trợ tạo nơ-ron thần kinh mới.": "20–40 mins of exercise boosts BDNF to promote new neural synapses.",
+      "Tuyến tùng & Melatonin": "Pineal & Melatonin", "Tắt ánh sáng xanh – Kích hoạt Melatonin": "Cut Blue Light – Trigger Melatonin",
+      "Ngưng dùng điện thoại trước khi ngủ 45 phút để chuẩn bị cho chu trình tự thực bào Autophagy ban đêm.": "Avoid screens 45 mins before bed to protect Melatonin and overnight Autophagy.",
       // Habits & Quiz
-      "Thói Quen BioHabit": "BioHabit Checklist",
-      "1. Ngủ đủ 7-8 tiếng": "1. Sleep 7–8 hours",
-      "2. Nạp đủ 1.5 - 2 Lít nước": "2. Drink 1.5–2L water",
-      "3. Vận động > 20 phút": "3. Exercise > 20 mins",
+      "Thói Quen BioHabit": "BioHabit Checklist", "1. Ngủ đủ 7-8 tiếng": "1. Sleep 7–8 hours", "Giúp trải qua đủ các chu kỳ sóng chậm REM và NREM củng cố trí nhớ.": "Completes NREM & REM cycles to consolidate memory.",
+      "2. Nạp đủ 1.5 - 2 Lít nước": "2. Drink 1.5–2L water", "Duy trì áp suất thẩm thấu màng tế bào máu, ngăn ngừa đau đầu.": "Maintains cellular osmotic pressure and prevents headaches.",
+      "3. Vận động > 20 phút": "3. Exercise > 20 mins", "Thúc đẩy bạch huyết, đào thải Axit Lactic tích tụ do ngồi học lâu.": "Boosts lymph circulation and clears lactic acid buildup.",
       "Xác nhận hoàn thành hôm nay (+10 Coins)": "Check in today (+10 Coins)",
       "Quiz Khoa Học & Sinh Học (Không Giới Hạn Đề Tài)": "Science & Biology Quiz (Unlimited Topics)",
       "Tự nhập bất kỳ chủ đề nào hoặc đổi đề ngẫu nhiên không trùng lặp • +5 BioCoins/câu đúng": "Enter any topic or draw non-repeating questions • +5 BioCoins/correct",
-      "+5 Coins/câu đúng": "+5 Coins/correct",
-      "3 câu": "3 Qs",
-      "5 câu": "5 Qs",
-      "8 câu": "8 Qs",
-      "Tạo đề mới": "New Quiz",
-      "Lĩnh vực rộng:": "Domains:",
-      "🎲 Ngẫu nhiên": "🎲 Random",
-      "🧠 Thần kinh & Tâm lý": "🧠 Neuro & Psych",
-      "🧬 Di truyền & CRISPR": "🧬 Genetics & CRISPR",
-      "🥗 Dinh dưỡng & Thể thao": "🥗 Nutrition & Sport",
-      "🌊 Sinh thái & Tiến hóa": "🌊 Ecology & Evolution",
-      "🚀 Sinh học Vũ trụ": "🚀 Astrobiology",
-      "Chấm điểm & Nhận BioCoins": "Submit & Claim BioCoins",
+      "+5 Coins/câu đúng": "+5 Coins/correct", "3 câu": "3 Qs", "5 câu": "5 Qs", "8 câu": "8 Qs", "Tạo đề mới": "New Quiz",
+      "Lĩnh vực rộng:": "Domains:", "🎲 Ngẫu nhiên": "🎲 Random", "🧠 Thần kinh & Tâm lý": "🧠 Neuro & Psych", "🧬 Di truyền & CRISPR": "🧬 Genetics & CRISPR",
+      "🥗 Dinh dưỡng & Thể thao": "🥗 Nutrition & Sport", "🌊 Sinh thái & Tiến hóa": "🌊 Ecology & Evolution", "🚀 Sinh học Vũ trụ": "🚀 Astrobiology",
+      "Chủ đề hiện tại: Đa lĩnh vực ngẫu nhiên (Không trùng lặp)": "Current topic: Multi-domain Random (No repeats)",
+      "Giải thích:": "Explanation:", "Chấm điểm & Nhận BioCoins": "Submit & Claim BioCoins",
       // Focus & Music
+      "🎧 Chế độ Tập trung (Study With Me) • Nhạc phát liên tục khi chuyển tab": "🎧 Focus Mode (Study With Me) • Music plays across tabs",
       "Học Tập Cùng Nhạc Yêu Thích": "Study With Favorite Music",
-      "Đồng Hồ Pomodoro Sinh Học": "Biological Pomodoro Timer",
-      "Tập trung": "Focus",
-      "Thư giãn": "Break",
-      "🧠 Học 25 phút": "🧠 Study 25m",
-      "🔥 Sâu 45 phút": "🔥 Deep 45m",
-      "☕ Nghỉ 5 phút": "☕ Break 5m",
-      "🌿 Nghỉ 15 phút": "🌿 Break 15m",
-      "Sẵn sàng bắt đầu phiên học": "Ready to focus",
-      "Bắt đầu học": "Start studying",
-      "Bắt đầu": "Start",
-      "Tiếp tục": "Resume",
-      "Tạm dừng": "Pause",
-      "Đang tạm dừng": "Paused",
-      "Tìm Ca Sĩ / Bài Hát Yêu Thích": "Search Artists / Songs on YouTube",
-      "Tìm nhạc": "Search",
-      "Phát link": "Play URL",
-      "Danh Sách Nhạc Yêu Thích": "Favorite Tracks",
-      "Phiên học đã xong": "Completed sessions",
+      "Bật đồng hồ Pomodoro và tìm ngay bài hát yêu thích trên YouTube. Nhạc sẽ thu gọn xuống góc dưới để bạn vừa nghe vừa học xuyên suốt các tab!": "Start Pomodoro and search YouTube music. The mini-player stays active while you switch tabs!",
+      "Phiên học đã xong": "Completed sessions", "+5 Coins / phiên tập trung": "+5 Coins / focus session",
+      "Đồng Hồ Pomodoro Sinh Học": "Biological Pomodoro Timer", "Tập trung": "Focus", "Thư giãn": "Break",
+      "🧠 Học 25 phút": "🧠 Study 25m", "🔥 Sâu 45 phút": "🔥 Deep 45m", "☕ Nghỉ 5 phút": "☕ Break 5m", "🌿 Nghỉ 15 phút": "🌿 Break 15m",
+      "Sẵn sàng bắt đầu phiên học": "Ready to focus", "Bắt đầu học": "Start studying", "Bắt đầu": "Start", "Tiếp tục": "Resume", "Tạm dừng": "Pause", "Đang tạm dừng": "Paused",
+      "Tìm Ca Sĩ / Bài Hát Yêu Thích": "Search Artists / Songs on YouTube", "Nghe trọn bài trực tiếp trên web": "Play full tracks directly", "Tìm nhạc": "Search",
+      "🎧 Lofi học bài": "🎧 Lofi Study", "🎹 Piano không lời": "🎹 Calm Piano", "🧠 Sóng Alpha": "🧠 Alpha Waves", "🎸 Acoustic Việt": "🎸 Acoustic Chill", "🌧️ Tiếng mưa rơi": "🌧️ Rain Sounds",
+      "Hoặc dán trực tiếp link YouTube bất kỳ để phát & lưu:": "Or paste any YouTube URL to play & save:", "Phát link": "Play URL", "Danh Sách Nhạc Yêu Thích": "Favorite Tracks", "Chưa có bài hát yêu thích nào.": "No favorite tracks saved yet.",
       // AI Tutor & BioMarket & Modals
       "Trợ Lý Sinh Học Gemini AI (Có Bộ Nhớ)": "Gemini AI Biology Tutor (Memory)",
-      "Gợi ý:": "Prompts:",
-      "Gửi": "Send",
-      "Bạn": "You",
+      "Ghi nhớ ngữ cảnh trò chuyện. Nếu bạn": "Remembers chat context. If you say", "\"không hiểu\"": "\"I don't understand\"", ", AI sẽ lấy ví dụ đời sống giải thích lại!": ", AI will re-explain with real-life examples!",
+      "Chào bạn! Mình là": "Hi there! I'm", ". Bạn có thể hỏi mình mọi câu hỏi về Sinh học, Y học, Dinh dưỡng hay Khoa học đời sống. 🧬": ". Ask me anything about Biology, Medicine, Nutrition, or Life Sciences! 🧬",
+      "Gợi ý:": "Prompts:", "Điều hòa đường huyết": "Blood sugar regulation", "Nơ-ron & Xung thần kinh": "Neurons & Nerve impulses",
+      "Ty thể & Tạo ATP": "Mitochondria & ATP", "Miễn dịch cơ thể": "Immune system", "Gửi": "Send", "Bạn": "You",
       "BioMarket: Thư Viện Công Trình Nghiên Cứu Y Sinh": "BioMarket: Biomedical Research Library",
-      "Số dư ví": "Wallet balance",
-      "Xuất bản 3 bài (AI)": "Publish 3 Papers (AI)",
-      "AI Soạn Nghiên Cứu": "AI Draft Paper",
-      "🧬 Di truyền & Y sinh": "🧬 Genetics & Biomed",
-      "🧠 Thần kinh & Tâm lý": "🧠 Neuro & Psych",
-      "🥗 Dinh dưỡng & Chuyển hóa": "🥗 Nutrition & Metabolism",
-      "🌍 Sinh thái & Vũ trụ": "🌍 Ecology & Space",
-      "Sơ đồ tư duy": "Mind Map",
-      "Toàn văn Nghiên cứu": "Full Research Paper",
-      "Tóm tắt (Abstract):": "Abstract:",
-      "Tóm tắt nghiên cứu (Abstract)": "Abstract",
-      "Tài liệu tham khảo (References)": "References",
-      "Đóng": "Close",
-      "Giao Diện & Cửa Hàng Skin VIP": "Themes & VIP Skin Shop",
-      "1. Chế độ hiển thị": "1. Display Mode",
-      "Ban ngày (Sáng)": "Light Mode",
-      "Học đêm (Tối dịu mắt)": "Dark Mode",
+      "Đọc toàn văn bài báo khoa học chuẩn cấu trúc": "Read full academic papers structured with",
+      "Abstract – Cơ chế – Số liệu – Tài liệu tham khảo": "Abstract – Mechanism – Data – References",
+      "hoặc chuyển sang chế độ": "or switch to", "Sơ đồ tư duy tỏa nhánh": "branching Mind Map view", "để nắm trọn kiến thức trong 1 phút.": "to grasp every concept in 1 minute.",
+      "Số dư ví": "Wallet", "Xuất bản 3 bài (AI)": "Publish 3 Papers (AI)", "AI Soạn Nghiên Cứu": "AI Draft Paper",
+      "Tất cả (": "All (", "📚 Thư viện đã mở (": "📚 Unlocked (",
+      "🧬 Di truyền & Y sinh": "🧬 Genetics & Biomed", "🧠 Thần kinh & Tâm lý": "🧠 Neuro & Psych",
+      "🥗 Dinh dưỡng & Chuyển hóa": "🥗 Nutrition & Metabolism", "🌍 Sinh thái & Vũ trụ": "🌍 Ecology & Space",
+      "Tóm tắt (Abstract):": "Abstract:", "Tóm tắt nghiên cứu (Abstract)": "Abstract",
+      "Sơ đồ tư duy": "Mind Map", "Toàn văn Nghiên cứu": "Full Research Paper", "Tài liệu tham khảo (References)": "References", "Đóng": "Close",
+      "💡 Chuyển giữa \"Sơ đồ tư duy\" và \"Toàn văn Nghiên cứu\" ở góc trên bên phải": "💡 Switch between \"Mind Map\" and \"Full Research Paper\" at the top right",
+      // Theme Modal & VIP Shop
+      "Giao Diện & Cửa Hàng Skin VIP": "Themes & VIP Skin Shop", "Số dư hiện tại:": "Balance:",
+      "1. Chế độ hiển thị": "1. Display Mode", "Ban ngày (Sáng)": "Light Mode", "Học đêm (Tối dịu mắt)": "Dark Mode",
       "2. Bộ phối màu Miễn phí (10 tông Gradient)": "2. Free Gradient Palettes (10 themes)",
-      "Tự phối màu riêng:": "Custom color mixer:",
-      "Áp dụng": "Apply",
-      "3. Phông chữ & Bo góc": "3. Font & Radius",
-      "4. Hiệu ứng nền trang": "4. Background Pattern",
-      "Trơn": "Clean",
-      "Đa sắc": "Mesh",
-      "Lưới": "Grid",
-      "Chấm bi": "Dots",
-      "Khôi phục mặc định": "Reset default",
-      "Xong": "Done"
+      "Rừng Ngọc": "Jade Forest", "Cực Quang": "Aurora", "Hoàng Hôn": "Sunset", "Biển Sâu": "Deep Ocean", "Vũ Trụ Tím": "Nebula",
+      "Anh Đào": "Sakura", "Bạc Hà Sky": "Mint Sky", "Hologram": "Hologram", "Mật Ong": "Honey Amber", "Đêm Gold": "Midnight Gold",
+      "Cửa hàng Giao diện VIP (Mua bằng BioCoins)": "VIP Theme Shop (Buy with BioCoins)", "Mở khóa vĩnh viễn": "Permanent unlock",
+      "Hiệu ứng Thẻ & Viền VIP:": "VIP Card & Border Effects:",
+      "Tinh Vân Đen": "Dark Nebula", "Matcha Kem": "Matcha Cream", "Huyết Thanh": "Crimson Serum",
+      "Mặc định": "Default", "Viền Neon": "Neon Border", "Ánh Sáng Động": "Shimmer Glow", "Khung Hoàng Kim": "Royal Gold",
+      "✓ Đang dùng": "✓ Active", "✓ Đã mua": "✓ Owned", "✓ Đang bật": "✓ On", "Miễn phí": "Free",
+      "Tự phối màu riêng:": "Custom mixer:", "Màu 1": "Color 1", "Màu 2": "Color 2", "Áp dụng": "Apply",
+      "3. Phông chữ & Bo góc": "3. Font & Radius", "Hiện đại": "Modern", "Tròn": "Rounded", "Sách": "Serif", "Bo mềm": "Soft", "Góc cạnh": "Sharp",
+      "4. Hiệu ứng nền trang": "4. Background Pattern", "Trơn": "Clean", "Đa sắc": "Mesh", "Lưới": "Grid", "Chấm bi": "Dots",
+      "Khôi phục mặc định": "Reset default", "Xong": "Done"
     };
+
+    // Tự động nạp toàn bộ 30 câu Quiz vào từ điển dịch
+    if (typeof QUIZ_BANK !== 'undefined') {
+      QUIZ_BANK.forEach((q, idx) => {
+        const en = QUIZ_BANK_EN[idx];
+        if (!en) return;
+        VI_TO_EN[q.question] = en.q;
+        VI_TO_EN[q.explain] = en.e;
+        q.options.forEach((opt, oi) => { if (en.o[oi]) VI_TO_EN[opt] = en.o[oi]; });
+      });
+    }
 
     const ATTR_VI_TO_EN = {
       "Tìm theo tên đề tài, từ khóa (#CRISPR, #REM...) hoặc mã DOI...": "Search by title, keyword (#CRISPR, #REM...) or DOI...",
-      "Đặt đề tài bất kỳ để AI tổng hợp bài nghiên cứu + Sơ đồ tư duy (Miễn phí mở đọc)...": "Enter any topic for AI to write a research paper + Mind Map (Free unlock)...",
+      "Đặt đề tài bất kỳ để AI tổng hợp bài nghiên cứu + Sơ đồ tư duy (Miễn phí mở đọc)...": "Enter any topic for AI to write a research paper + Mind Map (Free)...",
       "Nhập đề tài bất kỳ (VD: Tế bào gốc, Giấc mơ REM, Sinh học vũ trụ...)": "Enter any topic (e.g., Stem cells, REM sleep, Astrobiology...)",
       "Gõ tên ca sĩ hoặc bài hát (VD: Sơn Tùng, Đen Vâu, Lofi Chill...)": "Search artist or song (e.g., Lofi chill, Piano, Acoustic...)",
       "Hỏi Gemini AI về cơ thể người, dinh dưỡng và Sinh học...": "Ask Gemini AI about human biology, nutrition & science...",
       "Dán link youtube.com/watch?v=... hoặc youtu.be/...": "Paste youtube.com/watch?v=... or youtu.be/...",
       "VD: 1 tô phở bò, 2 quả trứng luộc...": "e.g., 1 bowl of Pho, 2 boiled eggs...",
+      "VD: 1 tô phở bò, 1 ly sữa tươi": "e.g., 1 bowl of Pho, 1 glass of milk",
+      "VD: 1 đĩa cơm sườn + canh rau": "e.g., 1 plate of pork rice + soup",
+      "VD: 1 bát cơm, 150g ức gà, rau luộc": "e.g., 1 bowl rice, 150g chicken, veggies",
+      "VD: 1 ly trà sữa, 1 quả chuối, 1000ml nước lọc": "e.g., 1 banana, 1000ml water",
       "VD: Minh Anh": "e.g., Alex"
     };
 
-    function translateDynamicStr(trimmed) {
-      if (VI_TO_EN[trimmed]) return VI_TO_EN[trimmed];
-      if (/^\d+\s+ngày$/.test(trimmed)) return trimmed.replace("ngày", "days");
-      if (/^\d+\s+bài$/.test(trimmed)) return trimmed.replace("bài", "items");
-      if (/^Ngày\s+\d{2}\/\d{2}\/\d{4}$/.test(trimmed)) return trimmed.replace("Ngày", "Date");
-      if (/^Còn thiếu ~\d+ kcal$/.test(trimmed)) return trimmed.replace("Còn thiếu", "Need");
-      if (/^Vượt mục tiêu \(\+\d+ kcal\)$/.test(trimmed)) return trimmed.replace("Vượt mục tiêu", "Over target");
-      if (/^Cân đối \(\d+% TDEE\)$/.test(trimmed)) return trimmed.replace("Cân đối", "Balanced");
-      if (/^Mở khóa Toàn văn \(\d+ Coins\)$/.test(trimmed)) return trimmed.replace("Mở khóa Toàn văn", "Unlock Paper");
-      if (/^Đọc Nghiên cứu & Sơ đồ \(\d+ nhánh\)$/.test(trimmed)) return trimmed.replace("Đọc Nghiên cứu & Sơ đồ", "Read Paper & Mind Map").replace("nhánh", "branches");
+    function translateDynamicStr(norm) {
+      if (Object.prototype.hasOwnProperty.call(VI_TO_EN, norm)) return VI_TO_EN[norm];
+      let m;
+      if ((m = norm.match(/^(\d+)\s+ngày$/))) return `${m[1]} days`;
+      if ((m = norm.match(/^(\d+)\s+bài$/))) return `${m[1]} items`;
+      if ((m = norm.match(/^([\d.]+)\s+giờ\/đêm$/))) return `${m[1]} hrs/night`;
+      if ((m = norm.match(/^([\d.]+)\s+Lít$/))) return `${m[1]} Liters`;
+      if ((m = norm.match(/^Câu\s+(\d+):$/))) return `Q${m[1]}:`;
+      if ((m = norm.match(/^Ngày\s+(\d{2}\/\d{2}\/\d{4})$/))) return `Date ${m[1]}`;
+      if ((m = norm.match(/^Còn thiếu ~(\d+) kcal$/))) return `Need ~${m[1]} kcal`;
+      if ((m = norm.match(/^Vượt mục tiêu \(\+(\d+) kcal\)$/))) return `Over target (+${m[1]} kcal)`;
+      if ((m = norm.match(/^Cân đối \((\d+)% TDEE\)$/))) return `Balanced (${m[1]}% TDEE)`;
+      if ((m = norm.match(/^Mở khóa Toàn văn \((\d+) Coins\)$/))) return `Unlock Paper (${m[1]} Coins)`;
+      if ((m = norm.match(/^Đọc Nghiên cứu & Sơ đồ \((\d+) nhánh\)$/))) return `Read Paper & Mind Map (${m[1]} branches)`;
+      if ((m = norm.match(/^🔒 (\d+) Coins$/))) return `🔒 ${m[1]} Coins`;
+      if ((m = norm.match(/^Bạn trả lời đúng (\d+)\/(\d+) câu!$/))) return `You answered ${m[1]}/${m[2]} correctly!`;
+      if ((m = norm.match(/^(.+) - Đánh thức cơ thể$/))) return `${m[1]} - Wake up body`;
+      if ((m = norm.match(/^BMI:\s*([\d.]+)\s*\((.+)\)$/))) return `BMI: ${m[1]} (${VI_TO_EN[m[2]] || m[2]})`;
+      if ((m = norm.match(/^Chủ đề hiện tại:\s*(.+)$/))) return `Current topic: ${m[1]}`;
+      if ((m = norm.match(/^Sẵn sàng:\s*(.+)$/))) return `Ready: ${m[1]}`;
+      if ((m = norm.match(/^Ước lượng:\s*(\d+) kcal • Đạm (\d+)g • Carb (\d+)g • Béo (\d+)g$/))) return `Est: ${m[1]} kcal • Protein ${m[2]}g • Carbs ${m[3]}g • Fat ${m[4]}g`;
+      if ((m = norm.match(/^Tính theo thể trạng \((\d+)cm - ([\d.]+)kg - (\d+) tuổi\) và (.+)\.$/))) return `Tailored for (${m[1]}cm - ${m[2]}kg - ${m[3]} yrs) & ${VI_TO_EN[m[4]] || m[4]}.`;
       return null;
+    }
+
+    // Dịch 9 bài nghiên cứu BioMarket khi ở chế độ EN
+    if (typeof getMergedArticles === 'function') {
+      const _origGetMerged = getMergedArticles;
+      getMergedArticles = function() {
+        const list = _origGetMerged();
+        if (AppState.lang !== 'en') return list;
+        return list.map(a => ARTICLES_EN_MAP[a.id] ? { ...a, ...ARTICLES_EN_MAP[a.id] } : a);
+      };
     }
 
     let langObserver = null;
@@ -3157,33 +3183,30 @@
         if (codeEl) codeEl.innerText = lang === 'en' ? 'EN' : 'VI';
         document.documentElement.lang = lang;
 
-        // 1. Dịch Text Nodes
         const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null);
         let node;
         while ((node = walker.nextNode())) {
-          const parentTag = node.parentElement?.tagName;
-          if (!parentTag || ['SCRIPT', 'STYLE', 'TEXTAREA', 'SVG', 'PATH'].includes(parentTag)) continue;
+          const tag = node.parentElement?.tagName;
+          if (!tag || ['SCRIPT', 'STYLE', 'TEXTAREA', 'svg', 'SVG', 'path', 'PATH'].includes(tag)) continue;
           const raw = node.nodeValue;
           if (!raw || !raw.trim()) continue;
 
           if (lang === 'en') {
             if (node._enVal !== undefined && raw === node._enVal) continue;
-            const leading = raw.match(/^\s*/)[0], trailing = raw.match(/\s*$/)[0], trimmed = raw.trim();
-            const translated = translateDynamicStr(trimmed);
+            const norm = raw.replace(/\s+/g, ' ').trim();
+            const translated = translateDynamicStr(norm);
             if (translated) {
+              const leading = raw.match(/^\s*/)[0], trailing = raw.match(/\s*$/)[0];
               node._viOrig = raw;
               node._enVal = leading + translated + trailing;
               node.nodeValue = node._enVal;
             }
-          } else {
-            if (node._viOrig !== undefined && node._enVal === raw) {
-              node.nodeValue = node._viOrig;
-              delete node._enVal;
-            }
+          } else if (node._viOrig !== undefined && node._enVal === raw) {
+            node.nodeValue = node._viOrig;
+            delete node._enVal;
           }
         }
 
-        // 2. Dịch Placeholder
         document.querySelectorAll('input[placeholder], textarea[placeholder]').forEach(el => {
           const cur = el.getAttribute('placeholder');
           if (lang === 'en') {
@@ -3200,12 +3223,14 @@
 
     function toggleAppLanguage() {
       AppState.lang = AppState.lang === 'en' ? 'vi' : 'en';
-      applyLanguageToDOM(AppState.lang);
       saveState();
+      applyLanguageToDOM(AppState.lang);
+      if (currentOpenArticleId && !document.getElementById('article-modal')?.classList.contains('hidden')) {
+        openArticleModal(currentOpenArticleId);
+      }
       showToast(AppState.lang === 'en' ? "Switched to English! 🇬🇧" : "Đã chuyển sang Tiếng Việt! 🇻🇳", "info");
     }
 
-    // Tự động yêu cầu Gemini AI trả lời/tạo Quiz/viết bài bằng Tiếng Anh khi đang chọn EN
     const _origFetch = window.fetch.bind(window);
     window.fetch = function(url, options = {}) {
       if (url === '/api/gemini' && AppState.lang === 'en' && options.body) {
