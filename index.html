@@ -56,6 +56,7 @@
       --bio-700: 15 118 110;
       --bio-800: 17 94 89;
       --bio-900: 19 78 74;
+      --sec-rgb: 147 51 234;
       --grad-start: #0d9488;
       --grad-mid: #2563eb;
       --grad-end: #9333ea;
@@ -86,14 +87,6 @@
       background-image: radial-gradient(rgb(var(--bio-500) / 0.25) 1.8px, transparent 1.8px);
       background-size: 20px 20px;
     }
-    body.bg-pattern-mesh {
-      background-color: #f8fafc;
-      background-image:
-        radial-gradient(at 10% 15%, var(--mesh-1, rgba(20,184,166,0.28)) 0px, transparent 50%),
-        radial-gradient(at 90% 10%, var(--mesh-2, rgba(59,130,246,0.24)) 0px, transparent 45%),
-        radial-gradient(at 80% 85%, var(--mesh-3, rgba(168,85,247,0.24)) 0px, transparent 50%);
-      background-attachment: fixed;
-    }
     body.theme-dark.bg-pattern-grid {
       background-image: linear-gradient(to right, rgb(var(--bio-400) / 0.15) 1px, transparent 1px),
                         linear-gradient(to bottom, rgb(var(--bio-400) / 0.15) 1px, transparent 1px);
@@ -101,21 +94,13 @@
     body.theme-dark.bg-pattern-dots {
       background-image: radial-gradient(rgb(var(--bio-400) / 0.28) 1.8px, transparent 1.8px);
     }
-    body.theme-dark.bg-pattern-mesh {
-      background-color: #0b1120 !important;
-      background-image:
-        radial-gradient(at 10% 15%, var(--mesh-1, rgba(20,184,166,0.22)) 0px, transparent 50%),
-        radial-gradient(at 90% 10%, var(--mesh-2, rgba(59,130,246,0.18)) 0px, transparent 45%),
-        radial-gradient(at 80% 85%, var(--mesh-3, rgba(168,85,247,0.22)) 0px, transparent 50%) !important;
-      background-attachment: fixed;
-    }
 
     /* Kiểu bo góc tùy chọn */
     body.radius-sharp .rounded-3xl { border-radius: 0.65rem !important; }
     body.radius-sharp .rounded-2xl { border-radius: 0.45rem !important; }
     body.radius-sharp .rounded-xl  { border-radius: 0.35rem !important; }
 
-    /* Chế độ tối (Dark Mode) - Đã sửa tương phản đầy đủ */
+    /* Chế độ tối (Dark Mode) */
     body.theme-dark {
       background-color: #0b1120 !important;
       color: #e2e8f0 !important;
@@ -134,9 +119,7 @@
     body.theme-dark .bg-slate-100 { background-color: #1e293b !important; }
     body.theme-dark .border-slate-200,
     body.theme-dark .border-slate-200\/80,
-    body.theme-dark .border-slate-100 {
-      border-color: #293548 !important;
-    }
+    body.theme-dark .border-slate-100 { border-color: #293548 !important; }
     body.theme-dark .text-slate-900,
     body.theme-dark .text-slate-800 { color: #f8fafc !important; }
     body.theme-dark .text-slate-700,
@@ -151,11 +134,6 @@
       border-color: #334155 !important;
     }
     body.theme-dark .bg-amber-400.text-slate-900 { color: #0f172a !important; }
-    body.theme-dark .bg-bio-50,
-    body.theme-dark .bg-bio-50\/50,
-    body.theme-dark .bg-bio-50\/60,
-    body.theme-dark .bg-bio-50\/70 { background-color: rgb(var(--bio-900) / 0.35) !important; }
-    body.theme-dark .bg-bio-100 { background-color: rgb(var(--bio-900) / 0.55) !important; }
     body.theme-dark .border-bio-100,
     body.theme-dark .border-bio-200,
     body.theme-dark .border-bio-300 { border-color: rgb(var(--bio-700) / 0.55) !important; }
@@ -190,6 +168,67 @@
     body.theme-dark .text-purple-800 { color: #d8b4fe !important; }
     body.theme-dark .text-blue-700 { color: #93c5fd !important; }
     body.theme-dark .text-indigo-700 { color: #a5b4fc !important; }
+
+    /* === BƯỚC 1: PHỐI ĐA SẮC TOÀN TRANG (ĐÃ TÍCH HỢP SẴN) === */
+    header {
+      border-top: 3px solid transparent;
+      border-image: linear-gradient(90deg, var(--grad-start), var(--grad-mid), var(--grad-end)) 1;
+    }
+    header .text-bio-600 {
+      background: linear-gradient(135deg, var(--grad-start), var(--grad-end));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    button.bg-bio-600,
+    #btn-submit-quiz,
+    #food-kcal-progress,
+    #pomodoro-progress-bar {
+      background-image: linear-gradient(135deg, var(--grad-start) 0%, var(--grad-mid) 55%, var(--grad-end) 100%) !important;
+      border: none !important;
+    }
+    button.bg-bio-600:hover,
+    #btn-submit-quiz:hover {
+      filter: brightness(1.08);
+    }
+    .bg-bio-50,
+    .bg-bio-50\/50,
+    .bg-bio-50\/60,
+    .bg-bio-50\/70,
+    .bg-bio-100 {
+      background-image: linear-gradient(135deg, rgb(var(--bio-50)), rgb(var(--sec-rgb, var(--bio-200)) / 0.22)) !important;
+    }
+    body.theme-dark .bg-bio-50,
+    body.theme-dark .bg-bio-50\/50,
+    body.theme-dark .bg-bio-50\/60,
+    body.theme-dark .bg-bio-50\/70,
+    body.theme-dark .bg-bio-100 {
+      background-image: linear-gradient(135deg, rgb(var(--bio-900) / 0.45), rgb(var(--sec-rgb, var(--bio-700)) / 0.24)) !important;
+    }
+    body.bg-pattern-mesh {
+      background-color: #eef2ff;
+      background-image:
+        radial-gradient(at 0% 0%, var(--mesh-1, rgba(20,184,166,0.42)) 0px, transparent 52%),
+        radial-gradient(at 100% 0%, var(--mesh-2, rgba(59,130,246,0.36)) 0px, transparent 50%),
+        radial-gradient(at 85% 90%, var(--mesh-3, rgba(168,85,247,0.38)) 0px, transparent 55%),
+        radial-gradient(at 10% 85%, var(--mesh-2, rgba(236,72,153,0.24)) 0px, transparent 50%) !important;
+      background-attachment: fixed;
+    }
+    body.theme-dark.bg-pattern-mesh {
+      background-color: #0b1120 !important;
+      background-image:
+        radial-gradient(at 0% 0%, var(--mesh-1, rgba(20,184,166,0.25)) 0px, transparent 52%),
+        radial-gradient(at 100% 0%, var(--mesh-2, rgba(59,130,246,0.22)) 0px, transparent 50%),
+        radial-gradient(at 85% 90%, var(--mesh-3, rgba(168,85,247,0.25)) 0px, transparent 55%) !important;
+      background-attachment: fixed;
+    }
+    body.bg-pattern-mesh:not(.theme-dark) .bg-white {
+      background-color: rgba(255, 255, 255, 0.86) !important;
+      backdrop-filter: blur(10px);
+    }
+    body.bg-pattern-mesh.theme-dark .bg-white {
+      background-color: rgba(21, 30, 50, 0.88) !important;
+      backdrop-filter: blur(10px);
+    }
 
     @keyframes fadeSlideUp {
       from { opacity: 0; transform: translateY(10px); }
@@ -811,7 +850,6 @@
               </span>
             </div>
 
-            <!-- Bộ chọn chủ đề & số câu không giới hạn -->
             <div class="bg-purple-50/70 p-3.5 rounded-xl border border-purple-200 space-y-2.5">
               <div class="flex flex-col sm:flex-row gap-2">
                 <input type="text" id="quiz-custom-topic" placeholder="Nhập đề tài bất kỳ (VD: Tế bào gốc, Giấc mơ REM, Sinh học vũ trụ, AI Y sinh...)" class="flex-grow border border-slate-200 rounded-xl px-3 py-2 text-xs bg-white focus:outline-none focus:ring-2 focus:ring-purple-500">
@@ -872,7 +910,6 @@
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <!-- CỘT TRÁI: ĐỒNG HỒ POMODORO SINH HỌC -->
         <div class="lg:col-span-5 space-y-4">
           <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
             <div class="flex items-center justify-between border-b border-slate-100 pb-3">
@@ -883,18 +920,10 @@
             </div>
 
             <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-2 gap-2 text-xs font-bold">
-              <button type="button" onclick="setPomodoroMode(25, 'focus', 'Tập trung 25p')" id="pomo-btn-25" class="pomo-mode-btn p-2.5 rounded-xl border-2 border-bio-600 bg-bio-50 text-bio-800 transition">
-                🧠 Học 25 phút
-              </button>
-              <button type="button" onclick="setPomodoroMode(45, 'focus', 'Chuyên sâu 45p')" id="pomo-btn-45" class="pomo-mode-btn p-2.5 rounded-xl border-2 border-slate-200 hover:border-bio-300 transition">
-                🔥 Sâu 45 phút
-              </button>
-              <button type="button" onclick="setPomodoroMode(5, 'break', 'Nghỉ ngắn 5p')" id="pomo-btn-5" class="pomo-mode-btn p-2.5 rounded-xl border-2 border-slate-200 hover:border-bio-300 transition">
-                ☕ Nghỉ 5 phút
-              </button>
-              <button type="button" onclick="setPomodoroMode(15, 'break', 'Nghỉ dài 15p')" id="pomo-btn-15" class="pomo-mode-btn p-2.5 rounded-xl border-2 border-slate-200 hover:border-bio-300 transition">
-                🌿 Nghỉ 15 phút
-              </button>
+              <button type="button" onclick="setPomodoroMode(25, 'focus', 'Tập trung 25p')" id="pomo-btn-25" class="pomo-mode-btn p-2.5 rounded-xl border-2 border-bio-600 bg-bio-50 text-bio-800 transition">🧠 Học 25 phút</button>
+              <button type="button" onclick="setPomodoroMode(45, 'focus', 'Chuyên sâu 45p')" id="pomo-btn-45" class="pomo-mode-btn p-2.5 rounded-xl border-2 border-slate-200 hover:border-bio-300 transition">🔥 Sâu 45 phút</button>
+              <button type="button" onclick="setPomodoroMode(5, 'break', 'Nghỉ ngắn 5p')" id="pomo-btn-5" class="pomo-mode-btn p-2.5 rounded-xl border-2 border-slate-200 hover:border-bio-300 transition">☕ Nghỉ 5 phút</button>
+              <button type="button" onclick="setPomodoroMode(15, 'break', 'Nghỉ dài 15p')" id="pomo-btn-15" class="pomo-mode-btn p-2.5 rounded-xl border-2 border-slate-200 hover:border-bio-300 transition">🌿 Nghỉ 15 phút</button>
             </div>
 
             <div class="py-6 px-4 rounded-2xl bg-slate-50 border border-slate-200 text-center space-y-2">
@@ -920,7 +949,6 @@
           </div>
         </div>
 
-        <!-- CỘT PHẢI: TÌM NHẠC YOUTUBE & TỦ NHẠC YÊU THÍCH -->
         <div class="lg:col-span-7 space-y-5">
           <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
             <div class="flex items-center justify-between flex-wrap gap-2">
@@ -1268,10 +1296,12 @@
     <i class="fa-solid fa-circle-check text-bio-400 text-base" id="toast-icon"></i>
     <span id="toast-msg">Thông báo</span>
   </div>
-```html
+
+  ```html
   <!-- ================= JAVASCRIPT & LOGIC ENGINE ================= -->
   <script>
     const DEFAULT_THEME = {
+      v: 2,
       color: "aurora",
       mode: "light",
       font: "jakarta",
@@ -1368,16 +1398,16 @@
 
     /* 2. STUDIO THIẾT KẾ GIAO DIỆN PHỐI ĐA SẮC */
     const THEME_PALETTES = {
-      green:    { 50:'240 253 244',100:'220 252 231',200:'187 247 208',300:'134 239 172',400:'74 222 128',500:'34 197 94',600:'22 163 74',700:'21 128 61',800:'22 101 52',900:'20 83 45', grad:['#065f46','#16a34a','#0d9488'], mesh:['rgba(16,185,129,0.28)','rgba(20,184,166,0.25)','rgba(132,204,22,0.2)'] },
-      aurora:   { 50:'240 253 250',100:'204 251 241',200:'153 246 228',300:'94 234 212',400:'45 212 191',500:'20 184 166',600:'13 148 136',700:'15 118 110',800:'17 94 89',900:'19 78 74', grad:['#0d9488','#2563eb','#9333ea'], mesh:['rgba(20,184,166,0.28)','rgba(59,130,246,0.24)','rgba(168,85,247,0.24)'] },
-      sunset:   { 50:'255 241 242',100:'255 228 230',200:'254 205 211',300:'253 164 175',400:'251 113 133',500:'244 63 94',600:'225 29 72',700:'190 18 60',800:'159 18 57',900:'136 19 55', grad:['#ea580c','#e11d48','#7c3aed'], mesh:['rgba(249,115,22,0.26)','rgba(244,63,94,0.24)','rgba(139,92,246,0.24)'] },
-      ocean:    { 50:'239 246 255',100:'219 234 254',200:'191 219 254',300:'147 197 253',400:'96 165 250',500:'59 130 246',600:'37 99 235',700:'29 78 216',800:'30 64 175',900:'30 58 138', grad:['#1e3a8a','#0284c7','#06b6d4'], mesh:['rgba(37,99,235,0.25)','rgba(6,182,212,0.26)','rgba(99,102,241,0.22)'] },
-      nebula:   { 50:'250 245 255',100:'243 232 255',200:'233 213 255',300:'216 180 254',400:'192 132 252',500:'168 85 247',600:'147 51 234',700:'126 34 206',800:'107 33 168',900:'88 28 135', grad:['#4c1d95','#9333ea','#ec4899'], mesh:['rgba(147,51,234,0.26)','rgba(236,72,153,0.24)','rgba(59,130,246,0.2)'] },
-      sakura:   { 50:'253 242 248',100:'252 231 243',200:'251 207 232',300:'249 168 212',400:'244 114 182',500:'236 72 153',600:'219 39 119',700:'190 24 93',800:'157 23 77',900:'131 24 67', grad:['#be185d','#f43f5e','#fb923c'], mesh:['rgba(236,72,153,0.26)','rgba(251,146,60,0.24)','rgba(244,63,94,0.22)'] },
-      mint:     { 50:'236 253 245',100:'209 250 229',200:'167 243 208',300:'110 231 183',400:'52 211 153',500:'16 185 129',600:'5 150 105',700:'4 120 87',800:'6 95 70',900:'6 78 59', grad:['#047857','#10b981','#0ea5e9'], mesh:['rgba(16,185,129,0.26)','rgba(14,165,233,0.24)','rgba(52,211,153,0.22)'] },
-      pastel:   { 50:'238 242 255',100:'224 231 255',200:'199 210 254',300:'165 180 252',400:'129 140 248',500:'99 102 241',600:'79 70 229',700:'67 56 202',800:'55 48 163',900:'49 46 129', grad:['#6366f1','#ec4899','#06b6d4'], mesh:['rgba(99,102,241,0.24)','rgba(236,72,153,0.22)','rgba(6,182,212,0.24)'] },
-      amber:    { 50:'255 251 235',100:'254 243 199',200:'253 230 138',300:'252 211 77',400:'251 191 36',500:'245 158 11',600:'217 119 6',700:'180 83 9',800:'146 64 14',900:'120 53 15', grad:['#9a3412','#d97706','#eab308'], mesh:['rgba(245,158,11,0.28)','rgba(234,88,12,0.22)','rgba(250,204,21,0.24)'] },
-      midnight: { 50:'238 242 255',100:'224 231 255',200:'199 210 254',300:'165 180 252',400:'129 140 248',500:'99 102 241',600:'67 56 202',700:'55 48 163',800:'49 46 129',900:'30 27 75', grad:['#1e1b4b','#4338ca','#d97706'], mesh:['rgba(67,56,202,0.26)','rgba(217,119,6,0.22)','rgba(30,27,75,0.24)'] }
+      green:    { 50:'240 253 244',100:'220 252 231',200:'187 247 208',300:'134 239 172',400:'74 222 128',500:'34 197 94',600:'22 163 74',700:'21 128 61',800:'22 101 52',900:'20 83 45', grad:['#065f46','#16a34a','#0d9488'], mesh:['rgba(16,185,129,0.34)','rgba(20,184,166,0.32)','rgba(132,204,22,0.26)'] },
+      aurora:   { 50:'240 253 250',100:'204 251 241',200:'153 246 228',300:'94 234 212',400:'45 212 191',500:'20 184 166',600:'13 148 136',700:'15 118 110',800:'17 94 89',900:'19 78 74', grad:['#0d9488','#2563eb','#9333ea'], mesh:['rgba(20,184,166,0.36)','rgba(59,130,246,0.34)','rgba(168,85,247,0.34)'] },
+      sunset:   { 50:'255 241 242',100:'255 228 230',200:'254 205 211',300:'253 164 175',400:'251 113 133',500:'244 63 94',600:'225 29 72',700:'190 18 60',800:'159 18 57',900:'136 19 55', grad:['#ea580c','#e11d48','#7c3aed'], mesh:['rgba(249,115,22,0.34)','rgba(244,63,94,0.32)','rgba(139,92,246,0.32)'] },
+      ocean:    { 50:'239 246 255',100:'219 234 254',200:'191 219 254',300:'147 197 253',400:'96 165 250',500:'59 130 246',600:'37 99 235',700:'29 78 216',800:'30 64 175',900:'30 58 138', grad:['#1e3a8a','#0284c7','#06b6d4'], mesh:['rgba(37,99,235,0.34)','rgba(6,182,212,0.34)','rgba(99,102,241,0.3)'] },
+      nebula:   { 50:'250 245 255',100:'243 232 255',200:'233 213 255',300:'216 180 254',400:'192 132 252',500:'168 85 247',600:'147 51 234',700:'126 34 206',800:'107 33 168',900:'88 28 135', grad:['#4c1d95','#9333ea','#ec4899'], mesh:['rgba(147,51,234,0.34)','rgba(236,72,153,0.32)','rgba(59,130,246,0.28)'] },
+      sakura:   { 50:'253 242 248',100:'252 231 243',200:'251 207 232',300:'249 168 212',400:'244 114 182',500:'236 72 153',600:'219 39 119',700:'190 24 93',800:'157 23 77',900:'131 24 67', grad:['#be185d','#f43f5e','#fb923c'], mesh:['rgba(236,72,153,0.34)','rgba(251,146,60,0.32)','rgba(244,63,94,0.28)'] },
+      mint:     { 50:'236 253 245',100:'209 250 229',200:'167 243 208',300:'110 231 183',400:'52 211 153',500:'16 185 129',600:'5 150 105',700:'4 120 87',800:'6 95 70',900:'6 78 59', grad:['#047857','#10b981','#0ea5e9'], mesh:['rgba(16,185,129,0.34)','rgba(14,165,233,0.32)','rgba(52,211,153,0.28)'] },
+      pastel:   { 50:'238 242 255',100:'224 231 255',200:'199 210 254',300:'165 180 252',400:'129 140 248',500:'99 102 241',600:'79 70 229',700:'67 56 202',800:'55 48 163',900:'49 46 129', grad:['#6366f1','#ec4899','#06b6d4'], mesh:['rgba(99,102,241,0.34)','rgba(236,72,153,0.3)','rgba(6,182,212,0.32)'] },
+      amber:    { 50:'255 251 235',100:'254 243 199',200:'253 230 138',300:'252 211 77',400:'251 191 36',500:'245 158 11',600:'217 119 6',700:'180 83 9',800:'146 64 14',900:'120 53 15', grad:['#9a3412','#d97706','#eab308'], mesh:['rgba(245,158,11,0.34)','rgba(234,88,12,0.28)','rgba(250,204,21,0.32)'] },
+      midnight: { 50:'238 242 255',100:'224 231 255',200:'199 210 254',300:'165 180 252',400:'129 140 248',500:'99 102 241',600:'67 56 202',700:'55 48 163',800:'49 46 129',900:'30 27 75', grad:['#1e1b4b','#4338ca','#d97706'], mesh:['rgba(67,56,202,0.34)','rgba(217,119,6,0.28)','rgba(30,27,75,0.3)'] }
     };
 
     const FONT_MAP = {
@@ -1400,6 +1430,7 @@
       const c1 = document.getElementById('custom-color-1')?.value || '#2563eb';
       const c2 = document.getElementById('custom-color-2')?.value || '#ec4899';
       if (!AppState.theme) AppState.theme = { ...DEFAULT_THEME };
+      AppState.theme.v = 2;
       AppState.theme.color = 'custom';
       AppState.theme.customStart = c1;
       AppState.theme.customEnd = c2;
@@ -1427,9 +1458,9 @@
         root.style.setProperty('--grad-start', theme.customStart);
         root.style.setProperty('--grad-mid', midHex);
         root.style.setProperty('--grad-end', theme.customEnd);
-        root.style.setProperty('--mesh-1', `rgba(${rgb1.r},${rgb1.g},${rgb1.b},0.26)`);
-        root.style.setProperty('--mesh-2', `rgba(${rgb2.r},${rgb2.g},${rgb2.b},0.24)`);
-        root.style.setProperty('--mesh-3', `rgba(${rgb1.r},${rgb2.g},${rgb2.b},0.2)`);
+        root.style.setProperty('--mesh-1', `rgba(${rgb1.r},${rgb1.g},${rgb1.b},0.34)`);
+        root.style.setProperty('--mesh-2', `rgba(${rgb2.r},${rgb2.g},${rgb2.b},0.32)`);
+        root.style.setProperty('--mesh-3', `rgba(${rgb1.r},${rgb2.g},${rgb2.b},0.28)`);
       } else {
         const palette = THEME_PALETTES[theme.color] || THEME_PALETTES.aurora;
         ['50','100','200','300','400','500','600','700','800','900'].forEach(s => root.style.setProperty(`--bio-${s}`, palette[s]));
@@ -1441,7 +1472,13 @@
         root.style.setProperty('--mesh-3', palette.mesh[2]);
       }
 
+      const secHex = theme.color === 'custom'
+        ? theme.customEnd
+        : (THEME_PALETTES[theme.color] || THEME_PALETTES.aurora).grad[2];
+      const secObj = hexToRgbObj(secHex);
+      root.style.setProperty('--sec-rgb', `${secObj.r} ${secObj.g} ${secObj.b}`);
       root.style.setProperty('--app-font', FONT_MAP[theme.font] || FONT_MAP.jakarta);
+
       const c1El = document.getElementById('custom-color-1'), c2El = document.getElementById('custom-color-2');
       if (c1El && theme.customStart) c1El.value = theme.customStart;
       if (c2El && theme.customEnd) c2El.value = theme.customEnd;
@@ -1474,6 +1511,7 @@
 
     function setThemeProp(key, value) {
       if (!AppState.theme) AppState.theme = { ...DEFAULT_THEME };
+      AppState.theme.v = 2;
       AppState.theme[key] = value;
       applyTheme(AppState.theme);
       saveState();
@@ -2619,7 +2657,9 @@
       return {
         user: { ...def.user, ...(rawData.user || {}) },
         schedule: { ...def.schedule, ...(rawData.schedule || {}) },
-        theme: { ...def.theme, ...(rawData.theme || {}) },
+        theme: (rawData.theme && rawData.theme.v === 2)
+          ? { ...def.theme, ...rawData.theme }
+          : { ...def.theme, mode: rawData.theme?.mode || 'light', font: rawData.theme?.font || 'jakarta', radius: rawData.theme?.radius || 'soft', v: 2 },
         favoriteTracks: Array.isArray(rawData.favoriteTracks) ? rawData.favoriteTracks : [],
         focusSessions: typeof rawData.focusSessions === 'number' ? rawData.focusSessions : 0,
         unlockedArticles: Array.isArray(rawData.unlockedArticles) ? rawData.unlockedArticles : def.unlockedArticles,
@@ -2846,4 +2886,3 @@
   </script>
 </body>
 </html>
-  
