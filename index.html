@@ -457,56 +457,41 @@
                   </div>
                 </div>
 
-                <!-- KHUNG PHÂN LOẠI 4 MỨC BMI TRỰC TIẾP -->
-                <div id="bmi-live-box" class="bg-white p-3.5 rounded-xl border border-slate-200 space-y-2.5">
-                  <div class="flex items-center justify-between flex-wrap gap-1">
-                    <span class="text-[11px] font-extrabold text-slate-700">Phân loại BMI (4 mức): <strong id="bmi-live-value" class="text-bio-600 text-xs">--</strong></span>
-                    <span id="bmi-live-badge" class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-slate-100 text-slate-500">Nhập cao & nặng</span>
-                  </div>
-                  <div class="grid grid-cols-4 gap-1 text-[9px] font-bold text-center">
-                    <div id="bmi-seg-1" class="p-1.5 rounded-lg bg-slate-100 text-slate-500 border border-transparent transition">Mức 1<br>Thiếu cân<br>(&lt;18.5)</div>
-                    <div id="bmi-seg-2" class="p-1.5 rounded-lg bg-slate-100 text-slate-500 border border-transparent transition">Mức 2<br>Cân đối<br>(18.5–22.9)</div>
-                    <div id="bmi-seg-3" class="p-1.5 rounded-lg bg-slate-100 text-slate-500 border border-transparent transition">Mức 3<br>Thừa cân<br>(23–24.9)</div>
-                    <div id="bmi-seg-4" class="p-1.5 rounded-lg bg-slate-100 text-slate-500 border border-transparent transition">Mức 4<br>Béo phì<br>(&ge;25)</div>
-                  </div>
-                  <p id="bmi-live-advice" class="text-[11px] text-slate-600 leading-snug">
-                    Nhập chiều cao & cân nặng ở trên để hệ thống đánh giá mức BMI và gợi ý chế độ tập/ăn phù hợp nhất!
-                  </p>
-                </div>
-
-                <!-- 4 NÚT BẤM CHẾ ĐỘ THỂ CHẤT -->
-                <div>
-                  <label class="block text-[11px] font-bold text-slate-600 mb-2">Bấm chọn chế độ mục tiêu thể chất:</label>
-                  <input type="hidden" id="user-goal" value="maintain">
-                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-2" id="goal-modes-grid">
-                    <button type="button" id="goal-mode-muscle" onclick="selectGoalMode('muscle')" class="goal-mode-btn text-left p-2.5 rounded-xl border-2 border-slate-200 bg-white hover:border-bio-300 transition relative">
-                      <span class="block text-xs font-extrabold text-slate-800">💪 Tăng cân & Cơ bắp</span>
-                      <span class="block text-[10px] text-slate-500">+300 kcal • Giàu đạm & chiều cao</span>
-                    </button>
-                    <button type="button" id="goal-mode-maintain" onclick="selectGoalMode('maintain')" class="goal-mode-btn text-left p-2.5 rounded-xl border-2 border-bio-600 bg-bio-50 transition relative">
-                      <span class="block text-xs font-extrabold text-slate-800">⚖️ Duy trì & Tập trung</span>
-                      <span class="block text-[10px] text-slate-500">Chuẩn TDEE • Tối ưu trí nhớ</span>
-                    </button>
-                    <button type="button" id="goal-mode-fatloss" onclick="selectGoalMode('fatloss')" class="goal-mode-btn text-left p-2.5 rounded-xl border-2 border-slate-200 bg-white hover:border-bio-300 transition relative">
-                      <span class="block text-xs font-extrabold text-slate-800">🔥 Giảm mỡ nhẹ nhàng</span>
-                      <span class="block text-[10px] text-slate-500">-300 kcal • Giảm tinh bột xấu</span>
-                    </button>
-                    <button type="button" id="goal-mode-fatloss_intensive" onclick="selectGoalMode('fatloss_intensive')" class="goal-mode-btn text-left p-2.5 rounded-xl border-2 border-slate-200 bg-white hover:border-bio-300 transition relative">
-                      <span class="block text-xs font-extrabold text-slate-800">🚀 Giảm mỡ chuyên sâu</span>
-                      <span class="block text-[10px] text-slate-500">-500 kcal • Kiểm soát đường huyết</span>
-                    </button>
-                  </div>
-                </div>
+         <input type="hidden" id="user-goal" value="maintain">
               </div>
             </div>
 
             <div class="flex items-center gap-2">
               <button type="submit" class="flex-grow py-3 bg-bio-600 hover:bg-bio-700 text-white font-bold text-sm rounded-xl transition shadow-md flex items-center justify-center">
-                <i class="fa-solid fa-wand-magic-sparkles mr-2"></i> Lưu & Tạo Lộ Trình Sinh Học
+                <i class="fa-solid fa-calculator mr-2"></i> Phân Tích Thông Số & Tính BMI
               </button>
               <button type="button" id="btn-reset-profile" onclick="resetBioProfile()" title="Xóa dữ liệu để nhập lại từ đầu" class="hidden px-3.5 py-3 bg-slate-100 hover:bg-rose-50 text-slate-600 hover:text-rose-600 border border-slate-200 rounded-xl text-sm transition">
                 <i class="fa-solid fa-rotate-left"></i>
               </button>
+            </div>
+
+            <!-- CHỈ HIỆN SAU KHI NHẬP ĐỦ THÔNG SỐ VÀ BẤM PHÂN TÍCH -->
+            <div id="bmi-priority-panel" class="hidden pt-4 border-t border-slate-100 space-y-3.5 animate-reveal">
+              <div id="bmi-live-box" class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 space-y-2.5">
+                <div class="flex items-center justify-between flex-wrap gap-1">
+                  <span class="text-xs font-extrabold text-slate-800">Chỉ số BMI của bạn: <strong id="bmi-live-value" class="text-bio-600 text-sm">--</strong></span>
+                  <span id="bmi-live-badge" class="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600">--</span>
+                </div>
+                <div class="grid grid-cols-4 gap-1 text-[9px] font-bold text-center">
+                  <div id="bmi-seg-1" class="p-1.5 rounded-lg bg-white text-slate-500 border border-slate-200 transition">Mức 1<br>Thiếu cân<br>(&lt;18.5)</div>
+                  <div id="bmi-seg-2" class="p-1.5 rounded-lg bg-white text-slate-500 border border-slate-200 transition">Mức 2<br>Cân đối<br>(18.5–22.9)</div>
+                  <div id="bmi-seg-3" class="p-1.5 rounded-lg bg-white text-slate-500 border border-slate-200 transition">Mức 3<br>Thừa cân<br>(23–24.9)</div>
+                  <div id="bmi-seg-4" class="p-1.5 rounded-lg bg-white text-slate-500 border border-slate-200 transition">Mức 4<br>Béo phì<br>(&ge;25)</div>
+                </div>
+                <p id="bmi-live-advice" class="text-[11px] text-slate-600 leading-snug"></p>
+              </div>
+
+              <div class="space-y-2">
+                <label class="block text-xs font-extrabold text-bio-700">
+                  <i class="fa-solid fa-hand-pointer mr-1"></i> Chọn 1 trong 4 chế độ ưu tiên cho thể trạng của bạn:
+                </label>
+                <div id="priority-modes-list" class="space-y-2"></div>
+              </div>
             </div>
           </form>
 
@@ -1765,71 +1750,105 @@
       let d = (wh * 60 + wm) - (sh * 60 + sm); if (d <= 0) d += 1440; return (d / 60).toFixed(1);
     }
 
+   let pendingProfileData = null;
+
+    const GOAL_MODE_META = {
+      muscle:            { icon: "💪", name: "Tăng cân & Cơ bắp", desc: "+300 kcal • Giàu đạm & hỗ trợ phát triển chiều cao" },
+      maintain:          { icon: "⚖️", name: "Duy trì & Tập trung", desc: "Chuẩn TDEE • Tối ưu trí nhớ học đường & thể lực" },
+      fatloss:           { icon: "🔥", name: "Giảm mỡ nhẹ nhàng", desc: "-300 kcal • Cắt đường tinh luyện, tăng chất xơ" },
+      fatloss_intensive: { icon: "🚀", name: "Giảm mỡ chuyên sâu", desc: "-500 kcal • Kiểm soát Calo & Insulin chặt chẽ" }
+    };
+
     function getBmiLevelInfo(bmiVal) {
-      if (bmiVal < 18.5) return { level: 1, label: "Mức 1: Thiếu cân", badgeCls: "bg-amber-100 text-amber-800", segCls: "bg-amber-100 text-amber-800 border-amber-400", recGoal: "muscle", advice: "BMI < 18.5 (Thiếu cân): Bạn nên bấm chế độ 'Tăng cân & Cơ bắp' để bổ sung đủ đạm và calo giúp phát triển thể chất." };
-      if (bmiVal < 23.0) return { level: 2, label: "Mức 2: Bình thường", badgeCls: "bg-emerald-100 text-emerald-800", segCls: "bg-emerald-100 text-emerald-800 border-emerald-400", recGoal: "maintain", advice: "BMI 18.5–22.9 (Cân đối): Thể trạng lý tưởng! Gợi ý bấm chế độ 'Duy trì & Tập trung' (hoặc 'Tăng cơ' nếu muốn săn chắc hơn)." };
-      if (bmiVal < 25.0) return { level: 3, label: "Mức 3: Thừa cân nhẹ", badgeCls: "bg-orange-100 text-orange-800", segCls: "bg-amber-100 text-amber-800 border-amber-400", recGoal: "fatloss", advice: "BMI 23–24.9 (Thừa cân nhẹ): Gợi ý bấm chế độ 'Giảm mỡ nhẹ nhàng' để cắt đường tinh luyện và tăng chất xơ." };
-      return { level: 4, label: "Mức 4: Béo phì", badgeCls: "bg-rose-100 text-rose-800", segCls: "bg-rose-100 text-rose-800 border-rose-400", recGoal: "fatloss_intensive", advice: "BMI ≥ 25 (Béo phì / Cần kiểm soát): Gợi ý bấm chế độ 'Giảm mỡ chuyên sâu' để kiểm soát Calo chặt chẽ và ổn định Insulin." };
+      if (bmiVal < 18.5) return {
+        level: 1, label: "Mức 1: Thiếu cân", badgeCls: "bg-amber-100 text-amber-800", segCls: "bg-amber-100 text-amber-800 border-amber-400",
+        priorityOrder: ["muscle", "maintain", "fatloss", "fatloss_intensive"],
+        advice: "Bạn đang ở mức Thiếu cân (<18.5). Chế độ 'Tăng cân & Cơ bắp' được xếp Ưu tiên #1 để bù năng lượng và phát triển cơ thể."
+      };
+      if (bmiVal < 23.0) return {
+        level: 2, label: "Mức 2: Bình thường", badgeCls: "bg-emerald-100 text-emerald-800", segCls: "bg-emerald-100 text-emerald-800 border-emerald-400",
+        priorityOrder: ["maintain", "muscle", "fatloss", "fatloss_intensive"],
+        advice: "Chỉ số BMI của bạn rất Cân đối (18.5–22.9)! Chế độ 'Duy trì & Tập trung' được xếp Ưu tiên #1 (hoặc chọn Tăng cơ nếu muốn săn chắc hơn)."
+      };
+      if (bmiVal < 25.0) return {
+        level: 3, label: "Mức 3: Thừa cân nhẹ", badgeCls: "bg-amber-100 text-amber-800", segCls: "bg-amber-100 text-amber-800 border-amber-400",
+        priorityOrder: ["fatloss", "maintain", "fatloss_intensive", "muscle"],
+        advice: "BMI đang ở mức Thừa cân nhẹ (23–24.9). Chế độ 'Giảm mỡ nhẹ nhàng' được xếp Ưu tiên #1 để điều chỉnh cân nặng an toàn."
+      };
+      return {
+        level: 4, label: "Mức 4: Béo phì", badgeCls: "bg-rose-100 text-rose-800", segCls: "bg-rose-100 text-rose-800 border-rose-400",
+        priorityOrder: ["fatloss_intensive", "fatloss", "maintain", "muscle"],
+        advice: "BMI ≥ 25 (Cần kiểm soát cân nặng). Chế độ 'Giảm mỡ chuyên sâu' được xếp Ưu tiên #1 để kiểm soát Calo và ổn định đường huyết."
+      };
     }
 
-    function updateLiveBMI() {
-      const h = parseFloat(document.getElementById('user-height')?.value);
-      const w = parseFloat(document.getElementById('user-weight')?.value);
-      const valEl = document.getElementById('bmi-live-value'), badgeEl = document.getElementById('bmi-live-badge'), advEl = document.getElementById('bmi-live-advice');
+    function showBmiAndPriorityModes(bmi, selectedGoal = null) {
+      const panel = document.getElementById('bmi-priority-panel');
+      const valEl = document.getElementById('bmi-live-value');
+      const badgeEl = document.getElementById('bmi-live-badge');
+      const advEl = document.getElementById('bmi-live-advice');
+      const listEl = document.getElementById('priority-modes-list');
+      if (!panel || !listEl) return;
 
+      const info = getBmiLevelInfo(bmi);
       [1, 2, 3, 4].forEach(n => {
         const seg = document.getElementById(`bmi-seg-${n}`);
-        if (seg) seg.className = "p-1.5 rounded-lg bg-slate-100 text-slate-500 border border-transparent transition";
+        if (seg) seg.className = "p-1.5 rounded-lg bg-white text-slate-500 border border-slate-200 transition";
       });
-      document.querySelectorAll('.rec-tag').forEach(el => el.remove());
-
-      if (!h || !w || h < 100 || w < 25) {
-        if (valEl) valEl.innerText = "--";
-        if (badgeEl) { badgeEl.className = "text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-slate-100 text-slate-500"; badgeEl.innerText = "Nhập cao & nặng"; }
-        if (advEl) advEl.innerText = "Nhập chiều cao & cân nặng ở trên để hệ thống phân tích 4 mức BMI và gợi ý chế độ!";
-        return;
-      }
-
-      const bmi = parseFloat((w / ((h / 100) ** 2)).toFixed(1));
-      const info = getBmiLevelInfo(bmi);
-      if (valEl) valEl.innerText = bmi;
-      if (badgeEl) { badgeEl.className = `text-[10px] font-extrabold px-2 py-0.5 rounded-full ${info.badgeCls}`; badgeEl.innerText = info.label; }
-      if (advEl) advEl.innerText = info.advice;
-
       const activeSeg = document.getElementById(`bmi-seg-${info.level}`);
       if (activeSeg) activeSeg.className = `p-1.5 rounded-lg border font-extrabold transition ${info.segCls}`;
 
-      const recBtn = document.getElementById(`goal-mode-${info.recGoal}`);
-      if (recBtn) {
-        const tag = document.createElement('span');
-        tag.className = "rec-tag absolute -top-2 right-2 bg-amber-400 text-slate-900 text-[9px] font-black px-1.5 py-0.5 rounded-full shadow-sm";
-        tag.innerText = "Đề xuất";
-        recBtn.appendChild(tag);
-      }
+      if (valEl) valEl.innerText = bmi;
+      if (badgeEl) { badgeEl.className = `text-[10px] font-extrabold px-2.5 py-0.5 rounded-full ${info.badgeCls}`; badgeEl.innerText = info.label; }
+      if (advEl) advEl.innerText = info.advice;
+
+      const rankLabels = [
+        { txt: "🥇 Ưu tiên #1 • Khuyên dùng", cls: "bg-amber-400 text-slate-900" },
+        { txt: "🥈 Ưu tiên #2 • Phù hợp", cls: "bg-bio-100 text-bio-800" },
+        { txt: "🥉 Ưu tiên #3 • Cân nhắc", cls: "bg-slate-200 text-slate-700" },
+        { txt: "Ưu tiên #4 • Ít phù hợp", cls: "bg-slate-100 text-slate-500" }
+      ];
+
+      listEl.innerHTML = info.priorityOrder.map((modeKey, idx) => {
+        const meta = GOAL_MODE_META[modeKey];
+        const rank = rankLabels[idx];
+        const isChosen = selectedGoal === modeKey;
+        return `
+          <button type="button" onclick="selectGoalMode('${modeKey}')"
+            class="w-full text-left p-3 rounded-xl border-2 transition flex items-center justify-between gap-2 ${isChosen ? 'border-bio-600 bg-bio-50 shadow-sm' : idx === 0 ? 'border-amber-300 bg-amber-50/40 hover:border-bio-500' : 'border-slate-200 bg-white hover:border-bio-400'}">
+            <div class="min-w-0">
+              <div class="flex items-center gap-1.5 flex-wrap mb-0.5">
+                <span class="text-[9px] font-black px-2 py-0.5 rounded-full ${rank.cls}">${rank.txt}</span>
+                ${isChosen ? '<span class="text-[9px] font-black px-2 py-0.5 rounded-full bg-bio-600 text-white">✓ Đang chọn</span>' : ''}
+              </div>
+              <p class="text-xs font-extrabold text-slate-800">${meta.icon} ${meta.name}</p>
+              <p class="text-[10px] text-slate-500">${meta.desc}</p>
+            </div>
+            <span class="px-2.5 py-1.5 rounded-lg text-[10px] font-bold shrink-0 ${isChosen ? 'bg-bio-600 text-white' : 'bg-slate-100 text-slate-700'}">
+              ${isChosen ? 'Đã chọn' : 'Chọn'}
+            </span>
+          </button>`;
+      }).join('');
+
+      panel.classList.remove('hidden');
     }
 
     function selectGoalMode(mode) {
       const hidden = document.getElementById('user-goal');
       if (hidden) hidden.value = mode;
 
-      document.querySelectorAll('.goal-mode-btn').forEach(btn => {
-        const isSel = btn.id === `goal-mode-${mode}`;
-        btn.classList.toggle('border-bio-600', isSel);
-        btn.classList.toggle('bg-bio-50', isSel);
-        btn.classList.toggle('border-slate-200', !isSel);
-        btn.classList.toggle('bg-white', !isSel);
-      });
-
-      if (AppState.schedule?.isConfigured) {
-        AppState.schedule.goal = mode;
-        saveState();
-        const names = { muscle: "Tăng cân & Cơ bắp", maintain: "Duy trì & Tập trung", fatloss: "Giảm mỡ nhẹ nhàng", fatloss_intensive: "Giảm mỡ chuyên sâu" };
-        showToast(`Đã chuyển sang chế độ: ${names[mode] || mode}!`, "success");
+      const base = pendingProfileData || AppState.schedule;
+      if (!base || !base.wake || !base.height || !base.weight) {
+        return showToast("Vui lòng nhập đầy đủ thông số và bấm Phân tích BMI trước!", "warning");
       }
-    }
 
-    document.getElementById('user-height')?.addEventListener('input', updateLiveBMI);
-    document.getElementById('user-weight')?.addEventListener('input', updateLiveBMI);
+      AppState.schedule = { ...base, isConfigured: true, goal: mode };
+      pendingProfileData = null;
+      saveState();
+
+      const meta = GOAL_MODE_META[mode];
+      showToast(`✅ Đã chọn "${meta?.name || mode}" & mở khóa Thực đơn của bạn!`, "success");
+    }
 
     function getUserTargetTDEE() {
       const s = AppState.schedule || {};
@@ -1848,12 +1867,13 @@
       setV('user-nickname', document.getElementById('user-nickname')?.value || 'Học sinh BioHabit');
       setV('user-age', '17'); setV('wake-time', '06:00'); setV('school-time', '07:15');
       setV('home-time', '17:00'); setV('sleep-time', '22:30'); setV('user-height', '165'); setV('user-weight', '55');
-      updateLiveBMI();
-      showToast("Đã điền mẫu thông tin! Hãy bấm chọn chế độ & Lưu lộ trình.", "info");
+      showToast("Đã điền mẫu thông số! Hãy bấm 'Phân Tích Thông Số & Tính BMI'.", "info");
     }
 
     function resetBioProfile() {
+      pendingProfileData = null;
       AppState.schedule = JSON.parse(JSON.stringify(DEFAULT_STORAGE.schedule));
+      document.getElementById('bmi-priority-panel')?.classList.add('hidden');
       saveState(); showToast("Đã đặt lại hồ sơ cá nhân!", "info");
     }
 
@@ -2479,13 +2499,12 @@
         setV('wake-time', s.wake); setV('school-time', s.school); setV('home-time', s.home); setV('sleep-time', s.sleep);
         setV('user-height', s.height); setV('user-weight', s.weight); setV('user-gender', s.gender || 'male'); setV('user-goal', s.goal || 'maintain');
 
-        // Highlight đúng nút chế độ đang chọn
-        document.querySelectorAll('.goal-mode-btn').forEach(btn => {
-          const isSel = btn.id === `goal-mode-${s.goal || 'maintain'}`;
-          btn.classList.toggle('border-bio-600', isSel); btn.classList.toggle('bg-bio-50', isSel);
-          btn.classList.toggle('border-slate-200', !isSel); btn.classList.toggle('bg-white', !isSel);
-        });
-        updateLiveBMI();
+        if (s.isConfigured && s.nutritionEnabled && s.height && s.weight) {
+          const savedBmi = parseFloat((parseFloat(s.weight) / ((parseFloat(s.height) / 100) ** 2)).toFixed(1));
+          showBmiAndPriorityModes(savedBmi, s.goal || 'maintain');
+        } else if (!pendingProfileData) {
+          document.getElementById('bmi-priority-panel')?.classList.add('hidden');
+        }
 
         const nutCheck = document.getElementById('nutrition-toggle'), nutInputs = document.getElementById('nutrition-inputs-area');
         if (nutCheck) nutCheck.checked = !!s.nutritionEnabled;
@@ -2546,15 +2565,29 @@
       if (!wake || !school || !home || !sleep) return showToast("Vui lòng điền đủ 4 mốc giờ sinh hoạt!", "warning");
       if (nut && (!height || !weight || height < 100 || weight < 25)) return showToast("Vui lòng nhập chiều cao (≥100cm) và cân nặng (≥25kg)!", "warning");
 
-      AppState.schedule = {
-        isConfigured: true, nickname: document.getElementById('user-nickname')?.value.trim() || "",
+      const collected = {
+        nickname: document.getElementById('user-nickname')?.value.trim() || "",
         age: (ageVal >= 10 && ageVal <= 90) ? ageVal : (role === 'freelancer' ? 25 : 17),
         role, wake, school, home, sleep, nutritionEnabled: nut,
         height: height || 165, weight: weight || 55,
-        gender: document.getElementById('user-gender')?.value || 'male',
-        goal: document.getElementById('user-goal')?.value || 'maintain'
+        gender: document.getElementById('user-gender')?.value || 'male'
       };
-      saveState(); showToast("Đã lưu lộ trình & thực đơn theo chế độ BMI bạn chọn!", "success");
+
+      if (!nut) {
+        pendingProfileData = null;
+        AppState.schedule = { ...collected, isConfigured: true, goal: 'maintain' };
+        document.getElementById('bmi-priority-panel')?.classList.add('hidden');
+        saveState();
+        showToast("Đã tạo Lộ trình Nhịp sinh học của bạn!", "success");
+        return;
+      }
+
+      pendingProfileData = collected;
+      const bmi = parseFloat((weight / ((height / 100) ** 2)).toFixed(1));
+      const preSelected = AppState.schedule?.isConfigured ? AppState.schedule.goal : null;
+      showBmiAndPriorityModes(bmi, preSelected);
+      document.getElementById('bmi-priority-panel')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      showToast(`BMI của bạn là ${bmi}! Hãy chọn 1 trong 4 chế độ ưu tiên bên dưới.`, "info");
     });
 
     function checkBadges() {
@@ -2593,7 +2626,7 @@
       loadDailyArticles();
       updatePomodoroDisplay();
       renderFoodLogs();
-      updateLiveBMI();
+      showBmiAndPriorityModes
     });
   </script>
 </body>
