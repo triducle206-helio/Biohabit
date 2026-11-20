@@ -236,25 +236,13 @@
         </div>
       </div>
 
-      <nav class="hidden md:flex items-center space-x-1 text-xs lg:text-sm font-semibold text-slate-600">
-        <button type="button" onclick="switchTab('dashboard')" id="nav-dashboard" class="tab-btn px-2.5 py-2 rounded-xl text-bio-700 bg-bio-50 hover:bg-bio-100 transition whitespace-nowrap">
-          <i class="fa-solid fa-house mr-1"></i> Tổng quan
-        </button>
-        <button type="button" onclick="switchTab('planner')" id="nav-planner" class="tab-btn px-2.5 py-2 rounded-xl hover:bg-slate-100 transition whitespace-nowrap">
-          <i class="fa-solid fa-clock mr-1"></i> Nhịp sinh & Thực đơn
-        </button>
-        <button type="button" onclick="switchTab('habits')" id="nav-habits" class="tab-btn px-2.5 py-2 rounded-xl hover:bg-slate-100 transition whitespace-nowrap">
-          <i class="fa-solid fa-calendar-check mr-1"></i> Thói quen & Quiz
-        </button>
-        <button type="button" onclick="switchTab('focus')" id="nav-focus" class="tab-btn px-2.5 py-2 rounded-xl hover:bg-slate-100 transition whitespace-nowrap">
-          <i class="fa-solid fa-headphones mr-1"></i> Học & Nhạc
-        </button>
-        <button type="button" onclick="switchTab('ai-tutor')" id="nav-ai-tutor" class="tab-btn px-2.5 py-2 rounded-xl hover:bg-slate-100 transition text-bio-600 font-bold whitespace-nowrap">
-          <i class="fa-solid fa-robot mr-1"></i> Gemini AI
-        </button>
-        <button type="button" onclick="switchTab('market')" id="nav-market" class="tab-btn px-2.5 py-2 rounded-xl hover:bg-slate-100 transition whitespace-nowrap">
-          <i class="fa-solid fa-diagram-project mr-1"></i> BioMarket
-        </button>
+     <nav class="hidden md:flex items-center space-x-1.5 text-xs lg:text-sm font-semibold text-slate-600">
+        <button type="button" onclick="switchTab('dashboard')" id="nav-dashboard" class="tab-btn px-3 py-2 rounded-xl text-bio-700 bg-bio-50 hover:bg-bio-100 transition whitespace-nowrap"><i class="fa-solid fa-house mr-1.5"></i>Tổng quan</button>
+        <button type="button" onclick="switchTab('planner')" id="nav-planner" class="tab-btn px-3 py-2 rounded-xl hover:bg-slate-100 transition whitespace-nowrap"><i class="fa-solid fa-utensils mr-1.5"></i>Thực đơn & BMI</button>
+        <button type="button" onclick="switchTab('habits')" id="nav-habits" class="tab-btn px-3 py-2 rounded-xl hover:bg-slate-100 transition whitespace-nowrap"><i class="fa-solid fa-check-double mr-1.5"></i>Thói quen & Quiz</button>
+        <button type="button" onclick="switchTab('focus')" id="nav-focus" class="tab-btn px-3 py-2 rounded-xl hover:bg-slate-100 transition whitespace-nowrap"><i class="fa-solid fa-headphones mr-1.5"></i>Học & Nhạc</button>
+        <button type="button" onclick="switchTab('ai-tutor')" id="nav-ai-tutor" class="tab-btn px-3 py-2 rounded-xl hover:bg-slate-100 transition text-bio-600 font-bold whitespace-nowrap"><i class="fa-solid fa-robot mr-1.5"></i>Gemini AI</button>
+        <button type="button" onclick="switchTab('market')" id="nav-market" class="tab-btn px-3 py-2 rounded-xl hover:bg-slate-100 transition whitespace-nowrap"><i class="fa-solid fa-diagram-project mr-1.5"></i>BioMarket</button>
       </nav>
 
       <div class="flex items-center space-x-1.5 sm:space-x-2.5 shrink-0">
@@ -361,125 +349,71 @@
     </section>
 
     <!-- ================= TAB 2: NHỊP SINH HỌC, 4 MỨC BMI & NHẬT KÝ 3 BUỔI ================= -->
+    <!-- ================= TAB 2: TÁCH 2 MỤC CON THOÁNG RÕ ================= -->
     <section id="tab-planner" class="hidden space-y-6">
-      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div class="bg-white p-5 sm:p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div>
           <h2 class="text-xl font-black text-slate-900 tracking-tight flex items-center">
-            <i class="fa-solid fa-sliders text-bio-600 mr-2.5"></i> Hồ Sơ BMI 4 Mức, Nhịp Sinh Học & Nhật Ký 3 Buổi
+            <i class="fa-solid fa-sliders text-bio-600 mr-2.5"></i> Thực Đơn, 4 Mức BMI & Nhật Ký Ăn Uống
           </h2>
-          <p class="text-xs sm:text-sm text-slate-600 mt-1">
-            Nhập chiều cao/cân nặng để xem phân loại 4 mức BMI, bấm chọn chế độ phù hợp và nhập bữa ăn hằng ngày (từng món hoặc đủ 3 buổi).
-          </p>
+          <p class="text-xs sm:text-sm text-slate-600 mt-1">Chọn mục bên cạnh để cài đặt chỉ số BMI hoặc ghi nhận bữa ăn hằng ngày.</p>
         </div>
-        <div id="planner-status-badge" class="shrink-0">
-          <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-200">
-            <i class="fa-solid fa-pen-to-square mr-1.5"></i> Chờ nhập thông tin
-          </span>
+        <div class="flex flex-wrap items-center gap-3">
+          <div class="flex bg-slate-100 p-1 rounded-xl text-xs font-extrabold border border-slate-200">
+            <button type="button" id="psub-btn-profile" onclick="switchPlannerSubTab('profile')" class="px-3.5 py-2 rounded-lg bg-white text-bio-700 shadow-sm transition">🧬 Hồ sơ BMI & Lộ trình</button>
+            <button type="button" id="psub-btn-food" onclick="switchPlannerSubTab('food')" class="px-3.5 py-2 rounded-lg text-slate-500 hover:text-slate-800 transition">🥗 Nhật ký 3 buổi & Calo</button>
+          </div>
+          <div id="planner-status-badge" class="shrink-0">
+            <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-200"><i class="fa-solid fa-pen-to-square mr-1.5"></i> Chờ nhập thông tin</span>
+          </div>
         </div>
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <!-- CỘT TRÁI: HỒ SƠ + GỢI Ý 4 MỨC BMI + NHẬP ĐỒ ĂN -->
-        <div class="lg:col-span-5 space-y-5">
+      <!-- MỤC CON 1: HỒ SƠ BMI & LỘ TRÌNH SINH HỌC -->
+      <div id="planner-sub-profile" class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        <div class="lg:col-span-5">
           <form id="bio-profile-form" novalidate class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
             <div class="border-b border-slate-100 pb-3 flex items-center justify-between">
-              <div>
-                <span class="text-xs font-extrabold text-bio-600 uppercase tracking-wider">Bước 1</span>
-                <h3 class="text-base font-bold text-slate-800">Thông tin & Thời gian biểu</h3>
-              </div>
-              <button type="button" onclick="fillSampleSchedule()" class="text-[11px] font-bold text-bio-700 bg-bio-50 hover:bg-bio-100 px-2.5 py-1 rounded-lg border border-bio-200 transition">
-                <i class="fa-solid fa-bolt mr-1"></i> Điền mẫu
-              </button>
+              <div><span class="text-xs font-extrabold text-bio-600 uppercase tracking-wider">Bước 1</span><h3 class="text-base font-bold text-slate-800">Thông tin & Thời gian biểu</h3></div>
+              <button type="button" onclick="fillSampleSchedule()" class="text-[11px] font-bold text-bio-700 bg-bio-50 hover:bg-bio-100 px-2.5 py-1 rounded-lg border border-bio-200 transition"><i class="fa-solid fa-bolt mr-1"></i> Điền mẫu</button>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-              <div>
-                <label class="block text-xs font-bold text-slate-600 mb-1.5">Tên / Biệt danh</label>
-                <input type="text" id="user-nickname" placeholder="VD: Minh Anh" class="w-full text-xs border border-slate-200 rounded-xl px-3 py-2.5 font-medium focus:ring-2 focus:ring-bio-500 outline-none">
-              </div>
-              <div>
-                <label class="block text-xs font-bold text-slate-600 mb-1.5">Tuổi</label>
-                <input type="number" id="user-age" min="10" max="90" placeholder="VD: 17" class="w-full text-xs border border-slate-200 rounded-xl px-3 py-2.5 font-medium focus:ring-2 focus:ring-bio-500 outline-none">
-              </div>
-              <div>
-                <label class="block text-xs font-bold text-slate-600 mb-1.5">Đối tượng</label>
-                <select id="user-role-select" class="w-full text-xs border border-slate-200 rounded-xl px-2.5 py-2.5 font-medium focus:ring-2 focus:ring-bio-500 outline-none">
-                  <option value="student">Học sinh / SV</option>
-                  <option value="freelancer">Đi làm / NC</option>
-                </select>
-              </div>
+            <div class="grid grid-cols-1 sm:grid-cols-12 gap-3">
+              <div class="sm:col-span-6"><label class="block text-xs font-bold text-slate-600 mb-1.5">Tên / Biệt danh</label><input type="text" id="user-nickname" placeholder="VD: Minh Anh" class="w-full text-xs border border-slate-200 rounded-xl px-3 py-2.5 font-medium focus:ring-2 focus:ring-bio-500 outline-none"></div>
+              <div class="sm:col-span-2"><label class="block text-xs font-bold text-slate-600 mb-1.5">Tuổi</label><input type="number" id="user-age" min="10" max="90" placeholder="17" class="w-full text-xs border border-slate-200 rounded-xl px-2.5 py-2.5 font-medium focus:ring-2 focus:ring-bio-500 outline-none"></div>
+              <div class="sm:col-span-4"><label class="block text-xs font-bold text-slate-600 mb-1.5">Đối tượng</label><select id="user-role-select" class="w-full text-xs border border-slate-200 rounded-xl px-2.5 py-2.5 font-medium focus:ring-2 focus:ring-bio-500 outline-none"><option value="student">Học sinh / SV</option><option value="freelancer">Đi làm / NC</option></select></div>
             </div>
 
             <div class="space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-100">
               <p class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Khung giờ sinh hoạt hằng ngày *</p>
               <div class="grid grid-cols-2 gap-3">
-                <div>
-                  <label class="block text-[11px] font-bold text-slate-600 mb-1"><i class="fa-regular fa-sun text-amber-500 mr-1"></i> Thức dậy</label>
-                  <input type="time" id="wake-time" class="w-full text-xs font-bold border border-slate-200 rounded-lg px-2.5 py-2 bg-white focus:ring-2 focus:ring-bio-500 outline-none">
-                </div>
-                <div>
-                  <label class="block text-[11px] font-bold text-slate-600 mb-1"><i class="fa-solid fa-school text-blue-500 mr-1"></i> Bắt đầu học/làm</label>
-                  <input type="time" id="school-time" class="w-full text-xs font-bold border border-slate-200 rounded-lg px-2.5 py-2 bg-white focus:ring-2 focus:ring-bio-500 outline-none">
-                </div>
-              </div>
-              <div class="grid grid-cols-2 gap-3">
-                <div>
-                  <label class="block text-[11px] font-bold text-slate-600 mb-1"><i class="fa-solid fa-house text-emerald-500 mr-1"></i> Về nhà / Chiều</label>
-                  <input type="time" id="home-time" class="w-full text-xs font-bold border border-slate-200 rounded-lg px-2.5 py-2 bg-white focus:ring-2 focus:ring-bio-500 outline-none">
-                </div>
-                <div>
-                  <label class="block text-[11px] font-bold text-slate-600 mb-1"><i class="fa-solid fa-moon text-indigo-500 mr-1"></i> Đi ngủ</label>
-                  <input type="time" id="sleep-time" class="w-full text-xs font-bold border border-slate-200 rounded-lg px-2.5 py-2 bg-white focus:ring-2 focus:ring-bio-500 outline-none">
-                </div>
+                <div><label class="block text-[11px] font-bold text-slate-600 mb-1"><i class="fa-regular fa-sun text-amber-500 mr-1"></i> Thức dậy</label><input type="time" id="wake-time" class="w-full text-xs font-bold border border-slate-200 rounded-lg px-2.5 py-2 bg-white"></div>
+                <div><label class="block text-[11px] font-bold text-slate-600 mb-1"><i class="fa-solid fa-school text-blue-500 mr-1"></i> Bắt đầu học/làm</label><input type="time" id="school-time" class="w-full text-xs font-bold border border-slate-200 rounded-lg px-2.5 py-2 bg-white"></div>
+                <div><label class="block text-[11px] font-bold text-slate-600 mb-1"><i class="fa-solid fa-house text-emerald-500 mr-1"></i> Về nhà / Chiều</label><input type="time" id="home-time" class="w-full text-xs font-bold border border-slate-200 rounded-lg px-2.5 py-2 bg-white"></div>
+                <div><label class="block text-[11px] font-bold text-slate-600 mb-1"><i class="fa-solid fa-moon text-indigo-500 mr-1"></i> Đi ngủ</label><input type="time" id="sleep-time" class="w-full text-xs font-bold border border-slate-200 rounded-lg px-2.5 py-2 bg-white"></div>
               </div>
             </div>
 
-            <!-- BƯỚC 2: CHỈ SỐ CƠ THỂ + GỢI Ý 4 MỨC BMI + BẤM CHỌN CHẾ ĐỘ -->
             <div class="border-t border-slate-100 pt-4">
               <div class="flex items-center justify-between">
-                <div>
-                  <span class="text-xs font-extrabold text-bio-600 uppercase tracking-wider">Bước 2</span>
-                  <h3 class="text-base font-bold text-slate-800">Chỉ số cơ thể & 4 Mức BMI</h3>
-                </div>
-                <label class="relative inline-flex items-center cursor-pointer" title="Bật/tắt phần gợi ý thực đơn">
-                  <input type="checkbox" id="nutrition-toggle" checked class="sr-only peer">
-                  <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-bio-600"></div>
-                </label>
+                <div><span class="text-xs font-extrabold text-bio-600 uppercase tracking-wider">Bước 2</span><h3 class="text-base font-bold text-slate-800">Chỉ số cơ thể & 4 Mức BMI</h3></div>
+                <label class="relative inline-flex items-center cursor-pointer"><input type="checkbox" id="nutrition-toggle" checked class="sr-only peer"><div class="w-11 h-6 bg-slate-200 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-bio-600"></div></label>
               </div>
-
-              <div id="nutrition-inputs-area" class="mt-4 space-y-3.5 bg-bio-50/50 p-4 rounded-xl border border-bio-100">
+              <div id="nutrition-inputs-area" class="mt-4 space-y-3 bg-bio-50/50 p-4 rounded-xl border border-bio-100">
                 <div class="grid grid-cols-3 gap-2.5">
-                  <div>
-                    <label class="block text-[11px] font-bold text-slate-600 mb-1">Chiều cao (cm)*</label>
-                    <input type="number" id="user-height" min="100" max="230" placeholder="VD: 165" class="w-full text-xs font-medium border border-slate-200 rounded-lg px-2.5 py-2 bg-white focus:ring-2 focus:ring-bio-500 outline-none">
-                  </div>
-                  <div>
-                    <label class="block text-[11px] font-bold text-slate-600 mb-1">Cân nặng (kg)*</label>
-                    <input type="number" id="user-weight" min="25" max="200" step="0.5" placeholder="VD: 55" class="w-full text-xs font-medium border border-slate-200 rounded-lg px-2.5 py-2 bg-white focus:ring-2 focus:ring-bio-500 outline-none">
-                  </div>
-                  <div>
-                    <label class="block text-[11px] font-bold text-slate-600 mb-1">Giới tính</label>
-                    <select id="user-gender" class="w-full text-xs font-medium border border-slate-200 rounded-lg px-2 py-2 bg-white focus:ring-2 focus:ring-bio-500 outline-none">
-                      <option value="male">Nam</option>
-                      <option value="female">Nữ</option>
-                    </select>
-                  </div>
+                  <div><label class="block text-[11px] font-bold text-slate-600 mb-1">Chiều cao (cm)*</label><input type="number" id="user-height" min="100" max="230" placeholder="165" class="w-full text-xs font-medium border border-slate-200 rounded-lg px-2.5 py-2 bg-white"></div>
+                  <div><label class="block text-[11px] font-bold text-slate-600 mb-1">Cân nặng (kg)*</label><input type="number" id="user-weight" min="25" max="200" step="0.5" placeholder="55" class="w-full text-xs font-medium border border-slate-200 rounded-lg px-2.5 py-2 bg-white"></div>
+                  <div><label class="block text-[11px] font-bold text-slate-600 mb-1">Giới tính</label><select id="user-gender" class="w-full text-xs font-medium border border-slate-200 rounded-lg px-2 py-2 bg-white"><option value="male">Nam</option><option value="female">Nữ</option></select></div>
                 </div>
-
-         <input type="hidden" id="user-goal" value="maintain">
+                <input type="hidden" id="user-goal" value="maintain">
               </div>
             </div>
 
             <div class="flex items-center gap-2">
-              <button type="submit" class="flex-grow py-3 bg-bio-600 hover:bg-bio-700 text-white font-bold text-sm rounded-xl transition shadow-md flex items-center justify-center">
-                <i class="fa-solid fa-calculator mr-2"></i> Phân Tích Thông Số & Tính BMI
-              </button>
-              <button type="button" id="btn-reset-profile" onclick="resetBioProfile()" title="Xóa dữ liệu để nhập lại từ đầu" class="hidden px-3.5 py-3 bg-slate-100 hover:bg-rose-50 text-slate-600 hover:text-rose-600 border border-slate-200 rounded-xl text-sm transition">
-                <i class="fa-solid fa-rotate-left"></i>
-              </button>
+              <button type="submit" class="flex-grow py-3 bg-bio-600 hover:bg-bio-700 text-white font-bold text-sm rounded-xl transition shadow-md flex items-center justify-center"><i class="fa-solid fa-calculator mr-2"></i> Phân Tích Thông Số & Tính BMI</button>
+              <button type="button" id="btn-reset-profile" onclick="resetBioProfile()" title="Xóa dữ liệu" class="hidden px-3.5 py-3 bg-slate-100 hover:bg-rose-50 text-slate-600 hover:text-rose-600 border border-slate-200 rounded-xl text-sm transition"><i class="fa-solid fa-rotate-left"></i></button>
             </div>
 
-            <!-- CHỈ HIỆN SAU KHI NHẬP ĐỦ THÔNG SỐ VÀ BẤM PHÂN TÍCH -->
             <div id="bmi-priority-panel" class="hidden pt-4 border-t border-slate-100 space-y-3.5 animate-reveal">
               <div id="bmi-live-box" class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 space-y-2.5">
                 <div class="flex items-center justify-between flex-wrap gap-1">
@@ -494,180 +428,21 @@
                 </div>
                 <p id="bmi-live-advice" class="text-[11px] text-slate-600 leading-snug"></p>
               </div>
-
               <div class="space-y-2">
-                <label class="block text-xs font-extrabold text-bio-700">
-                  <i class="fa-solid fa-hand-pointer mr-1"></i> Chọn 1 trong 4 chế độ ưu tiên cho thể trạng của bạn:
-                </label>
+                <label class="block text-xs font-extrabold text-bio-700"><i class="fa-solid fa-hand-pointer mr-1"></i> Chọn 1 trong 4 chế độ ưu tiên cho thể trạng của bạn:</label>
                 <div id="priority-modes-list" class="space-y-2"></div>
               </div>
             </div>
           </form>
-
-          <!-- MỤC NHẬP ĐỒ ĂN THỨC UỐNG (2 CHẾ ĐỘ: TỪNG MÓN / ĐỦ 3 BUỔI) -->
-          <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-            <div class="border-b border-slate-100 pb-3 flex items-center justify-between flex-wrap gap-2">
-              <div>
-                <span class="text-xs font-extrabold text-amber-600 uppercase tracking-wider">Nhật ký hôm nay</span>
-                <h3 class="text-base font-bold text-slate-800 flex items-center">
-                  <i class="fa-solid fa-bowl-food text-bio-600 mr-2"></i> Nhập Đồ Ăn & Thức Uống
-                </h3>
-              </div>
-              <span class="text-[11px] font-bold text-slate-400" id="food-today-date-label"></span>
-            </div>
-
-            <!-- Chuyển chế độ nhập từng món / đủ 3 buổi 1 lần -->
-            <div class="grid grid-cols-2 gap-1.5 bg-slate-100 p-1 rounded-xl text-xs font-bold">
-              <button type="button" id="food-mode-btn-single" onclick="switchFoodInputMode('single')" class="py-2 rounded-lg bg-white text-bio-700 shadow-sm transition">
-                <i class="fa-solid fa-plus-circle mr-1"></i> Nhập từng món
-              </button>
-              <button type="button" id="food-mode-btn-batch" onclick="switchFoodInputMode('batch')" class="py-2 rounded-lg text-slate-500 hover:text-slate-800 transition">
-                <i class="fa-solid fa-layer-group mr-1"></i> Nhập đủ 3 buổi 1 lần
-              </button>
-            </div>
-
-            <!-- CHẾ ĐỘ 1: NHẬP TỪNG MÓN -->
-            <div id="food-single-panel" class="space-y-3">
-              <form id="food-log-form" onsubmit="addFoodLogItem(event)" class="space-y-3">
-                <div class="grid grid-cols-2 gap-2.5">
-                  <div>
-                    <label class="block text-[11px] font-bold text-slate-600 mb-1">Bữa / Loại</label>
-                    <select id="food-meal-type" class="w-full text-xs font-medium border border-slate-200 rounded-xl px-2.5 py-2 focus:ring-2 focus:ring-bio-500 outline-none">
-                      <option value="Sáng">🌅 Bữa sáng</option>
-                      <option value="Trưa">☀️ Bữa trưa</option>
-                      <option value="Tối">🌙 Bữa tối</option>
-                      <option value="Ăn vặt / Nước">🥤 Ăn vặt / Thức uống</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label class="block text-[11px] font-bold text-slate-600 mb-1">Thời điểm ăn/uống</label>
-                    <input type="time" id="food-time-input" class="w-full text-xs font-bold border border-slate-200 rounded-xl px-2.5 py-2 focus:ring-2 focus:ring-bio-500 outline-none">
-                  </div>
-                </div>
-
-                <div>
-                  <label class="block text-[11px] font-bold text-slate-600 mb-1">Tên món ăn / thức uống & khẩu phần</label>
-                  <div class="flex gap-2">
-                    <input type="text" id="food-name-input" placeholder="VD: 1 tô phở bò, 2 quả trứng luộc..." class="flex-grow text-xs border border-slate-200 rounded-xl px-3 py-2.5 focus:ring-2 focus:ring-bio-500 outline-none">
-                    <button type="submit" class="px-4 py-2.5 bg-bio-600 hover:bg-bio-700 text-white font-bold text-xs rounded-xl transition shrink-0 shadow-sm">
-                      <i class="fa-solid fa-plus mr-1"></i> Thêm
-                    </button>
-                  </div>
-                </div>
-              </form>
-
-              <div class="space-y-1.5">
-                <span class="text-[11px] font-bold text-slate-500">Thêm nhanh món phổ biến:</span>
-                <div class="flex flex-wrap gap-1.5 text-[11px]">
-                  <button type="button" onclick="quickAddFood('1 tô phở bò', 'Sáng')" class="px-2.5 py-1 bg-slate-100 hover:bg-bio-50 hover:text-bio-700 rounded-full font-semibold transition">🍜 Phở bò</button>
-                  <button type="button" onclick="quickAddFood('1 đĩa cơm sườn', 'Trưa')" class="px-2.5 py-1 bg-slate-100 hover:bg-bio-50 hover:text-bio-700 rounded-full font-semibold transition">🍚 Cơm sườn</button>
-                  <button type="button" onclick="quickAddFood('1 ổ bánh mì thịt', 'Sáng')" class="px-2.5 py-1 bg-slate-100 hover:bg-bio-50 hover:text-bio-700 rounded-full font-semibold transition">🥖 Bánh mì</button>
-                  <button type="button" onclick="quickAddFood('2 quả trứng luộc', 'Sáng')" class="px-2.5 py-1 bg-slate-100 hover:bg-bio-50 hover:text-bio-700 rounded-full font-semibold transition">🥚 2 Trứng luộc</button>
-                  <button type="button" onclick="quickAddFood('150g ức gà + rau luộc', 'Tối')" class="px-2.5 py-1 bg-slate-100 hover:bg-bio-50 hover:text-bio-700 rounded-full font-semibold transition">🍗 Ức gà & Rau</button>
-                  <button type="button" onclick="quickAddFood('1 ly trà sữa trân châu', 'Ăn vặt / Nước')" class="px-2.5 py-1 bg-slate-100 hover:bg-bio-50 hover:text-bio-700 rounded-full font-semibold transition">🧋 Trà sữa</button>
-                  <button type="button" onclick="quickAddFood('1 ly cà phê sữa đá', 'Ăn vặt / Nước')" class="px-2.5 py-1 bg-slate-100 hover:bg-bio-50 hover:text-bio-700 rounded-full font-semibold transition">☕ Cà phê sữa</button>
-                  <button type="button" onclick="quickAddFood('500ml nước lọc', 'Ăn vặt / Nước')" class="px-2.5 py-1 bg-slate-100 hover:bg-bio-50 hover:text-bio-700 rounded-full font-semibold transition">💧 500ml Nước</button>
-                </div>
-              </div>
-            </div>
-
-            <!-- CHẾ ĐỘ 2: NHẬP ĐỦ 3 BUỔI 1 LẦN -->
-            <div id="food-batch-panel" class="hidden space-y-3">
-              <form id="food-batch-form" onsubmit="submitBatchFoodLog(event)" class="space-y-3">
-                <div class="p-3 rounded-xl bg-amber-50/70 border border-amber-200 space-y-1.5">
-                  <div class="flex items-center justify-between">
-                    <label class="text-[11px] font-extrabold text-amber-800">🌅 Bữa Sáng *</label>
-                    <input type="time" id="batch-time-morning" value="07:00" class="text-[11px] font-bold border border-amber-200 rounded-lg px-2 py-1 bg-white">
-                  </div>
-                  <input type="text" id="batch-food-morning" placeholder="VD: 1 tô phở bò, 1 ly sữa tươi" class="w-full text-xs border border-amber-200 rounded-lg px-3 py-2 bg-white focus:ring-2 focus:ring-bio-500 outline-none">
-                </div>
-
-                <div class="p-3 rounded-xl bg-emerald-50/70 border border-emerald-200 space-y-1.5">
-                  <div class="flex items-center justify-between">
-                    <label class="text-[11px] font-extrabold text-emerald-800">☀️ Bữa Trưa *</label>
-                    <input type="time" id="batch-time-noon" value="12:00" class="text-[11px] font-bold border border-emerald-200 rounded-lg px-2 py-1 bg-white">
-                  </div>
-                  <input type="text" id="batch-food-noon" placeholder="VD: 1 đĩa cơm sườn + canh rau" class="w-full text-xs border border-emerald-200 rounded-lg px-3 py-2 bg-white focus:ring-2 focus:ring-bio-500 outline-none">
-                </div>
-
-                <div class="p-3 rounded-xl bg-indigo-50/60 border border-indigo-200 space-y-1.5">
-                  <div class="flex items-center justify-between">
-                    <label class="text-[11px] font-extrabold text-indigo-700">🌙 Bữa Tối *</label>
-                    <input type="time" id="batch-time-evening" value="18:30" class="text-[11px] font-bold border border-indigo-200 rounded-lg px-2 py-1 bg-white">
-                  </div>
-                  <input type="text" id="batch-food-evening" placeholder="VD: 1 bát cơm, 150g ức gà, rau luộc" class="w-full text-xs border border-indigo-200 rounded-lg px-3 py-2 bg-white focus:ring-2 focus:ring-bio-500 outline-none">
-                </div>
-
-                <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1.5">
-                  <div class="flex items-center justify-between">
-                    <label class="text-[11px] font-bold text-slate-600">🥤 Ăn vặt / Nước uống (tùy chọn)</label>
-                    <input type="time" id="batch-time-snack" value="15:00" class="text-[11px] font-bold border border-slate-200 rounded-lg px-2 py-1 bg-white">
-                  </div>
-                  <input type="text" id="batch-food-snack" placeholder="VD: 1 ly trà sữa, 1 quả chuối, 1000ml nước lọc" class="w-full text-xs border border-slate-200 rounded-lg px-3 py-2 bg-white focus:ring-2 focus:ring-bio-500 outline-none">
-                </div>
-
-                <button type="submit" class="w-full py-2.5 bg-bio-600 hover:bg-bio-700 text-white font-bold text-xs rounded-xl transition shadow-md flex items-center justify-center">
-                  <i class="fa-solid fa-check-double mr-1.5"></i> Lưu đủ 3 buổi hôm nay & Phân tích
-                </button>
-              </form>
-            </div>
-          </div>
         </div>
 
-        <!-- CỘT PHẢI: PHÂN TÍCH ĐỒ ĂN HÔM NAY + LỘ TRÌNH SINH HỌC -->
         <div class="lg:col-span-7 space-y-5">
-          <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-            <div class="flex items-center justify-between border-b border-slate-100 pb-3 flex-wrap gap-2">
-              <div>
-                <h3 class="text-base font-extrabold text-slate-900 flex items-center">
-                  <i class="fa-solid fa-magnifying-glass-chart text-bio-600 mr-2"></i> Phân Tích Đồ Ăn & Thức Uống Hôm Nay
-                </h3>
-                <p class="text-xs text-slate-500 mt-0.5">Ước lượng năng lượng tự động & đánh giá sinh học bằng Gemini AI</p>
-              </div>
-              <div class="flex items-center gap-2">
-                <button type="button" onclick="clearTodayFoodLogs()" class="text-[11px] font-bold text-slate-500 hover:text-rose-600 px-2.5 py-1.5 rounded-lg border border-slate-200 transition">
-                  <i class="fa-solid fa-trash-can mr-1"></i> Xóa ngày
-                </button>
-                <button type="button" id="btn-analyze-food-ai" onclick="analyzeFoodWithGemini()" class="text-xs bg-bio-600 hover:bg-bio-700 text-white px-3.5 py-1.5 rounded-xl font-bold transition shadow-sm flex items-center">
-                  <i class="fa-solid fa-wand-magic-sparkles mr-1.5" id="food-ai-icon"></i>
-                  <span id="food-ai-btn-text">Phân tích sâu (AI)</span>
-                </button>
-              </div>
-            </div>
-
-            <div id="food-summary-bars" class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
-              <div class="flex items-center justify-between text-xs font-bold">
-                <span class="text-slate-700">Tổng năng lượng đã nạp: <strong id="food-total-kcal" class="text-bio-700 text-sm">0</strong> / <span id="food-target-kcal">2000</span> kcal</span>
-                <span id="food-kcal-status" class="px-2 py-0.5 rounded-full text-[11px] bg-slate-200 text-slate-700">Chưa có món</span>
-              </div>
-              <div class="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden">
-                <div id="food-kcal-progress" class="bg-bio-600 h-full transition-all duration-500" style="width: 0%"></div>
-              </div>
-              <div class="grid grid-cols-3 gap-2 text-center text-[11px]">
-                <div class="bg-white p-2 rounded-lg border border-slate-200"><span class="block text-slate-400 font-semibold">Đạm (Protein)</span><span class="font-extrabold text-emerald-700" id="food-total-protein">0g</span></div>
-                <div class="bg-white p-2 rounded-lg border border-slate-200"><span class="block text-slate-400 font-semibold">Tinh bột (Carb)</span><span class="font-extrabold text-amber-700" id="food-total-carb">0g</span></div>
-                <div class="bg-white p-2 rounded-lg border border-slate-200"><span class="block text-slate-400 font-semibold">Chất béo (Fat)</span><span class="font-extrabold text-rose-700" id="food-total-fat">0g</span></div>
-              </div>
-            </div>
-
-            <div id="food-log-list" class="space-y-2 max-h-[240px] overflow-y-auto pr-1"></div>
-            <div id="food-local-insights" class="space-y-2"></div>
-
-            <div id="food-ai-analysis-box" class="hidden bg-bio-50/70 border border-bio-200 rounded-xl p-4 space-y-2 animate-reveal">
-              <div class="flex items-center justify-between">
-                <span class="text-xs font-extrabold text-bio-800 flex items-center"><i class="fa-solid fa-robot mr-1.5"></i> Nhận xét Dinh dưỡng & Sinh học từ Gemini AI</span>
-                <span class="text-[10px] text-slate-500" id="food-ai-timestamp"></span>
-              </div>
-              <div id="food-ai-analysis-content" class="text-xs text-slate-700 leading-relaxed space-y-1.5"></div>
-            </div>
-          </div>
-
-          <div id="planner-empty-state" class="bg-white p-8 sm:p-10 rounded-2xl border-2 border-dashed border-bio-200 text-center flex flex-col items-center justify-center min-h-[340px] space-y-4">
+          <div id="planner-empty-state" class="bg-white p-10 rounded-2xl border-2 border-dashed border-bio-200 text-center flex flex-col items-center justify-center min-h-[420px] space-y-4">
             <div class="w-16 h-16 rounded-3xl bg-bio-50 text-bio-600 flex items-center justify-center text-3xl shadow-inner border border-bio-100"><i class="fa-solid fa-clipboard-user"></i></div>
             <div class="max-w-md space-y-2">
               <span class="inline-block px-3 py-1 rounded-full text-[11px] font-extrabold bg-bio-100 text-bio-700 uppercase tracking-wider">Đang chờ hồ sơ cá nhân</span>
               <h3 class="text-lg font-extrabold text-slate-800">Gợi ý Thực đơn & Nhịp sinh học đang được khóa</h3>
-              <p class="text-xs sm:text-sm text-slate-500 leading-relaxed">Hãy điền thông tin, bấm chọn chế độ BMI ở bảng bên trái rồi nhấn <strong>"Lưu & Tạo Lộ Trình Sinh Học"</strong>!</p>
+              <p class="text-xs sm:text-sm text-slate-500 leading-relaxed">Hãy điền thông tin ở cột bên trái, bấm tính BMI rồi chọn 1 chế độ ưu tiên để mở khóa thực đơn & đồng hồ sinh học!</p>
             </div>
           </div>
 
@@ -677,17 +452,17 @@
                 <h4 class="font-extrabold text-sm sm:text-base flex items-center"><i class="fa-solid fa-id-card-clip mr-2"></i>Lộ trình sinh học của <span id="summary-user-name" class="underline decoration-bio-200 ml-1">bạn</span></h4>
                 <span class="text-[11px] font-bold bg-white/20 px-2.5 py-0.5 rounded-full" id="summary-role-label">Học sinh</span>
               </div>
-              <div class="grid grid-cols-3 gap-2.5 text-center">
-                <div class="bg-white/15 rounded-xl p-2.5 border border-white/15"><span class="block text-[10px] text-white/80 uppercase font-bold">Thời lượng ngủ</span><span class="text-sm sm:text-base font-black" id="summary-sleep-hours">7.5 giờ</span></div>
-                <div class="bg-white/15 rounded-xl p-2.5 border border-white/15"><span class="block text-[10px] text-white/80 uppercase font-bold">Nước cần nạp/ngày</span><span class="text-sm sm:text-base font-black" id="summary-water-liters">1.9 Lít</span></div>
-                <div class="bg-white/15 rounded-xl p-2.5 border border-white/15"><span class="block text-[10px] text-white/80 uppercase font-bold">Năng lượng mục tiêu</span><span class="text-sm sm:text-base font-black" id="summary-calories">2000 kcal</span></div>
+              <div class="grid grid-cols-3 gap-3 text-center">
+                <div class="bg-white/15 rounded-xl p-3 border border-white/15"><span class="block text-[10px] text-white/80 uppercase font-bold">Thời lượng ngủ</span><span class="text-sm sm:text-base font-black" id="summary-sleep-hours">7.5 giờ</span></div>
+                <div class="bg-white/15 rounded-xl p-3 border border-white/15"><span class="block text-[10px] text-white/80 uppercase font-bold">Nước cần nạp/ngày</span><span class="text-sm sm:text-base font-black" id="summary-water-liters">1.9 Lít</span></div>
+                <div class="bg-white/15 rounded-xl p-3 border border-white/15"><span class="block text-[10px] text-white/80 uppercase font-bold">Năng lượng mục tiêu</span><span class="text-sm sm:text-base font-black" id="summary-calories">2000 kcal</span></div>
               </div>
             </div>
 
             <div id="nutrition-result-card" class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
               <div class="flex items-center justify-between border-b border-slate-100 pb-3 flex-wrap gap-2">
                 <h4 class="font-extrabold text-base flex items-center text-bio-700"><i class="fa-solid fa-utensils mr-2 text-bio-600"></i> Bảng Gợi Ý Thực Đơn Cá Nhân Hóa</h4>
-                <span id="nutrition-bmi-pill" class="text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800">BMI: 20.2 (Cân đối)</span>
+                <span id="nutrition-bmi-pill" class="text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800">BMI: 20.2</span>
               </div>
               <div id="nutrition-details" class="space-y-4"></div>
             </div>
@@ -697,41 +472,95 @@
                 <h3 class="text-base font-bold text-slate-900 flex items-center"><i class="fa-solid fa-wave-square text-bio-600 mr-2"></i> Lược Đồ Nhịp Sinh Học (Circadian Rhythm)</h3>
                 <span class="text-[11px] font-semibold text-slate-400">Tính theo giờ của bạn</span>
               </div>
-              <div class="relative mt-6 space-y-6 before:absolute before:inset-0 before:left-3.5 before:w-0.5 before:bg-gradient-to-b before:from-amber-400 before:via-bio-400 before:to-indigo-500">
-                <div class="relative flex items-start space-x-4 pl-1">
-                  <div class="w-6 h-6 rounded-full bg-amber-400 border-4 border-white shadow-sm flex items-center justify-center shrink-0 z-10 text-[10px] text-white"><i class="fa-solid fa-sun"></i></div>
-                  <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/80 flex-grow">
-                    <div class="flex items-center justify-between flex-wrap gap-1"><span class="text-xs font-extrabold text-amber-700 bg-amber-100 px-2 py-0.5 rounded-md" id="time-wake-display">06:00 AM</span><span class="text-[11px] font-bold text-slate-400">Cortisol Đỉnh Cao</span></div>
-                    <h4 class="text-sm font-bold text-slate-800 mt-2">Bình minh: Đánh thức hệ nội tiết & Bù nước</h4>
-                    <p class="text-xs text-slate-600 mt-1">Uống ngay 300ml nước ấm và tiếp xúc ánh sáng mặt trời để tế bào hạch võng mạc (ipRGCs) đồng bộ đồng hồ SCN.</p>
-                  </div>
-                </div>
-                <div class="relative flex items-start space-x-4 pl-1">
-                  <div class="w-6 h-6 rounded-full bg-bio-500 border-4 border-white shadow-sm flex items-center justify-center shrink-0 z-10 text-[10px] text-white"><i class="fa-solid fa-brain"></i></div>
-                  <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/80 flex-grow">
-                    <div class="flex items-center justify-between flex-wrap gap-1"><span class="text-xs font-extrabold text-bio-800 bg-bio-100 px-2 py-0.5 rounded-md" id="time-school-display">07:45 - 10:45 AM</span><span class="text-[11px] font-bold text-bio-600">Đỉnh cao tư duy</span></div>
-                    <h4 class="text-sm font-bold text-slate-800 mt-2">Giờ vàng học thuật: Vỏ não trước trán (Prefrontal Cortex)</h4>
-                    <p class="text-xs text-slate-600 mt-1">Acetylcholine và Dopamine đạt mức tối ưu nhất, thích hợp giải bài tập tư duy logic cao.</p>
-                  </div>
-                </div>
-                <div class="relative flex items-start space-x-4 pl-1">
-                  <div class="w-6 h-6 rounded-full bg-blue-500 border-4 border-white shadow-sm flex items-center justify-center shrink-0 z-10 text-[10px] text-white"><i class="fa-solid fa-dumbbell"></i></div>
-                  <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/80 flex-grow">
-                    <div class="flex items-center justify-between flex-wrap gap-1"><span class="text-xs font-extrabold text-blue-700 bg-blue-100 px-2 py-0.5 rounded-md" id="time-home-display">05:00 - 06:00 PM</span><span class="text-[11px] font-bold text-blue-500">Thể lực cực đại</span></div>
-                    <h4 class="text-sm font-bold text-slate-800 mt-2">Nhiệt độ cơ thể cao nhất: Vận động thể thao</h4>
-                    <p class="text-xs text-slate-600 mt-1">Vận động 20–40 phút giúp tiết hormone BDNF hỗ trợ tạo nơ-ron thần kinh mới.</p>
-                  </div>
-                </div>
-                <div class="relative flex items-start space-x-4 pl-1">
-                  <div class="w-6 h-6 rounded-full bg-indigo-600 border-4 border-white shadow-sm flex items-center justify-center shrink-0 z-10 text-[10px] text-white"><i class="fa-solid fa-moon"></i></div>
-                  <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/80 flex-grow">
-                    <div class="flex items-center justify-between flex-wrap gap-1"><span class="text-xs font-extrabold text-indigo-700 bg-indigo-100 px-2 py-0.5 rounded-md" id="time-sleep-display">09:45 - 10:30 PM</span><span class="text-[11px] font-bold text-indigo-500">Tuyến tùng & Melatonin</span></div>
-                    <h4 class="text-sm font-bold text-slate-800 mt-2">Tắt ánh sáng xanh – Kích hoạt Melatonin</h4>
-                    <p class="text-xs text-slate-600 mt-1">Ngưng dùng điện thoại trước khi ngủ 45 phút để chuẩn bị cho chu trình tự thực bào Autophagy ban đêm.</p>
-                  </div>
-                </div>
+              <div class="relative mt-6 space-y-5 before:absolute before:inset-0 before:left-3.5 before:w-0.5 before:bg-gradient-to-b before:from-amber-400 before:via-bio-400 before:to-indigo-500">
+                <div class="relative flex items-start space-x-4 pl-1"><div class="w-6 h-6 rounded-full bg-amber-400 border-4 border-white shadow-sm flex items-center justify-center shrink-0 z-10 text-[10px] text-white"><i class="fa-solid fa-sun"></i></div><div class="bg-slate-50 p-4 rounded-xl border border-slate-200/80 flex-grow"><div class="flex items-center justify-between flex-wrap gap-1"><span class="text-xs font-extrabold text-amber-700 bg-amber-100 px-2 py-0.5 rounded-md" id="time-wake-display">06:00 AM</span><span class="text-[11px] font-bold text-slate-400">Cortisol Đỉnh Cao</span></div><h4 class="text-sm font-bold text-slate-800 mt-2">Bình minh: Đánh thức hệ nội tiết & Bù nước</h4><p class="text-xs text-slate-600 mt-1">Uống ngay 300ml nước ấm và tiếp xúc ánh sáng mặt trời để tế bào hạch võng mạc (ipRGCs) đồng bộ đồng hồ SCN.</p></div></div>
+                <div class="relative flex items-start space-x-4 pl-1"><div class="w-6 h-6 rounded-full bg-bio-500 border-4 border-white shadow-sm flex items-center justify-center shrink-0 z-10 text-[10px] text-white"><i class="fa-solid fa-brain"></i></div><div class="bg-slate-50 p-4 rounded-xl border border-slate-200/80 flex-grow"><div class="flex items-center justify-between flex-wrap gap-1"><span class="text-xs font-extrabold text-bio-800 bg-bio-100 px-2 py-0.5 rounded-md" id="time-school-display">07:45 - 10:45 AM</span><span class="text-[11px] font-bold text-bio-600">Đỉnh cao tư duy</span></div><h4 class="text-sm font-bold text-slate-800 mt-2">Giờ vàng học thuật: Vỏ não trước trán (Prefrontal Cortex)</h4><p class="text-xs text-slate-600 mt-1">Acetylcholine và Dopamine đạt mức tối ưu nhất, thích hợp giải bài tập tư duy logic cao.</p></div></div>
+                <div class="relative flex items-start space-x-4 pl-1"><div class="w-6 h-6 rounded-full bg-blue-500 border-4 border-white shadow-sm flex items-center justify-center shrink-0 z-10 text-[10px] text-white"><i class="fa-solid fa-dumbbell"></i></div><div class="bg-slate-50 p-4 rounded-xl border border-slate-200/80 flex-grow"><div class="flex items-center justify-between flex-wrap gap-1"><span class="text-xs font-extrabold text-blue-700 bg-blue-100 px-2 py-0.5 rounded-md" id="time-home-display">05:00 - 06:00 PM</span><span class="text-[11px] font-bold text-blue-500">Thể lực cực đại</span></div><h4 class="text-sm font-bold text-slate-800 mt-2">Nhiệt độ cơ thể cao nhất: Vận động thể thao</h4><p class="text-xs text-slate-600 mt-1">Vận động 20–40 phút giúp tiết hormone BDNF hỗ trợ tạo nơ-ron thần kinh mới.</p></div></div>
+                <div class="relative flex items-start space-x-4 pl-1"><div class="w-6 h-6 rounded-full bg-indigo-600 border-4 border-white shadow-sm flex items-center justify-center shrink-0 z-10 text-[10px] text-white"><i class="fa-solid fa-moon"></i></div><div class="bg-slate-50 p-4 rounded-xl border border-slate-200/80 flex-grow"><div class="flex items-center justify-between flex-wrap gap-1"><span class="text-xs font-extrabold text-indigo-700 bg-indigo-100 px-2 py-0.5 rounded-md" id="time-sleep-display">09:45 - 10:30 PM</span><span class="text-[11px] font-bold text-indigo-500">Tuyến tùng & Melatonin</span></div><h4 class="text-sm font-bold text-slate-800 mt-2">Tắt ánh sáng xanh – Kích hoạt Melatonin</h4><p class="text-xs text-slate-600 mt-1">Ngưng dùng điện thoại trước khi ngủ 45 phút để chuẩn bị cho chu trình tự thực bào Autophagy ban đêm.</p></div></div>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MỤC CON 2: NHẬT KÝ 3 BUỔI & PHÂN TÍCH CALO (ĐẶT RIÊNG 1 MÀN HÌNH RỘNG) -->
+      <div id="planner-sub-food" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        <div class="lg:col-span-5 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+          <div class="border-b border-slate-100 pb-3 flex items-center justify-between flex-wrap gap-2">
+            <div><span class="text-xs font-extrabold text-amber-600 uppercase tracking-wider">Nhật ký hôm nay</span><h3 class="text-base font-bold text-slate-800 flex items-center"><i class="fa-solid fa-bowl-food text-bio-600 mr-2"></i> Nhập Đồ Ăn & Thức Uống</h3></div>
+            <span class="text-[11px] font-bold text-slate-400" id="food-today-date-label"></span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-1.5 bg-slate-100 p-1 rounded-xl text-xs font-bold">
+            <button type="button" id="food-mode-btn-single" onclick="switchFoodInputMode('single')" class="py-2 rounded-lg bg-white text-bio-700 shadow-sm transition"><i class="fa-solid fa-plus-circle mr-1"></i> Nhập từng món</button>
+            <button type="button" id="food-mode-btn-batch" onclick="switchFoodInputMode('batch')" class="py-2 rounded-lg text-slate-500 hover:text-slate-800 transition"><i class="fa-solid fa-layer-group mr-1"></i> Nhập đủ 3 buổi 1 lần</button>
+          </div>
+
+          <div id="food-single-panel" class="space-y-3">
+            <form id="food-log-form" onsubmit="addFoodLogItem(event)" class="space-y-3">
+              <div class="grid grid-cols-2 gap-2.5">
+                <div><label class="block text-[11px] font-bold text-slate-600 mb-1">Bữa / Loại</label><select id="food-meal-type" class="w-full text-xs font-medium border border-slate-200 rounded-xl px-2.5 py-2"><option value="Sáng">🌅 Bữa sáng</option><option value="Trưa">☀️ Bữa trưa</option><option value="Tối">🌙 Bữa tối</option><option value="Ăn vặt / Nước">🥤 Ăn vặt / Thức uống</option></select></div>
+                <div><label class="block text-[11px] font-bold text-slate-600 mb-1">Thời điểm ăn/uống</label><input type="time" id="food-time-input" class="w-full text-xs font-bold border border-slate-200 rounded-xl px-2.5 py-2"></div>
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold text-slate-600 mb-1">Tên món ăn / thức uống & khẩu phần</label>
+                <div class="flex gap-2"><input type="text" id="food-name-input" placeholder="VD: 1 tô phở bò, 2 quả trứng luộc..." class="flex-grow text-xs border border-slate-200 rounded-xl px-3 py-2.5"><button type="submit" class="px-4 py-2.5 bg-bio-600 text-white font-bold text-xs rounded-xl shrink-0 shadow-sm"><i class="fa-solid fa-plus mr-1"></i> Thêm</button></div>
+              </div>
+            </form>
+            <div class="space-y-1.5">
+              <span class="text-[11px] font-bold text-slate-500">Thêm nhanh món phổ biến:</span>
+              <div class="flex flex-wrap gap-1.5 text-[11px]">
+                <button type="button" onclick="quickAddFood('1 tô phở bò', 'Sáng')" class="px-2.5 py-1 bg-slate-100 hover:bg-bio-50 rounded-full font-semibold">🍜 Phở bò</button>
+                <button type="button" onclick="quickAddFood('1 đĩa cơm sườn', 'Trưa')" class="px-2.5 py-1 bg-slate-100 hover:bg-bio-50 rounded-full font-semibold">🍚 Cơm sườn</button>
+                <button type="button" onclick="quickAddFood('1 ổ bánh mì thịt', 'Sáng')" class="px-2.5 py-1 bg-slate-100 hover:bg-bio-50 rounded-full font-semibold">🥖 Bánh mì</button>
+                <button type="button" onclick="quickAddFood('2 quả trứng luộc', 'Sáng')" class="px-2.5 py-1 bg-slate-100 hover:bg-bio-50 rounded-full font-semibold">🥚 2 Trứng luộc</button>
+                <button type="button" onclick="quickAddFood('150g ức gà + rau luộc', 'Tối')" class="px-2.5 py-1 bg-slate-100 hover:bg-bio-50 rounded-full font-semibold">🍗 Ức gà & Rau</button>
+                <button type="button" onclick="quickAddFood('1 ly trà sữa trân châu', 'Ăn vặt / Nước')" class="px-2.5 py-1 bg-slate-100 hover:bg-bio-50 rounded-full font-semibold">🧋 Trà sữa</button>
+                <button type="button" onclick="quickAddFood('1 ly cà phê sữa đá', 'Ăn vặt / Nước')" class="px-2.5 py-1 bg-slate-100 hover:bg-bio-50 rounded-full font-semibold">☕ Cà phê sữa</button>
+                <button type="button" onclick="quickAddFood('500ml nước lọc', 'Ăn vặt / Nước')" class="px-2.5 py-1 bg-slate-100 hover:bg-bio-50 rounded-full font-semibold">💧 500ml Nước</button>
+              </div>
+            </div>
+          </div>
+
+          <div id="food-batch-panel" class="hidden space-y-3">
+            <form id="food-batch-form" onsubmit="submitBatchFoodLog(event)" class="space-y-3">
+              <div class="p-3 rounded-xl bg-amber-50/70 border border-amber-200 space-y-1.5"><div class="flex items-center justify-between"><label class="text-[11px] font-extrabold text-amber-800">🌅 Bữa Sáng *</label><input type="time" id="batch-time-morning" value="07:00" class="text-[11px] font-bold border border-amber-200 rounded-lg px-2 py-1 bg-white"></div><input type="text" id="batch-food-morning" placeholder="VD: 1 tô phở bò, 1 ly sữa tươi" class="w-full text-xs border border-amber-200 rounded-lg px-3 py-2 bg-white"></div>
+              <div class="p-3 rounded-xl bg-emerald-50/70 border border-emerald-200 space-y-1.5"><div class="flex items-center justify-between"><label class="text-[11px] font-extrabold text-emerald-800">☀️ Bữa Trưa *</label><input type="time" id="batch-time-noon" value="12:00" class="text-[11px] font-bold border border-emerald-200 rounded-lg px-2 py-1 bg-white"></div><input type="text" id="batch-food-noon" placeholder="VD: 1 đĩa cơm sườn + canh rau" class="w-full text-xs border border-emerald-200 rounded-lg px-3 py-2 bg-white"></div>
+              <div class="p-3 rounded-xl bg-indigo-50/60 border border-indigo-200 space-y-1.5"><div class="flex items-center justify-between"><label class="text-[11px] font-extrabold text-indigo-700">🌙 Bữa Tối *</label><input type="time" id="batch-time-evening" value="18:30" class="text-[11px] font-bold border border-indigo-200 rounded-lg px-2 py-1 bg-white"></div><input type="text" id="batch-food-evening" placeholder="VD: 1 bát cơm, 150g ức gà, rau luộc" class="w-full text-xs border border-indigo-200 rounded-lg px-3 py-2 bg-white"></div>
+              <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1.5"><div class="flex items-center justify-between"><label class="text-[11px] font-bold text-slate-600">🥤 Ăn vặt / Nước uống (tùy chọn)</label><input type="time" id="batch-time-snack" value="15:00" class="text-[11px] font-bold border border-slate-200 rounded-lg px-2 py-1 bg-white"></div><input type="text" id="batch-food-snack" placeholder="VD: 1 ly trà sữa, 1 quả chuối, 1000ml nước lọc" class="w-full text-xs border border-slate-200 rounded-lg px-3 py-2 bg-white"></div>
+              <button type="submit" class="w-full py-2.5 bg-bio-600 hover:bg-bio-700 text-white font-bold text-xs rounded-xl transition shadow-md flex items-center justify-center"><i class="fa-solid fa-check-double mr-1.5"></i> Lưu đủ 3 buổi hôm nay & Phân tích</button>
+            </form>
+          </div>
+        </div>
+
+        <div class="lg:col-span-7 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-3 flex-wrap gap-2">
+            <div><h3 class="text-base font-extrabold text-slate-900 flex items-center"><i class="fa-solid fa-magnifying-glass-chart text-bio-600 mr-2"></i> Phân Tích Đồ Ăn & Thức Uống Hôm Nay</h3><p class="text-xs text-slate-500 mt-0.5">Ước lượng năng lượng tự động & đánh giá sinh học bằng Gemini AI</p></div>
+            <div class="flex items-center gap-2">
+              <button type="button" onclick="clearTodayFoodLogs()" class="text-[11px] font-bold text-slate-500 hover:text-rose-600 px-2.5 py-1.5 rounded-lg border border-slate-200 transition"><i class="fa-solid fa-trash-can mr-1"></i> Xóa ngày</button>
+              <button type="button" id="btn-analyze-food-ai" onclick="analyzeFoodWithGemini()" class="text-xs bg-bio-600 hover:bg-bio-700 text-white px-3.5 py-1.5 rounded-xl font-bold transition shadow-sm flex items-center"><i class="fa-solid fa-wand-magic-sparkles mr-1.5" id="food-ai-icon"></i><span id="food-ai-btn-text">Phân tích sâu (AI)</span></button>
+            </div>
+          </div>
+
+          <div id="food-summary-bars" class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
+            <div class="flex items-center justify-between text-xs font-bold">
+              <span class="text-slate-700">Tổng năng lượng đã nạp: <strong id="food-total-kcal" class="text-bio-700 text-sm">0</strong> / <span id="food-target-kcal">2000</span> kcal</span>
+              <span id="food-kcal-status" class="px-2 py-0.5 rounded-full text-[11px] bg-slate-200 text-slate-700">Chưa có món</span>
+            </div>
+            <div class="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden"><div id="food-kcal-progress" class="bg-bio-600 h-full transition-all duration-500" style="width: 0%"></div></div>
+            <div class="grid grid-cols-3 gap-3 text-center text-[11px]">
+              <div class="bg-white p-2.5 rounded-lg border border-slate-200"><span class="block text-slate-400 font-semibold">Đạm (Protein)</span><span class="font-extrabold text-emerald-700 text-sm" id="food-total-protein">0g</span></div>
+              <div class="bg-white p-2.5 rounded-lg border border-slate-200"><span class="block text-slate-400 font-semibold">Tinh bột (Carb)</span><span class="font-extrabold text-amber-700 text-sm" id="food-total-carb">0g</span></div>
+              <div class="bg-white p-2.5 rounded-lg border border-slate-200"><span class="block text-slate-400 font-semibold">Chất béo (Fat)</span><span class="font-extrabold text-rose-700 text-sm" id="food-total-fat">0g</span></div>
+            </div>
+          </div>
+
+          <div id="food-log-list" class="space-y-2 max-h-[280px] overflow-y-auto pr-1"></div>
+          <div id="food-local-insights" class="space-y-2"></div>
+
+          <div id="food-ai-analysis-box" class="hidden bg-bio-50/70 border border-bio-200 rounded-xl p-4 space-y-2 animate-reveal">
+            <div class="flex items-center justify-between"><span class="text-xs font-extrabold text-bio-800 flex items-center"><i class="fa-solid fa-robot mr-1.5"></i> Nhận xét Dinh dưỡng & Sinh học từ Gemini AI</span><span class="text-[10px] text-slate-500" id="food-ai-timestamp"></span></div>
+            <div id="food-ai-analysis-content" class="text-xs text-slate-700 leading-relaxed space-y-1.5"></div>
           </div>
         </div>
       </div>
@@ -984,7 +813,7 @@
         </div>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="article-cards-container"></div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="article-cards-container"></div>
     </section>
   </main>
 
@@ -3255,6 +3084,67 @@
       langObserver.observe(document.body, { childList: true, subtree: true, characterData: true });
       applyLanguageToDOM(AppState.lang || 'vi');
     });
+    // Ép "Xuất bản 3 bài (AI)" viết tiếng Anh khi đang chọn EN
+    const _origFetchArticles = fetchGeminiArticles;
+    fetchGeminiArticles = async function(isManualClick = false) {
+      if (AppState.lang !== 'en') return _origFetchArticles(isManualClick);
+      const icon = document.getElementById('article-reload-icon'), txt = document.getElementById('article-reload-text');
+      icon?.classList.add('animate-spin'); if (txt) txt.innerText = "Publishing...";
+      try {
+        const p = `Write 3 diverse scientific biology research papers in English. Return ONLY a JSON array: [{"title":"...","tag":"Domain • Topic","keywords":["k1","k2","k3"],"cost":40,"summary":"2-sentence abstract","content":"<h4>I. Background</h4><ul><li>...</li></ul><h4>II. Mechanism</h4><ul><li>...</li></ul><h4>III. Key Findings</h4><ul><li>...</li></ul>","references":["Ref 1"]}]`;
+        const res = await _origFetch('/api/gemini', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ type: 'chat', message: p, history: [] }) });
+        const data = await res.json();
+        const m = res.ok && data.reply ? data.reply.match(/\[[\s\S]*\]/) : null;
+        if (m) {
+          const parsed = JSON.parse(m[0]), stamp = Date.now();
+          const news = parsed.map((art, i) => ({
+            ...art, id: `art_ai_${stamp}_${i}`, doi: `10.1038/bh.ai.${stamp.toString().slice(-4)}.${i + 1}`,
+            authors: "Gemini Scientific Synthesis • BioHabit AI", readTime: "5 min", cost: typeof art.cost === 'number' ? art.cost : 40
+          }));
+          currentArticlesList = [...news, ...currentArticlesList];
+          safeSetLocal("BIOHABIT_ARTICLES_DATE", getLocalDateStr(0));
+          safeSetLocal("BIOHABIT_DAILY_ARTICLES", JSON.stringify(currentArticlesList));
+          showToast(`Published ${news.length} new English papers!`, "success");
+        } else if (isManualClick) showToast("AI is busy, try again in a moment!", "info");
+      } catch (e) { if (isManualClick) showToast("Connection error!", "info"); }
+      finally { icon?.classList.remove('animate-spin'); if (txt) txt.innerText = "Publish 3 Papers (AI)"; renderArticlesMarket(); }
+    };
+
+    // Tự động nhờ AI dịch bộ Quiz AI hiện tại khi bấm đổi ngôn ngữ
+    const _origToggleLang = toggleAppLanguage;
+    toggleAppLanguage = async function() {
+      _origToggleLang();
+      const targetLang = AppState.lang === 'en' ? 'English' : 'Vietnamese';
+      const hasCustomQuiz = currentSessionQuiz.some(q => !Object.prototype.hasOwnProperty.call(VI_TO_EN, q.question) && AppState.lang === 'en')
+        || (AppState.lang === 'vi' && currentSessionQuiz.some(q => !QUIZ_BANK.some(b => b.question === q.question)));
+      if (hasCustomQuiz && currentSessionQuiz.length > 0) {
+        try {
+          const p = `Translate this JSON quiz array to ${targetLang}. Keep the exact structure and "answer" numbers, return ONLY valid JSON array:\n${JSON.stringify(currentSessionQuiz)}`;
+          const res = await _origFetch('/api/gemini', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ type: 'chat', message: p, history: [] }) });
+          const data = await res.json();
+          const m = res.ok && data.reply ? data.reply.match(/\[[\s\S]*\]/) : null;
+          if (m) { currentSessionQuiz = normalizeQuizArray(JSON.parse(m[0])); renderCurrentQuiz(); }
+        } catch (e) {}
+      }
+    };
+    function switchPlannerSubTab(sub) {
+      const pEl = document.getElementById('planner-sub-profile'), fEl = document.getElementById('planner-sub-food');
+      const pBtn = document.getElementById('psub-btn-profile'), fBtn = document.getElementById('psub-btn-food');
+      const isFood = sub === 'food';
+      pEl?.classList.toggle('hidden', isFood);
+      fEl?.classList.toggle('hidden', !isFood);
+      if (pBtn) pBtn.className = isFood ? "px-3.5 py-2 rounded-lg text-slate-500 hover:text-slate-800 transition" : "px-3.5 py-2 rounded-lg bg-white text-bio-700 shadow-sm transition";
+      if (fBtn) fBtn.className = isFood ? "px-3.5 py-2 rounded-lg bg-white text-bio-700 shadow-sm transition" : "px-3.5 py-2 rounded-lg text-slate-500 hover:text-slate-800 transition";
+    }
+    if (typeof VI_TO_EN !== 'undefined') {
+      Object.assign(VI_TO_EN, {
+        "Thực đơn & BMI": "Menu & BMI",
+        "Thực Đơn, 4 Mức BMI & Nhật Ký Ăn Uống": "Menu, 4-Level BMI & Food Log",
+        "Chọn mục bên cạnh để cài đặt chỉ số BMI hoặc ghi nhận bữa ăn hằng ngày.": "Switch between BMI setup and your daily meal log.",
+        "🧬 Hồ sơ BMI & Lộ trình": "🧬 BMI & Plan",
+        "🥗 Nhật ký 3 buổi & Calo": "🥗 3-Meal Log & Cal"
+      });
+    }
   </script>
 </body>
 </html>
