@@ -3459,6 +3459,230 @@
       if (typeof renderPersonalizedCircadian === 'function' && AppState.schedule?.isConfigured) renderPersonalizedCircadian();
       return res;
     };
+    // Bổ sung đầy đủ VI <-> EN cho: Thực đơn gợi ý, Nhận xét dinh dưỡng, Lịch sử Chat & Nhịp sinh học
+    if (typeof VI_TO_EN !== 'undefined') {
+      Object.assign(VI_TO_EN, {
+        "Trợ Lý Sinh Học Gemini AI": "Gemini AI Biology Tutor",
+        "Tự động lưu lịch sử các cuộc trò chuyện như Gemini để bạn mở lại ôn tập bất cứ lúc nào.": "Automatically saves chat history like Gemini so you can revisit any session anytime.",
+        "Cuộc trò chuyện mới": "New chat",
+        "Lịch sử trò chuyện": "Chat history",
+        "+ Đoạn mới": "+ New",
+        "💬 Cuộc trò chuyện mới": "💬 New conversation",
+        "Lược Đồ Nhịp Sinh Học Cá Nhân Hóa": "Personalized Circadian Rhythm",
+        "Theo thể trạng của bạn": "Tailored to your body",
+        "Gemini AI đang suy nghĩ...": "Gemini AI is thinking...",
+        "Nhận xét Dinh dưỡng & Sinh học từ Gemini AI": "Gemini AI Nutrition & Biology Review"
+      });
+    }
+
+    // Ghi đè renderNutritionAdvice để hỗ trợ song ngữ VI / EN đầy đủ cho 4 chế độ ăn
+    renderNutritionAdvice = function() {
+      try {
+        const s = AppState.schedule || {}, hCm = parseFloat(s.height) || 165, w = parseFloat(s.weight) || 55;
+        const bmi = parseFloat((w / ((hCm / 100) ** 2)).toFixed(1)), age = parseInt(s.age) || (s.role === 'freelancer' ? 25 : 17), goal = s.goal || "maintain";
+        const sleepHrs = calculateSleepDuration(s.wake, s.sleep), waterLiters = (w * 0.035).toFixed(1), tdee = getUserTargetTDEE();
+        const isEn = AppState.lang === 'en';
+
+        const setT = (id, v) => { const e = document.getElementById(id); if (e) e.innerText = v; };
+        setT('summary-sleep-hours', isEn ? `${sleepHrs} hrs/night` : `${sleepHrs} giờ/đêm`);
+        setT('summary-water-liters', isEn ? `${waterLiters} Liters` : `${waterLiters} Lít`);
+        setT('summary-calories', `${tdee} kcal`);
+        setT('summary-user-name', String(s.nickname || "").trim() || (AppState.user?.name || (isEn ? "you" : "bạn")));
+        setT('summary-role-label', s.role === 'freelancer'
+          ? (isEn ? `Worker / Researcher (${age} yrs)` : `Đi làm / NC (${age} tuổi)`)
+          : (isEn ? `Student (${age} yrs)` : `Học sinh / SV (${age} tuổi)`));
+
+        const bmiInfo = getBmiLevelInfo(bmi);
+        const bmiLabelEn = { 1: "Level 1: Underweight", 2: "Level 2: Normal", 3: "Level 3: Overweight", 4: "Level 4: Obesity" }[bmiInfo.level];
+        const pill = document.getElementById('nutrition-bmi-pill');
+        if (pill) {
+          pill.className = `text-xs font-extrabold px-3 py-1 rounded-full ${bmiInfo.badgeCls}`;
+          pill.innerText = `BMI: ${bmi} (${isEn ? bmiLabelEn : bmiInfo.label})`;
+        }
+
+        const maxProt = Math.round(w * 2.2);
+        const dinnerCut = addMinutesToTimeStr(s.sleep || '22:30', -180);
+        const menus = isEn ? {
+          muscle: {
+            title: "Weight & Muscle Gain Plan (+300 kcal)",
+            allowed: ["<strong>Clean Protein:</strong> Chicken breast, boiled eggs (2/day), basa/salmon fillet, lean beef.", "<strong>Plant Protein & Nuts:</strong> Tofu, unsweetened soy milk, walnuts, almonds.", "<strong>Slow Carbs:</strong> Brown rice, oats, sweet potatoes.", "<strong>Greens & Potassium:</strong> Broccoli, spinach, bananas."],
+            forbidden: ["<strong>Processed Meats:</strong> Sausages and canned meats high in nitrites.", "<strong>Milk Tea & Soda:</strong> Industrial fructose promotes visceral fat.", "<strong>Deep-Fried Foods:</strong> Trans-fats trigger muscle inflammation."],
+            restrictions: `<strong>Note (${tdee} kcal/day):</strong> Do not exceed ${maxProt}g Protein/day and drink at least ${waterLiters} Liters of water.`
+          },
+          fatloss: {
+            title: "Mild Fat Loss & Toning Plan (-300 kcal)",
+            allowed: ["<strong>Fiber & Probiotics:</strong> Leafy green soup, lettuce salad, unsweetened yogurt.", "<strong>Low-Cal Lean Protein:</strong> Steamed shrimp, ginger chicken breast, white tofu, light fish.", "<strong>Low-GI Carbs:</strong> Half bowl brown rice, boiled corn, oats.", "<strong>Drinks:</strong> Warm green tea (EGCG), warm lemon-ginger water."],
+            forbidden: ["<strong>White Bread, Instant Noodles, Pastries:</strong> Spike Insulin and fat storage.", "<strong>Liquid Calories:</strong> Milk tea, bottled juices.", "<strong>Animal Fat & Organ Meats:</strong> High in LDL cholesterol."],
+            restrictions: `<strong>Note (${tdee} kcal/day):</strong> Never skip breakfast; limit heavy carbs after ${dinnerCut}.`
+          },
+          fatloss_intensive: {
+            title: "Intensive Fat Loss & Glucose Control (-500 kcal)",
+            allowed: ["<strong>50-35-15 Plate Rule:</strong> 50% steamed greens, 35% lean protein (chicken, fish, tofu), 15% slow carbs.", "<strong>High-Satiety Foods:</strong> Chia seeds, oats, guava, cucumber.", "<strong>Natural Spices:</strong> Ginger, garlic, turmeric to support lipid metabolism."],
+            forbidden: ["<strong>Strictly Avoid:</strong> Soda, milk tea, sweets, fried fast food.", "<strong>No Late Meals:</strong> Finish eating at least 3 hours before bedtime."],
+            restrictions: `<strong>Note (${tdee} kcal/day):</strong> Combine with 30 mins brisk walking/cycling daily and ${waterLiters} Liters of water.`
+          },
+          maintain: {
+            title: "Maintain Fitness & Optimize Memory (Standard TDEE)",
+            allowed: ["<strong>Balanced Plate (50-25-25):</strong> 50% colorful veggies, 25% protein, 25% rice/grains.", "<strong>Brain Foods:</strong> Salmon/mackerel (Omega-3), walnuts, avocado, eggs.", "<strong>Dark Leafy Greens:</strong> Morning glory, bok choy (Folic Acid & Iron).", "<strong>Fresh Fruits:</strong> Apples, oranges, guava for immunity."],
+            forbidden: ["<strong>Reheated Fried Oils:</strong> Cause oxidative stress and daytime fatigue.", "<strong>Excess Salt:</strong> Increases cerebral capillary pressure.", "<strong>Late Stimulants:</strong> Disrupt deep NREM/REM sleep."],
+            restrictions: `<strong>Note (${tdee} kcal/day):</strong> Avoid strong coffee/tea after 15:00 to protect sleep at ${formatTimeToAMPM(s.sleep)}.`
+          }
+        } : {
+          muscle: {
+            title: "Chế Độ Tăng Cân & Phát Triển Cơ Bắp (+300 kcal)",
+            allowed: ["<strong>Đạm sạch:</strong> Ức gà, trứng gà (2 quả/ngày), cá basa/cá hồi, thịt bò nạc.", "<strong>Đạm thực vật & Hạt:</strong> Đậu phụ, sữa đậu nành, hạt óc chó, hạnh nhân.", "<strong>Tinh bột tốt:</strong> Cơm gạo lứt, yến mạch, khoai lang.", "<strong>Rau & Kali:</strong> Bông cải xanh, rau bina, chuối tiêu."],
+            forbidden: ["<strong>Thịt chế biến sẵn:</strong> Xúc xích, đồ hộp nhiều muối nitrat.", "<strong>Trà sữa, nước ngọt:</strong> Đường fructose gây tích mỡ nội tạng.", "<strong>Đồ chiên rán ngập dầu:</strong> Trans-fat gây viêm cơ."],
+            restrictions: `<strong>Lưu ý (${tdee} kcal/ngày):</strong> Nạp tối đa ${maxProt}g Protein/ngày và uống đủ ${waterLiters} Lít nước.`
+          },
+          fatloss: {
+            title: "Chế Độ Giảm Mỡ Nhẹ Nhàng & Săn Chắc (-300 kcal)",
+            allowed: ["<strong>Chất xơ & Lợi khuẩn:</strong> Canh rau ngót, mồng tơi, xà lách, sữa chua không đường.", "<strong>Đạm nạc ít calo:</strong> Tôm hấp, ức gà, đậu phụ trắng, cá kho nhạt.", "<strong>Tinh bột GI thấp:</strong> Nửa chén cơm gạo lứt, ngô luộc, yến mạch.", "<strong>Thức uống:</strong> Trà xanh ấm (EGCG), nước chanh gừng ấm."],
+            forbidden: ["<strong>Bánh mì trắng, mì tôm, bánh ngọt:</strong> Làm tăng vọt Insulin.", "<strong>Calo lỏng:</strong> Trà sữa, nước ép đóng chai.", "<strong>Mỡ động vật, nội tạng:</strong> Giàu cholesterol xấu LDL."],
+            restrictions: `<strong>Lưu ý (${tdee} kcal/ngày):</strong> Không nhịn ăn sáng; giảm tinh bột sau ${dinnerCut}.`
+          },
+          fatloss_intensive: {
+            title: "Chế Độ Giảm Mỡ Chuyên Sâu & Kiểm Soát Đường Huyết (-500 kcal)",
+            allowed: ["<strong>Nguyên tắc Đĩa 50-35-15:</strong> 50% rau xanh luộc/hấp, 35% đạm trắng (ức gà, cá, đậu hũ), 15% tinh bột chậm.", "<strong>Thực phẩm no lâu:</strong> Hạt chia, yến mạch, ổi, dưa leo.", "<strong>Gia vị tự nhiên:</strong> Gừng, tỏi, nghệ hỗ trợ chuyển hóa lipid."],
+            forbidden: ["<strong>Tuyệt đối tránh:</strong> Nước ngọt, trà sữa, bánh kẹo, đồ chiên rán, thức ăn nhanh.", "<strong>Không ăn khuya:</strong> Kết thúc ăn trước khi ngủ ít nhất 3 tiếng."],
+            restrictions: `<strong>Lưu ý (${tdee} kcal/ngày):</strong> Kết hợp đi bộ nhanh hoặc đạp xe 30 phút/ngày và uống đủ ${waterLiters} Lít nước.`
+          },
+          maintain: {
+            title: "Chế Độ Duy Trì Thể Lực & Tối Ưu Trí Nhớ (Chuẩn TDEE)",
+            allowed: ["<strong>Đĩa ăn chuẩn (50-25-25):</strong> 50% rau củ đa màu, 25% đạm, 25% cơm gạo.", "<strong>Dưỡng não:</strong> Cá hồi/cá mòi (Omega-3), quả óc chó, quả bơ, trứng gà.", "<strong>Rau xanh đậm:</strong> Rau muống, cải thìa (Acid Folic & Sắt).", "<strong>Trái cây tươi:</strong> Táo, cam, ổi tăng đề kháng."],
+            forbidden: ["<strong>Đồ chiên dầu tái chế:</strong> Gây oxy hóa ty thể, uể oải.", "<strong>Ăn quá mặn:</strong> Tăng áp lực mao mạch não.", "<strong>Chất kích thích muộn:</strong> Ảnh hưởng giấc ngủ sâu."],
+            restrictions: `<strong>Lưu ý (${tdee} kcal/ngày):</strong> Tránh cà phê/trà đặc sau 15:00 để bảo vệ giấc ngủ lúc ${formatTimeToAMPM(s.sleep)}.`
+          }
+        };
+
+        const m = menus[goal] || menus.maintain, c = document.getElementById('nutrition-details');
+        if (c) {
+          c.innerHTML = `
+            <div class="p-3.5 bg-bio-50/70 border border-bio-200 rounded-xl">
+              <h5 class="font-extrabold text-bio-900 text-sm mb-1">${m.title}</h5>
+              <p class="text-xs text-bio-700">${isEn ? `Calculated for (${hCm}cm - ${w}kg - ${age} yrs) & ${bmiLabelEn}.` : `Tính theo thể trạng (${hCm}cm - ${w}kg - ${age} tuổi) và ${bmiInfo.label}.`}</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+              <div class="bg-emerald-50/40 p-4 rounded-xl border border-emerald-200">
+                <h6 class="font-bold text-emerald-800 text-xs flex items-center mb-2.5"><i class="fa-solid fa-circle-check text-emerald-600 mr-1.5"></i> ${isEn ? 'RECOMMENDED FOODS' : 'CÁC MÓN NÊN ĂN'}</h6>
+                <ul class="text-xs space-y-2 text-slate-700 list-disc list-inside">${m.allowed.map(x => `<li>${x}</li>`).join('')}</ul>
+              </div>
+              <div class="bg-rose-50/50 p-4 rounded-xl border border-rose-200">
+                <h6 class="font-bold text-rose-800 text-xs flex items-center mb-2.5"><i class="fa-solid fa-ban text-rose-600 mr-1.5"></i> ${isEn ? 'FOODS TO AVOID' : 'MÓN NÊN TRÁNH'}</h6>
+                <ul class="text-xs space-y-2 text-slate-700 list-disc list-inside">${m.forbidden.map(x => `<li>${x}</li>`).join('')}</ul>
+              </div>
+            </div>
+            <div class="p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-900"><i class="fa-solid fa-triangle-exclamation text-amber-600 mr-1"></i> ${m.restrictions}</div>`;
+        }
+      } catch (err) { console.error("Lỗi thực đơn:", err); }
+    };
+
+    // Ghi đè renderFoodLogs để dịch đầy đủ các cảnh báo dinh dưỡng & nhận xét AI sang EN
+    renderFoodLogs = function() {
+      const todayStr = getLocalDateStr(0), dl = document.getElementById('food-today-date-label'), ti = document.getElementById('food-time-input');
+      const isEn = AppState.lang === 'en';
+      const dateDisp = todayStr.split('-').reverse().join('/');
+      if (dl) dl.innerText = isEn ? `Date ${dateDisp}` : `Ngày ${dateDisp}`;
+      if (ti && !ti.value) ti.value = getCurrentHHMM();
+
+      const items = Array.isArray(AppState.foodLogs?.[todayStr]) ? AppState.foodLogs[todayStr] : [];
+      const targetKcal = getUserTargetTDEE();
+      let totalKcal = 0, totalP = 0, totalC = 0, totalF = 0, lateCaffeine = false, lateMeal = false;
+      const allTags = new Set(), s = AppState.schedule || {}, sleepMins = timeToMinutes(s.sleep || '22:30');
+
+      items.forEach(it => {
+        totalKcal += it.kcal || 0; totalP += it.p || 0; totalC += it.c || 0; totalF += it.f || 0;
+        (it.tags || []).forEach(t => allTags.add(t));
+        const im = timeToMinutes(it.time || '12:00');
+        if ((it.tags || []).includes('caffeine') && im >= 15 * 60) lateCaffeine = true;
+        let diff = sleepMins - im; if (diff < -720) diff += 1440;
+        if (it.kcal >= 150 && diff >= 0 && diff <= 120) lateMeal = true;
+      });
+
+      const setT = (id, v) => { const e = document.getElementById(id); if (e) e.innerText = v; };
+      setT('food-total-kcal', totalKcal); setT('food-target-kcal', targetKcal);
+      setT('food-total-protein', `${totalP}g`); setT('food-total-carb', `${totalC}g`); setT('food-total-fat', `${totalF}g`);
+
+      const pct = Math.min(100, Math.round((totalKcal / targetKcal) * 100)), bar = document.getElementById('food-kcal-progress'), st = document.getElementById('food-kcal-status');
+      if (bar) { bar.style.width = `${pct}%`; bar.className = `h-full transition-all duration-500 ${totalKcal > targetKcal * 1.1 ? 'bg-rose-500' : totalKcal >= targetKcal * 0.75 ? 'bg-bio-600' : 'bg-amber-500'}`; }
+      if (st) {
+        if (items.length === 0) { st.className = "px-2 py-0.5 rounded-full text-[11px] bg-slate-200 text-slate-700"; st.innerText = isEn ? "No items" : "Chưa có món"; }
+        else if (totalKcal > targetKcal * 1.1) { st.className = "px-2 py-0.5 rounded-full text-[11px] bg-rose-100 text-rose-700"; st.innerText = isEn ? `Over target (+${totalKcal - targetKcal} kcal)` : `Vượt mục tiêu (+${totalKcal - targetKcal} kcal)`; }
+        else if (totalKcal >= targetKcal * 0.75) { st.className = "px-2 py-0.5 rounded-full text-[11px] bg-emerald-100 text-emerald-700"; st.innerText = isEn ? `Balanced (${pct}% TDEE)` : `Cân đối (${pct}% TDEE)`; }
+        else { st.className = "px-2 py-0.5 rounded-full text-[11px] bg-amber-100 text-amber-700"; st.innerText = isEn ? `Need ~${targetKcal - totalKcal} kcal` : `Còn thiếu ~${targetKcal - totalKcal} kcal`; }
+      }
+
+      const mealEnMap = { "Sáng": "Breakfast", "Trưa": "Lunch", "Tối": "Dinner", "Ăn vặt / Nước": "Snack / Drink" };
+      const listEl = document.getElementById('food-log-list');
+      if (listEl) {
+        listEl.innerHTML = items.length === 0
+          ? `<div class="text-center py-4 text-xs text-slate-400 border border-dashed border-slate-200 rounded-xl">${isEn ? 'No food or drinks logged today.' : 'Chưa ghi nhận món ăn / thức uống nào hôm nay.'}</div>`
+          : items.map(it => {
+              const mealLbl = isEn ? (mealEnMap[it.meal] || it.meal) : it.meal;
+              const estLine = isEn ? `Est: <strong>${it.kcal} kcal</strong> • Protein ${it.p}g • Carbs ${it.c}g • Fat ${it.f}g` : `Ước lượng: <strong>${it.kcal} kcal</strong> • Đạm ${it.p}g • Carb ${it.c}g • Béo ${it.f}g`;
+              return `<div class="flex items-center justify-between gap-2.5 p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs"><div class="min-w-0 flex-grow"><div class="flex items-center gap-1.5 flex-wrap"><span class="px-2 py-0.5 rounded-md bg-bio-100 text-bio-800 font-bold text-[10px]">${escapeHTML(mealLbl)}</span><span class="text-[10px] font-bold text-slate-400">${escapeHTML(it.time)}</span><span class="font-bold text-slate-800 truncate">${escapeHTML(it.name)}</span></div><p class="text-[10px] text-slate-500 mt-1">${estLine}</p></div><button type="button" onclick="removeFoodLogItem('${escapeHTML(it.id)}')" class="w-7 h-7 rounded-lg hover:bg-rose-100 text-slate-400 hover:text-rose-600 transition flex items-center justify-center shrink-0"><i class="fa-solid fa-xmark"></i></button></div>`;
+            }).join('');
+      }
+
+      const ins = document.getElementById('food-local-insights');
+      if (ins) {
+        if (items.length === 0) ins.innerHTML = "";
+        else {
+          const alerts = [];
+          if (lateCaffeine) alerts.push({ type: 'rose', icon: 'fa-mug-hot', text: isEn ? '<strong>Late Caffeine Alert:</strong> Caffeine after 15:00 blocks <em>Adenosine</em> receptors and delays <em>Melatonin</em> release.' : '<strong>Cảnh báo Caffeine muộn:</strong> Uống sau 15:00 sẽ cạnh tranh thụ thể <em>Adenosine</em> và làm chậm tiết <em>Melatonin</em>.' });
+          if (lateMeal) alerts.push({ type: 'amber', icon: 'fa-moon', text: isEn ? `<strong>Meal Near Bedtime (${s.sleep || '22:30'}):</strong> Eating within 2 hours of sleep raises Insulin, blocking growth hormone & <em>Autophagy</em>.` : `<strong>Ăn sát giờ ngủ (${s.sleep || '22:30'}):</strong> Làm tăng Insulin, cản trở hormone tăng trưởng và tự thực bào <em>Autophagy</em>.` });
+          if (allTags.has('sugar')) alerts.push({ type: 'amber', icon: 'fa-cubes-stacked', text: isEn ? '<strong>Refined Sugar:</strong> Causes rapid blood glucose spikes and crashes, hurting study focus.' : '<strong>Đường tinh luyện:</strong> Dễ gây vọt và tụt đường huyết làm giảm tập trung.' });
+          if (allTags.has('fried') || allTags.has('processed')) alerts.push({ type: 'amber', icon: 'fa-burger', text: isEn ? '<strong>Fried / Processed Foods:</strong> High trans-fats and sodium may cause sluggishness.' : '<strong>Đồ chiên / Chế biến sẵn:</strong> Chất béo trans-fat và muối cao dễ gây mệt mỏi.' });
+          if (!allTags.has('fiber')) alerts.push({ type: 'blue', icon: 'fa-seedling', text: isEn ? '<strong>Fiber Tip:</strong> Add greens or fresh fruit today to nourish your Gut-Brain Axis!' : '<strong>Gợi ý Chất xơ:</strong> Bổ sung thêm rau xanh/trái cây cho Trục Não - Ruột nhé!' });
+          if (!allTags.has('water')) alerts.push({ type: 'blue', icon: 'fa-droplet', text: isEn ? '<strong>Hydration Tip:</strong> Remember to log plain water intake for cellular osmotic balance.' : '<strong>Nhắc bù nước:</strong> Ghi nhận thêm nước lọc để theo dõi áp suất thẩm thấu tế bào.' });
+          if (alerts.length === 0) alerts.push({ type: 'emerald', icon: 'fa-circle-check', text: isEn ? '<strong>Great job!</strong> Today\'s meal log is balanced with your biological rhythm.' : '<strong>Tuyệt vời!</strong> Thực đơn hôm nay cân bằng theo nhịp sinh học.' });
+          ins.innerHTML = alerts.map(a => {
+            const cls = a.type === 'rose' ? 'bg-rose-50 border-rose-200 text-rose-800' : a.type === 'amber' ? 'bg-amber-50 border-amber-200 text-amber-900' : a.type === 'blue' ? 'bg-blue-50 border-blue-200 text-blue-700' : 'bg-emerald-50 border-emerald-200 text-emerald-800';
+            return `<div class="p-2.5 rounded-xl border text-[11px] leading-relaxed flex items-start gap-2 ${cls}"><i class="fa-solid ${a.icon} mt-0.5 shrink-0"></i><div>${a.text}</div></div>`;
+          }).join('');
+        }
+      }
+
+      const aiBox = document.getElementById('food-ai-analysis-box'), aiC = document.getElementById('food-ai-analysis-content'), aiT = document.getElementById('food-ai-timestamp');
+      const savedAI = AppState.foodAnalysis?.[todayStr];
+      if (aiBox && aiC) {
+        if (savedAI?.text) {
+          const dispText = isEn ? (savedAI.enText || savedAI.text) : (savedAI.viText || savedAI.text);
+          aiBox.classList.remove('hidden');
+          aiC.innerHTML = escapeHTML(dispText).replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+          if (aiT) aiT.innerText = savedAI.at ? (isEn ? `Updated at ${savedAI.at}` : `Cập nhật lúc ${savedAI.at}`) : '';
+        } else aiBox.classList.add('hidden');
+      }
+    };
+
+    const _prevToggleLangForAll = toggleAppLanguage;
+    toggleAppLanguage = async function() {
+      const p = _prevToggleLangForAll();
+      if (typeof renderChatSidebar === 'function') renderChatSidebar();
+      if (typeof renderActiveChatMessages === 'function') renderActiveChatMessages();
+      if (typeof renderPersonalizedCircadian === 'function' && AppState.schedule?.isConfigured) renderPersonalizedCircadian();
+      if (typeof renderNutritionAdvice === 'function' && AppState.schedule?.isConfigured) renderNutritionAdvice();
+      if (typeof renderFoodLogs === 'function') renderFoodLogs();
+
+      // Tự dịch luôn đoạn "Nhận xét sâu (AI)" của hôm nay nếu có
+      const todayStr = getLocalDateStr(0), savedAI = AppState.foodAnalysis?.[todayStr];
+      if (savedAI?.text) {
+        const isEn = AppState.lang === 'en';
+        if (isEn && !savedAI.enText) {
+          try {
+            const r = await _origFetch('/api/gemini', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ type: 'chat', message: `Translate this nutrition review into natural English (keep **bold** formatting):\n${savedAI.text}`, history: [] }) });
+            const d = await r.json();
+            if (r.ok && d.reply) { savedAI.viText = savedAI.viText || savedAI.text; savedAI.enText = d.reply; saveState(); renderFoodLogs(); }
+          } catch (e) {}
+        } else if (!isEn && !savedAI.viText && savedAI.text) {
+          try {
+            const r = await _origFetch('/api/gemini', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ type: 'chat', message: `Dịch nhận xét dinh dưỡng này sang tiếng Việt tự nhiên (giữ nguyên định dạng **in đậm**):\n${savedAI.text}`, history: [] }) });
+            const d = await r.json();
+            if (r.ok && d.reply) { savedAI.enText = savedAI.enText || savedAI.text; savedAI.viText = d.reply; saveState(); renderFoodLogs(); }
+          } catch (e) {}
+        }
+      }
+      return p;
+    };
   </script>
 </body>
 </html>
