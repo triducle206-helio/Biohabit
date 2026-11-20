@@ -258,6 +258,10 @@
       </nav>
 
       <div class="flex items-center space-x-1.5 sm:space-x-2.5 shrink-0">
+        <button type="button" id="btn-lang-toggle" onclick="toggleAppLanguage()" title="Đổi ngôn ngữ / Switch Language" class="flex items-center space-x-1 bg-slate-100 hover:bg-bio-50 text-slate-700 border border-slate-200 px-2.5 py-1.5 rounded-full text-xs font-extrabold transition shadow-sm">
+          <span id="lang-flag">🇻🇳</span>
+          <span id="lang-code">VI</span>
+        </button>
         <button type="button" onclick="openThemeModal()" title="Cửa hàng & Thiết kế giao diện" class="flex items-center space-x-1.5 bg-bio-50 hover:bg-bio-100 text-bio-700 border border-bio-200 px-2.5 py-1.5 rounded-full text-xs font-bold transition shadow-sm">
           <i class="fa-solid fa-palette text-sm"></i>
           <span class="hidden xl:inline">Giao diện</span>
@@ -1154,6 +1158,7 @@
 
     const DEFAULT_STORAGE = {
       user: { name: "Học sinh", coins: 50, streak: 0, lastCheckInDate: null },
+      lang: "vi",
       schedule: {
         isConfigured: false, nickname: "", age: "", role: "student",
         wake: "", school: "", home: "", sleep: "",
@@ -2706,6 +2711,7 @@
     catch (e) { console.warn("Firebase fallback:", e); }
 
     function mergeWithDefaults(rawData) {
+      lang: rawData.lang === 'en' ? 'en' : 'vi',
       const def = JSON.parse(JSON.stringify(DEFAULT_STORAGE));
       if (!rawData) return def;
       return {
@@ -2924,6 +2930,305 @@
       updatePomodoroDisplay();
       renderFoodLogs();
       showBmiAndPriorityModes
+    });
+    /* 11. HỆ THỐNG ĐỔI NGÔN NGỮ TỰ ĐỘNG (TIẾNG VIỆT <-> ENGLISH) + AI */
+    const VI_TO_EN = {
+      // Navbar & Tabs
+      "Nhịp Sống Sinh Học": "Biological Rhythm",
+      "Tổng quan": "Dashboard",
+      "Nhịp sinh & Thực đơn": "Rhythm & Menu",
+      "Thói quen & Quiz": "Habits & Quiz",
+      "Học & Nhạc": "Study & Music",
+      "Giao diện": "Theme",
+      "Đăng nhập": "Sign in",
+      "Học sinh": "Student",
+      "Trang chủ": "Home",
+      "Thực đơn": "Menu",
+      "Tạp chí": "Journal",
+      "Sơ đồ": "Mind Map",
+      // Dashboard
+      "🔬 Khoa học Sinh học & Lối sống • BioHabit Platform": "🔬 Biological Science & Lifestyle • BioHabit Platform",
+      "Xây dựng lối sống khoa học cùng": "Build a scientific lifestyle with",
+      "Gợi ý thể chất theo 4 mức BMI, nhật ký ăn uống 3 buổi/lần, sơ đồ tư duy BioMarket, học cùng YouTube và đổi BioCoins lấy Giao diện VIP!": "4-level BMI fitness advice, 3-meal daily log, BioMarket mind maps, YouTube study mode & VIP themes with BioCoins!",
+      "Phân tích BMI & 3 Bữa ăn": "BMI & 3-Meal Log",
+      "Sơ đồ tư duy BioMarket": "BioMarket Mind Maps",
+      "Shop Giao diện VIP": "VIP Theme Shop",
+      "Chuỗi kỷ luật": "Streak",
+      "Đề tài đã mở": "Unlocked Papers",
+      "Danh hiệu": "Rank",
+      "Bộ sưu tập Huy hiệu Sinh học": "Biology Badges Collection",
+      "Tự động đạt khi hoàn thành chỉ số": "Auto-unlocked on milestones",
+      "Chiến thần Nhịp sinh học": "Circadian Champion",
+      "Duy trì chuỗi Streak 7 ngày liên tiếp": "Maintain a 7-day habit streak",
+      "Bác sĩ tế bào": "Cell Specialist",
+      "Đạt điểm tuyệt đối trong Quiz ngẫu nhiên": "Score 100% in any Biology Quiz",
+      "Tâm hồn Sinh học": "Bio Scholar",
+      "Mở khóa ít nhất 3 sơ đồ nghiên cứu": "Unlock at least 3 research papers",
+      "Mầm Sinh Học 🌱": "Bio Sprout 🌱",
+      "Mầm sinh học 🌱": "Bio Sprout 🌱",
+      "Chiến Thần Sinh Học 🔥": "Circadian Champion 🔥",
+      "Bác Sĩ Tế Bào 🧠": "Cell Specialist 🧠",
+      "Tâm Hồn Sinh Học 🎓": "Bio Scholar 🎓",
+      "ĐÃ ĐẠT": "UNLOCKED",
+      "KHÓA": "LOCKED",
+      // Planner & BMI & Food Log
+      "Hồ Sơ BMI 4 Mức, Nhịp Sinh Học & Nhật Ký 3 Buổi": "4-Level BMI Profile, Circadian Rhythm & 3-Meal Log",
+      "Nhập chiều cao/cân nặng để xem phân loại 4 mức BMI, bấm chọn chế độ phù hợp và nhập bữa ăn hằng ngày (từng món hoặc đủ 3 buổi).": "Enter height/weight for 4-level BMI analysis, choose a fitness mode, and log your daily meals.",
+      "Chờ nhập thông tin": "Awaiting info",
+      "Đã tạo lộ trình cá nhân": "Plan ready",
+      "Bước 1": "Step 1",
+      "Thông tin & Thời gian biểu": "Profile & Schedule",
+      "Điền mẫu": "Sample",
+      "Tên / Biệt danh": "Name / Nickname",
+      "Tuổi": "Age",
+      "Đối tượng": "Role",
+      "Học sinh / SV": "Student",
+      "Đi làm / NC": "Worker / Researcher",
+      "Khung giờ sinh hoạt hằng ngày *": "Daily Schedule *",
+      "Thức dậy": "Wake up",
+      "Bắt đầu học/làm": "Start study/work",
+      "Về nhà / Chiều": "Home / Afternoon",
+      "Đi ngủ": "Bedtime",
+      "Bước 2": "Step 2",
+      "Chỉ số cơ thể & 4 Mức BMI": "Body Stats & 4-Level BMI",
+      "Chiều cao (cm)*": "Height (cm)*",
+      "Cân nặng (kg)*": "Weight (kg)*",
+      "Giới tính": "Gender",
+      "Nam": "Male",
+      "Nữ": "Female",
+      "Phân Tích Thông Số & Tính BMI": "Analyze Stats & Calculate BMI",
+      "Chỉ số BMI của bạn:": "Your BMI Score:",
+      "Chọn 1 trong 4 chế độ ưu tiên cho thể trạng của bạn:": "Pick 1 of the 4 prioritized modes for your body:",
+      "Chọn": "Select",
+      "Đã chọn": "Selected",
+      "✓ Đang chọn": "✓ Active",
+      "🥇 Ưu tiên #1 • Khuyên dùng": "🥇 Priority #1 • Recommended",
+      "🥈 Ưu tiên #2 • Phù hợp": "🥈 Priority #2 • Suitable",
+      "🥉 Ưu tiên #3 • Cân nhắc": "🥉 Priority #3 • Optional",
+      "Ưu tiên #4 • Ít phù hợp": "Priority #4 • Low fit",
+      "Mức 1: Thiếu cân": "Level 1: Underweight",
+      "Mức 2: Bình thường": "Level 2: Normal",
+      "Mức 3: Thừa cân nhẹ": "Level 3: Overweight",
+      "Mức 4: Béo phì": "Level 4: Obesity",
+      "Nhật ký hôm nay": "Today's Log",
+      "Nhập Đồ Ăn & Thức Uống": "Log Food & Drinks",
+      "Nhập từng món": "Single item",
+      "Nhập đủ 3 buổi 1 lần": "Log all 3 meals",
+      "Bữa / Loại": "Meal / Type",
+      "🌅 Bữa sáng": "🌅 Breakfast",
+      "☀️ Bữa trưa": "☀️ Lunch",
+      "🌙 Bữa tối": "🌙 Dinner",
+      "🥤 Ăn vặt / Thức uống": "🥤 Snack / Drink",
+      "🌅 Bữa Sáng *": "🌅 Breakfast *",
+      "☀️ Bữa Trưa *": "☀️ Lunch *",
+      "🌙 Bữa Tối *": "🌙 Dinner *",
+      "🥤 Ăn vặt / Nước uống (tùy chọn)": "🥤 Snack / Drink (optional)",
+      "Thời điểm ăn/uống": "Time",
+      "Tên món ăn / thức uống & khẩu phần": "Food / drink & portion",
+      "Thêm": "Add",
+      "Thêm nhanh món phổ biến:": "Quick add:",
+      "Lưu đủ 3 buổi hôm nay & Phân tích": "Save all 3 meals & Analyze",
+      "Phân Tích Đồ Ăn & Thức Uống Hôm Nay": "Today's Food & Drink Analysis",
+      "Ước lượng năng lượng tự động & đánh giá sinh học bằng Gemini AI": "Instant calorie estimate & biological review via Gemini AI",
+      "Xóa ngày": "Clear day",
+      "Phân tích sâu (AI)": "Deep Analysis (AI)",
+      "Tổng năng lượng đã nạp:": "Total intake:",
+      "Chưa có món": "No items",
+      "Đạm (Protein)": "Protein",
+      "Tinh bột (Carb)": "Carbs",
+      "Chất béo (Fat)": "Fat",
+      "Chưa ghi nhận món ăn / thức uống nào hôm nay.": "No food or drinks logged today.",
+      "Đang chờ hồ sơ cá nhân": "Awaiting personal profile",
+      "Gợi ý Thực đơn & Nhịp sinh học đang được khóa": "Menu & Circadian Plan Locked",
+      "Thời lượng ngủ": "Sleep Duration",
+      "Nước cần nạp/ngày": "Daily Water",
+      "Năng lượng mục tiêu": "Target Energy",
+      "Bảng Gợi Ý Thực Đơn Cá Nhân Hóa": "Personalized Menu Plan",
+      "Lược Đồ Nhịp Sinh Học (Circadian Rhythm)": "Circadian Rhythm Timeline",
+      "Tính theo giờ của bạn": "Based on your schedule",
+      // Habits & Quiz
+      "Thói Quen BioHabit": "BioHabit Checklist",
+      "1. Ngủ đủ 7-8 tiếng": "1. Sleep 7–8 hours",
+      "2. Nạp đủ 1.5 - 2 Lít nước": "2. Drink 1.5–2L water",
+      "3. Vận động > 20 phút": "3. Exercise > 20 mins",
+      "Xác nhận hoàn thành hôm nay (+10 Coins)": "Check in today (+10 Coins)",
+      "Quiz Khoa Học & Sinh Học (Không Giới Hạn Đề Tài)": "Science & Biology Quiz (Unlimited Topics)",
+      "Tự nhập bất kỳ chủ đề nào hoặc đổi đề ngẫu nhiên không trùng lặp • +5 BioCoins/câu đúng": "Enter any topic or draw non-repeating questions • +5 BioCoins/correct",
+      "+5 Coins/câu đúng": "+5 Coins/correct",
+      "3 câu": "3 Qs",
+      "5 câu": "5 Qs",
+      "8 câu": "8 Qs",
+      "Tạo đề mới": "New Quiz",
+      "Lĩnh vực rộng:": "Domains:",
+      "🎲 Ngẫu nhiên": "🎲 Random",
+      "🧠 Thần kinh & Tâm lý": "🧠 Neuro & Psych",
+      "🧬 Di truyền & CRISPR": "🧬 Genetics & CRISPR",
+      "🥗 Dinh dưỡng & Thể thao": "🥗 Nutrition & Sport",
+      "🌊 Sinh thái & Tiến hóa": "🌊 Ecology & Evolution",
+      "🚀 Sinh học Vũ trụ": "🚀 Astrobiology",
+      "Chấm điểm & Nhận BioCoins": "Submit & Claim BioCoins",
+      // Focus & Music
+      "Học Tập Cùng Nhạc Yêu Thích": "Study With Favorite Music",
+      "Đồng Hồ Pomodoro Sinh Học": "Biological Pomodoro Timer",
+      "Tập trung": "Focus",
+      "Thư giãn": "Break",
+      "🧠 Học 25 phút": "🧠 Study 25m",
+      "🔥 Sâu 45 phút": "🔥 Deep 45m",
+      "☕ Nghỉ 5 phút": "☕ Break 5m",
+      "🌿 Nghỉ 15 phút": "🌿 Break 15m",
+      "Sẵn sàng bắt đầu phiên học": "Ready to focus",
+      "Bắt đầu học": "Start studying",
+      "Bắt đầu": "Start",
+      "Tiếp tục": "Resume",
+      "Tạm dừng": "Pause",
+      "Đang tạm dừng": "Paused",
+      "Tìm Ca Sĩ / Bài Hát Yêu Thích": "Search Artists / Songs on YouTube",
+      "Tìm nhạc": "Search",
+      "Phát link": "Play URL",
+      "Danh Sách Nhạc Yêu Thích": "Favorite Tracks",
+      "Phiên học đã xong": "Completed sessions",
+      // AI Tutor & BioMarket & Modals
+      "Trợ Lý Sinh Học Gemini AI (Có Bộ Nhớ)": "Gemini AI Biology Tutor (Memory)",
+      "Gợi ý:": "Prompts:",
+      "Gửi": "Send",
+      "Bạn": "You",
+      "BioMarket: Thư Viện Công Trình Nghiên Cứu Y Sinh": "BioMarket: Biomedical Research Library",
+      "Số dư ví": "Wallet balance",
+      "Xuất bản 3 bài (AI)": "Publish 3 Papers (AI)",
+      "AI Soạn Nghiên Cứu": "AI Draft Paper",
+      "🧬 Di truyền & Y sinh": "🧬 Genetics & Biomed",
+      "🧠 Thần kinh & Tâm lý": "🧠 Neuro & Psych",
+      "🥗 Dinh dưỡng & Chuyển hóa": "🥗 Nutrition & Metabolism",
+      "🌍 Sinh thái & Vũ trụ": "🌍 Ecology & Space",
+      "Sơ đồ tư duy": "Mind Map",
+      "Toàn văn Nghiên cứu": "Full Research Paper",
+      "Tóm tắt (Abstract):": "Abstract:",
+      "Tóm tắt nghiên cứu (Abstract)": "Abstract",
+      "Tài liệu tham khảo (References)": "References",
+      "Đóng": "Close",
+      "Giao Diện & Cửa Hàng Skin VIP": "Themes & VIP Skin Shop",
+      "1. Chế độ hiển thị": "1. Display Mode",
+      "Ban ngày (Sáng)": "Light Mode",
+      "Học đêm (Tối dịu mắt)": "Dark Mode",
+      "2. Bộ phối màu Miễn phí (10 tông Gradient)": "2. Free Gradient Palettes (10 themes)",
+      "Tự phối màu riêng:": "Custom color mixer:",
+      "Áp dụng": "Apply",
+      "3. Phông chữ & Bo góc": "3. Font & Radius",
+      "4. Hiệu ứng nền trang": "4. Background Pattern",
+      "Trơn": "Clean",
+      "Đa sắc": "Mesh",
+      "Lưới": "Grid",
+      "Chấm bi": "Dots",
+      "Khôi phục mặc định": "Reset default",
+      "Xong": "Done"
+    };
+
+    const ATTR_VI_TO_EN = {
+      "Tìm theo tên đề tài, từ khóa (#CRISPR, #REM...) hoặc mã DOI...": "Search by title, keyword (#CRISPR, #REM...) or DOI...",
+      "Đặt đề tài bất kỳ để AI tổng hợp bài nghiên cứu + Sơ đồ tư duy (Miễn phí mở đọc)...": "Enter any topic for AI to write a research paper + Mind Map (Free unlock)...",
+      "Nhập đề tài bất kỳ (VD: Tế bào gốc, Giấc mơ REM, Sinh học vũ trụ...)": "Enter any topic (e.g., Stem cells, REM sleep, Astrobiology...)",
+      "Gõ tên ca sĩ hoặc bài hát (VD: Sơn Tùng, Đen Vâu, Lofi Chill...)": "Search artist or song (e.g., Lofi chill, Piano, Acoustic...)",
+      "Hỏi Gemini AI về cơ thể người, dinh dưỡng và Sinh học...": "Ask Gemini AI about human biology, nutrition & science...",
+      "Dán link youtube.com/watch?v=... hoặc youtu.be/...": "Paste youtube.com/watch?v=... or youtu.be/...",
+      "VD: 1 tô phở bò, 2 quả trứng luộc...": "e.g., 1 bowl of Pho, 2 boiled eggs...",
+      "VD: Minh Anh": "e.g., Alex"
+    };
+
+    function translateDynamicStr(trimmed) {
+      if (VI_TO_EN[trimmed]) return VI_TO_EN[trimmed];
+      if (/^\d+\s+ngày$/.test(trimmed)) return trimmed.replace("ngày", "days");
+      if (/^\d+\s+bài$/.test(trimmed)) return trimmed.replace("bài", "items");
+      if (/^Ngày\s+\d{2}\/\d{2}\/\d{4}$/.test(trimmed)) return trimmed.replace("Ngày", "Date");
+      if (/^Còn thiếu ~\d+ kcal$/.test(trimmed)) return trimmed.replace("Còn thiếu", "Need");
+      if (/^Vượt mục tiêu \(\+\d+ kcal\)$/.test(trimmed)) return trimmed.replace("Vượt mục tiêu", "Over target");
+      if (/^Cân đối \(\d+% TDEE\)$/.test(trimmed)) return trimmed.replace("Cân đối", "Balanced");
+      if (/^Mở khóa Toàn văn \(\d+ Coins\)$/.test(trimmed)) return trimmed.replace("Mở khóa Toàn văn", "Unlock Paper");
+      if (/^Đọc Nghiên cứu & Sơ đồ \(\d+ nhánh\)$/.test(trimmed)) return trimmed.replace("Đọc Nghiên cứu & Sơ đồ", "Read Paper & Mind Map").replace("nhánh", "branches");
+      return null;
+    }
+
+    let langObserver = null;
+
+    function applyLanguageToDOM(lang) {
+      if (langObserver) langObserver.disconnect();
+      try {
+        const flagEl = document.getElementById('lang-flag'), codeEl = document.getElementById('lang-code');
+        if (flagEl) flagEl.innerText = lang === 'en' ? '🇬🇧' : '🇻🇳';
+        if (codeEl) codeEl.innerText = lang === 'en' ? 'EN' : 'VI';
+        document.documentElement.lang = lang;
+
+        // 1. Dịch Text Nodes
+        const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null);
+        let node;
+        while ((node = walker.nextNode())) {
+          const parentTag = node.parentElement?.tagName;
+          if (!parentTag || ['SCRIPT', 'STYLE', 'TEXTAREA', 'SVG', 'PATH'].includes(parentTag)) continue;
+          const raw = node.nodeValue;
+          if (!raw || !raw.trim()) continue;
+
+          if (lang === 'en') {
+            if (node._enVal !== undefined && raw === node._enVal) continue;
+            const leading = raw.match(/^\s*/)[0], trailing = raw.match(/\s*$/)[0], trimmed = raw.trim();
+            const translated = translateDynamicStr(trimmed);
+            if (translated) {
+              node._viOrig = raw;
+              node._enVal = leading + translated + trailing;
+              node.nodeValue = node._enVal;
+            }
+          } else {
+            if (node._viOrig !== undefined && node._enVal === raw) {
+              node.nodeValue = node._viOrig;
+              delete node._enVal;
+            }
+          }
+        }
+
+        // 2. Dịch Placeholder
+        document.querySelectorAll('input[placeholder], textarea[placeholder]').forEach(el => {
+          const cur = el.getAttribute('placeholder');
+          if (lang === 'en') {
+            if (!el.dataset.viPh) el.dataset.viPh = cur;
+            if (ATTR_VI_TO_EN[el.dataset.viPh]) el.setAttribute('placeholder', ATTR_VI_TO_EN[el.dataset.viPh]);
+          } else if (el.dataset.viPh) {
+            el.setAttribute('placeholder', el.dataset.viPh);
+          }
+        });
+      } finally {
+        if (langObserver) langObserver.observe(document.body, { childList: true, subtree: true, characterData: true });
+      }
+    }
+
+    function toggleAppLanguage() {
+      AppState.lang = AppState.lang === 'en' ? 'vi' : 'en';
+      applyLanguageToDOM(AppState.lang);
+      saveState();
+      showToast(AppState.lang === 'en' ? "Switched to English! 🇬🇧" : "Đã chuyển sang Tiếng Việt! 🇻🇳", "info");
+    }
+
+    // Tự động yêu cầu Gemini AI trả lời/tạo Quiz/viết bài bằng Tiếng Anh khi đang chọn EN
+    const _origFetch = window.fetch.bind(window);
+    window.fetch = function(url, options = {}) {
+      if (url === '/api/gemini' && AppState.lang === 'en' && options.body) {
+        try {
+          const payload = JSON.parse(options.body);
+          if (payload.type === 'chat' && payload.message) {
+            payload.message += "\n\n(IMPORTANT: Respond completely in English. If returning JSON, keep the exact JSON keys but write all string values in English.)";
+          } else if (payload.type === 'quiz' && payload.topic) {
+            payload.topic += " (Write all questions, options, and explanations in English)";
+          }
+          options = { ...options, body: JSON.stringify(payload) };
+        } catch (e) {}
+      }
+      return _origFetch(url, options);
+    };
+
+    langObserver = new MutationObserver(() => {
+      if (AppState.lang === 'en') applyLanguageToDOM('en');
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      langObserver.observe(document.body, { childList: true, subtree: true, characterData: true });
+      applyLanguageToDOM(AppState.lang || 'vi');
     });
   </script>
 </body>
