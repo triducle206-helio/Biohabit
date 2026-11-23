@@ -3856,30 +3856,137 @@
       });
     }
 
-    // === 2. PHÂN TÍCH THỰC ĐƠN MƯỢT MÀ (TỰ NGẮT 12 GIÂY, KHÔNG HIỆN KHUNG VÀNG) ===
+    // === 2. BỘ PHÂN TÍCH MÓN ĂN & SINH HỌC CHUẨN XÁC ===
     (function () {
+      if (typeof LOCAL_FOOD_DB !== 'undefined' && Array.isArray(LOCAL_FOOD_DB)) {
+        LOCAL_FOOD_DB.unshift(
+          { keys: ["kfc", "lotteria", "jollibee", "texas", "popeyes", "gà rán", "gà chiên", "đùi gà", "cánh gà", "gà viên", "gà giòn", "gà sốt"], kcal: 250, p: 16, c: 11, f: 15, tags: ["fried", "processed"] },
+          { keys: ["mì ý", "mỳ ý", "spaghetti", "pasta", "nui xào", "mì xào"], kcal: 450, p: 16, c: 62, f: 14, tags: ["processed"] },
+          { keys: ["pizza"], kcal: 280, p: 12, c: 34, f: 11, tags: ["fried", "processed"] },
+          { keys: ["burger", "hamburger"], kcal: 420, p: 18, c: 40, f: 20, tags: ["fried", "processed"] },
+          { keys: ["khoai tây chiên", "gà lắc", "phô mai que", "cá viên chiên", "xúc xích"], kcal: 320, p: 7, c: 36, f: 17, tags: ["fried", "processed"] },
+          { keys: ["bún đậu", "mẹt bún đậu"], kcal: 650, p: 28, c: 68, f: 28, tags: ["fried"] },
+          { keys: ["bánh tráng trộn", "bánh tráng nướng", "tokbokki"], kcal: 350, p: 8, c: 55, f: 11, tags: ["processed"] },
+          { keys: ["trà đào", "trà vải", "matcha", "trà chanh", "trà tắc", "sinh tố"], kcal: 160, p: 1, c: 38, f: 1, tags: ["sugar"] }
+        );
+      }
+
+      estimateFoodItemNutrition = function (rawText) {
+        const segments = String(rawText || "").toLowerCase()
+          .split(/[,+;]+|\s+(?:vs|v\/s|với|và|kèm|cùng)\s+/i)
+          .map(s => s.trim()).filter(Boolean);
+
+        let totalKcal = 0, totalP = 0, totalC = 0, totalF = 0;
+        const tags = new Set();
+
+        segments.forEach(seg => {
+          let qty = 1;
+          const gramMatch = seg.match(/^(\d+(?:[.,]\d+)?)\s*(?:g|gr|gram)\b/i);
+          const mlMatch = seg.match(/^(\d+(?:[.,]\d+)?)\s*(?:ml|l|lít)\b/i);
+          const countMatch = seg.match(/^(\d+(?:[.,]\d+)?)/);
+
+          if (gramMatch) {
+            const grams = parseFloat(gramMatch[1].replace(',', '.'));
+            qty = Math.min(5, Math.max(0.3, grams / 150));
+          } else if (mlMatch) {
+            const ml = parseFloat(mlMatch[1].replace(',', '.'));
+            qty = (seg.includes("nước") || seg.includes("trà xanh")) ? 1 : Math.min(4, Math.max(0.5, ml / 350));
+          } else if (countMatch) {
+            qty = Math.min(10, Math.max(0.2, parseFloat(countMatch[1].replace(',', '.'))));
+          } else if (seg.includes("nửa")) {
+            qty = 0.5;
+          }
+
+          const matched = LOCAL_FOOD_DB.find(item => item.keys.some(k => seg.includes(k)));
+          if (matched) {
+            totalKcal += matched.kcal * qty;
+            totalP += matched.p * qty;
+            totalC += matched.c * qty;
+            totalF += matched.f * qty;
+            matched.tags.forEach(t => tags.add(t));
+          } else {
+            totalKcal += 220 * qty;
+            totalP += 9 * qty;
+            totalC += 26 * qty;
+            totalF += 8 * qty;
+          }
+        });
+
+        return {
+          kcal: Math.round(totalKcal),
+          p: Math.round(totalP),
+          c: Math.round(totalC),
+          f: Math.round(totalF),
+          tags: Array.from(tags)
+        };
+      };
+
+      const isLateNightMeal = (timeStr, kcal, sleepStr) => {
+        if ((kcal || 0) < 150) return false;
+        const im = timeToMinutes(timeStr || '12:00');
+        if (im >= 21 * 60 || im < 4 * 60) return true; // 21h đêm - 4h sáng luôn là ăn khuya
+        const sleepMins = timeToMinutes(sleepStr || '22:30');
+        let diff = sleepMins - im;
+        if (diff < -720) diff += 1440;
+        if (diff > 720) diff -= 1440;
+        return diff >= -120 && diff <= 150; // Trong vòng 2.5h trước ngủ hoặc lố giờ ngủ <= 2h
+      };
+
       const isGeminiErrorReply = (txt) => /đang xử lý nhiều yêu cầu|đang bận|quá tải|lỗi kết nối|rate limit|quota|⚠️/i.test(txt || '');
 
       const buildLocalNutritionFallback = (items, targetKcal, isEn) => {
-        let totalKcal = 0, totalP = 0, totalC = 0, totalF = 0, lateCaffeine = false, lateMeal = false;
-        const tags = new Set(), s = AppState.schedule || {}, sleepMins = timeToMinutes(s.sleep || '22:30');
+        let totalKcal = 0, totalP = 0, totalC = 0, totalF = 0, lateCaffeine = false;
+        const lateMeals = [], tags = new Set(), s = AppState.schedule || {};
+
         items.forEach(it => {
           totalKcal += it.kcal || 0; totalP += it.p || 0; totalC += it.c || 0; totalF += it.f || 0;
           (it.tags || []).forEach(t => tags.add(t));
           const im = timeToMinutes(it.time || '12:00');
-          if ((it.tags || []).includes('caffeine') && im >= 15 * 60) lateCaffeine = true;
-          let diff = sleepMins - im; if (diff < -720) diff += 1440;
-          if (it.kcal >= 150 && diff >= 0 && diff <= 120) lateMeal = true;
+          if ((it.tags || []).includes('caffeine') && (im >= 15 * 60 || im < 4 * 60)) lateCaffeine = true;
+          if (isLateNightMeal(it.time, it.kcal, s.sleep)) lateMeals.push(`${it.name} (${it.time})`);
         });
+
         const diffKcal = totalKcal - targetKcal;
+        const hasFried = tags.has('fried') || tags.has('processed');
+        const hasSugar = tags.has('sugar');
+
         if (isEn) {
-          return `1. **Estimated Calories & Macros:** Total **${totalKcal} / ${targetKcal} kcal** (${diffKcal > 100 ? `+${diffKcal} kcal over` : diffKcal < -200 ? `${Math.abs(diffKcal)} kcal remaining` : 'well balanced'}). Protein **${totalP}g**, Carbs **${totalC}g**, Fat **${totalF}g**.\n` +
-            `2. **Biological & Sleep Impact:** ${lateCaffeine ? 'Late caffeine after 15:00 competes with Adenosine receptors and delays Melatonin. ' : ''}${lateMeal ? 'Eating close to bedtime spikes Insulin and suppresses overnight Autophagy. ' : ''}${!lateCaffeine && !lateMeal ? 'Meal timing aligns well with your circadian Insulin curve and sleep prep.' : ''}\n` +
-            `3. **Actionable Adjustments:** ${!tags.has('fiber') ? 'Add leafy greens or fresh fruit for your Gut-Brain Axis. ' : ''}${!tags.has('water') ? 'Remember to drink enough plain water (~35ml/kg). ' : ''}${tags.has('sugar') ? 'Swap sugary drinks for plain water or unsweetened green tea.' : 'Keep maintaining this balanced meal schedule!'}`;
+          const bio = [];
+          if (lateMeals.length > 0) bio.push(`**Unhealthy late-night eating (${lateMeals.join(', ')}):** Eating heavy meals at night spikes Insulin, suppresses Growth Hormone (GH), delays Melatonin, and blocks overnight Autophagy.`);
+          if (hasFried) bio.push(`Fried/fast foods are high in saturated & trans fats, slowing digestion and causing bloating or reflux when lying down.`);
+          if (lateCaffeine) bio.push(`Late caffeine after 15:00 blocks Adenosine receptors and disrupts deep sleep.`);
+          if (hasSugar) bio.push(`Refined sugar causes rapid glucose spikes followed by energy crashes.`);
+          if (bio.length === 0) bio.push(`Meal timing and food choices are well aligned with your circadian rhythm.`);
+
+          const tips = [];
+          if (lateMeals.length > 0) tips.push(`Finish dinner 2.5–3 hours before bed; tonight sip warm water and stay upright/walk lightly for 15 mins before sleeping.`);
+          if (hasFried) tips.push(`Swap deep-fried items for steamed/grilled protein (chicken breast, fish, eggs) tomorrow.`);
+          if (!tags.has('fiber')) tips.push(`Add leafy greens or fresh fruit to support your Gut-Brain Axis.`);
+          if (!tags.has('water')) tips.push(`Log enough plain water (~35ml/kg body weight).`);
+          if (tips.length === 0) tips.push(`Keep maintaining this balanced daily routine!`);
+
+          return `1. **Estimated Calories & Macros:** Total **${totalKcal} / ${targetKcal} kcal** (${diffKcal > 100 ? `+${diffKcal} kcal over target` : diffKcal < -200 ? `${Math.abs(diffKcal)} kcal remaining` : 'balanced'}). Protein **${totalP}g**, Carbs **${totalC}g**, Fat **${totalF}g**.\n` +
+            `2. **Biological & Sleep Impact:** ${bio.join(' ')}\n` +
+            `3. **Actionable Adjustments:** ${tips.join(' ')}`;
         }
-        return `1. **Ước lượng Calo & Cân đối chất:** Tổng nạp **${totalKcal} / ${targetKcal} kcal** (${diffKcal > 100 ? `dư khoảng ${diffKcal} kcal` : diffKcal < -200 ? `còn thiếu ~${Math.abs(diffKcal)} kcal` : 'khá cân đối với TDEE'}). Đạm **${totalP}g**, Tinh bột **${totalC}g**, Chất béo **${totalF}g**.\n` +
-          `2. **Đánh giá Sinh học & Giấc ngủ:** ${lateCaffeine ? 'Có dùng Caffeine sau 15:00 dễ khóa thụ thể Adenosine và làm chậm tiết Melatonin. ' : ''}${lateMeal ? 'Ăn gần giờ ngủ làm tăng Insulin, cản trở hormone tăng trưởng và tự thực bào Autophagy ban đêm. ' : ''}${!lateCaffeine && !lateMeal ? 'Thời điểm ăn uống hợp lý, không gây áp lực đường huyết trước khi ngủ.' : ''}\n` +
-          `3. **Gợi ý điều chỉnh:** ${!tags.has('fiber') ? 'Bổ sung thêm rau xanh/trái cây để nuôi lợi khuẩn Trục Não - Ruột. ' : ''}${!tags.has('water') ? 'Nhớ bù đủ nước lọc (~35ml/kg cân nặng). ' : ''}${tags.has('sugar') ? 'Hạn chế đồ uống nhiều đường tinh luyện để tránh tụt năng lượng giữa buổi.' : 'Tiếp tục duy trì nhịp ăn uống hiện tại nhé!'}`;
+
+        const bio = [];
+        if (lateMeals.length > 0) bio.push(`**Ăn khuya KHÔNG hợp lý (${lateMeals.join(', ')}):** Nạp nhiều năng lượng vào đêm khuya làm tăng vọt Insulin, ức chế hormone tăng trưởng (GH), làm chậm tiết Melatonin và tắt cơ chế dọn rác tế bào (Autophagy).`);
+        if (hasFried) bio.push(`Nhóm đồ chiên rán / chế biến nhanh chứa nhiều chất béo bão hòa & trans-fat làm dạ dày tiêu hóa rất chậm, dễ gây đầy bụng, trào ngược khi nằm ngủ.`);
+        if (lateCaffeine) bio.push(`Dùng Caffeine sau 15:00 sẽ khóa thụ thể Adenosine gây khó ngủ sâu.`);
+        if (hasSugar) bio.push(`Đồ ngọt chứa đường tinh luyện dễ làm đường huyết tăng vọt rồi tụt nhanh.`);
+        if (bio.length === 0) bio.push(`Thời điểm ăn và lựa chọn món ăn hiện tại phù hợp với nhịp sinh học.`);
+
+        const tips = [];
+        if (lateMeals.length > 0) tips.push(`Nên kết thúc bữa tối trước khi ngủ ít nhất 2.5–3 tiếng; tối nay uống ít nước ấm và đi lại nhẹ/ngồi thẳng 15 phút trước khi nằm.`);
+        if (hasFried) tips.push(`Bữa tới ưu tiên đạm hấp/luộc/áp chảo thay cho đồ chiên ngập dầu.`);
+        if (!tags.has('fiber')) tips.push(`Bổ sung thêm rau xanh/trái cây để trung hòa chất béo và nuôi lợi khuẩn ruột.`);
+        if (!tags.has('water')) tips.push(`Nhớ uống đủ nước lọc (~35ml/kg cân nặng).`);
+        if (tips.length === 0) tips.push(`Tiếp tục duy trì thói quen ăn uống lành mạnh này nhé!`);
+
+        return `1. **Ước lượng Calo & Cân đối chất:** Tổng nạp **${totalKcal} / ${targetKcal} kcal** (${diffKcal > 100 ? `vượt ~${diffKcal} kcal` : diffKcal < -200 ? `còn thiếu ~${Math.abs(diffKcal)} kcal` : 'khá cân đối với TDEE'}). Đạm **${totalP}g**, Tinh bột **${totalC}g**, Chất béo **${totalF}g**.\n` +
+          `2. **Đánh giá Sinh học & Giấc ngủ:** ${bio.join(' ')}\n` +
+          `3. **Gợi ý điều chỉnh:** ${tips.join(' ')}`;
       };
 
       const baseFetch = typeof _origFetch === 'function' ? _origFetch : window.fetch.bind(window);
@@ -3888,6 +3995,8 @@
         const today = getLocalDateStr(0), items = Array.isArray(AppState.foodLogs?.[today]) ? AppState.foodLogs[today] : [];
         const isEn = AppState.lang === 'en';
         if (items.length === 0) return showToast(isEn ? "Log at least 1 meal or drink first!" : "Hãy nhập ít nhất 1 món ăn hoặc thức uống hôm nay!", "warning");
+
+        items.forEach(it => { if (it.name) Object.assign(it, estimateFoodItemNutrition(it.name)); });
 
         const btn = document.getElementById('btn-analyze-food-ai'), icon = document.getElementById('food-ai-icon'), bt = document.getElementById('food-ai-btn-text');
         if (btn) btn.disabled = true;
@@ -3919,6 +4028,7 @@
               text: data.reply,
               viText: isEn ? prev.viText : data.reply,
               enText: isEn ? data.reply : prev.enText,
+              isLocal: false,
               at: getCurrentHHMM()
             };
             saveState();
@@ -3938,6 +4048,7 @@
           text: buildLocalNutritionFallback(items, targetKcal, isEn),
           viText: buildLocalNutritionFallback(items, targetKcal, false),
           enText: buildLocalNutritionFallback(items, targetKcal, true),
+          isLocal: true,
           at: getCurrentHHMM()
         };
         saveState();
@@ -3947,21 +4058,49 @@
 
       const prevRenderFood = renderFoodLogs;
       renderFoodLogs = function () {
-        const today = getLocalDateStr(0), cur = AppState.foodAnalysis?.[today];
-        if (cur?.text && isGeminiErrorReply(cur.text)) {
-          const items = Array.isArray(AppState.foodLogs?.[today]) ? AppState.foodLogs[today] : [];
+        const today = getLocalDateStr(0), items = Array.isArray(AppState.foodLogs?.[today]) ? AppState.foodLogs[today] : [];
+        let updatedItems = false;
+        items.forEach(it => {
+          if (!it._v4 && it.name) {
+            Object.assign(it, estimateFoodItemNutrition(it.name));
+            it._v4 = true;
+            updatedItems = true;
+          }
+        });
+
+        const cur = AppState.foodAnalysis?.[today];
+        if (cur?.text && (isGeminiErrorReply(cur.text) || (updatedItems && (cur.isLocal || cur.text.includes('Ước lượng Calo & Cân đối chất'))))) {
           if (items.length > 0) {
             AppState.foodAnalysis[today] = {
               text: buildLocalNutritionFallback(items, getUserTargetTDEE(), AppState.lang === 'en'),
               viText: buildLocalNutritionFallback(items, getUserTargetTDEE(), false),
               enText: buildLocalNutritionFallback(items, getUserTargetTDEE(), true),
+              isLocal: true,
               at: cur.at || getCurrentHHMM()
             };
           } else {
             delete AppState.foodAnalysis[today];
           }
         }
+
         prevRenderFood();
+
+        const s = AppState.schedule || {};
+        const lateItems = items.filter(it => isLateNightMeal(it.time, it.kcal, s.sleep));
+        const ins = document.getElementById('food-local-insights');
+        if (ins && lateItems.length > 0 && !ins.innerHTML.includes('fa-moon')) {
+          const isEn = AppState.lang === 'en';
+          const tStr = lateItems.map(x => x.time).join(', ');
+          if (ins.innerHTML.includes('fa-circle-check')) ins.innerHTML = '';
+          ins.insertAdjacentHTML('afterbegin',
+            `<div class="p-2.5 rounded-xl border text-[11px] leading-relaxed flex items-start gap-2 bg-rose-50 border-rose-200 text-rose-800">
+              <i class="fa-solid fa-moon mt-0.5 shrink-0"></i>
+              <div>${isEn
+                ? `<strong>Late-Night Meal (${escapeHTML(tStr)}):</strong> Heavy eating late at night spikes Insulin, suppresses Growth Hormone, and blocks cellular <em>Autophagy</em>.`
+                : `<strong>Cảnh báo ăn khuya (${escapeHTML(tStr)}):</strong> Ăn bữa nặng vào giờ muộn làm tăng Insulin, ức chế hormone tăng trưởng, làm chậm Melatonin và cản trở tự thực bào <em>Autophagy</em>.`}</div>
+            </div>`
+          );
+        }
       };
 
       renderFoodLogs();
