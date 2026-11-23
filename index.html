@@ -3855,6 +3855,156 @@
         "Bạn chọn sai": "Wrong choice"
       });
     }
+    // === 1. DỊCH NHÃN ĐÚNG / SAI CHO QUIZ ===
+    if (typeof VI_TO_EN !== 'undefined') {
+      Object.assign(VI_TO_EN, {
+        "✓ Đúng": "✓ Correct",
+        "✗ Sai": "✗ Wrong",
+        "Bạn chọn đúng": "Your choice",
+        "Đáp án đúng": "Correct answer",
+        "Bạn chọn sai": "Wrong choice"
+      });
+    }
+
+    // === 2. VÁ LỖI PHÂN TÍCH THỰC ĐƠN, GIỚI HẠN 12 GIÂY & NÚT THỬ LẠI AI ===
+    (function () {
+      const isGeminiErrorReply = (txt) => /đang xử lý nhiều yêu cầu|đang bận|quá tải|lỗi kết nối|rate limit|quota|⚠️/i.test(txt || '');
+
+      const buildLocalNutritionFallback = (items, targetKcal, isEn) => {
+        let totalKcal = 0, totalP = 0, totalC = 0, totalF = 0, lateCaffeine = false, lateMeal = false;
+        const tags = new Set(), s = AppState.schedule || {}, sleepMins = timeToMinutes(s.sleep || '22:30');
+        items.forEach(it => {
+          totalKcal += it.kcal || 0; totalP += it.p || 0; totalC += it.c || 0; totalF += it.f || 0;
+          (it.tags || []).forEach(t => tags.add(t));
+          const im = timeToMinutes(it.time || '12:00');
+          if ((it.tags || []).includes('caffeine') && im >= 15 * 60) lateCaffeine = true;
+          let diff = sleepMins - im; if (diff < -720) diff += 1440;
+          if (it.kcal >= 150 && diff >= 0 && diff <= 120) lateMeal = true;
+        });
+        const diffKcal = totalKcal - targetKcal;
+        if (isEn) {
+          return `1. **Estimated Calories & Macros:** Total **${totalKcal} / ${targetKcal} kcal** (${diffKcal > 100 ? `+${diffKcal} kcal over` : diffKcal < -200 ? `${Math.abs(diffKcal)} kcal remaining` : 'well balanced'}). Protein **${totalP}g**, Carbs **${totalC}g**, Fat **${totalF}g**.\n` +
+            `2. **Biological & Sleep Impact:** ${lateCaffeine ? 'Late caffeine after 15:00 competes with Adenosine receptors and delays Melatonin. ' : ''}${lateMeal ? 'Eating close to bedtime spikes Insulin and suppresses overnight Autophagy. ' : ''}${!lateCaffeine && !lateMeal ? 'Meal timing aligns well with your circadian Insulin curve and sleep prep.' : ''}\n` +
+            `3. **Actionable Adjustments:** ${!tags.has('fiber') ? 'Add leafy greens or fresh fruit for your Gut-Brain Axis. ' : ''}${!tags.has('water') ? 'Remember to drink enough plain water (~35ml/kg). ' : ''}${tags.has('sugar') ? 'Swap sugary drinks for plain water or unsweetened green tea.' : 'Keep maintaining this balanced meal schedule!'}`;
+        }
+        return `1. **Ước lượng Calo & Cân đối chất:** Tổng nạp **${totalKcal} / ${targetKcal} kcal** (${diffKcal > 100 ? `dư khoảng ${diffKcal} kcal` : diffKcal < -200 ? `còn thiếu ~${Math.abs(diffKcal)} kcal` : 'khá cân đối với TDEE'}). Đạm **${totalP}g**, Tinh bột **${totalC}g**, Chất béo **${totalF}g**.\n` +
+          `2. **Đánh giá Sinh học & Giấc ngủ:** ${lateCaffeine ? 'Có dùng Caffeine sau 15:00 dễ khóa thụ thể Adenosine và làm chậm tiết Melatonin. ' : ''}${lateMeal ? 'Ăn gần giờ ngủ làm tăng Insulin, cản trở hormone tăng trưởng và tự thực bào Autophagy ban đêm. ' : ''}${!lateCaffeine && !lateMeal ? 'Thời điểm ăn uống hợp lý, không gây áp lực đường huyết trước khi ngủ.' : ''}\n` +
+          `3. **Gợi ý điều chỉnh:** ${!tags.has('fiber') ? 'Bổ sung thêm rau xanh/trái cây để nuôi lợi khuẩn Trục Não - Ruột. ' : ''}${!tags.has('water') ? 'Nhớ bù đủ nước lọc (~35ml/kg cân nặng). ' : ''}${tags.has('sugar') ? 'Hạn chế đồ uống nhiều đường tinh luyện để tránh tụt năng lượng giữa buổi.' : 'Tiếp tục duy trì nhịp ăn uống hiện tại nhé!'}`;
+      };
+
+      const baseFetch = typeof _origFetch === 'function' ? _origFetch : window.fetch.bind(window);
+
+      window.analyzeFoodWithGemini = async function () {
+        const today = getLocalDateStr(0), items = Array.isArray(AppState.foodLogs?.[today]) ? AppState.foodLogs[today] : [];
+        const isEn = AppState.lang === 'en';
+        if (items.length === 0) return showToast(isEn ? "Log at least 1 meal or drink first!" : "Hãy nhập ít nhất 1 món ăn hoặc thức uống hôm nay!", "warning");
+
+        const btn = document.getElementById('btn-analyze-food-ai'), icon = document.getElementById('food-ai-icon'), bt = document.getElementById('food-ai-btn-text');
+        const retryBtn = document.getElementById('btn-retry-food-ai');
+        if (btn) btn.disabled = true;
+        if (icon) icon.className = "fa-solid fa-spinner animate-spin mr-1.5";
+        if (bt) bt.innerText = isEn ? "Analyzing..." : "AI đang phân tích...";
+        if (retryBtn) {
+          retryBtn.disabled = true;
+          retryBtn.innerHTML = `<i class="fa-solid fa-spinner animate-spin mr-1"></i>${isEn ? 'Retrying...' : 'Đang thử lại...'}`;
+        }
+
+        const s = AppState.schedule || {}, targetKcal = getUserTargetTDEE();
+        const prompt = isEn
+          ? `SYSTEM INSTRUCTION OVERRIDE: Reply 100% in natural ENGLISH ONLY.\nAnalyze today's food log:\n- Profile: ${s.isConfigured ? `Height ${s.height}cm, Weight ${s.weight}kg, Goal: ${s.goal}, TDEE: ${targetKcal} kcal/day, Bedtime: ${s.sleep}` : `Target ~${targetKcal} kcal/day`}.\n- Meals:\n${items.map((it, i) => `${i + 1}. [${it.meal} - ${it.time}] ${it.name}`).join('\n')}\nConcise 3 parts:\n1. **Estimated Calories & Macros**\n2. **Biological & Sleep Impact**\n3. **Actionable Adjustments**`
+          : `Phân tích thực đơn hôm nay:\n- Hồ sơ: ${s.isConfigured ? `Cao ${s.height}cm, Nặng ${s.weight}kg, Chế độ: ${s.goal}, TDEE: ${targetKcal} kcal/ngày, Ngủ: ${s.sleep}` : `Mục tiêu ~${targetKcal} kcal/ngày`}.\n- Món đã nạp:\n${items.map((it, i) => `${i + 1}. [${it.meal} - ${it.time}] ${it.name}`).join('\n')}\nTrả lời ngắn gọn theo 3 ý:\n1. **Ước lượng Calo & Cân đối chất**\n2. **Đánh giá Sinh học & Giấc ngủ**\n3. **Gợi ý điều chỉnh**.`;
+
+        let failReason = "";
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 12000); // Tự ngắt nếu AI phản hồi quá 12 giây
+
+        try {
+          const res = await baseFetch('/api/gemini', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ type: 'chat', message: prompt, history: [] }),
+            signal: controller.signal
+          });
+          clearTimeout(timeoutId);
+          const data = await res.json().catch(() => ({}));
+
+          if (res.ok && data.reply && !isGeminiErrorReply(data.reply)) {
+            if (!AppState.foodAnalysis) AppState.foodAnalysis = {};
+            const prev = AppState.foodAnalysis[today] || {};
+            AppState.foodAnalysis[today] = {
+              text: data.reply,
+              viText: isEn ? prev.viText : data.reply,
+              enText: isEn ? data.reply : prev.enText,
+              isFallback: false,
+              at: getCurrentHHMM()
+            };
+            saveState();
+            showToast(isEn ? "Gemini AI finished analyzing!" : "Gemini AI đã phân tích xong thực đơn!", "success");
+            return;
+          }
+          failReason = data.error || data.reply || `HTTP ${res.status}`;
+        } catch (e) {
+          clearTimeout(timeoutId);
+          failReason = e?.name === 'AbortError'
+            ? (isEn ? "AI timed out (>12s)" : "AI phản hồi quá lâu (>12s)")
+            : (isEn ? "Cannot reach /api/gemini" : "Không kết nối được /api/gemini");
+        } finally {
+          if (btn) btn.disabled = false;
+          if (icon) icon.className = "fa-solid fa-wand-magic-sparkles mr-1.5";
+          if (bt) bt.innerText = isEn ? "Deep Analysis (AI)" : "Phân tích sâu (AI)";
+        }
+
+        if (!AppState.foodAnalysis) AppState.foodAnalysis = {};
+        AppState.foodAnalysis[today] = {
+          text: buildLocalNutritionFallback(items, targetKcal, isEn),
+          viText: buildLocalNutritionFallback(items, targetKcal, false),
+          enText: buildLocalNutritionFallback(items, targetKcal, true),
+          isFallback: true,
+          failReason: String(failReason).slice(0, 90),
+          at: getCurrentHHMM()
+        };
+        saveState();
+        showToast(isEn ? "Gemini unavailable — local review updated!" : "Gemini chưa phản hồi — đã cập nhật phân tích tại máy!", "warning");
+      };
+      analyzeFoodWithGemini = window.analyzeFoodWithGemini;
+
+      const prevRenderFood = renderFoodLogs;
+      renderFoodLogs = function () {
+        const today = getLocalDateStr(0), cur = AppState.foodAnalysis?.[today];
+        if (cur?.text && isGeminiErrorReply(cur.text)) {
+          const items = Array.isArray(AppState.foodLogs?.[today]) ? AppState.foodLogs[today] : [];
+          if (items.length > 0) {
+            AppState.foodAnalysis[today] = {
+              text: buildLocalNutritionFallback(items, getUserTargetTDEE(), AppState.lang === 'en'),
+              viText: buildLocalNutritionFallback(items, getUserTargetTDEE(), false),
+              enText: buildLocalNutritionFallback(items, getUserTargetTDEE(), true),
+              isFallback: true,
+              failReason: "Gemini quá tải / hết lượt API",
+              at: cur.at || getCurrentHHMM()
+            };
+          } else {
+            delete AppState.foodAnalysis[today];
+          }
+        }
+
+        prevRenderFood();
+
+        const savedAI = AppState.foodAnalysis?.[today];
+        const aiC = document.getElementById('food-ai-analysis-content');
+        if (savedAI?.isFallback && aiC && !aiC.querySelector('#btn-retry-food-ai')) {
+          const isEn = AppState.lang === 'en';
+          const reasonNote = savedAI.failReason ? ` (${escapeHTML(savedAI.failReason)})` : '';
+          aiC.insertAdjacentHTML('afterbegin',
+            `<div class="mb-2.5 p-2.5 rounded-lg bg-amber-50 border border-amber-200 flex items-center justify-between gap-2 text-[11px] text-amber-900">
+              <span><i class="fa-solid fa-bolt text-amber-600 mr-1"></i>${isEn ? 'Gemini AI unavailable' : 'Gemini AI chưa phản hồi'}${reasonNote} — ${isEn ? 'showing smart local review.' : 'đang dùng phân tích nhanh tại máy.'}</span>
+              <button id="btn-retry-food-ai" type="button" onclick="window.analyzeFoodWithGemini()" class="px-2.5 py-1 rounded-md bg-bio-600 hover:bg-bio-700 text-white font-bold shrink-0 cursor-pointer">🔄 ${isEn ? 'Retry AI' : 'Thử lại AI'}</button>
+            </div>`
+          );
+        }
+      };
+
+      renderFoodLogs();
+    })();
   </script>
 </body>
 </html>
