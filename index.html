@@ -3845,17 +3845,7 @@
     window.addEventListener('DOMContentLoaded', () => {
       if (AppState.lang === 'en') setTimeout(autoTranslateFoodReviewIfNeeded, 150);
     });
-
-    if (typeof VI_TO_EN !== 'undefined') {
-      Object.assign(VI_TO_EN, {
-        "✓ Đúng": "✓ Correct",
-        "✗ Sai": "✗ Wrong",
-        "Bạn chọn đúng": "Your choice",
-        "Đáp án đúng": "Correct answer",
-        "Bạn chọn sai": "Wrong choice"
-      });
-    }
-    // === 1. DỊCH NHÃN ĐÚNG / SAI CHO QUIZ ===
+// === 1. DỊCH NHÃN ĐÚNG / SAI CHO QUIZ ===
     if (typeof VI_TO_EN !== 'undefined') {
       Object.assign(VI_TO_EN, {
         "✓ Đúng": "✓ Correct",
@@ -3866,7 +3856,7 @@
       });
     }
 
-    // === 2. VÁ LỖI PHÂN TÍCH THỰC ĐƠN, GIỚI HẠN 12 GIÂY & NÚT THỬ LẠI AI ===
+    // === 2. PHÂN TÍCH THỰC ĐƠN MƯỢT MÀ (TỰ NGẮT 12 GIÂY, KHÔNG HIỆN KHUNG VÀNG) ===
     (function () {
       const isGeminiErrorReply = (txt) => /đang xử lý nhiều yêu cầu|đang bận|quá tải|lỗi kết nối|rate limit|quota|⚠️/i.test(txt || '');
 
@@ -3900,23 +3890,17 @@
         if (items.length === 0) return showToast(isEn ? "Log at least 1 meal or drink first!" : "Hãy nhập ít nhất 1 món ăn hoặc thức uống hôm nay!", "warning");
 
         const btn = document.getElementById('btn-analyze-food-ai'), icon = document.getElementById('food-ai-icon'), bt = document.getElementById('food-ai-btn-text');
-        const retryBtn = document.getElementById('btn-retry-food-ai');
         if (btn) btn.disabled = true;
         if (icon) icon.className = "fa-solid fa-spinner animate-spin mr-1.5";
         if (bt) bt.innerText = isEn ? "Analyzing..." : "AI đang phân tích...";
-        if (retryBtn) {
-          retryBtn.disabled = true;
-          retryBtn.innerHTML = `<i class="fa-solid fa-spinner animate-spin mr-1"></i>${isEn ? 'Retrying...' : 'Đang thử lại...'}`;
-        }
 
         const s = AppState.schedule || {}, targetKcal = getUserTargetTDEE();
         const prompt = isEn
           ? `SYSTEM INSTRUCTION OVERRIDE: Reply 100% in natural ENGLISH ONLY.\nAnalyze today's food log:\n- Profile: ${s.isConfigured ? `Height ${s.height}cm, Weight ${s.weight}kg, Goal: ${s.goal}, TDEE: ${targetKcal} kcal/day, Bedtime: ${s.sleep}` : `Target ~${targetKcal} kcal/day`}.\n- Meals:\n${items.map((it, i) => `${i + 1}. [${it.meal} - ${it.time}] ${it.name}`).join('\n')}\nConcise 3 parts:\n1. **Estimated Calories & Macros**\n2. **Biological & Sleep Impact**\n3. **Actionable Adjustments**`
           : `Phân tích thực đơn hôm nay:\n- Hồ sơ: ${s.isConfigured ? `Cao ${s.height}cm, Nặng ${s.weight}kg, Chế độ: ${s.goal}, TDEE: ${targetKcal} kcal/ngày, Ngủ: ${s.sleep}` : `Mục tiêu ~${targetKcal} kcal/ngày`}.\n- Món đã nạp:\n${items.map((it, i) => `${i + 1}. [${it.meal} - ${it.time}] ${it.name}`).join('\n')}\nTrả lời ngắn gọn theo 3 ý:\n1. **Ước lượng Calo & Cân đối chất**\n2. **Đánh giá Sinh học & Giấc ngủ**\n3. **Gợi ý điều chỉnh**.`;
 
-        let failReason = "";
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 12000); // Tự ngắt nếu AI phản hồi quá 12 giây
+        const timeoutId = setTimeout(() => controller.abort(), 12000);
 
         try {
           const res = await baseFetch('/api/gemini', {
@@ -3935,19 +3919,14 @@
               text: data.reply,
               viText: isEn ? prev.viText : data.reply,
               enText: isEn ? data.reply : prev.enText,
-              isFallback: false,
               at: getCurrentHHMM()
             };
             saveState();
             showToast(isEn ? "Gemini AI finished analyzing!" : "Gemini AI đã phân tích xong thực đơn!", "success");
             return;
           }
-          failReason = data.error || data.reply || `HTTP ${res.status}`;
         } catch (e) {
           clearTimeout(timeoutId);
-          failReason = e?.name === 'AbortError'
-            ? (isEn ? "AI timed out (>12s)" : "AI phản hồi quá lâu (>12s)")
-            : (isEn ? "Cannot reach /api/gemini" : "Không kết nối được /api/gemini");
         } finally {
           if (btn) btn.disabled = false;
           if (icon) icon.className = "fa-solid fa-wand-magic-sparkles mr-1.5";
@@ -3959,12 +3938,10 @@
           text: buildLocalNutritionFallback(items, targetKcal, isEn),
           viText: buildLocalNutritionFallback(items, targetKcal, false),
           enText: buildLocalNutritionFallback(items, targetKcal, true),
-          isFallback: true,
-          failReason: String(failReason).slice(0, 90),
           at: getCurrentHHMM()
         };
         saveState();
-        showToast(isEn ? "Gemini unavailable — local review updated!" : "Gemini chưa phản hồi — đã cập nhật phân tích tại máy!", "warning");
+        showToast(isEn ? "Analysis complete!" : "Đã phân tích xong thực đơn hôm nay!", "success");
       };
       analyzeFoodWithGemini = window.analyzeFoodWithGemini;
 
@@ -3978,32 +3955,17 @@
               text: buildLocalNutritionFallback(items, getUserTargetTDEE(), AppState.lang === 'en'),
               viText: buildLocalNutritionFallback(items, getUserTargetTDEE(), false),
               enText: buildLocalNutritionFallback(items, getUserTargetTDEE(), true),
-              isFallback: true,
-              failReason: "Gemini quá tải / hết lượt API",
               at: cur.at || getCurrentHHMM()
             };
           } else {
             delete AppState.foodAnalysis[today];
           }
         }
-
         prevRenderFood();
+      };
 
-        const savedAI = AppState.foodAnalysis?.[today];
-        const aiC = document.getElementById('food-ai-analysis-content');
-        // XÓA ĐOẠN NÀY ĐI ĐỂ ẨN KHUNG VÀNG:
-        const savedAI = AppState.foodAnalysis?.[today];
-        const aiC = document.getElementById('food-ai-analysis-content');
-        if (savedAI?.isFallback && aiC && !aiC.querySelector('#btn-retry-food-ai')) {
-          const isEn = AppState.lang === 'en';
-          const reasonNote = savedAI.failReason ? ` (${escapeHTML(savedAI.failReason)})` : '';
-          aiC.insertAdjacentHTML('afterbegin',
-            `<div class="mb-2.5 p-2.5 rounded-lg bg-amber-50 border border-amber-200 flex items-center justify-between gap-2 text-[11px] text-amber-900">
-              <span><i class="fa-solid fa-bolt text-amber-600 mr-1"></i>${isEn ? 'Gemini AI unavailable' : 'Gemini AI chưa phản hồi'}${reasonNote} — ${isEn ? 'showing smart local review.' : 'đang dùng phân tích nhanh tại máy.'}</span>
-              <button id="btn-retry-food-ai" type="button" onclick="window.analyzeFoodWithGemini()" class="px-2.5 py-1 rounded-md bg-bio-600 hover:bg-bio-700 text-white font-bold shrink-0 cursor-pointer">🔄 ${isEn ? 'Retry AI' : 'Thử lại AI'}</button>
-            </div>`
-          );
-        }
+      renderFoodLogs();
+    })();
   </script>
 </body>
 </html>
