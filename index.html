@@ -3991,6 +3991,9 @@
 
         const savedAI = AppState.foodAnalysis?.[today];
         const aiC = document.getElementById('food-ai-analysis-content');
+        // XÓA ĐOẠN NÀY ĐI ĐỂ ẨN KHUNG VÀNG:
+        const savedAI = AppState.foodAnalysis?.[today];
+        const aiC = document.getElementById('food-ai-analysis-content');
         if (savedAI?.isFallback && aiC && !aiC.querySelector('#btn-retry-food-ai')) {
           const isEn = AppState.lang === 'en';
           const reasonNote = savedAI.failReason ? ` (${escapeHTML(savedAI.failReason)})` : '';
@@ -4001,10 +4004,6 @@
             </div>`
           );
         }
-      };
-
-      renderFoodLogs();
-    })();
   </script>
 </body>
 </html>
