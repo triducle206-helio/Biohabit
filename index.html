@@ -1560,35 +1560,110 @@
 
     function renderCurrentQuiz() {
       const c = document.getElementById('quiz-container'); if (!c) return;
+      const isEn = AppState.lang === 'en';
       c.innerHTML = currentSessionQuiz.map((q, idx) => `
-        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2.5">
-          <p class="text-xs font-bold text-slate-800"><span class="text-purple-600 font-black mr-1">Câu ${idx + 1}:</span> ${escapeHTML(q.question)}</p>
-          <div class="space-y-1.5">${(q.options || []).map((o, oi) => `<label class="flex items-center space-x-2.5 p-2 rounded-lg bg-white border border-slate-200 hover:border-purple-300 text-xs font-medium cursor-pointer transition"><input type="radio" name="quiz-item-${idx}" value="${oi}" class="text-purple-600"><span class="text-slate-700">${escapeHTML(o)}</span></label>`).join('')}</div>
-          ${q.explain ? `<div id="quiz-explain-${idx}" class="hidden text-[11px] text-purple-700 bg-purple-50/70 p-2 rounded-lg border border-purple-100 font-medium"><i class="fa-regular fa-lightbulb mr-1"></i> <strong>Giải thích:</strong> ${escapeHTML(q.explain)}</div>` : ''}
+        <div id="quiz-card-${idx}" class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2.5 transition">
+          <div class="flex items-start justify-between gap-2">
+            <p class="text-xs font-bold text-slate-800"><span class="text-purple-600 font-black mr-1">${isEn ? `Q${idx + 1}:` : `Câu ${idx + 1}:`}</span> ${escapeHTML(q.question)}</p>
+            <span id="quiz-card-badge-${idx}" class="hidden text-[10px] font-extrabold px-2 py-0.5 rounded-full shrink-0"></span>
+          </div>
+          <div class="space-y-1.5">${(q.options || []).map((o, oi) => `
+            <label id="quiz-opt-${idx}-${oi}" class="flex items-center justify-between gap-2 p-2.5 rounded-lg bg-white border border-slate-200 hover:border-purple-300 text-xs font-medium cursor-pointer transition">
+              <span class="flex items-center space-x-2.5 min-w-0">
+                <input type="radio" name="quiz-item-${idx}" value="${oi}" class="text-purple-600 shrink-0">
+                <span id="quiz-opt-text-${idx}-${oi}" class="text-slate-700">${escapeHTML(o)}</span>
+              </span>
+              <span id="quiz-opt-status-${idx}-${oi}" class="hidden text-[10px] font-extrabold shrink-0 items-center gap-1"></span>
+            </label>`).join('')}
+          </div>
+          ${q.explain ? `<div id="quiz-explain-${idx}" class="hidden text-[11px] text-purple-700 bg-purple-50/70 p-2.5 rounded-lg border border-purple-100 font-medium"><i class="fa-regular fa-lightbulb mr-1"></i> <strong>${isEn ? 'Explanation:' : 'Giải thích:'}</strong> ${escapeHTML(q.explain)}</div>` : ''}
         </div>`).join('');
     }
 
     function evaluateQuiz() {
-      if (isCurrentQuizSubmitted) return showToast("Bạn đã chấm bộ này rồi! Bấm 'Tạo đề mới' để làm tiếp nhé!", "info");
-      let ok = 0, all = true;
+      const isEn = AppState.lang === 'en';
+      if (isCurrentQuizSubmitted) {
+        return showToast(isEn ? "Already graded! Click 'New Quiz' to try another set." : "Bạn đã chấm bộ này rồi! Bấm 'Tạo đề mới' để làm tiếp nhé!", "info");
+      }
+
+      // Kiểm tra xem đã chọn đủ hết các câu chưa trước khi chấm & tô màu
+      const selections = currentSessionQuiz.map((_, idx) => document.querySelector(`input[name="quiz-item-${idx}"]:checked`));
+      if (selections.some(s => !s)) {
+        return showToast(isEn ? `Please answer all ${currentSessionQuiz.length} questions!` : `Vui lòng trả lời đủ ${currentSessionQuiz.length} câu!`, "warning");
+      }
+
+      let ok = 0;
       currentSessionQuiz.forEach((q, idx) => {
-        const s = document.querySelector(`input[name="quiz-item-${idx}"]:checked`);
-        if (!s) all = false; else if (parseInt(s.value) === q.answer) ok++;
+        const picked = parseInt(selections[idx].value);
+        const isCorrect = picked === q.answer;
+        if (isCorrect) ok++;
+
+        // Tô viền và gắn nhãn Đúng / Sai cho thẻ câu hỏi
+        const card = document.getElementById(`quiz-card-${idx}`);
+        const badge = document.getElementById(`quiz-card-badge-${idx}`);
+        if (card) {
+          card.classList.remove('border-slate-200');
+          card.classList.add(isCorrect ? 'border-emerald-400' : 'border-rose-400');
+        }
+        if (badge) {
+          badge.className = isCorrect
+            ? "text-[10px] font-extrabold px-2 py-0.5 rounded-full shrink-0 bg-emerald-100 text-emerald-700"
+            : "text-[10px] font-extrabold px-2 py-0.5 rounded-full shrink-0 bg-rose-100 text-rose-700";
+          badge.innerText = isCorrect ? (isEn ? "✓ Correct" : "✓ Đúng") : (isEn ? "✗ Wrong" : "✗ Sai");
+        }
+
+        // Tô xanh đáp án đúng, tô đỏ đáp án chọn sai và khóa các nút chọn
+        (q.options || []).forEach((_, oi) => {
+          const lbl = document.getElementById(`quiz-opt-${idx}-${oi}`);
+          const txt = document.getElementById(`quiz-opt-text-${idx}-${oi}`);
+          const st = document.getElementById(`quiz-opt-status-${idx}-${oi}`);
+          const radio = lbl?.querySelector('input[type="radio"]');
+          if (radio) radio.disabled = true;
+          if (!lbl || !txt || !st) return;
+
+          lbl.classList.remove('bg-white', 'border-slate-200', 'hover:border-purple-300', 'cursor-pointer');
+
+          if (oi === q.answer) {
+            lbl.classList.add('bg-emerald-50', 'border-emerald-500');
+            txt.classList.remove('text-slate-700');
+            txt.classList.add('text-emerald-800', 'font-bold');
+            st.className = "flex text-[10px] font-extrabold text-emerald-700 shrink-0 items-center gap-1";
+            st.innerHTML = `<i class="fa-solid fa-circle-check"></i><span>${isCorrect ? (isEn ? 'Your choice' : 'Bạn chọn đúng') : (isEn ? 'Correct answer' : 'Đáp án đúng')}</span>`;
+          } else if (oi === picked) {
+            lbl.classList.add('bg-rose-50', 'border-rose-500');
+            txt.classList.remove('text-slate-700');
+            txt.classList.add('text-rose-800', 'font-bold');
+            st.className = "flex text-[10px] font-extrabold text-rose-700 shrink-0 items-center gap-1";
+            st.innerHTML = `<i class="fa-solid fa-circle-xmark"></i><span>${isEn ? 'Wrong choice' : 'Bạn chọn sai'}</span>`;
+          } else {
+            lbl.classList.add('bg-white', 'border-slate-200', 'opacity-60');
+          }
+        });
+
         document.getElementById(`quiz-explain-${idx}`)?.classList.remove('hidden');
       });
-      if (!all) return showToast(`Vui lòng trả lời đủ ${currentSessionQuiz.length} câu!`, "warning");
-      isCurrentQuizSubmitted = true; const coins = ok * 5;
+
+      isCurrentQuizSubmitted = true;
+      const coins = ok * 5;
       if (coins > 0) {
         AppState.user.coins = (AppState.user.coins || 0) + coins;
-        if (ok === currentSessionQuiz.length) { if (!AppState.badges) AppState.badges = {}; AppState.badges.quizMaster = true; }
-        saveState(); showToast(`Tuyệt vời! Đúng ${ok}/${currentSessionQuiz.length} câu: +${coins} BioCoins!`, "success");
-      } else showToast("Chưa đúng câu nào lần này. Đọc giải thích nhé!", "info");
+        if (ok === currentSessionQuiz.length) {
+          if (!AppState.badges) AppState.badges = {};
+          AppState.badges.quizMaster = true;
+        }
+        saveState();
+        showToast(isEn ? `Awesome! ${ok}/${currentSessionQuiz.length} correct: +${coins} BioCoins!` : `Tuyệt vời! Đúng ${ok}/${currentSessionQuiz.length} câu: +${coins} BioCoins!`, "success");
+      } else {
+        showToast(isEn ? "0 correct this time. Check the explanations!" : "Chưa đúng câu nào lần này. Đọc giải thích nhé!", "info");
+      }
+
       document.getElementById('quiz-result-box')?.classList.remove('hidden');
       const se = document.getElementById('quiz-score-text'), be = document.getElementById('quiz-bonus-text');
-      if (se) se.innerText = `Bạn trả lời đúng ${ok}/${currentSessionQuiz.length} câu!`;
-      if (be) be.innerHTML = coins > 0 ? `<span class="text-amber-600 font-extrabold text-sm">+${coins} BioCoins</span> đã cộng vào ví! 🪙` : "Thử đề khác để kiếm thêm BioCoins nhé!";
+      if (se) se.innerText = isEn ? `You answered ${ok}/${currentSessionQuiz.length} correctly!` : `Bạn trả lời đúng ${ok}/${currentSessionQuiz.length} câu!`;
+      if (be) be.innerHTML = coins > 0
+        ? (isEn ? `<span class="text-amber-600 font-extrabold text-sm">+${coins} BioCoins</span> added to your wallet! 🪙` : `<span class="text-amber-600 font-extrabold text-sm">+${coins} BioCoins</span> đã cộng vào ví! 🪙`)
+        : (isEn ? "Try another quiz to earn more BioCoins!" : "Thử đề khác để kiếm thêm BioCoins nhé!");
     }
-
 /* 5. CHAT GEMINI AI + LƯU LỊCH SỬ TRÒ CHUYỆN GIỐNG GEMINI */
     let conversationHistory = [];
 
@@ -3463,6 +3538,15 @@
     if (typeof VI_TO_EN !== 'undefined') {
       Object.assign(VI_TO_EN, {
         "Trợ Lý Sinh Học Gemini AI": "Gemini AI Biology Tutor",
+        if (typeof VI_TO_EN !== 'undefined') {
+      Object.assign(VI_TO_EN, {
+        "✓ Đúng": "✓ Correct",
+        "✗ Sai": "✗ Wrong",
+        "Bạn chọn đúng": "Your choice",
+        "Đáp án đúng": "Correct answer",
+        "Bạn chọn sai": "Wrong choice"
+      });
+    }
         "Tự động lưu lịch sử các cuộc trò chuyện như Gemini để bạn mở lại ôn tập bất cứ lúc nào.": "Automatically saves chat history like Gemini so you can revisit any session anytime.",
         "Cuộc trò chuyện mới": "New chat",
         "Lịch sử trò chuyện": "Chat history",
