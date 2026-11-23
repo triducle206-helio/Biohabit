@@ -3538,15 +3538,6 @@
     if (typeof VI_TO_EN !== 'undefined') {
       Object.assign(VI_TO_EN, {
         "Trợ Lý Sinh Học Gemini AI": "Gemini AI Biology Tutor",
-        if (typeof VI_TO_EN !== 'undefined') {
-      Object.assign(VI_TO_EN, {
-        "✓ Đúng": "✓ Correct",
-        "✗ Sai": "✗ Wrong",
-        "Bạn chọn đúng": "Your choice",
-        "Đáp án đúng": "Correct answer",
-        "Bạn chọn sai": "Wrong choice"
-      });
-    }
         "Tự động lưu lịch sử các cuộc trò chuyện như Gemini để bạn mở lại ôn tập bất cứ lúc nào.": "Automatically saves chat history like Gemini so you can revisit any session anytime.",
         "Cuộc trò chuyện mới": "New chat",
         "Lịch sử trò chuyện": "Chat history",
@@ -3851,6 +3842,22 @@
     window.addEventListener('DOMContentLoaded', () => {
       if (AppState.lang === 'en') setTimeout(autoTranslateFoodReviewIfNeeded, 150);
     });
+    window.addEventListener('DOMContentLoaded', () => {
+      if (AppState.lang === 'en') setTimeout(autoTranslateFoodReviewIfNeeded, 150);
+    });
+
+    if (typeof VI_TO_EN !== 'undefined') {
+      Object.assign(VI_TO_EN, {
+        "✓ Đúng": "✓ Correct",
+        "✗ Sai": "✗ Wrong",
+        "Bạn chọn đúng": "Your choice",
+        "Đáp án đúng": "Correct answer",
+        "Bạn chọn sai": "Wrong choice"
+      });
+    }
+  </script>
+</body>
+</html>
   </script>
 </body>
 </html>
